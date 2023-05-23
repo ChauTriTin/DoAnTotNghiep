@@ -1,4 +1,4 @@
-import 'package:appdiphuot/screen/home1_screen.dart';
+import 'package:appdiphuot/screen/home_screen.dart';
 import 'package:appdiphuot/screen/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,7 +34,7 @@ class DoanApp extends StatelessWidget {
           FirebaseAuth.instance.currentUser == null ? 'welcome' : 'home',
       routes: {
         'welcome': (context) => loginScreen(),
-        'home': (context) => home1Screen(),
+        'home': (context) => homeScreen(),
       },
     );
   }

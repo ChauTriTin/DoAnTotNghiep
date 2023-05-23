@@ -3,14 +3,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'addTrip_screen.dart';
 
-class home1Screen extends StatefulWidget {
-  const home1Screen({super.key});
+class homeScreen extends StatefulWidget {
+  const homeScreen({super.key});
 
   @override
-  State<home1Screen> createState() => _home1Screen();
+  State<homeScreen> createState() => _homeScreen();
 }
 
-class _home1Screen extends State<home1Screen> {
+class _homeScreen extends State<homeScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);

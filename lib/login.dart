@@ -1,4 +1,4 @@
-import 'package:appdiphuot/screen/home1_screen.dart';
+import 'package:appdiphuot/screen/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +12,7 @@ class Services {
       auth.authStateChanges().listen((event) {
         if (event != null) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => home1Screen()));
+              context, MaterialPageRoute(builder: (context) => homeScreen()));
         }
       });
     } catch (e) {
