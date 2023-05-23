@@ -1,10 +1,11 @@
-import 'package:doan/gg_maps/google_maps.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
+
+import '../gg_maps/google_maps.dart';
 
 class addTripScreen extends StatefulWidget {
   const addTripScreen({super.key});
