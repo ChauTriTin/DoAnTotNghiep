@@ -30,6 +30,7 @@ dependencies:
 #  open_street_map_search_and_pick: ^0.0.17
   shared_preferences: ^2.1.1
   avatar_glow: ^2.0.2
+  circular_bottom_navigation: ^2.3.0
 
 dev_dependencies:
   flutter_test:
