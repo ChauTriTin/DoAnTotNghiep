@@ -1,9 +1,13 @@
+import 'package:appdiphuot/ui/home/chat/page_chat_screen.dart';
+import 'package:appdiphuot/ui/home/home/page_home_screen.dart';
+import 'package:appdiphuot/ui/home/noti/page_noti_screen.dart';
+import 'package:appdiphuot/ui/home/user/page_user_screen.dart';
+import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
+import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/material.dart';
 
 import '../../base/base_stateful_state.dart';
 import '../../common/const/color_constants.dart';
-import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
-import 'package:circular_bottom_navigation/tab_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -86,7 +90,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        children: <Widget>[
+        children: [
           Padding(
             padding: EdgeInsets.only(bottom: bottomNavBarHeight),
             child: bodyContainer(),
@@ -99,23 +103,20 @@ class HomePageState extends State<HomePage> {
 
   Widget bodyContainer() {
     Color? selectedColor = tabItems[selectedPos].circleColor;
-    String slogan;
-    switch (selectedPos) {
-      case 0:
-        slogan = "Family, Happiness, Food";
-        break;
-      case 1:
-        slogan = "Find, Check, Use";
-        break;
-      case 2:
-        slogan = "Receive, Review, Rip";
-        break;
-      case 3:
-        slogan = "Noise, Panic, Ignore";
-        break;
-      default:
-        slogan = "";
-        break;
+
+    Widget buildPage() {
+      switch (selectedPos) {
+        case 0:
+          return const PageHomeScreen();
+        case 1:
+          return const PageChatScreen();
+        case 2:
+          return const PageNotiScreen();
+        case 3:
+          return const PageUserScreen();
+        default:
+          return const PageHomeScreen();
+      }
     }
 
     return GestureDetector(
@@ -123,16 +124,7 @@ class HomePageState extends State<HomePage> {
         width: double.infinity,
         height: double.infinity,
         color: selectedColor,
-        child: Center(
-          child: Text(
-            slogan,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ),
+        child: buildPage(),
       ),
       onTap: () {
         if (_navigationController.value == tabItems.length - 1) {
