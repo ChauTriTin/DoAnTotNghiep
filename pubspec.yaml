@@ -8,33 +8,33 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  syncfusion_flutter_charts: ^21.2.6
+#  syncfusion_flutter_charts: ^21.2.6
   cupertino_icons: ^1.0.5
-  percent_indicator: ^4.2.2
-  firebase_auth: ^4.1.2
-  cloud_firestore: ^4.1.0
-  firebase_core: ^2.2.0
-  get_cli: ^1.8.1
+#  percent_indicator: ^4.2.3
+#  firebase_auth: ^4.6.1
+#  cloud_firestore: ^4.7.1
+#  firebase_core: ^2.13.0
+#  get_cli: ^1.8.4
   buttons_tabbar: ^1.3.6
-  font_awesome_flutter: ^10.4.0
+#  font_awesome_flutter: ^10.4.0
   get: ^4.6.5
-  fl_chart: ^0.62.0
-  google_maps_flutter: ^2.2.5
-  google_fonts:
-  geolocator: ^9.0.2
-  permission_handler: ^10.2.0
-  location: ^4.4.0
-  flutter_svg: ^2.0.5
-  flutter_polyline_points: ^1.0.0
-  url_launcher: ^6.1.10
-  open_street_map_search_and_pick: ^0.0.16
+#  fl_chart: ^0.62.0
+#  google_maps_flutter: ^2.2.8
+#  google_fonts:
+#  geolocator: ^9.0.2
+#  permission_handler: ^10.2.0
+#  location: ^4.4.0
+  flutter_svg: ^2.0.6
+#  flutter_polyline_points: ^1.0.0
+  url_launcher: ^6.1.11
+#  open_street_map_search_and_pick: ^0.0.17
   shared_preferences: ^2.1.1
   avatar_glow: ^2.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
   flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
