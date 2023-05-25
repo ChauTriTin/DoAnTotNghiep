@@ -1,5 +1,5 @@
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/home_page.dart';
+import 'package:appdiphuot/ui/user/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +27,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MyHomePage(title: StringConstants.appName);
+    return const WelcomeScreen(title: StringConstants.appName);
   }
 }

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../base/base_stateful_state.dart';
-import '../common/const/color_constants.dart';
-import '../common/const/string_constants.dart';
-import '../util/ui_utils.dart';
-import 'home_page_controller.dart';
+import '../../base/base_stateful_state.dart';
+import '../../common/const/color_constants.dart';
+import '../../common/const/string_constants.dart';
+import '../../util/ui_utils.dart';
+import 'welcome_screen_controller.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({
+class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({
     super.key,
     required this.title,
   });
@@ -19,11 +19,11 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _MyHomePageState extends BaseStatefulState<MyHomePage> {
-  final _cHomePage = Get.put(HomePageController());
+class _WelcomeScreenState extends BaseStatefulState<WelcomeScreen> {
+  final _cHomePage = Get.put(WelcomeController());
 
   @override
   void initState() {
@@ -34,8 +34,9 @@ class _MyHomePageState extends BaseStatefulState<MyHomePage> {
   void _setupListen() {
     _cHomePage.appLoading.listen((appLoading) {});
     _cHomePage.appError.listen((err) {
-      showErrorDialog(
-          StringConstants.errorMsg, err.messageError, "Retry", () {});
+      showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
+        //do sth
+      });
     });
   }
 
@@ -61,11 +62,9 @@ class _MyHomePageState extends BaseStatefulState<MyHomePage> {
         () {},
         iconData: Icons.menu,
       ),
-      body: Container(),
-      // floatingActionButton: const FloatingActionButton(
-      //   onPressed: null,
-      //   child: Icon(Icons.favorite),
-      // ),
+      body: Column(
+        children: [],
+      ),
     );
   }
 }
