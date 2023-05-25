@@ -1,4 +1,4 @@
-import 'package:appdiphuot/screen/signup_srceen.dart';
+import 'package:appdiphuot/old/screen/signup_srceen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

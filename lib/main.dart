@@ -1,41 +1,32 @@
-import 'package:appdiphuot/screen/home_screen.dart';
-import 'package:appdiphuot/screen/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/ui/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-// void main() => runApp(MyApp());
+final navigatorKey = GlobalKey<NavigatorState>();
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'aaaa',
-//       home: MapSample(),
-//     );
-//   }
-// }
-
-Future<void> main(List<String> args) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(DoanApp());
+void main() {
+  runApp(
+    GetMaterialApp(
+      enableLog: true,
+      debugShowCheckedModeBanner: true,
+      defaultTransition: Transition.cupertino,
+      home: const MyApp(),
+      navigatorKey: navigatorKey,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.light,
+    ),
+  );
 }
 
-class DoanApp extends StatelessWidget {
-  //const DoanApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      debugShowCheckedModeBanner: false,
-      initialRoute:
-          FirebaseAuth.instance.currentUser == null ? 'welcome' : 'home',
-      routes: {
-        'welcome': (context) => loginScreen(),
-        'home': (context) => homeScreen(),
-      },
-    );
+    return const MyHomePage(title: StringConstants.appName);
   }
 }
