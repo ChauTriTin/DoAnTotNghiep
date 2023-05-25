@@ -53,8 +53,8 @@ class HomePageState extends State<HomePage> {
       ),
     ),
     TabItem(
-      Icons.search,
-      "Search",
+      Icons.mark_chat_unread,
+      "Chat",
       Colors.orange,
       labelStyle: const TextStyle(
         color: Colors.red,
@@ -62,14 +62,14 @@ class HomePageState extends State<HomePage> {
       ),
     ),
     TabItem(
-      Icons.layers,
-      "Reports",
+      Icons.notification_add,
+      "Notification",
       Colors.red,
       circleStrokeColor: Colors.black,
     ),
     TabItem(
-      Icons.notifications,
-      "Notifications",
+      Icons.people,
+      "Profile",
       Colors.cyan,
     ),
   ]);
