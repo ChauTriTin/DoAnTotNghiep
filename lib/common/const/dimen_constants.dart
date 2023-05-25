@@ -4,6 +4,7 @@ class DimenConstants {
   static const double marginPaddingMedium = 15.0;
   static const double marginPaddingLarge = 30.0;
   static const double marginPadding98 = 98;
+  static const double splashIconSize = 150;
 
   static const double actionBarHeight = 56.0;
   static const double buttonHeight = 45.0;

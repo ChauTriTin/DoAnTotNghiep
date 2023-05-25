@@ -32,6 +32,10 @@ dependencies:
   avatar_glow: ^2.0.2
   circular_bottom_navigation: ^2.3.0
 
+  #https://pub.dev/packages/flutter_native_splash
+  flutter_native_splash: ^2.3.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

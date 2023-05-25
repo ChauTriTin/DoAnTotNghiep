@@ -1,7 +1,7 @@
-import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/user/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'ui/splash/page_splash_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -27,6 +27,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const WelcomeScreen(title: StringConstants.appName);
+    return const SplashScreen();
   }
 }
