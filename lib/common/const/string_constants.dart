@@ -5,4 +5,6 @@ class StringConstants {
   static const String errorMsg = "Có lỗi xảy ra, vui lòng thử lại sau.";
   static const String cancel = "Hủy";
   static const String confirm = "Xác nhận";
+  static const String signin = "Đăng nhập";
+  static const String register = "Tạo tài khoản";
 }

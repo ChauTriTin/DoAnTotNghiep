@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../base/base_stateful_state.dart';
 import '../../common/const/string_constants.dart';
 import '../../util/shared_preferences_util.dart';
-import '../login/page_login_screen.dart';
+import '../login/authentication/page_authentication_page.dart';
 import '../user/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _SplashScreenState extends BaseStatefulState<SplashScreen> {
     if (isLoggedIn) {
       Get.off(const WelcomeScreen(title: StringConstants.appName));
     } else {
-      Get.off(const LoginScreen());
+      Get.off(const AuthenticationScreen());
     }
   }
 
