@@ -6,6 +6,8 @@ import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../view/profile_bar_widget.dart';
+
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
     super.key,
@@ -42,46 +44,60 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: ColorConstants.appColor,
+      ),
       backgroundColor: ColorConstants.appColorBkg,
       body: Container(
-        color: Colors.blue,
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-        child: Obx(() {
-          var number = _controllerDemo.number.value;
-          var list = _controllerDemo.list.toString();
-          return ListView(
-            children: [
-              const Text(
-                "This is Home Page",
-                style: TextStyle(
-                  fontSize: DimenConstants.txtLarge,
-                  color: Colors.red,
-                ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  minimumSize: const Size(240, 50),
-                ),
-                onPressed: () {
-                  _controllerDemo.addNumber();
-                  _controllerDemo.addString();
-                },
-                child: const Text(
-                  '+',
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.red,
+        color: ColorConstants.appColorBkg,
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            const ProfileBarWidget(
+              name: "Nguyen Hoang Giang",
+              state: "⬤ Online",
+              linkAvatar: StringConstants.linkImgMinaCrying,
+            ),
+            Row(
+              children: [
+                const SizedBox(width: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: ColorConstants.appColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Tạo chuyến đi',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                    ),
                   ),
                 ),
-              ),
-              Text("Number $number"),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-              Text("list $list"),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-            ],
-          );
-        }),
+                const Expanded(
+                  child: Text(
+                    'Mã: AB0134NM45',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: ColorConstants.appColor,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+                const SizedBox(width: DimenConstants.marginPaddingSmall),
+                const Icon(
+                  Icons.content_copy,
+                  color: ColorConstants.appColor,
+                ),
+                const SizedBox(width: DimenConstants.marginPaddingMedium),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

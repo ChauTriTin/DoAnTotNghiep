@@ -5,4 +5,9 @@ class StringConstants {
   static const String errorMsg = "Có lỗi xảy ra, vui lòng thử lại sau.";
   static const String cancel = "Hủy";
   static const String confirm = "Xác nhận";
+
+  static const String linkImgMinaCrying =
+      "https://i.pinimg.com/originals/91/98/48/91984862fad2e78a12cb202b3d06e727.gif";
+  static const String linkImg =
+      "https://i.pinimg.com/564x/e4/de/f2/e4def2d61e17614a4ef8f191277b3092.jpg";
 }
