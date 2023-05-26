@@ -3,7 +3,6 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -54,11 +53,49 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         color: ColorConstants.appColorBkg,
         child: ListView(
           physics: const BouncingScrollPhysics(),
-          children: const [
-            ProfileBarWidget(
-                name: "Nguyen Hoang Giang",
-                state: "⬤ Online",
-                linkAvatar: StringConstants.linkImgMinaCrying),
+          children: [
+            const ProfileBarWidget(
+              name: "Nguyen Hoang Giang",
+              state: "⬤ Online",
+              linkAvatar: StringConstants.linkImgMinaCrying,
+            ),
+            Row(
+              children: [
+                const SizedBox(width: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: ColorConstants.appColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Tạo chuyến đi',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                    ),
+                  ),
+                ),
+                const Expanded(
+                  child: Text(
+                    'Mã: AB0134NM45',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: ColorConstants.appColor,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+                const SizedBox(width: DimenConstants.marginPaddingSmall),
+                const Icon(
+                  Icons.content_copy,
+                  color: ColorConstants.appColor,
+                ),
+                const SizedBox(width: DimenConstants.marginPaddingMedium),
+              ],
+            ),
           ],
         ),
       ),
