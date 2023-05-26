@@ -3,8 +3,11 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../view/profile_bar_widget.dart';
 
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
@@ -42,46 +45,22 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: ColorConstants.appColor,
+      ),
       backgroundColor: ColorConstants.appColorBkg,
       body: Container(
-        color: Colors.blue,
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-        child: Obx(() {
-          var number = _controllerDemo.number.value;
-          var list = _controllerDemo.list.toString();
-          return ListView(
-            children: [
-              const Text(
-                "This is Home Page",
-                style: TextStyle(
-                  fontSize: DimenConstants.txtLarge,
-                  color: Colors.red,
-                ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  minimumSize: const Size(240, 50),
-                ),
-                onPressed: () {
-                  _controllerDemo.addNumber();
-                  _controllerDemo.addString();
-                },
-                child: const Text(
-                  '+',
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              Text("Number $number"),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-              Text("list $list"),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-            ],
-          );
-        }),
+        color: ColorConstants.appColorBkg,
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: const [
+            ProfileBarWidget(
+                name: "Nguyen Hoang Giang",
+                state: "⬤ Online",
+                linkAvatar: StringConstants.linkImgMinaCrying),
+          ],
+        ),
       ),
     );
   }
