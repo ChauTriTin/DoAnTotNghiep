@@ -1,22 +1,31 @@
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class CreateRouterController extends BaseController {
-  var number = 0.obs;
+  var title = "".obs;
+  var description = "".obs;
   var list = <String>[].obs;
 
   void clearOnDispose() {
     Get.delete<CreateRouterController>();
   }
 
-  void addNumber() {
-    number.value++;
+  void setTitle(String s) {
+    title.value = s;
   }
 
-  void addString() {
-    list.add(DateTime.now().toString());
-    list.refresh();
+  void setDescription(String s) {
+    description.value = s;
   }
 
-  void createRouter() {}
+  void createRouter() {
+    String sTitle = title.value;
+    String sDescription = description.value;
+
+    // final images = controller.images;
+
+    debugPrint(">>>createRouter sTitle $sTitle");
+    debugPrint(">>>createRouter sDescription $sDescription");
+  }
 }

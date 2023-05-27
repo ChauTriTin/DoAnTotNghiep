@@ -41,6 +41,12 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         //do sth
       });
     });
+    _tecTitle.addListener(() {
+      _controller.setTitle(_tecTitle.text.toString().trim());
+    });
+    _tecDescription.addListener(() {
+      _controller.setDescription(_tecDescription.text.toString().trim());
+    });
   }
 
   @override
@@ -196,7 +202,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   MultiImagePickerView(
                     onChange: (list) {
-                      debugPrint(list.toString());
+                      debugPrint("MultiImagePickerView $list");
                     },
                     controller: _controllerImagePicker,
                     padding: const EdgeInsets.all(0),
