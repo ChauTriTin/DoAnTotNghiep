@@ -437,6 +437,11 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               },
             ));
           },
+          onLongPress: () {
+            _controller.deletePlaceStop(i);
+            showSnackBarFull(
+                StringConstants.warning, "Xoá điểm dừng chân thành công");
+          },
         );
       },
     );
