@@ -314,6 +314,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             fontSize: DimenConstants.txtMedium,
           ),
         ),
+        const SizedBox(height: DimenConstants.marginPaddingSmall),
         InkWell(
           child: Container(
             padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
