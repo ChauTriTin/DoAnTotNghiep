@@ -511,7 +511,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               //TODO
               _controller.createRouter();
               Get.back();
-              Get.to(const CreateSuccessScreen(title: "AB0134NM45"));
+              Get.to(CreateSuccessScreen(
+                title: "AB0134NM45",
+                dateTimeEnd: _controller.dateTimeEnd.value,
+              ));
             },
             label: Text(
               "Tạo chuyến đi".toUpperCase(),
