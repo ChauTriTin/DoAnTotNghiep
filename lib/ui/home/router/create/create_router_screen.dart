@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import 'create_router_controller.dart';
 
@@ -36,7 +37,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void _setupListen() {
     _controller.appLoading.listen((appLoading) {
       if (appLoading.isLoading) {
-      } else {}
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
     });
     _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {

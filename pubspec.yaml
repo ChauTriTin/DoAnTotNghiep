@@ -43,6 +43,8 @@ dependencies:
   forked_slider_button: ^2.0.2
   lottie: ^2.3.2
   slide_countdown: ^0.6.0
+#  flutter_easyloading: ^3.0.5
+  overlay_loading_progress: ^1.0.1
 
 dev_dependencies:
   flutter_test:
