@@ -13,7 +13,7 @@ class CreateRouterController extends BaseController {
   );
   var startLat = 10.8231.obs; //hcmc default
   var startLong = 106.6297.obs; //hcmc default
-  var startName = "".obs;
+  var startName = "Chọn địa điểm".obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -30,14 +30,6 @@ class CreateRouterController extends BaseController {
 
   void setStartName(String value) {
     startName.value = value;
-  }
-
-  String getStartNameDisplay() {
-    if (startName.value.isNotEmpty) {
-      return startName.value;
-    } else {
-      return "Chọn địa điểm";
-    }
   }
 
   void createRouter() {

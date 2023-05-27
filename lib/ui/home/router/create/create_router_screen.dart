@@ -67,7 +67,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               linkAvatar: StringConstants.linkImgMinaCrying,
             ),
             const SizedBox(height: DimenConstants.marginPaddingTiny),
-            Expanded(child: _buildBodyView()),
+            Expanded(child: Obx(() {
+              return _buildBodyView();
+            })),
           ],
         ),
       ),
@@ -283,7 +285,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.getStartNameDisplay(),
+              _controller.startName.value,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
