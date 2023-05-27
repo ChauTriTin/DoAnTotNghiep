@@ -445,6 +445,32 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           ),
         ),
         const SizedBox(height: DimenConstants.marginPaddingSmall),
+        TextField(
+          textAlign: TextAlign.start,
+          controller: _controller.tecRequire,
+          keyboardType: TextInputType.multiline,
+          minLines: 5,
+          maxLines: 10,
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
+            hintText: 'Nhập yêu cầu',
+            hintStyle: const TextStyle(
+              fontSize: DimenConstants.txtMedium,
+              color: Colors.grey,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(DimenConstants.radiusMedium),
+              borderSide: const BorderSide(
+                width: 0,
+                style: BorderStyle.solid,
+              ),
+            ),
+            filled: true,
+            contentPadding:
+                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            fillColor: Colors.white,
+          ),
+        ),
         const Divider(),
       ],
     );

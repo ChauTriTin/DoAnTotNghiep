@@ -7,6 +7,7 @@ import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 class CreateRouterController extends BaseController {
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
+  final tecRequire = TextEditingController();
   final controllerImagePicker = MultiImagePickerController(
     maxImages: 6,
     withReadStream: true,
@@ -87,6 +88,7 @@ class CreateRouterController extends BaseController {
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
+    String sRequire = tecRequire.text.toString().trim();
     final sImages = controllerImagePicker.images;
     Place sPlaceStart = placeStart.value;
     Place sPlaceEnd = placeEnd.value;
@@ -97,6 +99,7 @@ class CreateRouterController extends BaseController {
     debugPrint(">>>>>>>>>>>>>>>createRouter");
     debugPrint("sTitle $sTitle");
     debugPrint("sDescription $sDescription");
+    debugPrint("sRequire $sRequire");
     debugPrint("sImages ${sImages.length}");
     for (var element in sImages) {
       debugPrint("element ${element.name} ${element.path}");
