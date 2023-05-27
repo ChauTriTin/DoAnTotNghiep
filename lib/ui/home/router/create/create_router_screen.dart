@@ -18,6 +18,8 @@ class CreateRouterScreen extends StatefulWidget {
 
 class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   final _controller = Get.put(PageHomeController());
+  final _tecTitle = TextEditingController();
+  final _tecDescription = TextEditingController();
 
   @override
   void initState() {
@@ -110,6 +112,33 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  TextField(
+                    textAlign: TextAlign.start,
+                    controller: _tecTitle,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      hintText: 'Nhập tiêu đề',
+                      hintStyle: const TextStyle(
+                        fontSize: DimenConstants.txtMedium,
+                        color: Colors.grey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(DimenConstants.radiusMedium),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      filled: false,
+                      contentPadding: const EdgeInsets.all(
+                          DimenConstants.marginPaddingMedium),
+                      fillColor: ColorConstants.appColor,
+                    ),
+                  ),
+                  const Divider(),
                   Text(
                     'Mô tả chuyến đi'.toUpperCase(),
                     style: const TextStyle(
@@ -117,6 +146,35 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  TextField(
+                    textAlign: TextAlign.start,
+                    controller: _tecDescription,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 5,
+                    maxLines: 10,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      hintText: 'Nhập mô tả',
+                      hintStyle: const TextStyle(
+                        fontSize: DimenConstants.txtMedium,
+                        color: Colors.grey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(DimenConstants.radiusMedium),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      filled: false,
+                      contentPadding: const EdgeInsets.all(
+                          DimenConstants.marginPaddingMedium),
+                      fillColor: ColorConstants.appColor,
+                    ),
+                  ),
+                  const Divider(),
                   Text(
                     'HÌNH ẢNH'.toUpperCase(),
                     style: const TextStyle(
@@ -124,6 +182,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'Địa điểm bắt đầu'.toUpperCase(),
                     style: const TextStyle(
@@ -131,6 +191,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'Địa điểm kết THúc'.toUpperCase(),
                     style: const TextStyle(
@@ -138,6 +200,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'Địa điểm kết THúc'.toUpperCase(),
                     style: const TextStyle(
@@ -145,6 +209,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'nơi dùng chân'.toUpperCase(),
                     style: const TextStyle(
@@ -152,6 +218,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'thời gian khởi hành'.toUpperCase(),
                     style: const TextStyle(
@@ -159,6 +227,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'thời gian NGỪng đăng ký'.toUpperCase(),
                     style: const TextStyle(
@@ -166,6 +236,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'thời gian NGỪng đăng ký'.toUpperCase(),
                     style: const TextStyle(
@@ -173,6 +245,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                   Text(
                     'Yêu cầu với người tham gia'.toUpperCase(),
                     style: const TextStyle(
@@ -180,6 +254,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       fontSize: DimenConstants.txtMedium,
                     ),
                   ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Divider(),
                 ],
               ),
             ),
