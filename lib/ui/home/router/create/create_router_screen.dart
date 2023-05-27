@@ -6,6 +6,7 @@ import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:forked_slider_button/forked_slider_button.dart';
 import 'package:get/get.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
@@ -499,6 +500,30 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             onTap: () {},
             onDoubleTap: () {},
             onSwipe: () {},
+          ),
+        ),
+        const SizedBox(height: DimenConstants.marginPaddingLarge),
+        Center(
+          child: SliderButton(
+            backgroundColor: Colors.red.withOpacity(0.25),
+            action: () {
+              _controller.createRouter();
+            },
+            label: Text(
+              "Tạo chuyến đi".toUpperCase(),
+              style: const TextStyle(
+                  color: Color(0xff4a4a4a),
+                  fontWeight: FontWeight.bold,
+                  fontSize: DimenConstants.txtMedium),
+            ),
+            icon: const Text(
+              "🛵",
+              style: TextStyle(
+                color: ColorConstants.appColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 44,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: DimenConstants.marginPadding98),
