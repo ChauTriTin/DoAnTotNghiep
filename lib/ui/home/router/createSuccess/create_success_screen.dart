@@ -34,12 +34,12 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               width: Get.width,
             ),
           ),
-          const Center(
+          Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   "TẠO THÀNH CÔNG",
                   style: TextStyle(
                     fontSize: 30.0,
@@ -48,6 +48,26 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: DimenConstants.marginPaddingSmall),
+                const Text(
+                  "Chuyến đi của bạn đã được tạo với mã",
+                  style: TextStyle(
+                    fontSize: DimenConstants.txtMedium,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    color: ColorConstants.appColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
               ],
             ),
           ),
