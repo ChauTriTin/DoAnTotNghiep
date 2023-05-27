@@ -1,7 +1,6 @@
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/user/welcome_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
