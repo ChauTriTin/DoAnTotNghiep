@@ -34,6 +34,11 @@ class CreateRouterController extends BaseController {
     listPlaceStop.refresh();
   }
 
+  void editPlaceStop(Place place, int index) {
+    listPlaceStop[index] = place;
+    listPlaceStop.refresh();
+  }
+
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();

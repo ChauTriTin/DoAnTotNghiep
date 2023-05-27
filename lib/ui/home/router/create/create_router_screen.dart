@@ -410,9 +410,33 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       itemCount: list.length,
       itemBuilder: (context, i) {
         var place = list[i];
-        return Container(
-          color: Colors.red,
-          child: Text(place.name),
+        return InkWell(
+          child: Container(
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 0.5,
+                  color: Colors.black,
+                ),
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(DimenConstants.radiusMedium))),
+            child: Text(
+              place.name,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: DimenConstants.txtMedium,
+              ),
+            ),
+          ),
+          onTap: () {
+            Get.to(MapPickerScreen(
+              defaultPlace: place,
+              callback: (newPlace) {
+                _controller.editPlaceStop(newPlace, i);
+              },
+            ));
+          },
         );
       },
     );
