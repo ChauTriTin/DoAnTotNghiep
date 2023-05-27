@@ -448,6 +448,11 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   }
 
   void _addNewStopPlace() {
+    if (!_controller.isValidToAddNewPlaceStop()) {
+      showSnackBarFullError(StringConstants.warning,
+          "Bạn chỉ có thể thêm tối đa 5 điểm dừng chân");
+      return;
+    }
     Get.to(MapPickerScreen(
       defaultPlace: null,
       callback: (newPlace) {

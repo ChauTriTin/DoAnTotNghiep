@@ -29,6 +29,13 @@ class CreateRouterController extends BaseController {
     placeEnd.value = place;
   }
 
+  bool isValidToAddNewPlaceStop() {
+    if (listPlaceStop.length < 5) {
+      return true;
+    }
+    return false;
+  }
+
   void addPlaceStop(Place place) {
     listPlaceStop.add(place);
     listPlaceStop.refresh();
