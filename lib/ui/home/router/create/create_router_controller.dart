@@ -15,7 +15,8 @@ class CreateRouterController extends BaseController {
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
   var listPlaceStop = <Place>[].obs;
-  var dateTimeStart = DateTime.now().obs;
+  final dateTimeDefault = DateTime(1111, 1, 11);
+  var dateTimeStart = DateTime(1111, 1, 11).obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
