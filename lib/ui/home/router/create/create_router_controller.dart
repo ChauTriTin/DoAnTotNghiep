@@ -11,16 +11,28 @@ class CreateRouterController extends BaseController {
     withReadStream: true,
     allowedImageTypes: ['png', 'jpg', 'jpeg'],
   );
+  var startLat = 10.8231.obs; //hcmc default
+  var startLong = 106.6297.obs; //hcmc default
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
     Get.delete<CreateRouterController>();
   }
 
+  void setStartLat(double value) {
+    startLat.value = value;
+  }
+
+  void setStartLong(double value) {
+    startLong.value = value;
+  }
+
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
     final sImages = controllerImagePicker.images;
+    double sStartLat = startLat.value;
+    double sStartLong = startLong.value;
 
     debugPrint(">>>createRouter sTitle $sTitle");
     debugPrint(">>>createRouter sDescription $sDescription");
@@ -28,5 +40,7 @@ class CreateRouterController extends BaseController {
     for (var element in sImages) {
       debugPrint(">>>createRouter element ${element.name} ${element.path}");
     }
+    debugPrint(">>>createRouter sStartLat $sStartLat");
+    debugPrint(">>>createRouter startLong $sStartLong");
   }
 }

@@ -272,7 +272,14 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
           ),
           onTap: () {
-            Get.to(MapPickerScreen());
+            Get.to(MapPickerScreen(
+              defaultLatitude: _controller.startLat.value,
+              defaultLongitude: _controller.startLong.value,
+              callback: (newLat, newLong) {
+                _controller.setStartLat(newLat);
+                _controller.setStartLong(newLong);
+              },
+            ));
           },
         ),
         const SizedBox(height: DimenConstants.marginPaddingSmall),
