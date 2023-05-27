@@ -114,6 +114,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                     ],
                   ),
                   const Divider(),
+                  //tieu de chuyen di
                   Text(
                     'Tiêu đề chuyến đi của bạn'.toUpperCase(),
                     style: const TextStyle(
@@ -148,6 +149,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                     ),
                   ),
                   const Divider(),
+                  //mo ta chuyen di
                   Text(
                     'Mô tả chuyến đi'.toUpperCase(),
                     style: const TextStyle(
@@ -184,6 +186,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                     ),
                   ),
                   const Divider(),
+                  //hinh anh
                   Text(
                     'HÌNH ẢNH'.toUpperCase(),
                     style: const TextStyle(
@@ -255,6 +258,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   ),
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   const Divider(),
+                  //dia diem bat dau
                   Text(
                     'Địa điểm bắt đầu'.toUpperCase(),
                     style: const TextStyle(
@@ -264,6 +268,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   ),
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   const Divider(),
+                  //dia diem ket thuc
                   Text(
                     'Địa điểm kết THúc'.toUpperCase(),
                     style: const TextStyle(
@@ -273,8 +278,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   ),
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   const Divider(),
+                  //noi dung chan
                   Text(
-                    'Địa điểm kết THúc'.toUpperCase(),
+                    'nơi dừng chân'.toUpperCase(),
                     style: const TextStyle(
                       color: Colors.grey,
                       fontSize: DimenConstants.txtMedium,
@@ -282,15 +288,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   ),
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   const Divider(),
-                  Text(
-                    'nơi dùng chân'.toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: DimenConstants.txtMedium,
-                    ),
-                  ),
-                  const SizedBox(height: DimenConstants.marginPaddingSmall),
-                  const Divider(),
+                  //thoi gian khoi hanh
                   Text(
                     'thời gian khởi hành'.toUpperCase(),
                     style: const TextStyle(
@@ -300,6 +298,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   ),
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   const Divider(),
+                  //thoi gian ngung dang ky
                   Text(
                     'thời gian NGỪng đăng ký'.toUpperCase(),
                     style: const TextStyle(
@@ -309,15 +308,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   ),
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   const Divider(),
-                  Text(
-                    'thời gian NGỪng đăng ký'.toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: DimenConstants.txtMedium,
-                    ),
-                  ),
-                  const SizedBox(height: DimenConstants.marginPaddingSmall),
-                  const Divider(),
+                  //yeu cau voi nguoi tham gia
                   Text(
                     'Yêu cầu với người tham gia'.toUpperCase(),
                     style: const TextStyle(
