@@ -7,11 +7,13 @@ import 'package:appdiphuot/ui/home/router/createSuccess/create_success_screen.da
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:forked_slider_button/forked_slider_button.dart';
 import 'package:get/get.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import 'create_router_controller.dart';
 
@@ -34,18 +36,28 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   }
 
   void _setupListen() {
-    _controller.appLoading.listen((appLoading) {});
+    _controller.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
     _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
       });
     });
-    // _controller.tecTitle.addListener(() {
-    //   _controller.setTitle(_controller.tecTitle.text.toString().trim());
-    // });
-    // _controller.tecDescription.addListener(() {
-    //   _controller.setDescription(_controller.tecDescription.text.toString().trim());
-    // });
+    ever(_controller.isCreateRouteSuccess, (value) {
+      if (value == true) {
+        Get.back();
+        showSnackBarFull(StringConstants.warning, "Tạo thành công");
+        Get.to(CreateSuccessScreen(
+          title: "AB0134NM45",
+          dateTimeEnd: _controller.dateTimeEnd.value,
+        ));
+      }
+    });
   }
 
   @override
@@ -62,21 +74,27 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         backgroundColor: ColorConstants.appColor,
       ),
       backgroundColor: ColorConstants.appColorBkg,
-      body: Container(
-        color: ColorConstants.appColorBkg,
-        child: Column(
-          children: [
-            const ProfileBarWidget(
-              name: "Nguyen Hoang Giang",
-              state: "⬤ Online",
-              linkAvatar: StringConstants.linkImgMinaCrying,
-            ),
-            const SizedBox(height: DimenConstants.marginPaddingTiny),
-            Expanded(child: Obx(() {
-              return _buildBodyView();
-            })),
-          ],
+      body: FocusDetector(
+        child: Container(
+          color: ColorConstants.appColorBkg,
+          child: Column(
+            children: [
+              const ProfileBarWidget(
+                name: "Nguyen Hoang Giang",
+                state: "⬤ Online",
+                linkAvatar: StringConstants.linkImgMinaCrying,
+              ),
+              const SizedBox(height: DimenConstants.marginPaddingTiny),
+              Expanded(child: Obx(() {
+                return _buildBodyView();
+              })),
+            ],
+          ),
         ),
+        onFocusLost: () {
+          debugPrint("onFocusLost");
+          FocusScope.of(context).unfocus();
+        },
       ),
     );
   }
@@ -95,7 +113,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           children: [
             ElevatedButton(
               onPressed: () {
-                _controller.createRouter();
+                //do nothing
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -506,12 +524,11 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         const SizedBox(height: DimenConstants.marginPaddingLarge),
         Center(
           child: SliderButton(
+            dismissible: false,
             backgroundColor: Colors.red.withOpacity(0.25),
             action: () {
-              //TODO
+              FocusScope.of(context).unfocus();
               _controller.createRouter();
-              Get.back();
-              Get.to(const CreateSuccessScreen(title: "AB0134NM45"));
             },
             label: Text(
               "Tạo chuyến đi".toUpperCase(),
