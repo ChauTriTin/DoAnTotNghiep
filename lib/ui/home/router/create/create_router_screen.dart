@@ -275,9 +275,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             Get.to(MapPickerScreen(
               defaultLatitude: _controller.startLat.value,
               defaultLongitude: _controller.startLong.value,
-              callback: (newLat, newLong) {
+              callback: (newLat, newLong, newName) {
                 _controller.setStartLat(newLat);
                 _controller.setStartLong(newLong);
+                _controller.setStartName(newName);
               },
             ));
           },

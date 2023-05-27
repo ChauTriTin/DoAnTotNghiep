@@ -13,6 +13,7 @@ class CreateRouterController extends BaseController {
   );
   var startLat = 10.8231.obs; //hcmc default
   var startLong = 106.6297.obs; //hcmc default
+  var startName = "".obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -27,12 +28,17 @@ class CreateRouterController extends BaseController {
     startLong.value = value;
   }
 
+  void setStartName(String value) {
+    startName.value = value;
+  }
+
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
     final sImages = controllerImagePicker.images;
     double sStartLat = startLat.value;
     double sStartLong = startLong.value;
+    String sStartName = startName.value;
 
     debugPrint(">>>createRouter sTitle $sTitle");
     debugPrint(">>>createRouter sDescription $sDescription");
@@ -42,5 +48,6 @@ class CreateRouterController extends BaseController {
     }
     debugPrint(">>>createRouter sStartLat $sStartLat");
     debugPrint(">>>createRouter startLong $sStartLong");
+    debugPrint(">>>createRouter sStartName $sStartName");
   }
 }

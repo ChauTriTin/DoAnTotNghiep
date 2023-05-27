@@ -15,7 +15,7 @@ class MapPickerScreen extends StatefulWidget {
 
   final double defaultLatitude;
   final double defaultLongitude;
-  final Function(double newLat, double newLong) callback;
+  final Function(double newLat, double newLong, String newName) callback;
 
   @override
   State<MapPickerScreen> createState() => _MapPickerScreenState();
@@ -34,8 +34,11 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
               "MapLocationPicker onNext lat ${result?.geometry.location.lat}");
           debugPrint(
               "MapLocationPicker onNext lng ${result?.geometry.location.lng}");
-          widget.callback.call(result?.geometry.location.lat ?? 0,
-              result?.geometry.location.lng ?? 0);
+          widget.callback.call(
+            result?.geometry.location.lat ?? 0,
+            result?.geometry.location.lng ?? 0,
+            result?.formattedAddress ?? "",
+          );
           Get.back();
         },
       ),
