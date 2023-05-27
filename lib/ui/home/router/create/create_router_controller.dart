@@ -17,6 +17,7 @@ class CreateRouterController extends BaseController {
   var listPlaceStop = <Place>[].obs;
   final dateTimeDefault = DateTime(1111, 1, 11);
   var dateTimeStart = DateTime(1111, 1, 11).obs;
+  var dateTimeEnd = DateTime(1111, 1, 11).obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -60,6 +61,29 @@ class CreateRouterController extends BaseController {
     dateTimeStart.value = dt;
   }
 
+  DateTime getDateTimeStart() {
+    if (dateTimeStart.value == dateTimeDefault) {
+      return DateTime.now();
+    } else {
+      return dateTimeStart.value;
+    }
+  }
+
+  DateTime getDateTimeEnd() {
+    if (dateTimeEnd.value == dateTimeDefault) {
+      return DateTime.now();
+    } else {
+      return dateTimeEnd.value;
+    }
+  }
+
+  void setDateTimeEnd(DateTime? dt) {
+    if (dt == null) {
+      return;
+    }
+    dateTimeEnd.value = dt;
+  }
+
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
@@ -67,6 +91,8 @@ class CreateRouterController extends BaseController {
     Place sPlaceStart = placeStart.value;
     Place sPlaceEnd = placeEnd.value;
     var sListPlaceStop = listPlaceStop;
+    var sDateTimeStart = dateTimeStart;
+    var sDateTimeEnd = dateTimeEnd;
 
     debugPrint(">>>>>>>>>>>>>>>createRouter");
     debugPrint("sTitle $sTitle");
@@ -81,5 +107,7 @@ class CreateRouterController extends BaseController {
     for (var element in sListPlaceStop) {
       debugPrint("element ${element.name}");
     }
+    debugPrint("sDateTimeStart $sDateTimeStart");
+    debugPrint("sDateTimeEnd $sDateTimeEnd");
   }
 }

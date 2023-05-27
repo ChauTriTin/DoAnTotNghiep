@@ -412,6 +412,29 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           ),
         ),
         const SizedBox(height: DimenConstants.marginPaddingSmall),
+        InkWell(
+          child: Container(
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 0.5,
+                  color: Colors.black,
+                ),
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(DimenConstants.radiusMedium))),
+            child: Text(
+              TimeUtils.convert(_controller.dateTimeEnd.value),
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: DimenConstants.txtMedium,
+              ),
+            ),
+          ),
+          onTap: () {
+            _pickTimeEnd();
+          },
+        ),
         const Divider(),
         //yeu cau voi nguoi tham gia
         Text(
@@ -486,10 +509,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     ));
   }
 
-  Future<void> _pickTimeStart() async {
+  void _pickTimeStart() async {
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _controller.getDateTimeStart(),
       firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
       lastDate: DateTime.now().add(
         const Duration(days: 3652),
@@ -527,5 +550,48 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       },
     );
     _controller.setDateTimeStart(dateTime);
+  }
+
+  void _pickTimeEnd() async {
+    DateTime? dateTime = await showOmniDateTimePicker(
+      context: context,
+      initialDate: _controller.getDateTimeEnd(),
+      firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+      lastDate: DateTime.now().add(
+        const Duration(days: 3652),
+      ),
+      is24HourMode: false,
+      isShowSeconds: false,
+      minutesInterval: 1,
+      secondsInterval: 1,
+      borderRadius: const BorderRadius.all(Radius.circular(16)),
+      constraints: const BoxConstraints(
+        maxWidth: 350,
+        maxHeight: 650,
+      ),
+      transitionBuilder: (context, anim1, anim2, child) {
+        return FadeTransition(
+          opacity: anim1.drive(
+            Tween(
+              begin: 0,
+              end: 1,
+            ),
+          ),
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 200),
+      barrierDismissible: true,
+      selectableDayPredicate: (dateTime) {
+        // Disable 25th Feb 2023
+        // if (dateTime == DateTime(2023, 2, 25)) {
+        //   return false;
+        // } else {
+        //   return true;
+        // }
+        return true;
+      },
+    );
+    _controller.setDateTimeEnd(dateTime);
   }
 }
