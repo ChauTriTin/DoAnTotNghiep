@@ -35,12 +35,12 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
     return PlacePicker(
       apiKey: Constants.googleMapAPIKey,
       onPlacePicked: (result) {
-        Get.back();
         Place p = Place();
         p.lat = result.geometry?.location.lat ?? 0;
         p.long = result.geometry?.location.lng ?? 0;
         p.name = result.formattedAddress ?? "";
         widget.callback.call(p);
+        Get.back();
       },
       initialPosition: LatLng(
         widget.defaultPlace.lat,
