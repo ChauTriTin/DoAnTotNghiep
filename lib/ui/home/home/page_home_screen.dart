@@ -3,6 +3,7 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
+import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ class PageHomeScreen extends StatefulWidget {
 }
 
 class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
-  final _controllerDemo = Get.put(PageHomeController());
+  final _controller = Get.put(PageHomeController());
 
   @override
   void initState() {
@@ -27,8 +28,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   }
 
   void _setupListen() {
-    _controllerDemo.appLoading.listen((appLoading) {});
-    _controllerDemo.appError.listen((err) {
+    _controller.appLoading.listen((appLoading) {});
+    _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
       });
@@ -37,7 +38,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
 
   @override
   void dispose() {
-    _controllerDemo.clearOnDispose();
+    _controller.clearOnDispose();
     super.dispose();
   }
 
@@ -53,52 +54,22 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         color: ColorConstants.appColorBkg,
         child: ListView(
           physics: const BouncingScrollPhysics(),
-          children: [
-            const ProfileBarWidget(
+          children: const [
+            ProfileBarWidget(
               name: "Nguyen Hoang Giang",
               state: "⬤ Online",
               linkAvatar: StringConstants.linkImgMinaCrying,
             ),
-            Row(
-              children: [
-                const SizedBox(width: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: ColorConstants.appColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Tạo chuyến đi',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                    ),
-                  ),
-                ),
-                const Expanded(
-                  child: Text(
-                    'Mã: AB0134NM45',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: ColorConstants.appColor,
-                    ),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-                const SizedBox(width: DimenConstants.marginPaddingSmall),
-                const Icon(
-                  Icons.content_copy,
-                  color: ColorConstants.appColor,
-                ),
-                const SizedBox(width: DimenConstants.marginPaddingMedium),
-              ],
-            ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          elevation: DimenConstants.elevationMedium,
+          backgroundColor: ColorConstants.appColor,
+          onPressed: () {
+            Get.to(const CreateRouterScreen());
+          },
+          child: const Icon(Icons.add)),
     );
   }
 }
