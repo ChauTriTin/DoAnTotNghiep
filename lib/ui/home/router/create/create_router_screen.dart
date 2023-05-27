@@ -2,6 +2,7 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -262,12 +263,17 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         const SizedBox(height: DimenConstants.marginPaddingSmall),
         const Divider(),
         //dia diem bat dau
-        Text(
-          'Địa điểm bắt đầu'.toUpperCase(),
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: DimenConstants.txtMedium,
+        InkWell(
+          child: Text(
+            'Địa điểm bắt đầu'.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: DimenConstants.txtMedium,
+            ),
           ),
+          onTap: () {
+            Get.to(MapPickerScreen());
+          },
         ),
         const SizedBox(height: DimenConstants.marginPaddingSmall),
         const Divider(),
