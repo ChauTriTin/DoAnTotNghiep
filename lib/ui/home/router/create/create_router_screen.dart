@@ -7,6 +7,7 @@ import 'package:appdiphuot/ui/home/router/createSuccess/create_success_screen.da
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:forked_slider_button/forked_slider_button.dart';
 import 'package:get/get.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
@@ -73,21 +74,27 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         backgroundColor: ColorConstants.appColor,
       ),
       backgroundColor: ColorConstants.appColorBkg,
-      body: Container(
-        color: ColorConstants.appColorBkg,
-        child: Column(
-          children: [
-            const ProfileBarWidget(
-              name: "Nguyen Hoang Giang",
-              state: "⬤ Online",
-              linkAvatar: StringConstants.linkImgMinaCrying,
-            ),
-            const SizedBox(height: DimenConstants.marginPaddingTiny),
-            Expanded(child: Obx(() {
-              return _buildBodyView();
-            })),
-          ],
+      body: FocusDetector(
+        child: Container(
+          color: ColorConstants.appColorBkg,
+          child: Column(
+            children: [
+              const ProfileBarWidget(
+                name: "Nguyen Hoang Giang",
+                state: "⬤ Online",
+                linkAvatar: StringConstants.linkImgMinaCrying,
+              ),
+              const SizedBox(height: DimenConstants.marginPaddingTiny),
+              Expanded(child: Obx(() {
+                return _buildBodyView();
+              })),
+            ],
+          ),
         ),
+        onFocusLost: () {
+          debugPrint("onFocusLost");
+          FocusScope.of(context).unfocus();
+        },
       ),
     );
   }
@@ -520,6 +527,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             dismissible: false,
             backgroundColor: Colors.red.withOpacity(0.25),
             action: () {
+              FocusScope.of(context).unfocus();
               _controller.createRouter();
             },
             label: Text(
