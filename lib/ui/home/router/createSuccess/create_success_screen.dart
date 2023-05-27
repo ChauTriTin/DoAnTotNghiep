@@ -96,6 +96,23 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              DimenConstants.marginPaddingMedium,
+              DimenConstants.marginPaddingLarge,
+              DimenConstants.marginPaddingMedium,
+              DimenConstants.marginPaddingMedium,
+            ),
+            child: FloatingActionButton(
+              mini: true,
+              elevation: DimenConstants.elevationMedium,
+              backgroundColor: ColorConstants.appColor,
+              onPressed: () {
+                Get.back();
+              },
+              child: const Icon(Icons.clear),
+            ),
+          ),
         ],
       ),
     );
