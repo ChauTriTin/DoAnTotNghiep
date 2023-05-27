@@ -349,14 +349,30 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         const SizedBox(height: DimenConstants.marginPaddingSmall),
         const Divider(),
         //noi dung chan
-        Text(
-          'nơi dừng chân'.toUpperCase(),
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: DimenConstants.txtMedium,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'nơi dừng chân'.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: DimenConstants.txtMedium,
+                ),
+              ),
+            ),
+            FloatingActionButton(
+              mini: true,
+              elevation: DimenConstants.elevationMedium,
+              backgroundColor: ColorConstants.appColor,
+              onPressed: () {
+                _addNewStopPlace();
+              },
+              child: const Icon(Icons.add),
+            ),
+          ],
         ),
         const SizedBox(height: DimenConstants.marginPaddingSmall),
+        _buildStopView(),
         const Divider(),
         //thoi gian khoi hanh
         Text(
@@ -391,4 +407,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       ],
     );
   }
+
+  Widget _buildStopView() {
+    return Container();
+  }
+
+  void _addNewStopPlace() {}
 }
