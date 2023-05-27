@@ -156,7 +156,7 @@ class CreateRouterController extends BaseController {
       return;
     }
     debugPrint("sDateTimeEnd $sDateTimeEnd");
-    if (sDateTimeStart == dateTimeDefault) {
+    if (sDateTimeEnd == dateTimeDefault) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn thời gian ngừng đăng kí");
       return;
