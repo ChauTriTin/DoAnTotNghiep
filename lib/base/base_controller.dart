@@ -64,5 +64,5 @@ class AppError {
 }
 
 enum TypeApp {
-  getListChap,
+  createRouter,
 }

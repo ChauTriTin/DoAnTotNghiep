@@ -34,18 +34,25 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   }
 
   void _setupListen() {
-    _controller.appLoading.listen((appLoading) {});
+    _controller.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+      } else {}
+    });
     _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
       });
     });
-    // _controller.tecTitle.addListener(() {
-    //   _controller.setTitle(_controller.tecTitle.text.toString().trim());
-    // });
-    // _controller.tecDescription.addListener(() {
-    //   _controller.setDescription(_controller.tecDescription.text.toString().trim());
-    // });
+    ever(_controller.isCreateRouteSuccess, (value) {
+      if (value == true) {
+        Get.back();
+        showSnackBarFull(StringConstants.warning, "Tạo thành công");
+        Get.to(CreateSuccessScreen(
+          title: "AB0134NM45",
+          dateTimeEnd: _controller.dateTimeEnd.value,
+        ));
+      }
+    });
   }
 
   @override
@@ -95,7 +102,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           children: [
             ElevatedButton(
               onPressed: () {
-                _controller.createRouter();
+                //do nothing
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -506,15 +513,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         const SizedBox(height: DimenConstants.marginPaddingLarge),
         Center(
           child: SliderButton(
+            dismissible: false,
             backgroundColor: Colors.red.withOpacity(0.25),
             action: () {
-              //TODO
               _controller.createRouter();
-              Get.back();
-              Get.to(CreateSuccessScreen(
-                title: "AB0134NM45",
-                dateTimeEnd: _controller.dateTimeEnd.value,
-              ));
             },
             label: Text(
               "Tạo chuyến đi".toUpperCase(),

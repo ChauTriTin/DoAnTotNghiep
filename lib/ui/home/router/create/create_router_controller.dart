@@ -21,6 +21,8 @@ class CreateRouterController extends BaseController {
   var dateTimeEnd = DateTime(1111, 1, 11).obs;
   var isPublic = true.obs;
 
+  var isCreateRouteSuccess = false.obs;
+
   void clearOnDispose() {
     controllerImagePicker.dispose();
     Get.delete<CreateRouterController>();
@@ -119,5 +121,11 @@ class CreateRouterController extends BaseController {
     debugPrint("sDateTimeStart $sDateTimeStart");
     debugPrint("sDateTimeEnd $sDateTimeEnd");
     debugPrint("sIsPublic $sIsPublic");
+
+    setAppLoading(true, "Loading", TypeApp.createRouter);
+    Future.delayed(const Duration(milliseconds: 5000), () {
+      isCreateRouteSuccess.value = true;
+      setAppLoading(false, "Loading", TypeApp.createRouter);
+    });
   }
 }
