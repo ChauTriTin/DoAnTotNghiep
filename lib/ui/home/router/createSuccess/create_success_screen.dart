@@ -89,60 +89,65 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: DimenConstants.marginPaddingLarge),
-                    Container(
-                      alignment: Alignment.center,
-                      width: Get.width,
-                      height: Get.height / 5,
-                      decoration: BoxDecoration(
-                        color: isDoneCountdown
-                            ? Colors.white
-                            : ColorConstants.appColor.withOpacity(0.5),
-                        border: Border.all(
+                    InkWell(
+                      onTap: () {
+                        _tapGoNow();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: Get.width,
+                        height: Get.height / 5,
+                        decoration: BoxDecoration(
                           color: isDoneCountdown
                               ? Colors.white
                               : ColorConstants.appColor.withOpacity(0.5),
-                        ),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(DimenConstants.radiusRound),
-                        ),
-                      ),
-                      padding: const EdgeInsets.all(
-                          DimenConstants.marginPaddingMedium),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            isDoneCountdown
-                                ? "ĐI THÔI"
-                                : "Chuyến đi sẽ khởi hành sau",
-                            style: TextStyle(
-                              fontSize: DimenConstants.txtMedium,
-                              fontWeight: FontWeight.bold,
-                              color: isDoneCountdown
-                                  ? ColorConstants.appColor
-                                  : Colors.white,
-                            ),
-                            textAlign: TextAlign.center,
+                          border: Border.all(
+                            color: isDoneCountdown
+                                ? Colors.white
+                                : ColorConstants.appColor.withOpacity(0.5),
                           ),
-                          if (!isDoneCountdown)
-                            const SizedBox(
-                                height: DimenConstants.marginPaddingMedium),
-                          Expanded(
-                            child: SlideCountdownSeparated(
-                              showZeroValue: true,
-                              duration:
-                                  widget.dateTimeEnd.difference(DateTime.now()),
-                              // separatorType: SeparatorType.title,
-                              // slideDirection: SlideDirection.up,
-                              onDone: () {
-                                _controller.setDoneCountdown(true);
-                              },
-                              replacement: Image.asset(
-                                "assets/images/bike.png",
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(DimenConstants.radiusRound),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(
+                            DimenConstants.marginPaddingMedium),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              isDoneCountdown
+                                  ? "ĐI THÔI"
+                                  : "Chuyến đi sẽ khởi hành sau",
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                fontWeight: FontWeight.bold,
+                                color: isDoneCountdown
+                                    ? ColorConstants.appColor
+                                    : Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            if (!isDoneCountdown)
+                              const SizedBox(
+                                  height: DimenConstants.marginPaddingMedium),
+                            Expanded(
+                              child: SlideCountdownSeparated(
+                                showZeroValue: true,
+                                duration: widget.dateTimeEnd
+                                    .difference(DateTime.now()),
+                                // separatorType: SeparatorType.title,
+                                // slideDirection: SlideDirection.up,
+                                onDone: () {
+                                  _controller.setDoneCountdown(true);
+                                },
+                                replacement: Image.asset(
+                                  "assets/images/bike.png",
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: DimenConstants.marginPaddingLarge),
@@ -171,5 +176,12 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
         ],
       ),
     );
+  }
+
+  void _tapGoNow() {
+    if (!_controller.isDoneCountdown.value) {
+      return;
+    }
+    //TODO
   }
 }
