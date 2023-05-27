@@ -1,10 +1,13 @@
 class Place {
-  var lat = 10.8231;
-  var long = 106.6297;
+  static const defaultLat = 10.8231;
+  static const defaultLong = 106.6297;
+
+  var lat = defaultLat;
+  var long = defaultLong;
   var name = "Chọn địa điểm";
 
   bool isDefaultPlace() {
-    if (lat == 10.8231 && long == 106.6297) {
+    if (lat == defaultLat && long == defaultLong) {
       return true;
     }
     return false;

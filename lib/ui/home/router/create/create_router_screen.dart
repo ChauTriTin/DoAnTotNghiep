@@ -403,8 +403,27 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   }
 
   Widget _buildStopView() {
-    return Container();
+    var list = _controller.listPlaceStop;
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: list.length,
+      itemBuilder: (context, i) {
+        var place = list[i];
+        return Container(
+          color: Colors.red,
+          child: Text(place.name),
+        );
+      },
+    );
   }
 
-  void _addNewStopPlace() {}
+  void _addNewStopPlace() {
+    Get.to(MapPickerScreen(
+      defaultPlace: null,
+      callback: (newPlace) {
+        _controller.addPlaceStop(newPlace);
+      },
+    ));
+  }
 }

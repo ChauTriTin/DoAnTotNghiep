@@ -14,7 +14,7 @@ class MapPickerScreen extends StatefulWidget {
     required this.callback,
   });
 
-  final Place defaultPlace;
+  final Place? defaultPlace;
   final Function(Place newPlace) callback;
 
   @override
@@ -31,20 +31,20 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
   }
 
   Widget _buildBodyView() {
-    var useCurrentLocation = widget.defaultPlace.isDefaultPlace();
+    var useCurrentLocation = widget.defaultPlace?.isDefaultPlace();
     return PlacePicker(
       apiKey: Constants.googleMapAPIKey,
       onPlacePicked: (result) {
         Place p = Place();
-        p.lat = result.geometry?.location.lat ?? 0;
-        p.long = result.geometry?.location.lng ?? 0;
+        p.lat = result.geometry?.location.lat ?? Place.defaultLat;
+        p.long = result.geometry?.location.lng ?? Place.defaultLong;
         p.name = result.formattedAddress ?? "";
         widget.callback.call(p);
         Get.back();
       },
       initialPosition: LatLng(
-        widget.defaultPlace.lat,
-        widget.defaultPlace.long,
+        widget.defaultPlace?.lat ?? Place.defaultLat,
+        widget.defaultPlace?.long ?? Place.defaultLong,
       ),
       useCurrentLocation: useCurrentLocation,
       resizeToAvoidBottomInset: false,

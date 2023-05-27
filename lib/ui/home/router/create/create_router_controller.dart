@@ -14,6 +14,7 @@ class CreateRouterController extends BaseController {
   );
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
+  var listPlaceStop = <Place>[].obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -28,20 +29,31 @@ class CreateRouterController extends BaseController {
     placeEnd.value = place;
   }
 
+  void addPlaceStop(Place place) {
+    listPlaceStop.add(place);
+    listPlaceStop.refresh();
+  }
+
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
     final sImages = controllerImagePicker.images;
     Place sPlaceStart = placeStart.value;
     Place sPlaceEnd = placeEnd.value;
+    var sListPlaceStop = listPlaceStop;
 
-    debugPrint(">>>createRouter sTitle $sTitle");
-    debugPrint(">>>createRouter sDescription $sDescription");
-    debugPrint(">>>createRouter sImages ${sImages.length}");
+    debugPrint(">>>>>>>>>>>>>>>createRouter");
+    debugPrint("sTitle $sTitle");
+    debugPrint("sDescription $sDescription");
+    debugPrint("sImages ${sImages.length}");
     for (var element in sImages) {
-      debugPrint(">>>createRouter element ${element.name} ${element.path}");
+      debugPrint("element ${element.name} ${element.path}");
     }
-    debugPrint(">>>createRouter sPlaceStart $sPlaceStart");
-    debugPrint(">>>createRouter sPlaceEnd $sPlaceEnd");
+    debugPrint("sPlaceStart $sPlaceStart");
+    debugPrint("sPlaceEnd $sPlaceEnd");
+    debugPrint("sListPlaceStop ${sListPlaceStop.length}");
+    for (var element in sListPlaceStop) {
+      debugPrint("element ${element.name}");
+    }
   }
 }
