@@ -49,6 +49,7 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
       useCurrentLocation: useCurrentLocation,
       resizeToAvoidBottomInset: false,
       zoomControlsEnabled: true,
+      searchForInitialValue: true,
     );
   }
 }
