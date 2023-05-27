@@ -2,10 +2,12 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:multi_image_picker_view/multi_image_picker_view.dart';
+
+import 'create_router_controller.dart';
 
 class CreateRouterScreen extends StatefulWidget {
   const CreateRouterScreen({
@@ -17,9 +19,14 @@ class CreateRouterScreen extends StatefulWidget {
 }
 
 class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
-  final _controller = Get.put(PageHomeController());
+  final _controller = Get.put(CreateRouterController());
   final _tecTitle = TextEditingController();
   final _tecDescription = TextEditingController();
+  final _controllerImagePicker = MultiImagePickerController(
+    maxImages: 6,
+    withReadStream: true,
+    allowedImageTypes: ['png', 'jpg', 'jpeg'],
+  );
 
   @override
   void initState() {
@@ -39,6 +46,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   @override
   void dispose() {
     _controller.clearOnDispose();
+    _controllerImagePicker.dispose();
     super.dispose();
   }
 
@@ -59,6 +67,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               state: "⬤ Online",
               linkAvatar: StringConstants.linkImgMinaCrying,
             ),
+            const SizedBox(height: DimenConstants.marginPaddingTiny),
             Expanded(
               child: ListView(
                 physics: const BouncingScrollPhysics(),
@@ -72,7 +81,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   Row(
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _controller.createRouter();
+                        },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: ColorConstants.appColor,
@@ -181,6 +192,68 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       color: Colors.grey,
                       fontSize: DimenConstants.txtMedium,
                     ),
+                  ),
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  MultiImagePickerView(
+                    onChange: (list) {
+                      debugPrint(list.toString());
+                    },
+                    controller: _controllerImagePicker,
+                    padding: const EdgeInsets.all(0),
+                    initialContainerBuilder: (context, pickerCallback) {
+                      return SizedBox(
+                        height: 70,
+                        width: 70,
+                        child: Center(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: ColorConstants.appColor,
+                              shape: const CircleBorder(),
+                              elevation: DimenConstants.radiusMedium,
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(
+                                  DimenConstants.marginPaddingMedium),
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            onPressed: () {
+                              pickerCallback();
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    addMoreBuilder: (context, pickerCallback) {
+                      return SizedBox(
+                        height: 70,
+                        width: 0,
+                        child: Center(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: ColorConstants.appColor,
+                              shape: const CircleBorder(),
+                              elevation: DimenConstants.radiusMedium,
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(
+                                  DimenConstants.marginPaddingMedium),
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                            onPressed: () {
+                              pickerCallback();
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   const Divider(),

@@ -17,4 +17,6 @@ class CreateRouterController extends BaseController {
     list.add(DateTime.now().toString());
     list.refresh();
   }
+
+  void createRouter() {}
 }
