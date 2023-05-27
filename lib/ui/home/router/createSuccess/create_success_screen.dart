@@ -34,41 +34,66 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               width: Get.width,
             ),
           ),
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "TẠO THÀNH CÔNG",
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    color: ColorConstants.appColor,
+          Padding(
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "TẠO THÀNH CÔNG",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.appColor,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: DimenConstants.marginPaddingSmall),
-                const Text(
-                  "Chuyến đi của bạn đã được tạo với mã",
-                  style: TextStyle(
-                    fontSize: DimenConstants.txtMedium,
-                    color: Colors.black,
+                  const SizedBox(height: DimenConstants.marginPaddingSmall),
+                  const Text(
+                    "Chuyến đi của bạn đã được tạo với mã",
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                    color: ColorConstants.appColor,
+                  const SizedBox(height: DimenConstants.marginPaddingMedium),
+                  Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.appColor,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-              ],
+                  const SizedBox(height: DimenConstants.marginPaddingLarge),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: ColorConstants.appColor,
+                      border: Border.all(
+                        color: ColorConstants.appColor,
+                      ),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(DimenConstants.radiusMedium),
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(
+                        DimenConstants.marginPaddingMedium),
+                    child: const Text(
+                      "Chuyến đi sẽ khởi hành sau\n3 ngày 12h56p",
+                      style: TextStyle(
+                        fontSize: DimenConstants.txtMedium,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
