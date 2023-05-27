@@ -7,6 +7,7 @@ import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
@@ -472,6 +473,35 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           ),
         ),
         const Divider(),
+        Text(
+          'TRẠNG THÁI CHUYẾN ĐI'.toUpperCase(),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: DimenConstants.txtMedium,
+          ),
+        ),
+        const SizedBox(height: DimenConstants.marginPaddingSmall),
+        Container(
+          alignment: Alignment.center,
+          child: LiteRollingSwitch(
+            width: 160,
+            value: true,
+            textOn: 'công khai'.toUpperCase(),
+            textOff: 'Cá NHân'.toUpperCase(),
+            colorOn: ColorConstants.appColor,
+            colorOff: ColorConstants.appColor,
+            iconOn: Icons.language,
+            iconOff: Icons.lock,
+            textSize: DimenConstants.txtMedium,
+            onChanged: (bool state) {
+              debugPrint('Current State of SWITCH IS: $state');
+            },
+            onTap: () {},
+            onDoubleTap: () {},
+            onSwipe: () {},
+          ),
+        ),
+        const SizedBox(height: DimenConstants.marginPadding98),
       ],
     );
   }
