@@ -98,8 +98,9 @@ class CreateRouterController extends BaseController {
     Place sPlaceStart = placeStart.value;
     Place sPlaceEnd = placeEnd.value;
     var sListPlaceStop = listPlaceStop;
-    var sDateTimeStart = dateTimeStart;
-    var sDateTimeEnd = dateTimeEnd;
+    var sDateTimeStart = dateTimeStart.value;
+    var sDateTimeEnd = dateTimeEnd.value;
+    var sIsPublic = isPublic.value;
 
     debugPrint(">>>>>>>>>>>>>>>createRouter");
     debugPrint("sTitle $sTitle");
@@ -117,5 +118,6 @@ class CreateRouterController extends BaseController {
     }
     debugPrint("sDateTimeStart $sDateTimeStart");
     debugPrint("sDateTimeEnd $sDateTimeEnd");
+    debugPrint("sIsPublic $sIsPublic");
   }
 }
