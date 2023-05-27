@@ -15,6 +15,7 @@ class CreateRouterController extends BaseController {
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
   var listPlaceStop = <Place>[].obs;
+  var dateTimeStart = DateTime.now().obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -49,6 +50,13 @@ class CreateRouterController extends BaseController {
   void deletePlaceStop(int index) {
     listPlaceStop.removeAt(index);
     listPlaceStop.refresh();
+  }
+
+  void setDateTimeStart(DateTime? dt) {
+    if (dt == null) {
+      return;
+    }
+    dateTimeStart.value = dt;
   }
 
   void createRouter() {
