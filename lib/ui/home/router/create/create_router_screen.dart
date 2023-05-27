@@ -20,13 +20,6 @@ class CreateRouterScreen extends StatefulWidget {
 
 class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   final _controller = Get.put(CreateRouterController());
-  final _tecTitle = TextEditingController();
-  final _tecDescription = TextEditingController();
-  final _controllerImagePicker = MultiImagePickerController(
-    maxImages: 6,
-    withReadStream: true,
-    allowedImageTypes: ['png', 'jpg', 'jpeg'],
-  );
 
   @override
   void initState() {
@@ -41,18 +34,17 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         //do sth
       });
     });
-    _tecTitle.addListener(() {
-      _controller.setTitle(_tecTitle.text.toString().trim());
-    });
-    _tecDescription.addListener(() {
-      _controller.setDescription(_tecDescription.text.toString().trim());
-    });
+    // _controller.tecTitle.addListener(() {
+    //   _controller.setTitle(_controller.tecTitle.text.toString().trim());
+    // });
+    // _controller.tecDescription.addListener(() {
+    //   _controller.setDescription(_controller.tecDescription.text.toString().trim());
+    // });
   }
 
   @override
   void dispose() {
     _controller.clearOnDispose();
-    _controllerImagePicker.dispose();
     super.dispose();
   }
 
@@ -132,7 +124,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   TextField(
                     textAlign: TextAlign.start,
-                    controller: _tecTitle,
+                    controller: _controller.tecTitle,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
@@ -166,7 +158,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   const SizedBox(height: DimenConstants.marginPaddingSmall),
                   TextField(
                     textAlign: TextAlign.start,
-                    controller: _tecDescription,
+                    controller: _controller.tecDescription,
                     keyboardType: TextInputType.multiline,
                     minLines: 5,
                     maxLines: 10,
@@ -204,7 +196,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                     onChange: (list) {
                       debugPrint("MultiImagePickerView $list");
                     },
-                    controller: _controllerImagePicker,
+                    controller: _controller.controllerImagePicker,
                     padding: const EdgeInsets.all(0),
                     initialContainerBuilder: (context, pickerCallback) {
                       return SizedBox(
