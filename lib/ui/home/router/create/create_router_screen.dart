@@ -507,7 +507,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           child: SliderButton(
             backgroundColor: Colors.red.withOpacity(0.25),
             action: () {
+              //TODO
               _controller.createRouter();
+              Get.back();
             },
             label: Text(
               "Tạo chuyến đi".toUpperCase(),
