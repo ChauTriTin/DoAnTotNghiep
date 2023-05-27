@@ -285,7 +285,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.startName.value,
+              _controller.placeStart.value.name,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -294,12 +294,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           ),
           onTap: () {
             Get.to(MapPickerScreen(
-              defaultLatitude: _controller.startLat.value,
-              defaultLongitude: _controller.startLong.value,
-              callback: (newLat, newLong, newName) {
-                _controller.setStartLat(newLat);
-                _controller.setStartLong(newLong);
-                _controller.setStartName(newName);
+              defaultPlace: _controller.placeStart.value,
+              callback: (newPlace) {
+                _controller.setPlaceStart(newPlace);
               },
             ));
           },
@@ -327,7 +324,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.endName.value,
+              _controller.placeEnd.value.name,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -336,12 +333,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           ),
           onTap: () {
             Get.to(MapPickerScreen(
-              defaultLatitude: _controller.endLat.value,
-              defaultLongitude: _controller.endLong.value,
-              callback: (newLat, newLong, newName) {
-                _controller.setEndLat(newLat);
-                _controller.setEndLong(newLong);
-                _controller.setEndName(newName);
+              defaultPlace: _controller.placeEnd.value,
+              callback: (newPlace) {
+                _controller.setPlaceEnd(newPlace);
               },
             ));
           },

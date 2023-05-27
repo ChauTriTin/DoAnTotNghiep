@@ -1,5 +1,5 @@
 class Place {
-  var startLat = 10.8231;
-  var startLong = 106.6297;
-  var startName = "Chọn địa điểm";
+  var lat = 10.8231;
+  var long = 106.6297;
+  var name = "Chọn địa điểm";
 }
