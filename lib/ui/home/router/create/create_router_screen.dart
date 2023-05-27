@@ -263,12 +263,31 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         const SizedBox(height: DimenConstants.marginPaddingSmall),
         const Divider(),
         //dia diem bat dau
+        Text(
+          'Địa điểm bắt đầu'.toUpperCase(),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: DimenConstants.txtMedium,
+          ),
+        ),
+        const SizedBox(height: DimenConstants.marginPaddingSmall),
         InkWell(
-          child: Text(
-            'Địa điểm bắt đầu'.toUpperCase(),
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: DimenConstants.txtMedium,
+          child: Container(
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 0.5,
+                  color: Colors.black,
+                ),
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(DimenConstants.radiusMedium))),
+            child: Text(
+              _controller.getStartNameDisplay(),
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: DimenConstants.txtMedium,
+              ),
             ),
           ),
           onTap: () {

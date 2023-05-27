@@ -32,6 +32,14 @@ class CreateRouterController extends BaseController {
     startName.value = value;
   }
 
+  String getStartNameDisplay() {
+    if (startName.value.isNotEmpty) {
+      return startName.value;
+    } else {
+      return "Chọn địa điểm";
+    }
+  }
+
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
