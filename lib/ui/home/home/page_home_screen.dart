@@ -64,12 +64,13 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          elevation: DimenConstants.elevationMedium,
-          backgroundColor: ColorConstants.appColor,
-          onPressed: () {
-            Get.to(const CreateRouterScreen());
-          },
-          child: const Icon(Icons.add)),
+        elevation: DimenConstants.elevationMedium,
+        backgroundColor: ColorConstants.appColor,
+        onPressed: () {
+          Get.to(const CreateRouterScreen());
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

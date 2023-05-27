@@ -3,6 +3,7 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
+import 'package:appdiphuot/ui/home/router/createSuccess/create_success_screen.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -510,6 +511,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               //TODO
               _controller.createRouter();
               Get.back();
+              Get.to(const CreateSuccessScreen(title: "AB0134NM45"));
             },
             label: Text(
               "Tạo chuyến đi".toUpperCase(),
