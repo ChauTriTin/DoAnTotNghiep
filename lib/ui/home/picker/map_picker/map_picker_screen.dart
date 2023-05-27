@@ -34,12 +34,12 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
               "MapLocationPicker onNext lat ${result?.geometry.location.lat}");
           debugPrint(
               "MapLocationPicker onNext lng ${result?.geometry.location.lng}");
+          Get.back();
           widget.callback.call(
-            result?.geometry.location.lat ?? 0,
-            result?.geometry.location.lng ?? 0,
+            result?.geometry.location.lat ?? 0.0,
+            result?.geometry.location.lng ?? 0.0,
             result?.formattedAddress ?? "",
           );
-          Get.back();
         },
       ),
     );

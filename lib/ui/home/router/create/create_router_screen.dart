@@ -314,6 +314,37 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             fontSize: DimenConstants.txtMedium,
           ),
         ),
+        InkWell(
+          child: Container(
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 0.5,
+                  color: Colors.black,
+                ),
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(DimenConstants.radiusMedium))),
+            child: Text(
+              _controller.endName.value,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: DimenConstants.txtMedium,
+              ),
+            ),
+          ),
+          onTap: () {
+            Get.to(MapPickerScreen(
+              defaultLatitude: _controller.endLat.value,
+              defaultLongitude: _controller.endLong.value,
+              callback: (newLat, newLong, newName) {
+                _controller.setEndLat(newLat);
+                _controller.setEndLong(newLong);
+                _controller.setEndName(newName);
+              },
+            ));
+          },
+        ),
         const SizedBox(height: DimenConstants.marginPaddingSmall),
         const Divider(),
         //noi dung chan

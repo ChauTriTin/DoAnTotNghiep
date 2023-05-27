@@ -15,6 +15,10 @@ class CreateRouterController extends BaseController {
   var startLong = 106.6297.obs; //hcmc default
   var startName = "Chọn địa điểm".obs;
 
+  var endLat = 10.8231.obs; //hcmc default
+  var endLong = 106.6297.obs; //hcmc default
+  var endName = "Chọn địa điểm".obs;
+
   void clearOnDispose() {
     controllerImagePicker.dispose();
     Get.delete<CreateRouterController>();
@@ -32,6 +36,18 @@ class CreateRouterController extends BaseController {
     startName.value = value;
   }
 
+  void setEndLat(double value) {
+    endLat.value = value;
+  }
+
+  void setEndLong(double value) {
+    endLong.value = value;
+  }
+
+  void setEndName(String value) {
+    endName.value = value;
+  }
+
   void createRouter() {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
@@ -39,6 +55,9 @@ class CreateRouterController extends BaseController {
     double sStartLat = startLat.value;
     double sStartLong = startLong.value;
     String sStartName = startName.value;
+    double sEndLat = endLat.value;
+    double sEndLong = endLong.value;
+    String sEndName = endName.value;
 
     debugPrint(">>>createRouter sTitle $sTitle");
     debugPrint(">>>createRouter sDescription $sDescription");
@@ -49,5 +68,8 @@ class CreateRouterController extends BaseController {
     debugPrint(">>>createRouter sStartLat $sStartLat");
     debugPrint(">>>createRouter startLong $sStartLong");
     debugPrint(">>>createRouter sStartName $sStartName");
+    debugPrint(">>>createRouter sEndLat $sEndLat");
+    debugPrint(">>>createRouter sEndLong $sEndLong");
+    debugPrint(">>>createRouter sEndName $sEndName");
   }
 }
