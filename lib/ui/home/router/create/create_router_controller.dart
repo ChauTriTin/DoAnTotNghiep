@@ -19,6 +19,7 @@ class CreateRouterController extends BaseController {
   final dateTimeDefault = DateTime(1111, 1, 11);
   var dateTimeStart = DateTime(1111, 1, 11).obs;
   var dateTimeEnd = DateTime(1111, 1, 11).obs;
+  var isPublic = true.obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -83,6 +84,10 @@ class CreateRouterController extends BaseController {
       return;
     }
     dateTimeEnd.value = dt;
+  }
+
+  void setPublic(bool value) {
+    isPublic.value = value;
   }
 
   void createRouter() {

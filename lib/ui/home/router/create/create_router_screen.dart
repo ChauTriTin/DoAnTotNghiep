@@ -485,7 +485,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           alignment: Alignment.center,
           child: LiteRollingSwitch(
             width: 160,
-            value: true,
+            value: _controller.isPublic.value,
             textOn: 'công khai'.toUpperCase(),
             textOff: 'Cá NHân'.toUpperCase(),
             colorOn: ColorConstants.appColor,
@@ -494,7 +494,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             iconOff: Icons.lock,
             textSize: DimenConstants.txtMedium,
             onChanged: (bool state) {
-              debugPrint('Current State of SWITCH IS: $state');
+              _controller.setPublic(state);
             },
             onTap: () {},
             onDoubleTap: () {},
