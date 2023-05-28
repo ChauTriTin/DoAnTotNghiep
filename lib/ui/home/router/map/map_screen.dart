@@ -299,30 +299,44 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       return SizedBox(
         width: 90,
         height: 90,
-        child: AvatarGlow(
-          glowColor: Colors.red,
-          endRadius: 60,
-          duration: const Duration(milliseconds: 2000),
-          repeat: true,
-          showTwoGlows: true,
-          repeatPauseDuration: const Duration(milliseconds: 100),
-          child: SizedBox(
-            width: 70,
-            height: 70,
-            child: ClipOval(
-              child: SizedBox.fromSize(
-                size: const Size.fromRadius(48), // Image radius
-                child: Image.network(
-                  pos % 2 == 0
-                      ? "https://kenh14cdn.com/thumb_w/620/203336854389633024/2022/11/6/photo-4-16677111180281863259936.jpg"
-                      : "https://kenh14cdn.com/thumb_w/620/2019/11/30/0d19c07b6b3b8265db2a-15751098043831840905821.jpg",
-                  height: 45,
-                  width: 45,
-                  fit: BoxFit.cover,
+        child: Stack(
+          children: [
+            AvatarGlow(
+              glowColor: Colors.red,
+              endRadius: 60,
+              duration: const Duration(milliseconds: 2000),
+              repeat: true,
+              showTwoGlows: true,
+              repeatPauseDuration: const Duration(milliseconds: 100),
+              child: SizedBox(
+                width: 70,
+                height: 70,
+                child: ClipOval(
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(48), // Image radius
+                    child: Image.network(
+                      pos % 2 == 0
+                          ? "https://kenh14cdn.com/thumb_w/620/203336854389633024/2022/11/6/photo-4-16677111180281863259936.jpg"
+                          : "https://kenh14cdn.com/thumb_w/620/2019/11/30/0d19c07b6b3b8265db2a-15751098043831840905821.jpg",
+                      height: 45,
+                      width: 45,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+            const Center(
+              child: Text(
+                "100m",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: DimenConstants.txtMedium,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
