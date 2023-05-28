@@ -18,9 +18,10 @@ class CreateRouterController extends BaseController {
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
   var listPlaceStop = <Place>[].obs;
-  final dateTimeDefault = DateTime(1111, 1, 11);
-  var dateTimeStart = DateTime(1111, 1, 11).obs;
-  var dateTimeEnd = DateTime(1111, 1, 11).obs;
+
+  // final dateTimeDefault = DateTime(1111, 1, 11);
+  var dateTimeStart = DateTime.now().obs;
+  var dateTimeEnd = DateTime.now().add(const Duration(days: 3)).obs;
   var isPublic = true.obs;
 
   var isCreateRouteSuccess = false.obs;
@@ -64,30 +65,50 @@ class CreateRouterController extends BaseController {
     if (dt == null) {
       return;
     }
-    dateTimeStart.value = dt;
-  }
-
-  DateTime getDateTimeStart() {
-    if (dateTimeStart.value == dateTimeDefault) {
-      return DateTime.now();
+    debugPrint(">>> dt ${dt.microsecondsSinceEpoch}");
+    debugPrint(">>> dateTimeEnd ${dateTimeEnd.value.microsecondsSinceEpoch}");
+    var diff =
+        dt.microsecondsSinceEpoch < dateTimeEnd.value.microsecondsSinceEpoch;
+    debugPrint(">>> diff $diff");
+    if (diff) {
+      dateTimeStart.value = dt;
     } else {
-      return dateTimeStart.value;
+      showSnackBarFullError(StringConstants.warning,
+          "Thời gian khởi hành phải trước thời gian ngừng đăng kí");
     }
   }
 
-  DateTime getDateTimeEnd() {
-    if (dateTimeEnd.value == dateTimeDefault) {
-      return DateTime.now();
-    } else {
-      return dateTimeEnd.value;
-    }
-  }
+  // DateTime getDateTimeStart() {
+  //   if (dateTimeStart.value == dateTimeDefault) {
+  //     return DateTime.now();
+  //   } else {
+  //     return dateTimeStart.value;
+  //   }
+  // }
+  //
+  // DateTime getDateTimeEnd() {
+  //   if (dateTimeEnd.value == dateTimeDefault) {
+  //     return DateTime.now();
+  //   } else {
+  //     return dateTimeEnd.value;
+  //   }
+  // }
 
   void setDateTimeEnd(DateTime? dt) {
     if (dt == null) {
       return;
     }
-    dateTimeEnd.value = dt;
+    debugPrint(">>> dt ${dt.microsecondsSinceEpoch}");
+    debugPrint(">>> dateTimeEnd ${dateTimeStart.value.microsecondsSinceEpoch}");
+    var diff =
+        dt.microsecondsSinceEpoch > dateTimeStart.value.microsecondsSinceEpoch;
+    debugPrint(">>> diff $diff");
+    if (diff) {
+      dateTimeEnd.value = dt;
+    } else {
+      showSnackBarFullError(StringConstants.warning,
+          "Thời gian ngừng đăng ký phải lớn hơn thời gian khởi hành");
+    }
   }
 
   void setPublic(bool value) {
@@ -159,17 +180,17 @@ class CreateRouterController extends BaseController {
       debugPrint("element ${element.name}");
     }
     debugPrint("sDateTimeStart $sDateTimeStart");
-    if (sDateTimeStart == dateTimeDefault) {
-      showSnackBarFullError(
-          StringConstants.warning, "Vui lòng chọn thời gian khởi hành");
-      return;
-    }
+    // if (sDateTimeStart == dateTimeDefault) {
+    //   showSnackBarFullError(
+    //       StringConstants.warning, "Vui lòng chọn thời gian khởi hành");
+    //   return;
+    // }
     debugPrint("sDateTimeEnd $sDateTimeEnd");
-    if (sDateTimeEnd == dateTimeDefault) {
-      showSnackBarFullError(
-          StringConstants.warning, "Vui lòng chọn thời gian ngừng đăng kí");
-      return;
-    }
+    // if (sDateTimeEnd == dateTimeDefault) {
+    //   showSnackBarFullError(
+    //       StringConstants.warning, "Vui lòng chọn thời gian ngừng đăng kí");
+    //   return;
+    // }
     debugPrint("sIsPublic $sIsPublic");
     if (sRequire.isEmpty) {
       showSnackBarFullError(
