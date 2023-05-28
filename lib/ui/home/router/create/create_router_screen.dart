@@ -2,10 +2,12 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
 import 'package:appdiphuot/ui/home/router/createSuccess/create_success_screen.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:forked_slider_button/forked_slider_button.dart';
@@ -50,11 +52,15 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     });
     ever(_controller.isCreateRouteSuccess, (value) {
       if (value == true) {
-        Get.back();
+        //TODO loitp revert
+        // Get.back();
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
         Get.to(CreateSuccessScreen(
           title: "AB0134NM45",
           dateTimeEnd: _controller.dateTimeEnd.value,
+          placeStart: _controller.placeStart.value,
+          placeEnd: _controller.placeEnd.value,
+          listPlaceStop: _controller.listPlaceStop,
         ));
       }
     });
@@ -604,7 +610,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       return;
     }
     Get.to(MapPickerScreen(
-      defaultPlace: null,
+      defaultPlace: Place(),
       callback: (newPlace) {
         _controller.addPlaceStop(newPlace);
       },

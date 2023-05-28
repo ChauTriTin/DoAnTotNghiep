@@ -1,6 +1,10 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -13,10 +17,16 @@ class CreateSuccessScreen extends StatefulWidget {
     super.key,
     required this.title,
     required this.dateTimeEnd,
+    required this.placeStart,
+    required this.placeEnd,
+    required this.listPlaceStop,
   });
 
   final String title;
   final DateTime dateTimeEnd;
+  final Place placeStart;
+  final Place placeEnd;
+  final List<Place> listPlaceStop;
 
   @override
   State<CreateSuccessScreen> createState() => _CreateSuccessScreenState();
@@ -179,9 +189,26 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
   }
 
   void _tapGoNow() {
+    void go() {
+      Get.back(); //close this screen
+      var placeStart = widget.placeStart;
+      var placeEnd = widget.placeEnd;
+      var listPlaceStop = widget.listPlaceStop;
+      Get.to(MapScreen(
+        placeStart: placeStart,
+        placeEnd: placeEnd,
+        listPlaceStop: listPlaceStop,
+      ));
+    }
+
+    if (kDebugMode == true) {
+      showSnackBarFull(
+          StringConstants.warning, "Debug mode: forced go to map screen");
+      go();
+    }
     if (!_controller.isDoneCountdown.value) {
       return;
     }
-    //TODO
+    go();
   }
 }

@@ -2,6 +2,7 @@ import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
@@ -105,6 +106,14 @@ class CreateRouterController extends BaseController {
     var sDateTimeEnd = dateTimeEnd.value;
     var sIsPublic = isPublic.value;
 
+    // if (kDebugMode) {
+    //   showSnackBarFull(
+    //       StringConstants.warning, "Debug mode: Force createRouter");
+    //   isCreateRouteSuccess.value = true;
+    //   setAppLoading(false, "Loading", TypeApp.createRouter);
+    //   return;
+    // }
+
     debugPrint(">>>>>>>>>>>>>>>createRouter");
     debugPrint("sTitle $sTitle");
     if (sTitle.isEmpty) {
@@ -169,8 +178,14 @@ class CreateRouterController extends BaseController {
     }
 
     setAppLoading(true, "Loading", TypeApp.createRouter);
-    Future.delayed(const Duration(milliseconds: 5000), () {
+    Future.delayed(const Duration(milliseconds: 2000), () {
       isCreateRouteSuccess.value = true;
+
+      //TODO loitp delete later
+      if (kDebugMode) {
+        isCreateRouteSuccess.value = false;
+      }
+
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
   }
