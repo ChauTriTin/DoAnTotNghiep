@@ -53,7 +53,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    createMarkerPlaceStart(context);
+    createMarker(context);
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: Stack(
@@ -88,44 +88,53 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           target: _controller.kMapPlaceStart.value,
           zoom: 15.0,
         ),
-        markers: <Marker>{_createMarkerPlaceStart()},
-        onMapCreated: _onMapCreated,
+        markers: _createMaker(),
+        onMapCreated: (controllerParam) {
+          setState(() {
+            mapController = controllerParam;
+          });
+        },
       );
     });
   }
 
-  Marker _createMarkerPlaceStart() {
-    if (markerIconPlaceStart == null) {
-      return Marker(
-        markerId: MarkerId(_controller.idMarkerStart),
-        position: _controller.kMapPlaceStart.value,
-      );
-    } else {
-      return Marker(
-        markerId: MarkerId(_controller.idMarkerStart),
-        position: _controller.kMapPlaceStart.value,
-        icon: markerIconPlaceStart!,
-      );
+  Set<Marker> _createMaker() {
+    Marker createMarkerPlaceStart() {
+      if (markerIconPlaceStart == null) {
+        return Marker(
+          markerId: MarkerId(_controller.idMarkerStart),
+          position: _controller.kMapPlaceStart.value,
+        );
+      } else {
+        return Marker(
+          markerId: MarkerId(_controller.idMarkerStart),
+          position: _controller.kMapPlaceStart.value,
+          icon: markerIconPlaceStart!,
+        );
+      }
     }
+
+    var list = <Marker>[];
+    list.add(createMarkerPlaceStart());
+    return list.toSet();
   }
 
-  void _onMapCreated(GoogleMapController controllerParam) {
-    setState(() {
-      mapController = controllerParam;
-    });
-  }
-
-  Future<void> createMarkerPlaceStart(BuildContext context) async {
-    if (markerIconPlaceStart == null) {
-      final ImageConfiguration imageConfiguration =
-          createLocalImageConfiguration(context, size: const Size.square(55.0));
-      var bitmap = await BitmapDescriptor.fromAssetImage(
-        imageConfiguration,
-        'assets/images/ic_x.png',
-      );
-      setState(() {
-        markerIconPlaceStart = bitmap;
-      });
+  void createMarker(BuildContext context) {
+    Future<void> createMarkerPlaceStart(BuildContext context) async {
+      if (markerIconPlaceStart == null) {
+        final ImageConfiguration imageConfiguration =
+            createLocalImageConfiguration(context,
+                size: const Size.square(55.0));
+        var bitmap = await BitmapDescriptor.fromAssetImage(
+          imageConfiguration,
+          'assets/images/ic_marker.png',
+        );
+        setState(() {
+          markerIconPlaceStart = bitmap;
+        });
+      }
     }
+
+    createMarkerPlaceStart(context);
   }
 }
