@@ -53,7 +53,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    createMarkerImageFromAsset(context);
+    createMarkerPlaceStart(context);
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: Stack(
@@ -115,20 +115,17 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     });
   }
 
-  Future<void> createMarkerImageFromAsset(BuildContext context) async {
+  Future<void> createMarkerPlaceStart(BuildContext context) async {
     if (markerIconPlaceStart == null) {
       final ImageConfiguration imageConfiguration =
-          createLocalImageConfiguration(context, size: const Size.square(55));
-      BitmapDescriptor.fromAssetImage(
+          createLocalImageConfiguration(context, size: const Size.square(55.0));
+      var bitmap = await BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        'assets/images/bike.png',
-      ).then(_updateBitmap);
+        'assets/images/ic_x.png',
+      );
+      setState(() {
+        markerIconPlaceStart = bitmap;
+      });
     }
-  }
-
-  void _updateBitmap(BitmapDescriptor bitmap) {
-    setState(() {
-      markerIconPlaceStart = bitmap;
-    });
   }
 }
