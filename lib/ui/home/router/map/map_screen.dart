@@ -244,6 +244,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       consumeTapEvents: false,
       color: ColorConstants.appColor,
       width: 5,
+      // jointType: JointType.round,
       points: _controller.createPoints(),
       onTap: () {},
     );
