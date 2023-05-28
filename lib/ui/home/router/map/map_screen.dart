@@ -26,13 +26,14 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
+  GoogleMapController? mapController;
 
   @override
   void initState() {
     super.initState();
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
-    _createMarkerImageFromAsset(context);
+    _controller.createMarkerImageFromAsset(context);
   }
 
   void _setupListen() {
@@ -83,49 +84,33 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     return Obx(() {
       return GoogleMap(
         initialCameraPosition: CameraPosition(
-          target: _controller.kMapCenter.value,
+          target: _controller.kMapPlaceStart.value,
           zoom: 15.0,
         ),
-        markers: <Marker>{_createMarker()},
+        markers: <Marker>{_createMarkerPlaceStart()},
         onMapCreated: _onMapCreated,
       );
     });
   }
 
-  Marker _createMarker() {
-    if (_controller.markerIcon != null) {
+  Marker _createMarkerPlaceStart() {
+    if (_controller.markerIconPlaceStart != null) {
       return Marker(
-        markerId: const MarkerId('marker_1'),
-        position: _controller.kMapCenter.value,
-        icon: _controller.markerIcon!,
+        markerId: MarkerId(_controller.idMarkerStart),
+        position: _controller.kMapPlaceStart.value,
+        icon: _controller.markerIconPlaceStart!,
       );
     } else {
       return Marker(
-        markerId: const MarkerId('marker_1'),
-        position: _controller.kMapCenter.value,
+        markerId: MarkerId(_controller.idMarkerStart),
+        position: _controller.kMapPlaceStart.value,
       );
     }
-  }
-
-  Future<void> _createMarkerImageFromAsset(BuildContext context) async {
-    if (_controller.markerIcon == null) {
-      final ImageConfiguration imageConfiguration =
-          createLocalImageConfiguration(context, size: const Size.square(48));
-      BitmapDescriptor.fromAssetImage(
-              imageConfiguration, 'assets/images/ic_x.png')
-          .then(_updateBitmap);
-    }
-  }
-
-  void _updateBitmap(BitmapDescriptor bitmap) {
-    setState(() {
-      _controller.markerIcon = bitmap;
-    });
   }
 
   void _onMapCreated(GoogleMapController controllerParam) {
     setState(() {
-      _controller.mapController = controllerParam;
+      mapController = controllerParam;
     });
   }
 }

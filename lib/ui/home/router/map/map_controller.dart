@@ -1,12 +1,13 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapController extends BaseController {
-  var kMapCenter = const LatLng(Place.defaultLat, Place.defaultLong).obs;
-  GoogleMapController? mapController;
-  BitmapDescriptor? markerIcon;
+  final idMarkerStart = "idMarkerStart";
+  var kMapPlaceStart = const LatLng(Place.defaultLat, Place.defaultLong).obs;
+  BitmapDescriptor? markerIconPlaceStart;
 
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
@@ -27,6 +28,21 @@ class MapController extends BaseController {
     listPlaceStop.addAll(list);
     listPlaceStop.refresh();
 
-    kMapCenter.value = LatLng(pStart.lat, pStart.long);
+    kMapPlaceStart.value = LatLng(pStart.lat, pStart.long);
+  }
+
+  Future<void> createMarkerImageFromAsset(BuildContext context) async {
+    if (markerIconPlaceStart == null) {
+      final ImageConfiguration imageConfiguration =
+          createLocalImageConfiguration(context, size: const Size.square(48));
+      BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/images/bike.png',
+      ).then(_updateBitmap);
+    }
+  }
+
+  void _updateBitmap(BitmapDescriptor bitmap) {
+    markerIconPlaceStart = bitmap;
   }
 }
