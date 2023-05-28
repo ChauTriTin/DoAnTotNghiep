@@ -326,8 +326,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ),
               ),
             ),
-            const Center(
-              child: Text(
+            Container(
+              alignment: Alignment.bottomCenter,
+              padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+              child: const Text(
                 "100m",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
