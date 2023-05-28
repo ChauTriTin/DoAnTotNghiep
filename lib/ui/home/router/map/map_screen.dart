@@ -297,18 +297,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   Widget _buildPeopleView() {
     Widget buildItem(int pos) {
       return SizedBox(
-        width: 70,
-        height: 70,
+        width: 90,
+        height: 90,
         child: AvatarGlow(
-          glowColor: Colors.white,
+          glowColor: Colors.red,
           endRadius: 60,
           duration: const Duration(milliseconds: 2000),
           repeat: true,
           showTwoGlows: true,
           repeatPauseDuration: const Duration(milliseconds: 100),
           child: SizedBox(
-            width: 50,
-            height: 50,
+            width: 70,
+            height: 70,
             child: ClipOval(
               child: SizedBox.fromSize(
                 size: const Size.fromRadius(48), // Image radius
