@@ -29,6 +29,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   GoogleMapController? mapController;
   BitmapDescriptor? markerIconPlaceStart;
   BitmapDescriptor? markerIconPlaceEnd;
+  // BitmapDescriptor? markerIconPlaceStop;
+  List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
 
   @override
   void initState() {
@@ -130,9 +132,45 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
     }
 
+    List<Marker> createMarkerPlaceStop() {
+      Marker create(int index, String markerId, LatLng position) {
+        var markerIconPlaceStop = listMarkerIconPlaceStop[index];
+        if (markerIconPlaceStop == null) {
+          return Marker(
+            markerId: MarkerId(markerId),
+            position: position,
+          );
+        } else {
+          return Marker(
+            markerId: MarkerId(markerId),
+            position: position,
+            icon: markerIconPlaceStop,
+          );
+        }
+      }
+
+      var list = <Marker>[];
+      for (int i = 0; i < _controller.listPlaceStop.length; i++) {
+        var placeStop = _controller.listPlaceStop[i];
+        var marker = create(
+          i,
+          _controller.getIdMarkerStop(i),
+          LatLng(placeStop.lat, placeStop.long),
+        );
+        list.add(marker);
+      }
+      return list;
+    }
+
     var list = <Marker>[];
     list.add(createMarkerPlaceStart());
+    var listStop = createMarkerPlaceStop();
+    for (var element in listStop) {
+      list.add(element);
+    }
     list.add(createMarkerPlaceEnd());
+    debugPrint(">>>>_createMaker listStop.length ${listStop.length}");
+    debugPrint(">>>>_createMaker list.length ${list.length}");
     return list.toSet();
   }
 
@@ -167,7 +205,31 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
     }
 
+    Future<void> createMarkerPlaceStop(BuildContext context) async {
+      Future<BitmapDescriptor> create() async {
+        final ImageConfiguration imageConfiguration =
+            createLocalImageConfiguration(context,
+                size: const Size.square(55.0));
+        var bitmap = await BitmapDescriptor.fromAssetImage(
+          imageConfiguration,
+          'assets/images/ic_marker_stop.png',
+        );
+        return bitmap;
+      }
+
+      for (var element in _controller.listPlaceStop) {
+        debugPrint(">>>createMarkerPlaceStop element ${element.name}");
+        var bmp = await create();
+        listMarkerIconPlaceStop.add(bmp);
+      }
+
+      setState(() {
+        listMarkerIconPlaceStop;
+      });
+    }
+
     createMarkerPlaceStart(context);
     createMarkerPlaceEnd(context);
+    createMarkerPlaceStop(context);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/model/place.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -31,5 +30,9 @@ class MapController extends BaseController {
 
     kMapPlaceStart.value = LatLng(pStart.lat, pStart.long);
     kMapPlaceEnd.value = LatLng(pEnd.lat, pEnd.long);
+  }
+
+  String getIdMarkerStop(int position) {
+    return "idMarkerStop$position";
   }
 }
