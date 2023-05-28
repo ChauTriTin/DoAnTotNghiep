@@ -2,6 +2,7 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
 import 'package:appdiphuot/ui/home/router/createSuccess/create_success_screen.dart';
 import 'package:appdiphuot/util/time_utils.dart';
@@ -609,7 +610,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       return;
     }
     Get.to(MapPickerScreen(
-      defaultPlace: null,
+      defaultPlace: Place(),
       callback: (newPlace) {
         _controller.addPlaceStop(newPlace);
       },
