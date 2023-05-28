@@ -152,7 +152,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                                   _controller.setDoneCountdown(true);
                                 },
                                 replacement: Image.asset(
-                                  "assets/images/bike.png",
+                                  "assets/images/ic_launcher.png",
                                 ),
                               ),
                             ),
