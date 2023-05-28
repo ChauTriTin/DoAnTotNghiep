@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapController extends BaseController {
   final idMarkerStart = "idMarkerStart";
-  // var kMapPlaceStart = const LatLng(Place.defaultLat, Place.defaultLong).obs;
+  var kMapPlaceStart = const LatLng(Place.defaultLat, Place.defaultLong).obs;
 
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
@@ -27,6 +27,6 @@ class MapController extends BaseController {
     listPlaceStop.addAll(list);
     listPlaceStop.refresh();
 
-    // kMapPlaceStart.value = LatLng(pStart.lat, pStart.long);
+    kMapPlaceStart.value = LatLng(pStart.lat, pStart.long);
   }
 }

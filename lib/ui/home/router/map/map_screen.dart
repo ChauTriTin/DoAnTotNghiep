@@ -26,7 +26,6 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
-  LatLng kMapPlaceStart = LatLng(52.4478, -3.5402);
   GoogleMapController? mapController;
   BitmapDescriptor? markerIconPlaceStart;
 
@@ -83,26 +82,28 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   }
 
   Widget _buildMapView() {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: kMapPlaceStart,
-        zoom: 15.0,
-      ),
-      markers: <Marker>{_createMarkerPlaceStart()},
-      onMapCreated: _onMapCreated,
-    );
+    return Obx(() {
+      return GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: _controller.kMapPlaceStart.value,
+          zoom: 15.0,
+        ),
+        markers: <Marker>{_createMarkerPlaceStart()},
+        onMapCreated: _onMapCreated,
+      );
+    });
   }
 
   Marker _createMarkerPlaceStart() {
     if (markerIconPlaceStart == null) {
       return Marker(
         markerId: MarkerId(_controller.idMarkerStart),
-        position: kMapPlaceStart,
+        position: _controller.kMapPlaceStart.value,
       );
     } else {
       return Marker(
         markerId: MarkerId(_controller.idMarkerStart),
-        position: kMapPlaceStart,
+        position: _controller.kMapPlaceStart.value,
         icon: markerIconPlaceStart!,
       );
     }
