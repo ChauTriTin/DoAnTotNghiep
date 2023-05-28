@@ -28,6 +28,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
   BitmapDescriptor? markerIconPlaceStart;
+  BitmapDescriptor? markerIconPlaceEnd;
 
   @override
   void initState() {
@@ -114,8 +115,24 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
     }
 
+    Marker createMarkerPlaceEnd() {
+      if (markerIconPlaceEnd == null) {
+        return Marker(
+          markerId: MarkerId(_controller.idMarkerEnd),
+          position: _controller.kMapPlaceEnd.value,
+        );
+      } else {
+        return Marker(
+          markerId: MarkerId(_controller.idMarkerEnd),
+          position: _controller.kMapPlaceEnd.value,
+          icon: markerIconPlaceEnd!,
+        );
+      }
+    }
+
     var list = <Marker>[];
     list.add(createMarkerPlaceStart());
+    list.add(createMarkerPlaceEnd());
     return list.toSet();
   }
 
@@ -127,7 +144,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 size: const Size.square(55.0));
         var bitmap = await BitmapDescriptor.fromAssetImage(
           imageConfiguration,
-          'assets/images/ic_marker.png',
+          'assets/images/ic_marker_start.png',
         );
         setState(() {
           markerIconPlaceStart = bitmap;
@@ -135,6 +152,22 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
     }
 
+    Future<void> createMarkerPlaceEnd(BuildContext context) async {
+      if (markerIconPlaceEnd == null) {
+        final ImageConfiguration imageConfiguration =
+            createLocalImageConfiguration(context,
+                size: const Size.square(55.0));
+        var bitmap = await BitmapDescriptor.fromAssetImage(
+          imageConfiguration,
+          'assets/images/ic_marker_end.png',
+        );
+        setState(() {
+          markerIconPlaceEnd = bitmap;
+        });
+      }
+    }
+
     createMarkerPlaceStart(context);
+    createMarkerPlaceEnd(context);
   }
 }
