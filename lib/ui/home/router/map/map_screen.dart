@@ -43,10 +43,32 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
-      body: Container(
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-        child: Text("111"),
+      body: Stack(
+        children: [
+          _buildMapView(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              DimenConstants.marginPaddingMedium,
+              DimenConstants.marginPaddingLarge,
+              DimenConstants.marginPaddingMedium,
+              DimenConstants.marginPaddingMedium,
+            ),
+            child: FloatingActionButton(
+              mini: true,
+              elevation: DimenConstants.elevationMedium,
+              backgroundColor: ColorConstants.appColor,
+              onPressed: () {
+                Get.back();
+              },
+              child: const Icon(Icons.clear),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  Widget _buildMapView() {
+    return Container();
   }
 }
