@@ -52,8 +52,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     });
     ever(_controller.isCreateRouteSuccess, (value) {
       if (value == true) {
-        //TODO loitp revert
-        // Get.back();
+        Get.back();
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
         Get.to(CreateSuccessScreen(
           title: "AB0134NM45",
