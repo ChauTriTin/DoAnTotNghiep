@@ -4,6 +4,7 @@ import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -83,6 +84,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             ),
           ),
           _buildHelperView(),
+          _buildPeopleView(),
         ],
       ),
     );
@@ -288,6 +290,56 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             child: const Icon(Icons.priority_high),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPeopleView() {
+    Widget buildItem(int pos) {
+      return SizedBox(
+        width: 70,
+        height: 70,
+        child: AvatarGlow(
+          glowColor: Colors.white,
+          endRadius: 60,
+          duration: const Duration(milliseconds: 2000),
+          repeat: true,
+          showTwoGlows: true,
+          repeatPauseDuration: const Duration(milliseconds: 100),
+          child: SizedBox(
+            width: 50,
+            height: 50,
+            child: ClipOval(
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(48), // Image radius
+                child: Image.network(
+                  pos % 2 == 0
+                      ? "https://kenh14cdn.com/thumb_w/620/203336854389633024/2022/11/6/photo-4-16677111180281863259936.jpg"
+                      : "https://kenh14cdn.com/thumb_w/620/2019/11/30/0d19c07b6b3b8265db2a-15751098043831840905821.jpg",
+                  height: 45,
+                  width: 45,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+      alignment: Alignment.bottomLeft,
+      child: SizedBox(
+        height: 100,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          itemCount: 15,
+          itemBuilder: (context, i) {
+            return buildItem(i);
+          },
+        ),
       ),
     );
   }
