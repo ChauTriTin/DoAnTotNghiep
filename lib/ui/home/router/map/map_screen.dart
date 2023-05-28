@@ -29,14 +29,17 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   GoogleMapController? mapController;
   BitmapDescriptor? markerIconPlaceStart;
   BitmapDescriptor? markerIconPlaceEnd;
+
   // BitmapDescriptor? markerIconPlaceStop;
   List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
+  Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
 
   @override
   void initState() {
     super.initState();
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
+    _add();
   }
 
   void _setupListen() {
@@ -92,6 +95,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           zoom: 15.0,
         ),
         markers: _createMaker(),
+        polylines: Set<Polyline>.of(polylines.values),
         onMapCreated: (controllerParam) {
           setState(() {
             mapController = controllerParam;
@@ -231,5 +235,20 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     createMarkerPlaceStart(context);
     createMarkerPlaceEnd(context);
     createMarkerPlaceStop(context);
+  }
+
+  void _add() {
+    final PolylineId polylineId = PolylineId(_controller.polylineId);
+    final Polyline polyline = Polyline(
+      polylineId: polylineId,
+      consumeTapEvents: true,
+      color: Colors.orange,
+      width: 5,
+      points: _controller.createPoints(),
+      onTap: () {},
+    );
+    setState(() {
+      polylines[polylineId] = polyline;
+    });
   }
 }

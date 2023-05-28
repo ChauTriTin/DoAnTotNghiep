@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapController extends BaseController {
+  final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
   var kMapPlaceStart = const LatLng(Place.defaultLat, Place.defaultLong).obs;
@@ -34,5 +35,15 @@ class MapController extends BaseController {
 
   String getIdMarkerStop(int position) {
     return "idMarkerStop$position";
+  }
+
+  List<LatLng> createPoints() {
+    final List<LatLng> points = <LatLng>[];
+    points.add(LatLng(placeStart.value.lat, placeStart.value.long));
+    for (var element in listPlaceStop) {
+      points.add(LatLng(element.lat, element.long));
+    }
+    points.add(LatLng(placeEnd.value.lat, placeEnd.value.long));
+    return points;
   }
 }
