@@ -26,14 +26,15 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
+  LatLng kMapPlaceStart = LatLng(52.4478, -3.5402);
   GoogleMapController? mapController;
+  BitmapDescriptor? markerIconPlaceStart;
 
   @override
   void initState() {
     super.initState();
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
-    _controller.createMarkerImageFromAsset(context);
   }
 
   void _setupListen() {
@@ -53,6 +54,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    createMarkerImageFromAsset(context);
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: Stack(
@@ -81,29 +83,27 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   }
 
   Widget _buildMapView() {
-    return Obx(() {
-      return GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: _controller.kMapPlaceStart.value,
-          zoom: 15.0,
-        ),
-        markers: <Marker>{_createMarkerPlaceStart()},
-        onMapCreated: _onMapCreated,
-      );
-    });
+    return GoogleMap(
+      initialCameraPosition: CameraPosition(
+        target: kMapPlaceStart,
+        zoom: 15.0,
+      ),
+      markers: <Marker>{_createMarkerPlaceStart()},
+      onMapCreated: _onMapCreated,
+    );
   }
 
   Marker _createMarkerPlaceStart() {
-    if (_controller.markerIconPlaceStart != null) {
+    if (markerIconPlaceStart == null) {
       return Marker(
         markerId: MarkerId(_controller.idMarkerStart),
-        position: _controller.kMapPlaceStart.value,
-        icon: _controller.markerIconPlaceStart!,
+        position: kMapPlaceStart,
       );
     } else {
       return Marker(
         markerId: MarkerId(_controller.idMarkerStart),
-        position: _controller.kMapPlaceStart.value,
+        position: kMapPlaceStart,
+        icon: markerIconPlaceStart!,
       );
     }
   }
@@ -111,6 +111,23 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   void _onMapCreated(GoogleMapController controllerParam) {
     setState(() {
       mapController = controllerParam;
+    });
+  }
+
+  Future<void> createMarkerImageFromAsset(BuildContext context) async {
+    if (markerIconPlaceStart == null) {
+      final ImageConfiguration imageConfiguration =
+          createLocalImageConfiguration(context, size: const Size.square(55));
+      BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/images/bike.png',
+      ).then(_updateBitmap);
+    }
+  }
+
+  void _updateBitmap(BitmapDescriptor bitmap) {
+    setState(() {
+      markerIconPlaceStart = bitmap;
     });
   }
 }
