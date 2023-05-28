@@ -7,7 +7,6 @@ import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
 import 'package:appdiphuot/ui/home/router/createSuccess/create_success_screen.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:forked_slider_button/forked_slider_button.dart';
@@ -542,13 +541,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   fontWeight: FontWeight.bold,
                   fontSize: DimenConstants.txtMedium),
             ),
-            icon: const Text(
-              "🛵",
-              style: TextStyle(
-                color: ColorConstants.appColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 44,
-              ),
+            icon: Image.asset(
+              "assets/images/ic_launcher.png",
+              width: 40,
+              height: 40,
             ),
           ),
         ),
@@ -619,7 +615,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void _pickTimeStart() async {
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
-      initialDate: _controller.getDateTimeStart(),
+      initialDate: _controller.dateTimeStart.value,
       firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
       lastDate: DateTime.now().add(
         const Duration(days: 3652),
@@ -662,7 +658,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void _pickTimeEnd() async {
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
-      initialDate: _controller.getDateTimeEnd(),
+      initialDate: _controller.dateTimeEnd.value,
       firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
       lastDate: DateTime.now().add(
         const Duration(days: 3652),
