@@ -1,20 +1,32 @@
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/model/place.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapController extends BaseController {
-  var number = 0.obs;
-  var list = <String>[].obs;
+  var kMapCenter = const LatLng(Place.defaultLat, Place.defaultLong).obs;
+  GoogleMapController? mapController;
+  BitmapDescriptor? markerIcon;
+
+  var placeStart = Place().obs;
+  var placeEnd = Place().obs;
+  var listPlaceStop = <Place>[].obs;
 
   void clearOnDispose() {
     Get.delete<MapController>();
   }
 
-  void addNumber() {
-    number.value++;
-  }
+  void init(
+    Place pStart,
+    Place pEnd,
+    List<Place> list,
+  ) {
+    placeStart.value = pStart;
+    placeEnd.value = pEnd;
+    listPlaceStop.clear();
+    listPlaceStop.addAll(list);
+    listPlaceStop.refresh();
 
-  void addString() {
-    list.add(DateTime.now().toString());
-    list.refresh();
+    kMapCenter.value = LatLng(pStart.lat, pStart.long);
   }
 }

@@ -180,6 +180,12 @@ class CreateRouterController extends BaseController {
     setAppLoading(true, "Loading", TypeApp.createRouter);
     Future.delayed(const Duration(milliseconds: 2000), () {
       isCreateRouteSuccess.value = true;
+
+      //TODO loitp delete later
+      if (kDebugMode) {
+        isCreateRouteSuccess.value = false;
+      }
+
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
   }
