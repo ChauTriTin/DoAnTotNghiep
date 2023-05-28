@@ -55,6 +55,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Get.to(CreateSuccessScreen(
           title: "AB0134NM45",
           dateTimeEnd: _controller.dateTimeEnd.value,
+          placeStart: _controller.placeStart.value,
+          placeEnd: _controller.placeEnd.value,
+          listPlaceStop: _controller.listPlaceStop,
         ));
       }
     });

@@ -106,13 +106,13 @@ class CreateRouterController extends BaseController {
     var sDateTimeEnd = dateTimeEnd.value;
     var sIsPublic = isPublic.value;
 
-    if (kDebugMode) {
-      showSnackBarFull(
-          StringConstants.warning, "Debug mode: Force createRouter");
-      isCreateRouteSuccess.value = true;
-      setAppLoading(false, "Loading", TypeApp.createRouter);
-      return;
-    }
+    // if (kDebugMode) {
+    //   showSnackBarFull(
+    //       StringConstants.warning, "Debug mode: Force createRouter");
+    //   isCreateRouteSuccess.value = true;
+    //   setAppLoading(false, "Loading", TypeApp.createRouter);
+    //   return;
+    // }
 
     debugPrint(">>>>>>>>>>>>>>>createRouter");
     debugPrint("sTitle $sTitle");
