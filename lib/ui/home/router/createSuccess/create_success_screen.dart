@@ -1,6 +1,9 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -179,9 +182,16 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
   }
 
   void _tapGoNow() {
+    if (kDebugMode == true) {
+      showSnackBarFull(
+          StringConstants.warning, "Debug mode: forced go to map screen");
+      Get.back(); //close this screen
+      Get.to(const MapScreen());
+    }
     if (!_controller.isDoneCountdown.value) {
       return;
     }
-    //TODO
+    Get.back(); //close this screen
+    Get.to(const MapScreen());
   }
 }

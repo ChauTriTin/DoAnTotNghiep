@@ -169,7 +169,7 @@ class CreateRouterController extends BaseController {
     }
 
     setAppLoading(true, "Loading", TypeApp.createRouter);
-    Future.delayed(const Duration(milliseconds: 5000), () {
+    Future.delayed(const Duration(milliseconds: 2000), () {
       isCreateRouteSuccess.value = true;
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });

@@ -20,7 +20,7 @@ class DemoScreen extends StatefulWidget {
 }
 
 class _DemoScreenState extends BaseStatefulState<DemoScreen> {
-  final _controllerDemo = Get.put(DemoController());
+  final _controller = Get.put(DemoController());
 
   @override
   void initState() {
@@ -29,8 +29,8 @@ class _DemoScreenState extends BaseStatefulState<DemoScreen> {
   }
 
   void _setupListen() {
-    _controllerDemo.appLoading.listen((appLoading) {});
-    _controllerDemo.appError.listen((err) {
+    _controller.appLoading.listen((appLoading) {});
+    _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
       });
@@ -39,7 +39,7 @@ class _DemoScreenState extends BaseStatefulState<DemoScreen> {
 
   @override
   void dispose() {
-    _controllerDemo.clearOnDispose();
+    _controller.clearOnDispose();
     super.dispose();
   }
 
@@ -50,8 +50,8 @@ class _DemoScreenState extends BaseStatefulState<DemoScreen> {
       body: Container(
         padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
         child: Obx(() {
-          var number = _controllerDemo.number.value;
-          var list = _controllerDemo.list.toString();
+          var number = _controller.number.value;
+          var list = _controller.list.toString();
           return ListView(
             children: [
               TextButton(
@@ -60,8 +60,8 @@ class _DemoScreenState extends BaseStatefulState<DemoScreen> {
                   minimumSize: const Size(240, 50),
                 ),
                 onPressed: () {
-                  _controllerDemo.addNumber();
-                  _controllerDemo.addString();
+                  _controller.addNumber();
+                  _controller.addString();
                 },
                 child: const Text(
                   '+',
