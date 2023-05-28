@@ -39,7 +39,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     super.initState();
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
-    _add();
+    _addPolylines();
   }
 
   void _setupListen() {
@@ -237,7 +237,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     createMarkerPlaceStop(context);
   }
 
-  void _add() {
+  void _addPolylines() {
     final PolylineId polylineId = PolylineId(_controller.polylineId);
     final Polyline polyline = Polyline(
       polylineId: polylineId,
