@@ -241,8 +241,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     final PolylineId polylineId = PolylineId(_controller.polylineId);
     final Polyline polyline = Polyline(
       polylineId: polylineId,
-      consumeTapEvents: true,
-      color: Colors.orange,
+      consumeTapEvents: false,
+      color: ColorConstants.appColor,
       width: 5,
       points: _controller.createPoints(),
       onTap: () {},
