@@ -82,6 +82,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
               child: const Icon(Icons.clear),
             ),
           ),
+          _buildHelperView(),
         ],
       ),
     );
@@ -251,5 +252,43 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     setState(() {
       polylines[polylineId] = polyline;
     });
+  }
+
+  Widget _buildHelperView() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton(
+            elevation: DimenConstants.elevationMedium,
+            backgroundColor: ColorConstants.appColor,
+            onPressed: () {
+              showSnackBarFull(StringConstants.warning, "TODO");
+            },
+            child: const Icon(Icons.pan_tool),
+          ),
+          const SizedBox(height: DimenConstants.marginPaddingMedium),
+          FloatingActionButton(
+            elevation: DimenConstants.elevationMedium,
+            backgroundColor: ColorConstants.appColor,
+            onPressed: () {
+              showSnackBarFull(StringConstants.warning, "TODO");
+            },
+            child: const Icon(Icons.sms),
+          ),
+          const SizedBox(height: DimenConstants.marginPaddingMedium),
+          FloatingActionButton(
+            elevation: DimenConstants.elevationMedium,
+            backgroundColor: ColorConstants.appColor,
+            onPressed: () {
+              showSnackBarFull(StringConstants.warning, "TODO");
+            },
+            child: const Icon(Icons.priority_high),
+          ),
+        ],
+      ),
+    );
   }
 }
