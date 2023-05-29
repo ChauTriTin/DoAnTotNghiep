@@ -109,7 +109,7 @@ class MapController extends BaseController {
 
           List<Polyline> listPolyline = [
             Polyline(
-              width: 5,
+              width: 7,
               polylineId: PolylineId("$i"),
               color: ColorConstants.getRandomColor(),
               points: listLatLong,
