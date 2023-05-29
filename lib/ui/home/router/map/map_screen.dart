@@ -1,5 +1,6 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
+import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
@@ -7,7 +8,9 @@ import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import "package:google_maps_directions/google_maps_directions.dart" as gmd;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -33,14 +36,15 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   // BitmapDescriptor? markerIconPlaceStop;
   List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
-  Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
+
+  int countCreateMarker = 0;
 
   @override
   void initState() {
     super.initState();
+    GoogleMapsDirections.init(googleAPIKey: Constants.googleMapAPIKey);
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
-    _addPolylines();
   }
 
   void _setupListen() {
@@ -60,7 +64,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    createMarker(context);
+    if (countCreateMarker <= 0) {
+      createMarker(context);
+      countCreateMarker++;
+    }
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: Stack(
@@ -98,7 +105,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           zoom: 15.0,
         ),
         markers: _createMaker(),
-        polylines: Set<Polyline>.of(polylines.values),
+        polylines: Set.of(_controller.polylines),
         onMapCreated: (controllerParam) {
           setState(() {
             mapController = controllerParam;
@@ -238,22 +245,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     createMarkerPlaceStart(context);
     createMarkerPlaceEnd(context);
     createMarkerPlaceStop(context);
-  }
-
-  void _addPolylines() {
-    final PolylineId polylineId = PolylineId(_controller.polylineId);
-    final Polyline polyline = Polyline(
-      polylineId: polylineId,
-      consumeTapEvents: false,
-      color: ColorConstants.appColor,
-      width: 5,
-      // jointType: JointType.round,
-      points: _controller.createPoints(),
-      onTap: () {},
-    );
-    setState(() {
-      polylines[polylineId] = polyline;
-    });
   }
 
   Widget _buildHelperView() {

@@ -197,6 +197,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
               height: MediaQuery.of(context).size.height * 1 / 5.5,
               margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
               child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 itemCount: dataList.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -218,6 +219,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
               height: MediaQuery.of(context).size.height * 1 / 5.5,
               margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
               child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 itemCount: dataList.length,
                 itemBuilder: (BuildContext context, int index) {
