@@ -1,4 +1,5 @@
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class MapController extends BaseController {
       Polyline(
         width: 5,
         polylineId: const PolylineId("111"),
-        color: Colors.green,
+        color: ColorConstants.appColor,
         points: points,
       ),
     ];
