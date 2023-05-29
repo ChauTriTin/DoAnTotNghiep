@@ -1,5 +1,6 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
+import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
@@ -7,7 +8,9 @@ import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import "package:google_maps_directions/google_maps_directions.dart" as gmd;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -38,6 +41,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   @override
   void initState() {
     super.initState();
+    GoogleMapsDirections.init(googleAPIKey: Constants.googleMapAPIKey);
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
     _addPolylines();

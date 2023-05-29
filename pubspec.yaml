@@ -46,6 +46,9 @@ dependencies:
 #  flutter_easyloading: ^3.0.5
   overlay_loading_progress: ^1.0.1
   focus_detector_v2: ^3.1.0+1
+#  google_directions_api_nic: ^0.9.1
+  google_maps_directions: ^0.0.3+4
+  flutter_polyline_points: ^1.0.0
 
 dev_dependencies:
   flutter_test:
