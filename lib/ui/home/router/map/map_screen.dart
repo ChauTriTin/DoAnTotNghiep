@@ -38,6 +38,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
   Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
 
+  int countCreateMarker = 0;
+
   @override
   void initState() {
     super.initState();
@@ -64,7 +66,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    createMarker(context);
+    if (countCreateMarker <= 0) {
+      createMarker(context);
+      countCreateMarker++;
+    }
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: Stack(
