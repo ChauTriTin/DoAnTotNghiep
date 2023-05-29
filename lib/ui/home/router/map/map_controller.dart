@@ -3,14 +3,16 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:google_maps_directions/google_maps_directions.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapController extends BaseController {
+  void log(String s) {
+    debugPrint("MapController $s");
+  }
+
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
@@ -41,7 +43,7 @@ class MapController extends BaseController {
     kMapPlaceStart.value = LatLng(pStart.lat, pStart.long);
     kMapPlaceEnd.value = LatLng(pEnd.lat, pEnd.long);
 
-    getRoute(pStart.lat, pStart.long, pEnd.lat, pEnd.long);
+    _genRouter();
   }
 
   String getIdMarkerStop(int position) {
@@ -58,13 +60,13 @@ class MapController extends BaseController {
     return points;
   }
 
-  Future<void> getRoute(
+  Future<List<LatLng>> _getRoute(
     double lat1,
     double long1,
     double lat2,
     double long2,
   ) async {
-    debugPrint("<<<route $lat1 $long1, $lat2 $long2");
+    log("<<<_getRoute $lat1 $long1, $lat2 $long2");
     Directions directions = await getDirections(
       lat1,
       long1,
@@ -73,21 +75,53 @@ class MapController extends BaseController {
     );
 
     DirectionRoute route = directions.shortestRoute;
-    debugPrint(">>>route done");
+    log(">>>route done");
     List<LatLng> points = PolylinePoints()
         .decodePolyline(route.overviewPolyline.points)
         .map((point) => LatLng(point.latitude, point.longitude))
         .toList();
-    debugPrint(">>>decodePolyline ${points.length}");
-    List<Polyline> listPolyline = [
-      Polyline(
-        width: 5,
-        polylineId: const PolylineId("111"),
-        color: ColorConstants.appColor,
-        points: points,
-      ),
-    ];
-    polylines.addAll(listPolyline);
-    polylines.refresh();
+    log(">>>decodePolyline ${points.length}");
+    return points;
+  }
+
+  void _genRouter() {
+    polylines.clear();
+
+    var listPlace = <Place>[];
+    listPlace.add(placeStart.value);
+    for (var element in listPlaceStop) {
+      listPlace.add(element);
+    }
+    listPlace.add(placeEnd.value);
+    log(">>>_genRouter listPlace ${listPlace.length}");
+
+    var listLatLong = <LatLng>[];
+    for (int i = 0; i < listPlace.length; i++) {
+      try {
+        log("_genRouter $i - ${i + 1}");
+        var eCurrent = listPlace[i];
+        var eNext = listPlace[i + 1];
+        var listPolyline =
+            _getRoute(eCurrent.lat, eCurrent.long, eNext.lat, eNext.long);
+        listPolyline.then((list) {
+          listLatLong.addAll(list);
+          log("_genRouter listPolyline list ${list.length} -> listLatLong ${listLatLong.length}");
+
+          List<Polyline> listPolyline = [
+            Polyline(
+              width: 5,
+              polylineId: PolylineId("$i"),
+              color: ColorConstants.appColor,
+              points: listLatLong,
+            ),
+          ];
+
+          polylines.addAll(listPolyline);
+          polylines.refresh();
+        });
+      } catch (e) {
+        log("_genRouter e ${e.toString()}");
+      }
+    }
   }
 }
