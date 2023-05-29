@@ -36,7 +36,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   // BitmapDescriptor? markerIconPlaceStop;
   List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
-  Map<PolylineId, Polyline> polylines = <PolylineId, Polyline>{};
 
   int countCreateMarker = 0;
 
@@ -46,7 +45,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     GoogleMapsDirections.init(googleAPIKey: Constants.googleMapAPIKey);
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
-    _addPolylines();
   }
 
   void _setupListen() {
@@ -107,7 +105,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           zoom: 15.0,
         ),
         markers: _createMaker(),
-        // polylines: Set<Polyline>.of(polylines.values),
         polylines: Set.of(_controller.polylines),
         onMapCreated: (controllerParam) {
           setState(() {
@@ -248,22 +245,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     createMarkerPlaceStart(context);
     createMarkerPlaceEnd(context);
     createMarkerPlaceStop(context);
-  }
-
-  void _addPolylines() {
-    final PolylineId polylineId = PolylineId(_controller.polylineId);
-    final Polyline polyline = Polyline(
-      polylineId: polylineId,
-      consumeTapEvents: false,
-      color: ColorConstants.appColor,
-      width: 5,
-      // jointType: JointType.round,
-      points: _controller.createPoints(),
-      onTap: () {},
-    );
-    setState(() {
-      polylines[polylineId] = polyline;
-    });
   }
 
   Widget _buildHelperView() {
