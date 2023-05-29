@@ -1,6 +1,7 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,6 +19,8 @@ class MapController extends BaseController {
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
   var listPlaceStop = <Place>[].obs;
+
+  var polylines = <Polyline>[].obs;
 
   void clearOnDispose() {
     Get.delete<MapController>();
@@ -75,5 +78,15 @@ class MapController extends BaseController {
         .map((point) => LatLng(point.latitude, point.longitude))
         .toList();
     debugPrint(">>>decodePolyline ${points.length}");
+    List<Polyline> listPolyline = [
+      Polyline(
+        width: 5,
+        polylineId: const PolylineId("111"),
+        color: Colors.green,
+        points: points,
+      ),
+    ];
+    polylines.addAll(listPolyline);
+    polylines.refresh();
   }
 }

@@ -107,7 +107,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           zoom: 15.0,
         ),
         markers: _createMaker(),
-        polylines: Set<Polyline>.of(polylines.values),
+        // polylines: Set<Polyline>.of(polylines.values),
+        polylines: Set.of(_controller.polylines),
         onMapCreated: (controllerParam) {
           setState(() {
             mapController = controllerParam;
