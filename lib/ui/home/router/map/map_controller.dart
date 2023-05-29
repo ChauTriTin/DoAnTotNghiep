@@ -111,7 +111,7 @@ class MapController extends BaseController {
             Polyline(
               width: 5,
               polylineId: PolylineId("$i"),
-              color: ColorConstants.appColor,
+              color: ColorConstants.getRandomColor(),
               points: listLatLong,
             ),
           ];
