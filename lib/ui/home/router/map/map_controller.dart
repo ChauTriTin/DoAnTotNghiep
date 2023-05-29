@@ -95,8 +95,8 @@ class MapController extends BaseController {
     listPlace.add(placeEnd.value);
     log(">>>_genRouter listPlace ${listPlace.length}");
 
-    var listLatLong = <LatLng>[];
     for (int i = 0; i < listPlace.length; i++) {
+      var listLatLong = <LatLng>[];
       try {
         log("_genRouter $i - ${i + 1}");
         var eCurrent = listPlace[i];
