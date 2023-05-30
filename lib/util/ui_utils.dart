@@ -151,7 +151,8 @@ class UIUtils {
           color: borderColor ?? Colors.red,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(DimenConstants.radiusMedium),
+          borderRadius:
+              BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
         ),
       ),
       child: Text(text),
@@ -175,10 +176,84 @@ class UIUtils {
             ColorConstants.loginBtnBgColor));
   }
 
+  static BoxDecoration getBoxDecorationLoginBg() {
+    return const BoxDecoration(
+        color: ColorConstants.appColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(DimenConstants.borderBottomAuth),
+          topRight: Radius.circular(DimenConstants.borderBottomAuth),
+        ));
+  }
+
   static Text getText(String text) {
     return Text(
       text,
       style: UIUtils.getStyleText(),
+    );
+  }
+
+  static Text getTextHeaderAuth(String text) {
+    return Text(text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: DimenConstants.txtHeader1,
+        ));
+  }
+
+  static Container getTitleTextInputAuth(String text) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingTiny),
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingExtraLarge),
+      child: Text(text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: DimenConstants.txtMedium,
+          )),
+    );
+  }
+
+  static Container getTextInputLogin(String hint) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingExtraLarge),
+      child: TextField(
+        style: const TextStyle(color: Colors.white),
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorConstants.focusBorderTextInputColor,
+                width: 1.0,
+              ),
+              borderRadius:
+                  BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorConstants.borderTextInputColor,
+                width: 1.0,
+              ),
+              borderRadius:
+                  BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorConstants.borderTextInputColor,
+                width: 1.0,
+              ),
+              borderRadius:
+                  BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
+            ),
+            filled: true,
+            // errorStyle: ,
+            hintStyle: TextStyle(color: ColorConstants.textEditBgColor),
+            hintText: hint,
+            fillColor: ColorConstants.textEditBgColor),
+      ),
     );
   }
 
