@@ -3,7 +3,6 @@ import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../base/base_stateful_state.dart';
 
@@ -105,18 +104,27 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
         child: Container(
       decoration: UIUtils.getBoxDecorationLoginBg(),
       width: double.infinity,
-      alignment: Alignment.center,
       child: ListView(
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              UIUtils.getTextAuthTitle(StringConstants.signin),
-              const SizedBox(width: DimenConstants.marginPaddingMedium),
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
+              UIUtils.getTextHeaderAuth(StringConstants.signin),
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
+
+              //Email
+              UIUtils.getTitleTextInputAuth(StringConstants.email),
+              const SizedBox(height: DimenConstants.marginPaddingSmall),
               UIUtils.getTextInputLogin(StringConstants.email),
-              const SizedBox(width: DimenConstants.marginPaddingSmall),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+
+              // Password
+              UIUtils.getTitleTextInputAuth(StringConstants.password),
+              const SizedBox(height: DimenConstants.marginPaddingSmall),
               UIUtils.getTextInputLogin(StringConstants.password),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
             ],
           )
         ],

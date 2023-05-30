@@ -192,12 +192,28 @@ class UIUtils {
     );
   }
 
-  static Text getTextAuthTitle(String text) {
+  static Text getTextHeaderAuth(String text) {
     return Text(text,
         style: const TextStyle(
           color: Colors.white,
           fontSize: DimenConstants.txtHeader1,
         ));
+  }
+
+  static Container getTitleTextInputAuth(String text) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingTiny),
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingExtraLarge),
+      child: Text(text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: DimenConstants.txtMedium,
+          )),
+    );
   }
 
   static Container getTextInputLogin(String hint) {
