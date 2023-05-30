@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class PageHomeController extends BaseController {
   var number = 0.obs;
+  var buttonChoose = 0.obs;
   var list = <String>[].obs;
 
   void clearOnDispose() {
@@ -11,6 +12,10 @@ class PageHomeController extends BaseController {
 
   void addNumber() {
     number.value++;
+  }
+
+  void setButtonChoose(int number) {
+    buttonChoose.value = number;
   }
 
   void addString() {

@@ -119,20 +119,11 @@ class HomePageState extends State<HomePage> {
       }
     }
 
-    return GestureDetector(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: selectedColor,
-        child: buildPage(),
-      ),
-      onTap: () {
-        if (_navigationController.value == tabItems.length - 1) {
-          _navigationController.value = 0;
-        } else {
-          _navigationController.value = _navigationController.value! + 1;
-        }
-      },
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: selectedColor,
+      child: buildPage(),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:get/get.dart';
 
 class BaseController extends GetxController {
@@ -39,6 +40,20 @@ class BaseController extends GetxController {
     );
     this.appError.value = appError;
   }
+
+  void showSnackBarFull(
+    String title,
+    String message,
+  ) {
+    UIUtils.showFullWidthSnackBar(title, message);
+  }
+
+  void showSnackBarFullError(
+    String title,
+    String message,
+  ) {
+    UIUtils.showFullWidthSnackBarError(title, message);
+  }
 }
 
 class AppLoading {
@@ -64,5 +79,5 @@ class AppError {
 }
 
 enum TypeApp {
-  getListChap,
+  createRouter,
 }

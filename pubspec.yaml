@@ -31,6 +31,24 @@ dependencies:
   shared_preferences: ^2.1.1
   avatar_glow: ^2.0.2
   circular_bottom_navigation: ^2.3.0
+  multi_image_picker_view: ^0.0.15
+#  map_location_picker: ^1.2.0
+#  location_picker_flutter_map: ^1.2.0
+  google_maps_place_picker_mb: ^3.0.2
+  google_maps_flutter: ^2.2.8
+  google_maps_flutter_android: ^2.4.15
+  omni_datetime_picker: ^1.0.7
+  date_format: ^2.0.7
+  lite_rolling_switch: ^1.0.1
+  forked_slider_button: ^2.0.2
+  lottie: ^2.3.2
+  slide_countdown: ^0.6.0
+#  flutter_easyloading: ^3.0.5
+  overlay_loading_progress: ^1.0.1
+  focus_detector_v2: ^3.1.0+1
+#  google_directions_api_nic: ^0.9.1
+  google_maps_directions: ^0.0.3+4
+  flutter_polyline_points: ^1.0.0
 
   #https://pub.dev/packages/flutter_native_splash
   flutter_native_splash: ^2.3.0
