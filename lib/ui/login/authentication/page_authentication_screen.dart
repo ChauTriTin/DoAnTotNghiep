@@ -40,12 +40,7 @@ class _AuthenticationScreen extends BaseStatefulState<AuthenticationScreen> {
   Expanded _buildButtonAreaWidget() {
     return Expanded(
         child: Container(
-      decoration: const BoxDecoration(
-          color: ColorConstants.appColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(DimenConstants.borderBottomAuth),
-            topRight: Radius.circular(DimenConstants.borderBottomAuth),
-          )),
+      decoration: UIUtils.getBoxDecorationLoginBg(),
       width: double.infinity,
       alignment: Alignment.center,
       child: Column(
