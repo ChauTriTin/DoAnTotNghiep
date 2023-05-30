@@ -7,6 +7,7 @@ class StringConstants {
   static const String confirm = "Xác nhận";
   static const String signin = "Đăng nhập";
   static const String register = "Tạo tài khoản";
+  static const String forget = "Quên mật khẩu";
   static const String email = "Email";
   static const String password = "Mật khẩu";
 
