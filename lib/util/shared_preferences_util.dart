@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesUtil {
   static const KEY_GG = "KEY_GG";
+  static const IS_LOGGED_IN = "IS_LOGGED_IN";
 
   static Future<void> setInt(String key, int value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -42,4 +41,15 @@ class SharedPreferencesUtil {
 //     return null;
 //   }
 // }
+
+  static Future<bool> isLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isLoggedIn = prefs.getBool(IS_LOGGED_IN);
+    return isLoggedIn ?? false;
+  }
+
+  static Future<void> setIsLoggedInStatus(bool isLoggedIn) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(IS_LOGGED_IN, isLoggedIn);
+  }
 }

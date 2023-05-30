@@ -50,6 +50,12 @@ dependencies:
   google_maps_directions: ^0.0.3+4
   flutter_polyline_points: ^1.0.0
 
+  #https://pub.dev/packages/flutter_native_splash
+  flutter_native_splash: ^2.3.0
+  firebase_auth: ^4.6.2
+  firebase_core: ^2.13.1
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
