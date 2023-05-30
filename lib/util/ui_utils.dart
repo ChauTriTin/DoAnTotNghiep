@@ -1,9 +1,13 @@
+import 'dart:ffi';
+
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../common/const/color_constants.dart';
 import '../common/const/dimen_constants.dart';
+import '../common/const/string_constants.dart';
 
 class UIUtils {
   static AppBar getAppBar(
@@ -126,6 +130,49 @@ class UIUtils {
       ),
       child: Text(text),
     );
+  }
+
+  static OutlinedButton getOutlineButton1(
+    String text,
+    VoidCallback? onPressed,
+    Color? borderColor,
+    double? paddingVertical,
+    Color? textColor,
+    Color? backgroundColor,
+  ) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.all(paddingVertical ?? 0),
+        backgroundColor: backgroundColor,
+        foregroundColor: textColor,
+        side: BorderSide(
+          width: 2.0,
+          color: borderColor ?? Colors.red,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DimenConstants.radiusMedium),
+        ),
+      ),
+      child: Text(text),
+    );
+  }
+
+  static Container getLoginOutlineButton(
+    String text,
+    VoidCallback? onPressed,
+  ) {
+    return Container(
+        margin: const EdgeInsets.symmetric(
+            horizontal: DimenConstants.marginPaddingExtraLarge),
+        width: double.infinity,
+        child: UIUtils.getOutlineButton1(
+            text,
+            onPressed,
+            ColorConstants.colorWhite,
+            DimenConstants.paddingLoginBtn,
+            ColorConstants.loginBtnTextColor,
+            ColorConstants.loginBtnBgColor));
   }
 
   static Text getText(String text) {

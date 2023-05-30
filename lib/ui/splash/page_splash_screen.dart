@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../base/base_stateful_state.dart';
 import '../../common/const/string_constants.dart';
 import '../../util/shared_preferences_util.dart';
-import '../login/authentication/page_authentication_page.dart';
+import '../login/authentication/page_authentication_screen.dart';
 import '../user/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
