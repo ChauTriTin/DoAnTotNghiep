@@ -19,6 +19,7 @@ class DimenConstants {
   static const double txtMedium = 16.0;
   static const double txtLarge = 20.0;
   static const double txtHeader = 45.0;
+  static const double txtHeader1 = 35.0;
 
   static const double elevationSmall = 1.0;
   static const double elevationMedium = 3.0;
@@ -26,11 +27,18 @@ class DimenConstants {
 
   static const double radiusMedium = 15.0;
   static const double radiusRound = 45.0;
+  static const double radiusLoginBtnRound = 15.0;
 
   static const double heightButton = 48.0;
   static const double logoStroke = 3.0;
   static const double logoHeight = 120.0;
   static const double borderBottomAuth = 20;
+  static const double loginIconHeight = 25;
 
   static const double paddingLoginBtn = 20;
+
+  // Icon Back Login Page
+  static const double circleBackBg = 180;
+
+
 }

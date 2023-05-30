@@ -1,3 +1,7 @@
+import 'package:appdiphuot/common/const/color_constants.dart';
+import 'package:appdiphuot/common/const/dimen_constants.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../../../base/base_stateful_state.dart';
@@ -20,10 +24,183 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("LOGIN"),
+        backgroundColor: ColorConstants.colorWhite,
+        body: SafeArea(
+          child: Container(
+              alignment: Alignment.topLeft,
+              child: Column(
+                children: [_buildBackWidget(), _buildLoginWidget()],
+              )),
+        ));
+  }
+
+  Widget _buildBackWidget() {
+    return Container(
+      alignment: Alignment.topLeft,
+      // margin: const EdgeInsets.symmetric(
+      //     vertical: DimenConstants.marginTopIconBack),
+      width: DimenConstants.circleBackBg,
+      height: DimenConstants.circleBackBg,
+      decoration: BoxDecoration(
+        color: ColorConstants.bgBackCircleColor,
+        shape: BoxShape.circle,
       ),
     );
 
+    // Container(
+    //     width: double.infinity,
+    //     height: double.infinity,
+    //     child: CustomPaint(
+    //       painter: CirclePainter(),
+    //     ));
+    //     Container(
+    //   width: MediaQuery.of(context).size.width,
+    //   height: 250,
+    //   child: Stack(
+    //     children: <Widget>[
+    //       Positioned(
+    //         top: 150,
+    //         right: MediaQuery.of(context).size.width - 200,
+    //         child: Container(
+    //           width: 200,
+    //           height: 200,
+    //           decoration: BoxDecoration(
+    //             color: ColorConstants.bgBackCircle50Color,
+    //             borderRadius: BorderRadius.all(
+    //               Radius.circular(200),
+    //             ),
+    //           ),
+    //           child: Center(
+    //             child: Container(
+    //               width: 150,
+    //               height: 150,
+    //               decoration: BoxDecoration(
+    //                 color: ColorConstants.bgBackCircleColor,
+    //                 borderRadius: BorderRadius.all(
+    //                   Radius.circular(150),
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //       Positioned(
+    //         bottom: 30,
+    //         left: 30,
+    //         child: Text(
+    //           'Write now',
+    //           style: TextStyle(
+    //             color: Colors.white,
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
+
+  Widget _buildLoginWidget() {
+    return Expanded(
+        child: Container(
+      decoration: UIUtils.getBoxDecorationLoginBg(),
+      width: double.infinity,
+      child: ListView(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
+              UIUtils.getTextHeaderAuth(StringConstants.signin),
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
+
+              //Email
+              UIUtils.getTitleTextInputAuth(StringConstants.email),
+              const SizedBox(height: DimenConstants.marginPaddingSmall),
+              UIUtils.getTextInputLogin(StringConstants.email),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+
+              // Password
+              UIUtils.getTitleTextInputAuth(StringConstants.password),
+              const SizedBox(height: DimenConstants.marginPaddingSmall),
+              UIUtils.getTextInputLogin(StringConstants.password),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+
+              // Login btn
+              const SizedBox(height: DimenConstants.marginPaddingSmall),
+              UIUtils.getLoginOutlineButton(
+                StringConstants.signin,
+                _doLogin,
+              ),
+
+              // Forgot pw
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
+              TextButton(
+                onPressed: _navigateToForgotPasswordScreen,
+                child: const Text(
+                  StringConstants.forgotPW,
+                  style: TextStyle(
+                      color: ColorConstants.textColorForgotPassword,
+                      decoration: TextDecoration.underline),
+                ),
+              ),
+
+              // Other login ways
+              const Center(
+                child: Text(StringConstants.loginWayTitle,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: DimenConstants.txtLarge,
+                    )),
+              ),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+
+              // Goole - Facebook
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Goolgle
+                  CircleAvatar(
+                    radius: DimenConstants.loginIconHeight,
+                    backgroundColor: ColorConstants.colorGrey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(DimenConstants.logoStroke),
+                      // Border radius
+                      child: ClipOval(
+                          child: Image.asset(
+                        "assets/images/ic_launcher.png",
+                      )),
+                    ),
+                  ),
+
+                  const SizedBox(width: DimenConstants.marginPaddingLarge),
+
+                  // Facebook
+                  CircleAvatar(
+                    radius: DimenConstants.loginIconHeight,
+                    backgroundColor: ColorConstants.colorGrey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(DimenConstants.logoStroke),
+                      // Border radius
+                      child: ClipOval(
+                          child: Image.asset(
+                        "assets/images/ic_launcher.png",
+                      )),
+                    ),
+                  ),
+
+                  const SizedBox(width: DimenConstants.marginPaddingLarge),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    ));
+  }
+
+  void _doLogin() {}
+
+  void _navigateToForgotPasswordScreen() {}
 }
