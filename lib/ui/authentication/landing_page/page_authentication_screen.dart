@@ -1,5 +1,5 @@
 import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:appdiphuot/ui/login/register/page_register_screen.dart';
+import 'package:appdiphuot/ui/authentication/register/page_register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

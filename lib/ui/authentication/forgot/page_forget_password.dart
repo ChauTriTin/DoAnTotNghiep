@@ -1,5 +1,5 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
-import 'package:appdiphuot/ui/login/forgot/page_forget_password_controller.dart';
+import 'package:appdiphuot/ui/authentication/forgot/page_forget_password_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

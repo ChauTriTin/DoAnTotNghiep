@@ -1,7 +1,7 @@
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/login/login/page_login_controller.dart';
+import 'package:appdiphuot/ui/authentication/login/page_login_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:appdiphuot/util/validate_utils.dart';
 import 'package:flutter/material.dart';
