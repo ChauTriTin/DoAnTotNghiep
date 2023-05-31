@@ -12,6 +12,9 @@ class StringConstants {
   static const String forgotPW = "Quên mật khẩu";
   static const String loginWayTitle = "Hoặc đăng kí đăng nhập bằng";
   static const String titleAuthPage = "Cùng bạn trên những hành trình";
+  static const String forget = "Quên mật khẩu";
+  static const String email = "Email";
+  static const String password = "Mật khẩu";
 
   static const String linkImgMinaCrying =
       "https://i.pinimg.com/originals/91/98/48/91984862fad2e78a12cb202b3d06e727.gif";
