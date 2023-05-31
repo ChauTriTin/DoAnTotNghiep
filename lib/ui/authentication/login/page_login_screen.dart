@@ -175,8 +175,8 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   }
 
   void _doLogin() {
+    _formLoginKey.currentState!.save();
     if (_formLoginKey.currentState!.validate()) {
-      _formLoginKey.currentState!.save();
       loginController.doLogin();
     }
   }

@@ -1,6 +1,7 @@
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/ui/authentication/register/page_register_controller.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -130,8 +131,8 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
   }
 
   void _doRegister() {
+    _formLoginKey.currentState!.save();
     if (_formLoginKey.currentState!.validate()) {
-      _formLoginKey.currentState!.save();
       registerController.doRegister();
     }
   }
@@ -145,9 +146,11 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
             ? validatePasswordConfirm
             : ValidateUtils.validatePassword,
         onSaved: (String? value) {
-          isConfirmPassword
-              ? registerController.setConfirmPassword(value ?? "")
-              : registerController.setPassword(value ?? "");
+          if (isConfirmPassword) {
+            registerController.setConfirmPassword(value ?? "");
+          } else {
+            registerController.setPassword(value ?? "");
+          }
         },
       ),
     );
@@ -159,6 +162,8 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
     }
 
     String? pw = registerController.getPw();
+
+    Dog.d("pw: $pw, confirmPw: $confirmPw");
     if (!ValidateUtils.isValidPasswordRetype(pw, confirmPw)) {
       return StringConstants.errorPasswordNotMatch;
     }
@@ -175,9 +180,11 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
             : ValidateUtils.validateUserName,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         onSaved: (String? value) {
-          isEmail
-              ? registerController.setEmail(value ?? "")
-              : registerController.setName(value ?? "");
+          if (isEmail) {
+            registerController.setEmail(value ?? "");
+          } else {
+            registerController.setName(value ?? "");
+          }
         },
       ),
     );

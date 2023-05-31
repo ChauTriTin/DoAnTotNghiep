@@ -3,7 +3,10 @@ import 'package:flutter/src/widgets/form.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base_controller.dart';
+import '../../../common/const/string_constants.dart';
 import '../../../util/log_dog_utils.dart';
+import '../../../util/shared_preferences_util.dart';
+import '../../../util/ui_utils.dart';
 import '../../home/home_screen.dart';
 
 class ControllerLogin extends BaseController {
@@ -26,7 +29,6 @@ class ControllerLogin extends BaseController {
   void doLogin() {
     Dog.d("doLogin: email:${email.value}, password: ${password.value}}");
     signInWithEmailAndPassword();
-    // SharedPreferencesUtil.setUID("");
   }
 
   Future<void> signInWithEmailAndPassword() async {
@@ -39,6 +41,9 @@ class ControllerLogin extends BaseController {
 
       if (user != null) {
         Dog.d("signInWithEmailAndPassword: SignIn successfully ${user.toString()}");
+        UIUtils.showSnackBar(
+            StringConstants.signin, StringConstants.signInSuccess);
+        SharedPreferencesUtil.setUID(user.uid);
         Get.offAll(const HomeScreen());
       }
     } catch (e) {
@@ -46,20 +51,4 @@ class ControllerLogin extends BaseController {
     }
   }
 
-  Future<void> signUpWithEmailAndPassword() async {
-    try {
-      final UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-          email: email.value,
-          password: password.value
-      );
-      final User? user = userCredential.user;
-
-      if (user != null) {
-        Dog.d("signUpWithEmailAndPassword: Signup success ${user.toString()}");
-        Get.offAll(const HomeScreen());
-      }
-    } catch (e) {
-      Dog.d("signUpWithEmailAndPassword: Login failed $e");
-    }
-  }
 }

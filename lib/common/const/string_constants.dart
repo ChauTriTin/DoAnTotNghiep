@@ -26,6 +26,8 @@ class StringConstants {
   static const String name = "Tên";
   static const String password = "Mật khẩu";
   static const String passwordConfirm = "Xác nhận mật khẩu";
+  static const String signInSuccess = "Đăng nhập thành công";
+  static const String signUpSuccess = "Đăng kí thành công";
 
   static const String linkImgMinaCrying =
       "https://i.pinimg.com/originals/91/98/48/91984862fad2e78a12cb202b3d06e727.gif";
