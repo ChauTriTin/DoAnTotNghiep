@@ -218,43 +218,6 @@ class UIUtils {
     );
   }
 
-  static Container getTextInputLogin(String? hint, TextInputType? keyboardType) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
-      child: TextField(
-        style: const TextStyle(color: Colors.white),
-        keyboardType: keyboardType ?? TextInputType.text,
-        decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.focusBorderTextInputColor,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.borderTextInputColor,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.borderTextInputColor,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-            ),
-            filled: true,
-            // errorStyle: ,
-            hintStyle: TextStyle(color: ColorConstants.textEditBgColor),
-            hintText: hint,
-            fillColor: ColorConstants.textEditBgColor),
-      ),
-    );
-  }
-
   static TextStyle getStyleText() {
     return const TextStyle(
       color: Colors.black,

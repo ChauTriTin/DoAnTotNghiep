@@ -90,7 +90,6 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
                       //Email
                       UIUtils.getTitleTextInputAuth(StringConstants.email),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
-                      // UIUtils.getTextInputLogin(null, TextInputType.emailAddress),
                       _getEmailTextInputWidget(),
                       const SizedBox(
                           height: DimenConstants.marginPaddingMedium),
@@ -191,8 +190,8 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
       margin: const EdgeInsets.symmetric(
           horizontal: DimenConstants.marginPaddingExtraLarge),
       child: PasswordField(
-        validator: _validatePassword,
-        onFieldSubmitted: (String value) {
+        validator: ValidateUtils.validatePassword,
+        onSaved: (String? value) {
           loginController.setPassword(value);
         },
       ),
@@ -204,28 +203,12 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
       margin: const EdgeInsets.symmetric(
           horizontal: DimenConstants.marginPaddingExtraLarge),
       child: TextInputField(
-        validator: _validateEmail,
+        validator: ValidateUtils.validateEmail,
         keyboardType: TextInputType.emailAddress,
-        onFieldSubmitted: (String value) {
+        onSaved: (String? value) {
           loginController.setEmail(value);
         },
       ),
     );
-  }
-
-  String? _validateEmail(String? value) {
-    if (value!.isEmpty) return StringConstants.errorEmailEmpty;
-    if (!ValidateUtils.isValidEmailFormat(value)) {
-      return StringConstants.errorEmailRegex;
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value!.isEmpty) return StringConstants.errorPasswordEmpty;
-    if (!ValidateUtils.isValidPasswordFormat(value)) {
-      return StringConstants.errorPasswordRegex;
-    }
-    return null;
   }
 }

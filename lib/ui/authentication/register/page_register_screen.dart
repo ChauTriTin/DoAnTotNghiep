@@ -1,10 +1,15 @@
-
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:appdiphuot/ui/authentication/register/page_register_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../base/base_stateful_state.dart';
+import '../../../common/const/string_constants.dart';
+import '../../../util/PasswordField.dart';
+import '../../../util/TextInputField.dart';
+import '../../../util/ui_utils.dart';
+import '../../../util/validate_utils.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,61 +21,165 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
+  final _formLoginKey = GlobalKey<FormState>();
+  RegisterController registerController = Get.put(RegisterController());
+
   @override
   void initState() {
     super.initState();
+    _setupListen();
+  }
+
+  void _setupListen() {
+    registerController.appLoading.listen((appLoading) {});
+    registerController.appError.listen((err) {
+      showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
+        //do sth
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    registerController.clearOnDispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.colorWhite,
-      body: SafeArea(
-          child: Column (
-            children: [_buildBackWidget(), _buildRegisterWidget()],
-          )
-      ),
-    );
-
+        backgroundColor: ColorConstants.colorWhite, body: _buildBody());
   }
 
-  Widget _buildBackWidget() {
-    return Container(
-      // margin: const EdgeInsets.symmetric(
-      //     vertical: DimenConstants.marginTopIconBack),
-      width: double.infinity,
-      height: DimenConstants.circleBackBg,
-      child: Stack(
-        alignment: Alignment.topLeft,
-        children: [
-          Positioned(
-            top: -50,
-            left: -250,
-            right: 0,
-            bottom: 0,
-            child: Container(
-                decoration: BoxDecoration(
-                  color: ColorConstants.bgBackCircleColor,
-                  shape: BoxShape.circle,
-                ),
-              child: Center(
-                child: Text(
-                    "Trở lại",
-                  style: TextStyle(color: ColorConstants.colorWhite),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
+  Widget _buildBody() {
+    return SafeArea(
+      child: Container(
+          alignment: Alignment.topLeft,
+          child: Column(
+            children: [
+              UIUtils.getBackWidget(() {
+                Get.back();
+              }),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              _buildLoginWidget()
+            ],
+          )),
     );
   }
 
-  Widget _buildRegisterWidget() {
+  Widget _buildLoginWidget() {
     return Expanded(
+        flex: 5,
         child: Container(
+          decoration: UIUtils.getBoxDecorationLoginBg(),
+          width: double.infinity,
+          child: SingleChildScrollView(
+              child: Form(
+                  key: _formLoginKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Title: Register
+                      const SizedBox(height: DimenConstants.marginPaddingLarge),
+                      UIUtils.getTextHeaderAuth(StringConstants.registerTitle,
+                          ColorConstants.colorWhite),
+                      const SizedBox(height: DimenConstants.marginPaddingLarge),
 
-        )
+                      // Name
+                      UIUtils.getTitleTextInputAuth(StringConstants.name),
+                      const SizedBox(height: DimenConstants.marginPaddingSmall),
+                      _getTextInputWidget(false),
+                      const SizedBox(
+                          height: DimenConstants.marginPaddingMedium),
+
+                      //Email
+                      UIUtils.getTitleTextInputAuth(StringConstants.email),
+                      const SizedBox(height: DimenConstants.marginPaddingSmall),
+                      _getTextInputWidget(true),
+                      const SizedBox(
+                          height: DimenConstants.marginPaddingMedium),
+
+                      // Password
+                      UIUtils.getTitleTextInputAuth(StringConstants.password),
+                      const SizedBox(height: DimenConstants.marginPaddingSmall),
+                      _getPasswordWidget(false),
+                      const SizedBox(
+                          height: DimenConstants.marginPaddingMedium),
+
+                      // Confirm password
+                      UIUtils.getTitleTextInputAuth(
+                          StringConstants.passwordConfirm),
+                      const SizedBox(height: DimenConstants.marginPaddingSmall),
+                      _getPasswordWidget(true),
+                      const SizedBox(
+                          height: DimenConstants.marginPaddingMedium),
+
+                      // Register btn
+                      const SizedBox(height: DimenConstants.marginPaddingSmall),
+                      UIUtils.getLoginOutlineButton(
+                        StringConstants.register,
+                        _doRegister,
+                      ),
+
+                      const SizedBox(
+                          height: DimenConstants.marginPaddingExtraLarge),
+                    ],
+                  ))),
+        ));
+  }
+
+  void _doRegister() {
+    if (_formLoginKey.currentState!.validate()) {
+      _formLoginKey.currentState!.save();
+      registerController.doRegister();
+    }
+  }
+
+  Widget _getPasswordWidget(bool isConfirmPassword) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingExtraLarge),
+      child: PasswordField(
+        validator: isConfirmPassword
+            ? validatePasswordConfirm
+            : ValidateUtils.validatePassword,
+        onSaved: (String? value) {
+          isConfirmPassword
+              ? registerController.setConfirmPassword(value ?? "")
+              : registerController.setPassword(value ?? "");
+        },
+      ),
+    );
+  }
+
+  String? validatePasswordConfirm(String? confirmPw) {
+    if (confirmPw!.isEmpty) {
+      return StringConstants.errorPasswordEmpty;
+    }
+
+    String? pw = registerController.getPw();
+    if (!ValidateUtils.isValidPasswordRetype(pw, confirmPw)) {
+      return StringConstants.errorPasswordNotMatch;
+    }
+    return null;
+  }
+
+  Widget _getTextInputWidget(bool isEmail) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingExtraLarge),
+      child: TextInputField(
+        validator: isEmail
+            ? ValidateUtils.validateEmail
+            : ValidateUtils.validateUserName,
+        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+        onSaved: (String? value) {
+          isEmail
+              ? registerController.setEmail(value ?? "")
+              : registerController.setName(value ?? "");
+        },
+      ),
     );
   }
 }

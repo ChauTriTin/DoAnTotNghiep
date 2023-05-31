@@ -37,7 +37,7 @@ class _PasswordFieldState extends BaseStatefulState<PasswordField> {
       style: const TextStyle(color: Colors.white),
       key: widget.fieldKey,
       obscureText: _obscureText,
-      maxLength: 8,
+      // maxLength: 30,
       onSaved: widget.onSaved,
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
