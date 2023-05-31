@@ -18,14 +18,9 @@ class ColorConstants {
   static Color textEditBgColor = const Color(0x98000000);
   static Color borderTextInputColor = const Color(0xA6C2C2C2);
   static Color focusBorderTextInputColor = Colors.white;
-  static Color errorBorderTextInputColor = const Color(0xA6FC7F49);
-  static const Color textColorForgotPassword = const Color(0xA6FFE3A6);
+  static Color errorBorderTextInputColor = const Color(0xFFFDC10B);
+  static const Color textColorForgotPassword = Color(0xFFFFE49A);
   static const Color iconColor = Colors.white;
-
-  static Color textEditBgColor = const Color(0x98000000);
-  static Color borderTextInputColor = const Color(0xA6C2C2C2);
-  static Color focusBorderTextInputColor = Colors.white;
-  static Color errorBorderTextInputColor = const Color(0xA6FC7F49);
 
   static getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())

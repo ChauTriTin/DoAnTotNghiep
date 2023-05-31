@@ -7,12 +7,13 @@ class StringConstants {
   static const String confirm = "Xác nhận";
   static const String signin = "Đăng nhập";
   static const String register = "Tạo tài khoản";
-  static const String email = "Email";
-  static const String password = "Mật khẩu";
   static const String forgotPW = "Quên mật khẩu";
   static const String loginWayTitle = "Hoặc đăng kí đăng nhập bằng";
   static const String titleAuthPage = "Cùng bạn trên những hành trình";
-  static const String forget = "Quên mật khẩu";
+  static const String errorEmailEmpty = "Vui lòng nhập email";
+  static const String errorEmailRegex = "Vui lòng nhập email hợp lệ";
+  static const String errorPasswordEmpty = "Vui lòng nhập mật khẩu";
+  static const String errorPasswordRegex = "Mật khẩu phải ít nhất 4 kí tự gồm chữ và số";
   static const String email = "Email";
   static const String password = "Mật khẩu";
 

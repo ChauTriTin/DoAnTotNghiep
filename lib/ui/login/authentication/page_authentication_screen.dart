@@ -35,7 +35,10 @@ class _AuthenticationScreen extends BaseStatefulState<AuthenticationScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // Icon back with circle
                   _buildLogoAuthWidget(),
+
+                  // Title: Cùng bạn trên mọi hành trình
                   Container(
                     alignment: Alignment.center,
                     width: double.infinity,
@@ -45,6 +48,8 @@ class _AuthenticationScreen extends BaseStatefulState<AuthenticationScreen> {
                         StringConstants.titleAuthPage,
                         ColorConstants.colorBlack),
                   ),
+
+                  // Sign in, register button
                   _buildButtonAreaWidget()
                 ],
               )),

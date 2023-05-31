@@ -1,15 +1,9 @@
+import 'package:appdiphuot/base/base_stateful_state.dart';
+import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../common/const/color_constants.dart';
-import '../common/const/dimen_constants.dart';
 
-/**
- * Created by Loitp on 08,August,2022
- * Galaxy One company,
- * Vietnam
- * +840766040293
- * freuss47@gmail.com
- */
 class PasswordField extends StatefulWidget {
   const PasswordField({
     super.key,
@@ -34,7 +28,7 @@ class PasswordField extends StatefulWidget {
   _PasswordFieldState createState() => _PasswordFieldState();
 }
 
-class _PasswordFieldState extends State<PasswordField> {
+class _PasswordFieldState extends BaseStatefulState<PasswordField> {
   bool _obscureText = true;
 
   @override
@@ -48,30 +42,12 @@ class _PasswordFieldState extends State<PasswordField> {
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: ColorConstants.focusBorderTextInputColor,
-            width: 1.0,
-          ),
-          borderRadius:
-              BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: ColorConstants.borderTextInputColor,
-            width: 1.0,
-          ),
-          borderRadius:
-              BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: ColorConstants.borderTextInputColor,
-            width: 1.0,
-          ),
-          borderRadius:
-              BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-        ),
+        errorMaxLines: 3,
+        focusedBorder: UIUtils.getOutlineFocus(ColorConstants.focusBorderTextInputColor),
+        enabledBorder: UIUtils.getOutlineFocus(ColorConstants.borderTextInputColor),
+        errorBorder: UIUtils.getOutlineFocus(ColorConstants.errorBorderTextInputColor),
+        border: UIUtils.getOutlineFocus(ColorConstants.borderTextInputColor),
+        errorStyle: TextStyle(color: ColorConstants.errorBorderTextInputColor),
         filled: true,
         hintStyle: TextStyle(color: ColorConstants.textEditBgColor),
         hintText: widget.hintText,
@@ -82,7 +58,10 @@ class _PasswordFieldState extends State<PasswordField> {
               _obscureText = !_obscureText;
             });
           },
-          child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off, color: ColorConstants.colorWhite,),
+          child: Icon(
+            _obscureText ? Icons.visibility : Icons.visibility_off,
+            color: ColorConstants.colorWhite,
+          ),
         ),
       ),
     );

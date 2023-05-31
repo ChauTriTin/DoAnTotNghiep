@@ -39,12 +39,13 @@ class DimenConstants {
 
   // Icon Back Login Page
   static const double iconSize = 36;
+  static const double loginIconSize = 50;
   static const double iconSizePadding = 6;
 
 
 
   // Icon Back Login Page
-  static const double circleBackBg = 180;
+  static const double circleBackBg = 130;
 
 
 }

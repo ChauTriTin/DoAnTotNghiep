@@ -22,10 +22,7 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
   final _auth = FirebaseAuth.instance;
 
   Future<void> _resetPassword({required String email}) async {
-    await _auth
-        .sendPasswordResetEmail(email: email)
-        .then((value) => log('data'))
-        .catchError((e) => log('data Error: $e'));
+    await _auth.sendPasswordResetEmail(email: email).then((value) => log('data')).catchError((e) => log('data Error: $e'));
   }
 
   @override
@@ -42,55 +39,50 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
               alignment: Alignment.topLeft,
               child: Column(
                 children: [
-                  _buildBackWidget(),
-                  _buildLoginWidget(),
-                  UIUtils.getLoginOutlineButton(
-                    StringConstants.forget,
-                    () => _resetPassword(email: "huynhquocnguyen99@gmail.com"),
-                  ),
+                  UIUtils.getBackWidget(() {
+                    Get.back();
+                  }),
+                  const SizedBox(height: DimenConstants.marginPaddingLarge),
+                  _buildForgetPwWidget(),
                 ],
               )),
         ));
   }
 
-  Widget _buildBackWidget() {
-    return Container(
-      alignment: Alignment.topLeft,
-      // margin: const EdgeInsets.symmetric(
-      //     vertical: DimenConstants.marginTopIconBack),
-      width: DimenConstants.circleBackBg,
-      height: DimenConstants.circleBackBg,
-      decoration: BoxDecoration(
-        color: ColorConstants.bgBackCircleColor,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
-
-  Widget _buildLoginWidget() {
+  Widget _buildForgetPwWidget() {
     return Expanded(
+        flex: 5,
         child: Container(
-      decoration: UIUtils.getBoxDecorationLoginBg(),
-      width: double.infinity,
-      child: ListView(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          decoration: UIUtils.getBoxDecorationLoginBg(),
+          width: double.infinity,
+          child: ListView(
             children: [
-              const SizedBox(height: DimenConstants.marginPaddingLarge),
-              UIUtils.getTextHeaderAuth(StringConstants.forget),
-              const SizedBox(height: DimenConstants.marginPaddingLarge),
+              Form(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: DimenConstants.marginPaddingLarge),
+                    UIUtils.getTextHeaderAuth(StringConstants.forgotPW, ColorConstants.colorWhite),
+                    const SizedBox(height: DimenConstants.marginPaddingLarge),
 
-              //Email
-              UIUtils.getTitleTextInputAuth(StringConstants.email),
-              const SizedBox(height: DimenConstants.marginPaddingSmall),
-              UIUtils.getTextInputLogin(StringConstants.email),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    //Email
+                    UIUtils.getTitleTextInputAuth(StringConstants.email),
+                    const SizedBox(height: DimenConstants.marginPaddingSmall),
+                    UIUtils.getTextInputLogin(null, TextInputType.emailAddress),
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
+
+                    // Forgot pw btn
+                    const SizedBox(height: DimenConstants.marginPaddingExtraLarge),
+                    UIUtils.getLoginOutlineButton(
+                      StringConstants.forgotPW,
+                      () => _resetPassword(email: "huynhquocnguyen99@gmail.com"),
+                    ),
+                  ],
+                ),
+              ),
             ],
-          )
-        ],
-      ),
-    ));
+          ),
+        ));
   }
 }

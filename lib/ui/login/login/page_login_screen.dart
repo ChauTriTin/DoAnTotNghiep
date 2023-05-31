@@ -1,12 +1,16 @@
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/ui/login/login/page_login_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
+import 'package:appdiphuot/util/validate_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base_stateful_state.dart';
 import '../../../util/PasswordField.dart';
+import '../../../util/TextInputField.dart';
+import '../page_forget_password.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,8 +22,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginState extends BaseStatefulState<LoginScreen> {
-  final GlobalKey<FormFieldState<String>> _passwordFieldKey =
-  GlobalKey<FormFieldState<String>>();
+  final _formLoginKey = GlobalKey<FormState>();
+  ControllerLogin loginController = Get.put(ControllerLogin());
 
   @override
   void initState() {
@@ -29,20 +33,23 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ColorConstants.colorWhite,
-        body: SafeArea(
-          child: Container(
-              alignment: Alignment.topLeft,
-              child: Column(
-                children: [
-                  UIUtils.getBackWidget(() {
-                    Get.back();
-                  }),
-                  const SizedBox(height: DimenConstants.marginPaddingLarge),
-                  _buildLoginWidget()
-                ],
-              )),
-        ));
+        backgroundColor: ColorConstants.colorWhite, body: _buildBody());
+  }
+
+  Widget _buildBody() {
+    return SafeArea(
+      child: Container(
+          alignment: Alignment.topLeft,
+          child: Column(
+            children: [
+              UIUtils.getBackWidget(() {
+                Get.back();
+              }),
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
+              _buildLoginWidget()
+            ],
+          )),
+    );
   }
 
   Widget _buildLoginWidget() {
@@ -51,22 +58,24 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
         child: Container(
           decoration: UIUtils.getBoxDecorationLoginBg(),
           width: double.infinity,
-          child: ListView(
-            children: [
-              Form(
+          child: SingleChildScrollView(
+              child: Form(
+                  key: _formLoginKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // Title: Sign in
                       const SizedBox(height: DimenConstants.marginPaddingLarge),
-                      UIUtils.getTextHeaderAuth(StringConstants.signin, ColorConstants.colorWhite),
+                      UIUtils.getTextHeaderAuth(
+                          StringConstants.signin, ColorConstants.colorWhite),
                       const SizedBox(height: DimenConstants.marginPaddingLarge),
 
                       //Email
                       UIUtils.getTitleTextInputAuth(StringConstants.email),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
-                      UIUtils.getTextInputLogin(
-                          null, TextInputType.emailAddress),
+                      // UIUtils.getTextInputLogin(null, TextInputType.emailAddress),
+                      _getEmailTextInputWidget(),
                       const SizedBox(
                           height: DimenConstants.marginPaddingMedium),
 
@@ -107,71 +116,100 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
                       const SizedBox(
                           height: DimenConstants.marginPaddingMedium),
 
-                      // Goole - Facebook
+                      // Google - Facebook
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Goolgle
-                          CircleAvatar(
-                            radius: DimenConstants.loginIconHeight,
-                            backgroundColor: ColorConstants.colorGrey,
-                            child: Padding(
-                              padding:
-                              const EdgeInsets.all(DimenConstants.logoStroke),
-                              // Border radius
-                              child: ClipOval(
-                                  child: Image.asset(
-                                    "assets/images/ic_launcher.png",
-                                  )),
-                            ),
+                          // Google
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                                padding: const EdgeInsets.all(
+                                    DimenConstants.marginPaddingTiny),
+                                decoration: const BoxDecoration(
+                                    color: ColorConstants.colorWhite,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                            DimenConstants.radiusRound))),
+                                width: DimenConstants.loginIconSize,
+                                child: Image.asset(
+                                  "assets/images/ic_google.png",
+                                )),
                           ),
 
                           const SizedBox(
                               width: DimenConstants.marginPaddingLarge),
 
                           // Facebook
-                          CircleAvatar(
-                            radius: DimenConstants.loginIconHeight,
-                            backgroundColor: ColorConstants.colorGrey,
-                            child: Padding(
-                              padding:
-                              const EdgeInsets.all(DimenConstants.logoStroke),
-                              // Border radius
-                              child: ClipOval(
-                                  child: Image.asset(
-                                    "assets/images/ic_launcher.png",
-                                  )),
-                            ),
-                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: SizedBox(
+                                width: DimenConstants.loginIconSize,
+                                child: Image.asset(
+                                  "assets/images/ic_facebook.png",
+                                )),
+                          )
                         ],
                       ),
 
                       const SizedBox(height: DimenConstants.marginPaddingLarge),
                     ],
-                  ))
-            ],
-          ),
+                  ))),
         ));
   }
 
-  void _doLogin() {}
+  void _doLogin() {
+    if (_formLoginKey.currentState!.validate()) {
+      _formLoginKey.currentState!.save();
+      loginController.doLogin();
+    }
+  }
 
-  void _navigateToForgotPasswordScreen() {}
+  void _navigateToForgotPasswordScreen() {
+    Get.to(const PageForgetPassword());
+  }
 
   Widget _getPasswordWidget() {
     return Container(
       margin: const EdgeInsets.symmetric(
           horizontal: DimenConstants.marginPaddingExtraLarge),
       child: PasswordField(
-        fieldKey: _passwordFieldKey,
-        helperText: 'No more than 8 characters.',
+        validator: _validatePassword,
         onFieldSubmitted: (String value) {
-          setState(() {
-            // this._password = value;
-          });
+          loginController.setPassword(value);
         },
       ),
     );
+  }
+
+  Widget _getEmailTextInputWidget() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingExtraLarge),
+      child: TextInputField(
+        validator: _validateEmail,
+        keyboardType: TextInputType.emailAddress,
+        onFieldSubmitted: (String value) {
+          loginController.setEmail(value);
+        },
+      ),
+    );
+  }
+
+  String? _validateEmail(String? value) {
+    if (value!.isEmpty) return StringConstants.errorEmailEmpty;
+    if (!ValidateUtils.isValidEmailFormat(value)) {
+      return StringConstants.errorEmailRegex;
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value!.isEmpty) return StringConstants.errorPasswordEmpty;
+    if (!ValidateUtils.isValidPasswordFormat(value)) {
+      return StringConstants.errorPasswordRegex;
+    }
+    return null;
   }
 }
