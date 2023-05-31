@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import '../../../base/base_stateful_state.dart';
 import '../../../util/PasswordField.dart';
 import '../../../util/TextInputField.dart';
-import '../page_forget_password.dart';
+import '../forgot/page_forget_password.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,6 +28,22 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    _setupListen();
+  }
+
+  void _setupListen() {
+    loginController.appLoading.listen((appLoading) {});
+    loginController.appError.listen((err) {
+      showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
+        //do sth
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    loginController.clearOnDispose();
+    super.dispose();
   }
 
   @override

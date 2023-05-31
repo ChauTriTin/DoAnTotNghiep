@@ -1,3 +1,4 @@
+import 'package:appdiphuot/ui/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,10 +25,10 @@ class _SplashScreenState extends BaseStatefulState<SplashScreen> {
   }
 
   void _checkIsLogin() async {
-    bool isLoggedIn = await SharedPreferencesUtil.isLoggedIn();
+    String? uid = await SharedPreferencesUtil.getUIDLogin();
 
-    if (isLoggedIn) {
-      Get.off(const WelcomeScreen(title: StringConstants.appName));
+    if (uid?.isNotEmpty == true) {
+      Get.off(const HomeScreen());
     } else {
       Get.off(const AuthenticationScreen());
     }
