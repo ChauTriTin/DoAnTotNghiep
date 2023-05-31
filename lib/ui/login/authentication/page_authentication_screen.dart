@@ -32,7 +32,21 @@ class _AuthenticationScreen extends BaseStatefulState<AuthenticationScreen> {
           child: Container(
               alignment: Alignment.center,
               child: Column(
-                children: [_buildLogoAuthWidget(), _buildButtonAreaWidget()],
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildLogoAuthWidget(),
+                  Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(
+                        DimenConstants.marginPaddingLarge),
+                    child: UIUtils.getTextHeaderAuth(
+                        StringConstants.titleAuthPage,
+                        ColorConstants.colorBlack),
+                  ),
+                  _buildButtonAreaWidget()
+                ],
               )),
         ));
   }

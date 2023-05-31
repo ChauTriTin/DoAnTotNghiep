@@ -190,10 +190,10 @@ class UIUtils {
     );
   }
 
-  static Text getTextHeaderAuth(String text) {
+  static Text getTextHeaderAuth(String text, Color? textColor) {
     return Text(text,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: textColor ?? Colors.white,
           fontSize: DimenConstants.txtHeader1,
         ));
   }
@@ -214,13 +214,14 @@ class UIUtils {
     );
   }
 
-  static Container getTextInputLogin(String hint) {
+  static Container getTextInputLogin(
+      String? hint, TextInputType? keyboardType) {
     return Container(
       margin: const EdgeInsets.symmetric(
           horizontal: DimenConstants.marginPaddingExtraLarge),
       child: TextField(
         style: const TextStyle(color: Colors.white),
-        keyboardType: TextInputType.text,
+        keyboardType: keyboardType ?? TextInputType.text,
         decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
@@ -470,6 +471,50 @@ class UIUtils {
           child: child,
         );
       },
+    );
+  }
+
+  static Widget getBackWidget(
+    VoidCallback? onPress,
+  ) {
+    return SizedBox(
+      // margin: const EdgeInsets.symmetric(
+      //     vertical: DimenConstants.marginTopIconBack),
+      width: double.infinity,
+      height: DimenConstants.circleBackBg,
+      child: Stack(
+        alignment: Alignment.topLeft,
+        children: [
+          Positioned(
+            top: -50,
+            left: -250,
+            right: 0,
+            bottom: 0,
+            child: Container(
+                decoration: BoxDecoration(
+              color: ColorConstants.bgBackCircleColor,
+              shape: BoxShape.circle,
+            )),
+          ),
+          Positioned(
+            top: -30,
+            left: -260,
+            right: 0,
+            bottom: 0,
+            child: IconButton(
+              icon: const Icon(
+                Icons.navigate_before,
+                color: ColorConstants.colorWhite,
+              ),
+              iconSize: DimenConstants.iconSize,
+              padding: const EdgeInsets.all(DimenConstants.iconSizePadding),
+              onPressed: () {
+                onPress?.call();
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
