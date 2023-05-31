@@ -2,6 +2,7 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/ui/home/home/detail/page_detail_router_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
 import 'package:appdiphuot/view/state_home_widget.dart';
@@ -112,6 +113,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
           )
         ]),
         onTap: () {
+          Get.to(const DetailRouterScreen());
           setState(
             () {
               // widgets.add(getRow(widgets.length + 1));
