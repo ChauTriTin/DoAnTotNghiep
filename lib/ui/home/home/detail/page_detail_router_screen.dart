@@ -1,6 +1,8 @@
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../common/const/color_constants.dart';
 import '../../../../view/profile_bar_widget.dart';
@@ -42,32 +44,34 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     );
   }
 
-  final Widget _infoRouter = Container(
-      margin: const EdgeInsets.all(24),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 12),
-                child: const Text(
-                  "Vinh Ha Long 3N3D",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  Widget _infoRouter() {
+    return Container(
+        margin: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 12),
+                  child: const Text(
+                    "Vinh Ha Long 3N3D",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              const Icon(
-                Icons.public,
-                color: Colors.blue,
-              )
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 12),
-            child: const Text(
-                "Chuyến đi Hạ Long trong 3 ngày khởi hành từ tp.HCM ngày 15/5 Chuyến đi Hạ Long trong 3 ngày khởi hành từ tp.HCM ngày 15/5"),
-          )
-        ],
-      ));
+                const Icon(
+                  Icons.public,
+                  color: Colors.blue,
+                )
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              child: const Text(
+                  "Chuyến đi Hạ Long trong 3 ngày khởi hành từ tp.HCM ngày 15/5 Chuyến đi Hạ Long trong 3 ngày khởi hành từ tp.HCM ngày 15/5"),
+            )
+          ],
+        ));
+  }
 
   Widget _listButtonEvent() {
     return Container(
@@ -151,6 +155,104 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     );
   }
 
+  Widget _leader() {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 24, right: 24, top: 4),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.sports_motorsports_outlined,
+                      color: Colors.blue,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 12),
+                      child: const Text(
+                        "Leader: Huynh Quoc Nguyen",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 54, right: 24, top: 6),
+                child: RatingBar.builder(
+                  ignoreGestures: true,
+                  initialRating: 3,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 20,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.red,
+                  ),
+                  onRatingUpdate: (rating) {
+                    print(rating);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+            margin: const EdgeInsets.only(right: 24, top: 6),
+            child: Center(
+                child: Image.network(
+              "https://www.w3schools.com/howto/img_avatar.png",
+              height: 50,
+              width: 50,
+            ))),
+      ],
+    );
+  }
+
+  Widget _divider(double marginTop) {
+    return Container(
+        margin: EdgeInsets.only(top: marginTop), child: const Divider());
+  }
+
+  Widget _seeMore() {
+    return InkWell(
+      onTap: () {
+        _showDetailRouterDialog();
+      },
+      child: Expanded(
+          child: Container(
+        padding: const EdgeInsets.only(top: 6, bottom: 6),
+        child: const Center(
+          child: Text(
+            "Xem chi tiết chuyến đi",
+            style: TextStyle(color: Colors.blue),
+          ),
+        ),
+      )),
+    );
+  }
+
+  void _showDetailRouterDialog() {
+    showCupertinoModalBottomSheet(
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        controller: ModalScrollController.of(context),
+        child: Container(
+          height: 300,
+          width: double.infinity,
+          color: ColorConstants.colorGrey,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,17 +263,27 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       backgroundColor: ColorConstants.appColorBkg,
       body: Container(
         color: ColorConstants.appColorBkg,
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
+        child: Column(
           children: [
             const ProfileBarWidget(
               name: "Nguyen Hoang Giang",
               state: "⬤ Online",
               linkAvatar: "https://www.w3schools.com/howto/img_avatar.png",
             ),
-            _slideShowImage(context),
-            _infoRouter,
-            _listButtonEvent()
+            Expanded(
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  _slideShowImage(context),
+                  _infoRouter(),
+                  _listButtonEvent(),
+                  _divider(12),
+                  _leader(),
+                  _divider(12),
+                  _seeMore()
+                ],
+              ),
+            ),
           ],
         ),
       ),
