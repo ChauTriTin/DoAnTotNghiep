@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../view/profile_bar_widget.dart';
-
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
     super.key,
@@ -134,11 +132,6 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
-            const ProfileBarWidget(
-              name: "Nguyen Hoang Giang",
-              state: "⬤ Online",
-              linkAvatar: "https://www.w3schools.com/howto/img_avatar.png",
-            ),
             banner,
             Container(
               padding: const EdgeInsets.only(left: 24, right: 24),

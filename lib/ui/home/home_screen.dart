@@ -1,13 +1,16 @@
 import 'package:appdiphuot/ui/home/chat/page_chat_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_screen.dart';
+import 'package:appdiphuot/ui/home/home_controller.dart';
 import 'package:appdiphuot/ui/home/noti/page_noti_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_screen.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../base/base_stateful_state.dart';
 import '../../common/const/color_constants.dart';
+import '../../view/profile_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -44,6 +47,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int selectedPos = 0;
+  final _controller = Get.put(HomeController());
 
   double bottomNavBarHeight = 60;
 
@@ -84,21 +88,51 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _navigationController = CircularBottomNavigationController(selectedPos);
+    _setupListen();
+    _controller.getUserInfo();
+  }
+
+  void _setupListen() {
+    _controller.appLoading.listen((appLoading) {});
+    _controller.appError.listen((err) {});
+  }
+
+  @override
+  void dispose() {
+    _controller.clearOnDispose();
+    _navigationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: bottomNavBarHeight),
-            child: bodyContainer(),
-          ),
-          Align(alignment: Alignment.bottomCenter, child: bottomNav())
-        ],
-      ),
-    );
+        appBar: AppBar(
+          toolbarHeight: 0,
+          backgroundColor: ColorConstants.appColor,
+        ),
+        body: Obx(() {
+          return Column(
+            children: [
+              ProfileBarWidget(
+                name: _controller.getName(),
+                state: "⬤ Online",
+                linkAvatar: _controller.getAvatar(),
+              ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: bottomNavBarHeight),
+                      child: bodyContainer(),
+                    ),
+                    Align(alignment: Alignment.bottomCenter, child: bottomNav())
+                  ],
+                ),
+              )
+            ],
+          );
+        }));
   }
 
   Widget bodyContainer() {
@@ -144,11 +178,5 @@ class HomePageState extends State<HomePage> {
         });
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _navigationController.dispose();
   }
 }

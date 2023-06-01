@@ -16,4 +16,9 @@ class UserData {
       _$UserDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserDataToJson(this);
+
+  @override
+  String toString() {
+    return 'UserData{name: $name, uid: $uid, email: $email, password: $password, avatar: $avatar}';
+  }
 }
