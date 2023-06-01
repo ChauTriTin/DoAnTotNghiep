@@ -16,7 +16,7 @@ class StringConstants {
   static const String errorEmailRegex = "Vui lòng nhập email hợp lệ";
 
   static const String errorNameEmpty = "Vui lòng nhập tên";
-  static const String errorNameRegex = "Tên ít nhất 2 kí tự, gồm chữ hoa và chữ thường";
+  static const String errorNameRegex = "Tên ít nhất 1 kí tự, A-Z, a-z, 0-9, và 1 số kí tự đặc biệt";
 
   static const String errorPasswordEmpty = "Vui lòng nhập mật khẩu";
   static const String errorPasswordRegex = "Mật khẩu phải ít nhất 6 kí tự";

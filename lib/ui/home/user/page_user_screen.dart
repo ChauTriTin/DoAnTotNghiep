@@ -2,7 +2,7 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/authentication/login/page_login_screen.dart';
+import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,6 +66,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
 
   void _signOut() {
     _controller.signOut();
-    Get.offAll(const LoginScreen());
+    Get.offAll(const AuthenticationScreen());
   }
 }

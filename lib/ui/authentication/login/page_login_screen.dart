@@ -220,11 +220,10 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
     );
   }
 
-  void onTabGoogleLogin() {
-
-  }
+  void onTabGoogleLogin() {}
 
   void onTabFacebookLogin() {
-    UIUtils.showSnackBarError(StringConstants.error, StringConstants.facebookLoginError);
+    UIUtils.showSnackBarError(
+        StringConstants.error, StringConstants.facebookLoginError);
   }
 }

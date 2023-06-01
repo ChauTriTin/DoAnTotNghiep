@@ -28,7 +28,7 @@ class ValidateUtils {
   }
 
   static bool isValidNameFormat(String format) {
-    String pattern = r'^[A-Z][-a-zA-Z]+$';
+    String pattern = r'^[a-zA-Z0-9]+(([,. -][a-zA-Z ])?[a-zA-Z]*)*$';
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(format);
   }
