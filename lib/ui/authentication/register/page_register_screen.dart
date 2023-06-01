@@ -4,6 +4,7 @@ import 'package:appdiphuot/ui/authentication/register/page_register_controller.d
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../base/base_stateful_state.dart';
 import '../../../common/const/string_constants.dart';
@@ -32,7 +33,13 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
   }
 
   void _setupListen() {
-    registerController.appLoading.listen((appLoading) {});
+    registerController.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
     registerController.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
@@ -43,13 +50,13 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
   @override
   void dispose() {
     registerController.clearOnDispose();
+    OverlayLoadingProgress.stop();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: ColorConstants.colorWhite, body: _buildBody());
+    return Scaffold(backgroundColor: ColorConstants.colorWhite, body: _buildBody());
   }
 
   Widget _buildBody() {
@@ -83,38 +90,32 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                     children: [
                       // Title: Register
                       const SizedBox(height: DimenConstants.marginPaddingLarge),
-                      UIUtils.getTextHeaderAuth(StringConstants.registerTitle,
-                          ColorConstants.colorWhite),
+                      UIUtils.getTextHeaderAuth(StringConstants.registerTitle, ColorConstants.colorWhite),
                       const SizedBox(height: DimenConstants.marginPaddingLarge),
 
                       // Name
                       UIUtils.getTitleTextInputAuth(StringConstants.name),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       _getTextInputWidget(false),
-                      const SizedBox(
-                          height: DimenConstants.marginPaddingMedium),
+                      const SizedBox(height: DimenConstants.marginPaddingMedium),
 
                       //Email
                       UIUtils.getTitleTextInputAuth(StringConstants.email),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       _getTextInputWidget(true),
-                      const SizedBox(
-                          height: DimenConstants.marginPaddingMedium),
+                      const SizedBox(height: DimenConstants.marginPaddingMedium),
 
                       // Password
                       UIUtils.getTitleTextInputAuth(StringConstants.password),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       _getPasswordWidget(false),
-                      const SizedBox(
-                          height: DimenConstants.marginPaddingMedium),
+                      const SizedBox(height: DimenConstants.marginPaddingMedium),
 
                       // Confirm password
-                      UIUtils.getTitleTextInputAuth(
-                          StringConstants.passwordConfirm),
+                      UIUtils.getTitleTextInputAuth(StringConstants.passwordConfirm),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       _getPasswordWidget(true),
-                      const SizedBox(
-                          height: DimenConstants.marginPaddingMedium),
+                      const SizedBox(height: DimenConstants.marginPaddingMedium),
 
                       // Register btn
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
@@ -123,8 +124,7 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                         _doRegister,
                       ),
 
-                      const SizedBox(
-                          height: DimenConstants.marginPaddingExtraLarge),
+                      const SizedBox(height: DimenConstants.marginPaddingExtraLarge),
                     ],
                   ))),
         ));
@@ -139,12 +139,9 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
 
   Widget _getPasswordWidget(bool isConfirmPassword) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingExtraLarge),
+      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
       child: PasswordField(
-        validator: isConfirmPassword
-            ? validatePasswordConfirm
-            : ValidateUtils.validatePassword,
+        validator: isConfirmPassword ? validatePasswordConfirm : ValidateUtils.validatePassword,
         onChange: (String? value) {
           if (isConfirmPassword) {
             registerController.setConfirmPassword(value ?? "");
@@ -172,12 +169,9 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
 
   Widget _getTextInputWidget(bool isEmail) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingExtraLarge),
+      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
       child: TextInputField(
-        validator: isEmail
-            ? ValidateUtils.validateEmail
-            : ValidateUtils.validateUserName,
+        validator: isEmail ? ValidateUtils.validateEmail : ValidateUtils.validateUserName,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         onChange: (String? value) {
           if (isEmail) {

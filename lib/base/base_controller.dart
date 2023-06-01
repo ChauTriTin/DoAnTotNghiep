@@ -83,4 +83,5 @@ enum TypeApp {
   forgotPassword,
   login,
   register,
+  logout,
 }

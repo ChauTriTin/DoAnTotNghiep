@@ -27,16 +27,14 @@ class ForgotPasswordController extends BaseController {
     log("Reset password: email: $email");
     if (email.isNotEmpty) {
       setAppLoading(true, "Loading", TypeApp.forgotPassword);
+
       try {
-        List<String> signInMethods =
-            await _auth.fetchSignInMethodsForEmail(email);
-        if (signInMethods.isNotEmpty) {
+        if (await isEmailExist(email)) {
           await _auth
               .sendPasswordResetEmail(email: email)
               .then((value) => {
                     setAppLoading(false, "Loading", TypeApp.forgotPassword),
-                    UIUtils.showSnackBar(StringConstants.resetPw,
-                        StringConstants.resetPwSuccess),
+                    UIUtils.showSnackBar(StringConstants.resetPw, StringConstants.resetPwSuccess),
                     log("Reset password success"),
                   })
               .catchError((e) => {resetPasswordFail(e)});
@@ -49,17 +47,22 @@ class ForgotPasswordController extends BaseController {
     }
   }
 
+  Future<bool> isEmailExist(String email) async {
+    List<String> signInMethods = await _auth.fetchSignInMethodsForEmail(email);
+    return signInMethods.isNotEmpty;
+  }
+
   void resetPasswordFail(Object? e) {
     setAppLoading(false, "Loading", TypeApp.forgotPassword);
+
     String errorMsg = "";
     if (e == null) {
       errorMsg = StringConstants.emailNotFound;
     } else {
-      errorMsg = e.toString();
+      errorMsg = StringConstants.resetPwFail + errorMsg;
     }
 
-    UIUtils.showSnackBar(
-        StringConstants.resetPw, StringConstants.resetPwFail + errorMsg);
+    UIUtils.showSnackBarError(StringConstants.error, errorMsg);
     log("Reset password fail: $e");
   }
 }

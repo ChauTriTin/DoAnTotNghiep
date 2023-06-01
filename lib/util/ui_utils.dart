@@ -337,12 +337,26 @@ class UIUtils {
     String message,
   ) {
     Get.snackbar(
-      title, // title
-      message, // message
-      // barBlur: 20,
-      isDismissible: true,
-      duration: const Duration(seconds: 4),
-    );
+        title, // title
+        message, // message
+        // barBlur: 20,
+        isDismissible: true,
+        duration: const Duration(seconds: 4),
+        backgroundColor: ColorConstants.colorWhite);
+  }
+
+  static void showSnackBarError(
+    String title,
+    String message,
+  ) {
+    Get.snackbar(
+        title, // title
+        message, // message
+        // barBlur: 20,
+        isDismissible: true,
+        // snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+        backgroundColor: ColorConstants.errorBorderTextInputColor);
   }
 
   static void showDialogSuccess(

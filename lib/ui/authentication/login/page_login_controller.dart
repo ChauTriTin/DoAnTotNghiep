@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/form.dart';
 import 'package:get/get.dart';
@@ -37,23 +39,53 @@ class ControllerLogin extends BaseController {
 
   Future<void> signInWithEmailAndPassword() async {
     try {
-      final UserCredential userCredential =
-          await auth.signInWithEmailAndPassword(
-        email: email.value,
+      var emailStr = email.value;
+      setAppLoading(true, "Loading", TypeApp.login);
+
+      if (!(await isEmailExist(emailStr))) {
+        Dog.d("Login fail. Email does not exist");
+        setAppLoading(false, "Loading", TypeApp.login);
+        loginFail(null);
+        return;
+      }
+
+      final UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: emailStr,
         password: password.value,
       );
       final User? user = userCredential.user;
 
       if (user != null) {
-        Dog.d(
-            "signInWithEmailAndPassword: SignIn successfully ${user.toString()}");
-        UIUtils.showSnackBar(
-            StringConstants.signin, StringConstants.signInSuccess);
+        setAppLoading(false, "Loading", TypeApp.login);
+
+        Dog.d("signInWithEmailAndPassword: SignIn successfully ${user.toString()}");
+        UIUtils.showSnackBar(StringConstants.signin, StringConstants.signInSuccess);
+
         SharedPreferencesUtil.setUID(user.uid);
         Get.offAll(const HomeScreen());
       }
     } catch (e) {
       Dog.d("signInWithEmailAndPassword: SignIn failed $e");
+      loginFail(e);
     }
+  }
+
+  Future<bool> isEmailExist(String email) async {
+    List<String> signInMethods = await auth.fetchSignInMethodsForEmail(email);
+    return signInMethods.isNotEmpty;
+  }
+
+  void loginFail(Object? e) {
+    setAppLoading(false, "Loading", TypeApp.login);
+
+    String errorMsg = "";
+    if (e == null) {
+      errorMsg = StringConstants.emailNotFound;
+    } else {
+      errorMsg = StringConstants.loginFailWithError;
+    }
+
+    UIUtils.showSnackBarError(StringConstants.error, errorMsg);
+    log("Reset password fail: $e");
   }
 }

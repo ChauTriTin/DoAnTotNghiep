@@ -6,6 +6,7 @@ import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:appdiphuot/util/validate_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../base/base_stateful_state.dart';
 import '../../../util/PasswordField.dart';
@@ -32,7 +33,13 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   }
 
   void _setupListen() {
-    loginController.appLoading.listen((appLoading) {});
+    loginController.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
     loginController.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
@@ -43,6 +50,7 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   @override
   void dispose() {
     loginController.clearOnDispose();
+    OverlayLoadingProgress.stop();
     super.dispose();
   }
 
@@ -138,7 +146,7 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
                         children: [
                           // Google
                           GestureDetector(
-                            onTap: () {},
+                            onTap: onTabGoogleLogin,
                             child: Container(
                                 padding: const EdgeInsets.all(
                                     DimenConstants.marginPaddingTiny),
@@ -158,7 +166,7 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
 
                           // Facebook
                           GestureDetector(
-                            onTap: () {},
+                            onTap: onTabFacebookLogin,
                             child: SizedBox(
                                 width: DimenConstants.loginIconSize,
                                 child: Image.asset(
@@ -210,5 +218,13 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
         },
       ),
     );
+  }
+
+  void onTabGoogleLogin() {
+
+  }
+
+  void onTabFacebookLogin() {
+    UIUtils.showSnackBarError(StringConstants.error, StringConstants.facebookLoginError);
   }
 }
