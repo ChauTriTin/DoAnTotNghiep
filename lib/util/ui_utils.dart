@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import '../common/const/color_constants.dart';
 import '../common/const/dimen_constants.dart';
 import '../common/const/string_constants.dart';
@@ -151,8 +152,7 @@ class UIUtils {
           color: borderColor ?? Colors.red,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
+          borderRadius: BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
         ),
       ),
       child: Text(text),
@@ -164,16 +164,9 @@ class UIUtils {
     VoidCallback? onPressed,
   ) {
     return Container(
-        margin: const EdgeInsets.symmetric(
-            horizontal: DimenConstants.marginPaddingExtraLarge),
+        margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
         width: double.infinity,
-        child: UIUtils.getOutlineButton1(
-            text,
-            onPressed,
-            ColorConstants.colorWhite,
-            DimenConstants.paddingLoginBtn,
-            ColorConstants.loginBtnTextColor,
-            ColorConstants.loginBtnBgColor));
+        child: UIUtils.getOutlineButton1(text, onPressed, ColorConstants.colorWhite, DimenConstants.paddingLoginBtn, ColorConstants.loginBtnTextColor, ColorConstants.loginBtnBgColor));
   }
 
   static BoxDecoration getBoxDecorationLoginBg() {
@@ -192,10 +185,11 @@ class UIUtils {
     );
   }
 
-  static Text getTextHeaderAuth(String text) {
+  static Text getTextHeaderAuth(String text, Color? textColor) {
     return Text(text,
-        style: const TextStyle(
-          color: Colors.white,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: textColor ?? Colors.white,
           fontSize: DimenConstants.txtHeader1,
         ));
   }
@@ -204,10 +198,8 @@ class UIUtils {
     return Container(
       alignment: Alignment.centerLeft,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingTiny),
-      margin: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingExtraLarge),
+      padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
+      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
       child: Text(text,
           style: const TextStyle(
             color: Colors.white,
@@ -216,44 +208,13 @@ class UIUtils {
     );
   }
 
-  static Container getTextInputLogin(String hint) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingExtraLarge),
-      child: TextField(
-        style: const TextStyle(color: Colors.white),
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.focusBorderTextInputColor,
-                width: 1.0,
-              ),
-              borderRadius:
-                  BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.borderTextInputColor,
-                width: 1.0,
-              ),
-              borderRadius:
-                  BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.borderTextInputColor,
-                width: 1.0,
-              ),
-              borderRadius:
-                  BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
-            ),
-            filled: true,
-            // errorStyle: ,
-            hintStyle: TextStyle(color: ColorConstants.textEditBgColor),
-            hintText: hint,
-            fillColor: ColorConstants.textEditBgColor),
+  static InputBorder getOutlineFocus(Color? outLineColor) {
+    return OutlineInputBorder(
+      borderSide: BorderSide(
+        color: outLineColor ?? ColorConstants.borderTextInputColor,
+        width: 1.0,
       ),
+      borderRadius: BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
     );
   }
 
@@ -376,12 +337,26 @@ class UIUtils {
     String message,
   ) {
     Get.snackbar(
-      title, // title
-      message, // message
-      // barBlur: 20,
-      isDismissible: true,
-      duration: const Duration(seconds: 3),
-    );
+        title, // title
+        message, // message
+        // barBlur: 20,
+        isDismissible: true,
+        duration: const Duration(seconds: 4),
+        backgroundColor: ColorConstants.colorWhite);
+  }
+
+  static void showSnackBarError(
+    String title,
+    String message,
+  ) {
+    Get.snackbar(
+        title, // title
+        message, // message
+        // barBlur: 20,
+        isDismissible: true,
+        // snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+        backgroundColor: ColorConstants.errorBorderTextInputColor);
   }
 
   static void showDialogSuccess(
@@ -475,8 +450,51 @@ class UIUtils {
     );
   }
 
-  static Widget buildHorizontalDivider(
-      Color color, double width, double height) {
+  static Widget getBackWidget(
+    VoidCallback? onPress,
+  ) {
+    return SizedBox(
+      // margin: const EdgeInsets.symmetric(
+      //     vertical: DimenConstants.marginTopIconBack),
+      width: double.infinity,
+      height: DimenConstants.circleBackBg,
+      child: Stack(
+        alignment: Alignment.topLeft,
+        children: [
+          Positioned(
+            top: -50,
+            left: -250,
+            right: 0,
+            bottom: 0,
+            child: Container(
+                decoration: BoxDecoration(
+              color: ColorConstants.bgBackCircleColor,
+              shape: BoxShape.circle,
+            )),
+          ),
+          Positioned(
+            top: -30,
+            left: -260,
+            right: 0,
+            bottom: 0,
+            child: IconButton(
+              icon: const Icon(
+                Icons.navigate_before,
+                color: ColorConstants.colorWhite,
+              ),
+              iconSize: DimenConstants.iconSize,
+              padding: const EdgeInsets.all(DimenConstants.iconSizePadding),
+              onPressed: () {
+                onPress?.call();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget buildHorizontalDivider(Color color, double width, double height) {
     return Container(
       margin: const EdgeInsets.all(0.0),
       height: height,
@@ -494,8 +512,7 @@ class UIUtils {
     );
   }
 
-  static void showFullWidthSnackBar(String title, String message,
-      {bool isTop = true}) {
+  static void showFullWidthSnackBar(String title, String message, {bool isTop = true}) {
     Get.snackbar(
       title,
       message,
@@ -522,8 +539,7 @@ class UIUtils {
     );
   }
 
-  static void showFullWidthSnackBarError(String title, String message,
-      {bool isTop = true}) {
+  static void showFullWidthSnackBarError(String title, String message, {bool isTop = true}) {
     Get.snackbar(
       title,
       message,

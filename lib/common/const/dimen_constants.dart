@@ -33,11 +33,19 @@ class DimenConstants {
   static const double logoStroke = 3.0;
   static const double logoHeight = 120.0;
   static const double borderBottomAuth = 20;
+  static const double loginIconHeight = 25;
 
   static const double paddingLoginBtn = 20;
 
   // Icon Back Login Page
-  static const double circleBackBg = 180;
+  static const double iconSize = 36;
+  static const double loginIconSize = 50;
+  static const double iconSizePadding = 6;
+
+
+
+  // Icon Back Login Page
+  static const double circleBackBg = 130;
 
 
 }

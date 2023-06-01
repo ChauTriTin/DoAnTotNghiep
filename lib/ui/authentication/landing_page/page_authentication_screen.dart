@@ -1,5 +1,5 @@
 import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:appdiphuot/ui/login/register/page_register_screen.dart';
+import 'package:appdiphuot/ui/authentication/register/page_register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,7 +32,26 @@ class _AuthenticationScreen extends BaseStatefulState<AuthenticationScreen> {
           child: Container(
               alignment: Alignment.center,
               child: Column(
-                children: [_buildLogoAuthWidget(), _buildButtonAreaWidget()],
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Icon back with circle
+                  _buildLogoAuthWidget(),
+
+                  // Title: Cùng bạn trên mọi hành trình
+                  Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(
+                        DimenConstants.marginPaddingLarge),
+                    child: UIUtils.getTextHeaderAuth(
+                        StringConstants.titleAuthPage,
+                        ColorConstants.colorBlack),
+                  ),
+
+                  // Sign in, register button
+                  _buildButtonAreaWidget()
+                ],
               )),
         ));
   }
