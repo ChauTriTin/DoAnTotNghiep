@@ -182,7 +182,7 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   }
 
   void _navigateToForgotPasswordScreen() {
-    Get.to(const PageForgetPassword());
+    Get.to(PageForgetPassword(email: loginController.getEmail()));
   }
 
   Widget _getPasswordWidget() {
@@ -191,7 +191,7 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
           horizontal: DimenConstants.marginPaddingExtraLarge),
       child: PasswordField(
         validator: ValidateUtils.validatePassword,
-        onSaved: (String? value) {
+        onChange: (String? value) {
           loginController.setPassword(value);
         },
       ),
@@ -205,7 +205,7 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
       child: TextInputField(
         validator: ValidateUtils.validateEmail,
         keyboardType: TextInputType.emailAddress,
-        onSaved: (String? value) {
+        onChange: (String? value) {
           loginController.setEmail(value);
         },
       ),

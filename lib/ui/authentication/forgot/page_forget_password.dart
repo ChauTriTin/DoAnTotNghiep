@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/ui/authentication/forgot/page_forget_password_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../common/const/color_constants.dart';
 import '../../../common/const/dimen_constants.dart';
@@ -11,7 +14,12 @@ import '../../../util/ui_utils.dart';
 import '../../../util/validate_utils.dart';
 
 class PageForgetPassword extends StatefulWidget {
-  const PageForgetPassword({Key? key}) : super(key: key);
+  PageForgetPassword({
+    super.key,
+    this.email,
+  });
+
+  final String? email;
 
   @override
   State<PageForgetPassword> createState() => _PageForgetPasswordState();
@@ -25,10 +33,18 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
   void initState() {
     super.initState();
     _setupListen();
+    controller.setEmail(widget.email ?? "");
+    log("email forgot pw: ${widget.email}");
   }
 
   void _setupListen() {
-    controller.appLoading.listen((appLoading) {});
+    controller.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
     controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
@@ -39,6 +55,7 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
   @override
   void dispose() {
     controller.clearOnDispose();
+    OverlayLoadingProgress.stop();
     super.dispose();
   }
 
@@ -63,42 +80,42 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
 
   Widget _buildForgetPwWidget() {
     return Expanded(
-      flex: 5,
-      child: Container(
-        decoration: UIUtils.getBoxDecorationLoginBg(),
-        width: double.infinity,
-        child: ListView(
-          children: [
-            Form(
-              key: _formForgotPWKey,
-              child: Column(
+        flex: 5,
+        child: Container(
+          decoration: UIUtils.getBoxDecorationLoginBg(),
+          width: double.infinity,
+          child: ListView(
+            children: [
+              Form(
+                key: _formForgotPWKey,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                  const SizedBox(height: DimenConstants.marginPaddingLarge),
-              UIUtils.getTextHeaderAuth(
-                  StringConstants.forgotPW, ColorConstants.colorWhite),
-              const SizedBox(height: DimenConstants.marginPaddingLarge),
+                    const SizedBox(height: DimenConstants.marginPaddingLarge),
+                    UIUtils.getTextHeaderAuth(
+                        StringConstants.forgotPW, ColorConstants.colorWhite),
+                    const SizedBox(height: DimenConstants.marginPaddingLarge),
 
-              //Email
-              UIUtils.getTitleTextInputAuth(StringConstants.email),
-              const SizedBox(height: DimenConstants.marginPaddingSmall),
-              _getEmailTextInputWidget(),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    //Email
+                    UIUtils.getTitleTextInputAuth(StringConstants.email),
+                    const SizedBox(height: DimenConstants.marginPaddingSmall),
+                    _getEmailTextInputWidget(),
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
 
-              // Forgot pw btn
-              const SizedBox(
-                  height: DimenConstants.marginPaddingExtraLarge),
-              UIUtils.getLoginOutlineButton(
-                  StringConstants.forgotPW,
+                    // Forgot pw btn
+                    const SizedBox(
+                        height: DimenConstants.marginPaddingExtraLarge),
+                    UIUtils.getLoginOutlineButton(
+                      StringConstants.forgotPW,
                       () => checkResetPw(),
-            ),
-          ],
-        ),
-      ),
-      ],
-    ),)
-    );
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget _getEmailTextInputWidget() {
@@ -108,9 +125,10 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
       child: TextInputField(
         validator: _validateEmail,
         keyboardType: TextInputType.emailAddress,
-        onFieldSubmitted: (String value) {
-          controller.setEmail(value);
+        onChange: (String? value) {
+          controller.setEmail(value ?? "");
         },
+        initalText: controller.getEmail(),
       ),
     );
   }

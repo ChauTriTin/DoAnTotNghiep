@@ -19,8 +19,11 @@ class StringConstants {
   static const String errorNameRegex = "Tên ít nhất 2 kí tự, gồm chữ hoa và chữ thường";
 
   static const String errorPasswordEmpty = "Vui lòng nhập mật khẩu";
-  static const String errorPasswordRegex = "Mật khẩu phải ít nhất 4 kí tự gồm chữ và số";
+  static const String errorPasswordRegex = "Mật khẩu phải ít nhất 6 kí tự";
   static const String errorPasswordNotMatch = "Mật khẩu không trùng";
+  static const String resetPwSuccess = "Reset password thành công, vui lòng check mail của bạn";
+  static const String resetPwFail = "Reset password không thành công, vui lòng kiểm tra lại. \n Lỗi: ";
+  static const String resetPw = "Reset password";
 
   static const String email = "Email";
   static const String name = "Tên";
@@ -28,6 +31,7 @@ class StringConstants {
   static const String passwordConfirm = "Xác nhận mật khẩu";
   static const String signInSuccess = "Đăng nhập thành công";
   static const String signUpSuccess = "Đăng kí thành công";
+  static const String emailNotFound = "Email không tồn tại trong hệ thống!";
 
   static const String linkImgMinaCrying =
       "https://i.pinimg.com/originals/91/98/48/91984862fad2e78a12cb202b3d06e727.gif";

@@ -15,13 +15,17 @@ class TextInputField extends StatefulWidget {
     this.validator,
     this.onFieldSubmitted,
     this.keyboardType,
+    this.onChange,
+    this.initalText,
   });
 
   final Key? fieldKey;
   final TextInputType? keyboardType;
   final String? labelText;
+  final String? initalText;
   final String? helperText;
   final FormFieldSetter<String>? onSaved;
+  final ValueChanged<String>? onChange;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onFieldSubmitted;
 
@@ -36,16 +40,22 @@ class _TextInputField extends BaseStatefulState<TextInputField> {
       style: const TextStyle(color: Colors.white),
       key: widget.fieldKey,
       onSaved: widget.onSaved,
+      initialValue: widget.initalText,
+      onChanged: widget.onChange,
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
       keyboardType: widget.keyboardType ?? TextInputType.text,
       decoration: InputDecoration(
           errorMaxLines: 3,
-          focusedBorder: UIUtils.getOutlineFocus(ColorConstants.focusBorderTextInputColor),
-          enabledBorder: UIUtils.getOutlineFocus(ColorConstants.borderTextInputColor),
-          errorBorder: UIUtils.getOutlineFocus(ColorConstants.errorBorderTextInputColor),
+          focusedBorder:
+              UIUtils.getOutlineFocus(ColorConstants.focusBorderTextInputColor),
+          enabledBorder:
+              UIUtils.getOutlineFocus(ColorConstants.borderTextInputColor),
+          errorBorder:
+              UIUtils.getOutlineFocus(ColorConstants.errorBorderTextInputColor),
           border: UIUtils.getOutlineFocus(ColorConstants.borderTextInputColor),
-          errorStyle: TextStyle(color: ColorConstants.errorBorderTextInputColor),
+          errorStyle:
+              TextStyle(color: ColorConstants.errorBorderTextInputColor),
           filled: true,
           // errorStyle: ,
           hintStyle: TextStyle(color: ColorConstants.textEditBgColor),

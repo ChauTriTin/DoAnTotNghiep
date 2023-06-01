@@ -13,7 +13,7 @@ class ValidateUtils {
 
   static bool isValidPasswordFormat(String format) {
     // r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    String pattern = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$';
+    String pattern = r'^(?=.*[0-9a-zA-Z]).{6,}';
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(format);
   }

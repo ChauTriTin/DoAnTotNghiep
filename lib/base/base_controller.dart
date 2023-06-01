@@ -80,4 +80,7 @@ class AppError {
 
 enum TypeApp {
   createRouter,
+  forgotPassword,
+  login,
+  register,
 }

@@ -22,6 +22,10 @@ class ControllerLogin extends BaseController {
     email.value = id ?? "";
   }
 
+  String getEmail() {
+    return email.value ?? "";
+  }
+
   void setPassword(String? pw) {
     password.value = pw ?? "";
   }
@@ -33,14 +37,16 @@ class ControllerLogin extends BaseController {
 
   Future<void> signInWithEmailAndPassword() async {
     try {
-      final UserCredential userCredential = await auth.signInWithEmailAndPassword(
+      final UserCredential userCredential =
+          await auth.signInWithEmailAndPassword(
         email: email.value,
         password: password.value,
       );
       final User? user = userCredential.user;
 
       if (user != null) {
-        Dog.d("signInWithEmailAndPassword: SignIn successfully ${user.toString()}");
+        Dog.d(
+            "signInWithEmailAndPassword: SignIn successfully ${user.toString()}");
         UIUtils.showSnackBar(
             StringConstants.signin, StringConstants.signInSuccess);
         SharedPreferencesUtil.setUID(user.uid);
@@ -50,5 +56,4 @@ class ControllerLogin extends BaseController {
       Dog.d("signInWithEmailAndPassword: SignIn failed $e");
     }
   }
-
 }

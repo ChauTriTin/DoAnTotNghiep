@@ -145,7 +145,7 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
         validator: isConfirmPassword
             ? validatePasswordConfirm
             : ValidateUtils.validatePassword,
-        onSaved: (String? value) {
+        onChange: (String? value) {
           if (isConfirmPassword) {
             registerController.setConfirmPassword(value ?? "");
           } else {
@@ -179,7 +179,7 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
             ? ValidateUtils.validateEmail
             : ValidateUtils.validateUserName,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
-        onSaved: (String? value) {
+        onChange: (String? value) {
           if (isEmail) {
             registerController.setEmail(value ?? "");
           } else {

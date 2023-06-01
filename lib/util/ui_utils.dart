@@ -341,7 +341,7 @@ class UIUtils {
       message, // message
       // barBlur: 20,
       isDismissible: true,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 4),
     );
   }
 

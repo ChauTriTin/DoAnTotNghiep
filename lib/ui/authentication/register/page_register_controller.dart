@@ -51,6 +51,7 @@ class RegisterController extends BaseController {
   void doRegister() {
     Dog.d(
         "doRegister: name: ${name.value}, email:${email.value}, password: ${password.value}, confirmPw: ${confirmPassword.value}");
+    signUpWithEmailAndPassword();
   }
 
   Future<void> signUpWithEmailAndPassword() async {
