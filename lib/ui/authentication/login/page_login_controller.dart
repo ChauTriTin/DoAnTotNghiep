@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/form.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../base/base_controller.dart';
 import '../../../common/const/string_constants.dart';
@@ -12,7 +13,9 @@ import '../../../util/ui_utils.dart';
 import '../../home/home_screen.dart';
 
 class ControllerLogin extends BaseController {
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   var email = "".obs;
   var password = "".obs;
 
@@ -49,7 +52,7 @@ class ControllerLogin extends BaseController {
         return;
       }
 
-      final UserCredential userCredential = await auth.signInWithEmailAndPassword(
+      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: emailStr,
         password: password.value,
       );
@@ -71,7 +74,7 @@ class ControllerLogin extends BaseController {
   }
 
   Future<bool> isEmailExist(String email) async {
-    List<String> signInMethods = await auth.fetchSignInMethodsForEmail(email);
+    List<String> signInMethods = await _auth.fetchSignInMethodsForEmail(email);
     return signInMethods.isNotEmpty;
   }
 
@@ -87,5 +90,33 @@ class ControllerLogin extends BaseController {
 
     UIUtils.showSnackBarError(StringConstants.error, errorMsg);
     log("Reset password fail: $e");
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        setAppLoading(false, "Loading", TypeApp.login);
+
+        Dog.d("signInWithGoogle: SignIn successfully ${user.toString()}");
+        UIUtils.showSnackBar(StringConstants.signin, StringConstants.signInSuccess);
+
+        SharedPreferencesUtil.setUID(user.uid);
+        Get.offAll(const HomeScreen());
+      }
+    } catch (e) {
+      Dog.d("signInWithGoogle: SignIn failed $e");
+      loginFail(e);
+    }
   }
 }
