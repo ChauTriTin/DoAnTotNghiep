@@ -116,7 +116,7 @@ class ControllerLogin extends BaseController {
       }
     } catch (e) {
       Dog.d("signInWithGoogle: SignIn failed $e");
-      loginFail(e);
+      UIUtils.showSnackBarError(StringConstants.error, "Login fail: $e");
     }
   }
 }

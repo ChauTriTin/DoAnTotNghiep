@@ -133,115 +133,99 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
       backgroundColor: ColorConstants.appColorBkg,
       body: Container(
           color: ColorConstants.appColorBkg,
-          child: Column(
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
             children: [
-              const ProfileBarWidget(
-                name: "Nguyen Hoang Giang",
-                state: "⬤ Online",
-                linkAvatar: "https://www.w3schools.com/howto/img_avatar.png",
-              ),
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    banner,
-                    Container(
-                      padding: const EdgeInsets.only(left: 24, right: 24),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            StateHomeWidget(
-                              isChoose: _controller.buttonChoose.value == 0
-                                  ? true
-                                  : false,
-                              icon: const Icon(Icons.done_all,
-                                  size: 14, color: Colors.blue),
-                              text: "Tất cả",
-                              onPress: () {
-                                setState(() {
-                                  _controller.buttonChoose.value = 0;
-                                });
-                              },
-                            ),
-                            StateHomeWidget(
-                              isChoose: _controller.buttonChoose.value == 1
-                                  ? true
-                                  : false,
-                              icon: const Icon(Icons.public,
-                                  size: 14, color: Colors.blue),
-                              text: "Công khai",
-                              onPress: () {
-                                setState(() {
-                                  _controller.buttonChoose.value = 1;
-                                });
-                              },
-                            ),
-                            StateHomeWidget(
-                              isChoose: _controller.buttonChoose.value == 2
-                                  ? true
-                                  : false,
-                              icon: const Icon(Icons.lock,
-                                  size: 14, color: Colors.blue),
-                              text: "Cá nhân",
-                              onPress: () {
-                                setState(() {
-                                  _controller.buttonChoose.value = 2;
-                                });
-                              },
-                            )
-                          ]),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 12, left: 24),
-                      child: const Text(
-                        "Chuyen đi đang mở",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 1 / 5.5,
-                      margin:
-                          const EdgeInsets.only(right: 24, left: 24, top: 12),
-                      child: ClipRect(
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: dataList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return getRow(index);
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 12, left: 24),
-                      child: const Text(
-                        "Bai danh gia ve chuyen di da hoan thanh",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 1 / 5.5,
-                      margin:
-                          const EdgeInsets.only(right: 24, left: 24, top: 12),
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: dataList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return getRow(index);
+              banner,
+              Container(
+                padding: const EdgeInsets.only(left: 24, right: 24),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      StateHomeWidget(
+                        isChoose:
+                            _controller.buttonChoose.value == 0 ? true : false,
+                        icon: const Icon(Icons.done_all,
+                            size: 14, color: Colors.blue),
+                        text: "Tất cả",
+                        onPress: () {
+                          setState(() {
+                            _controller.buttonChoose.value = 0;
+                          });
                         },
                       ),
-                    ),
-                  ],
+                      StateHomeWidget(
+                        isChoose:
+                            _controller.buttonChoose.value == 1 ? true : false,
+                        icon: const Icon(Icons.public,
+                            size: 14, color: Colors.blue),
+                        text: "Công khai",
+                        onPress: () {
+                          setState(() {
+                            _controller.buttonChoose.value = 1;
+                          });
+                        },
+                      ),
+                      StateHomeWidget(
+                        isChoose:
+                            _controller.buttonChoose.value == 2 ? true : false,
+                        icon: const Icon(Icons.lock,
+                            size: 14, color: Colors.blue),
+                        text: "Cá nhân",
+                        onPress: () {
+                          setState(() {
+                            _controller.buttonChoose.value = 2;
+                          });
+                        },
+                      )
+                    ]),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 12, left: 24),
+                child: const Text(
+                  "Chuyen đi đang mở",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 1 / 5.5,
+                margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
+                child: ClipRect(
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: dataList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return getRow(index);
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 12, left: 24),
+                child: const Text(
+                  "Bai danh gia ve chuyen di da hoan thanh",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 1 / 5.5,
+                margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: dataList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return getRow(index);
+                  },
                 ),
               ),
             ],

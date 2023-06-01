@@ -20,7 +20,7 @@ class HomeController extends BaseController {
   String getAvatar() {
     String avatarUrl = userData.value.avatar;
     if (avatarUrl.isEmpty) {
-      return "https://www.w3schools.com/howto/img_avatar.png";
+      return "https://img.myloview.com/stickers/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg";
     } else {
       return avatarUrl;
     }
