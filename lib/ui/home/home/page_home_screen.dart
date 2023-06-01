@@ -2,12 +2,15 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/ui/home/home/detail/page_detail_router_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
 import 'package:appdiphuot/view/state_home_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../../view/profile_bar_widget.dart';
 
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
@@ -110,6 +113,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
           )
         ]),
         onTap: () {
+          Get.to(const DetailRouterScreen());
           setState(
             () {
               // widgets.add(getRow(widgets.length + 1));
@@ -128,101 +132,120 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
       ),
       backgroundColor: ColorConstants.appColorBkg,
       body: Container(
-        color: ColorConstants.appColorBkg,
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          children: [
-            banner,
-            Container(
-              padding: const EdgeInsets.only(left: 24, right: 24),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          color: ColorConstants.appColorBkg,
+          child: Column(
+            children: [
+              const ProfileBarWidget(
+                name: "Nguyen Hoang Giang",
+                state: "⬤ Online",
+                linkAvatar: "https://www.w3schools.com/howto/img_avatar.png",
+              ),
+              Expanded(
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
                   children: [
-                    StateHomeWidget(
-                      isChoose:
-                          _controller.buttonChoose.value == 0 ? true : false,
-                      icon: const Icon(Icons.done_all,
-                          size: 14, color: Colors.blue),
-                      text: "Tất cả",
-                      onPress: () {
-                        setState(() {
-                          _controller.buttonChoose.value = 0;
-                        });
-                      },
+                    banner,
+                    Container(
+                      padding: const EdgeInsets.only(left: 24, right: 24),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            StateHomeWidget(
+                              isChoose: _controller.buttonChoose.value == 0
+                                  ? true
+                                  : false,
+                              icon: const Icon(Icons.done_all,
+                                  size: 14, color: Colors.blue),
+                              text: "Tất cả",
+                              onPress: () {
+                                setState(() {
+                                  _controller.buttonChoose.value = 0;
+                                });
+                              },
+                            ),
+                            StateHomeWidget(
+                              isChoose: _controller.buttonChoose.value == 1
+                                  ? true
+                                  : false,
+                              icon: const Icon(Icons.public,
+                                  size: 14, color: Colors.blue),
+                              text: "Công khai",
+                              onPress: () {
+                                setState(() {
+                                  _controller.buttonChoose.value = 1;
+                                });
+                              },
+                            ),
+                            StateHomeWidget(
+                              isChoose: _controller.buttonChoose.value == 2
+                                  ? true
+                                  : false,
+                              icon: const Icon(Icons.lock,
+                                  size: 14, color: Colors.blue),
+                              text: "Cá nhân",
+                              onPress: () {
+                                setState(() {
+                                  _controller.buttonChoose.value = 2;
+                                });
+                              },
+                            )
+                          ]),
                     ),
-                    StateHomeWidget(
-                      isChoose:
-                          _controller.buttonChoose.value == 1 ? true : false,
-                      icon: const Icon(Icons.public,
-                          size: 14, color: Colors.blue),
-                      text: "Công khai",
-                      onPress: () {
-                        setState(() {
-                          _controller.buttonChoose.value = 1;
-                        });
-                      },
+                    Container(
+                      margin: const EdgeInsets.only(top: 12, left: 24),
+                      child: const Text(
+                        "Chuyen đi đang mở",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    StateHomeWidget(
-                      isChoose:
-                          _controller.buttonChoose.value == 2 ? true : false,
-                      icon:
-                          const Icon(Icons.lock, size: 14, color: Colors.blue),
-                      text: "Cá nhân",
-                      onPress: () {
-                        setState(() {
-                          _controller.buttonChoose.value = 2;
-                        });
-                      },
-                    )
-                  ]),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 12, left: 24),
-              child: const Text(
-                "Chuyen đi đang mở",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 1 / 5.5,
+                      margin:
+                          const EdgeInsets.only(right: 24, left: 24, top: 12),
+                      child: ClipRect(
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: dataList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return getRow(index);
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 12, left: 24),
+                      child: const Text(
+                        "Bai danh gia ve chuyen di da hoan thanh",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 1 / 5.5,
+                      margin:
+                          const EdgeInsets.only(right: 24, left: 24, top: 12),
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: dataList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return getRow(index);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 1 / 5.5,
-              margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: dataList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return getRow(index);
-                },
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 12, left: 24),
-              child: const Text(
-                "Bai danh gia ve chuyen di da hoan thanh",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 1 / 5.5,
-              margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: dataList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return getRow(index);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          )),
       floatingActionButton: FloatingActionButton(
         elevation: DimenConstants.elevationMedium,
         backgroundColor: ColorConstants.appColor,
