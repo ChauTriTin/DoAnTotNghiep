@@ -51,8 +51,13 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: ColorConstants.appColor,
+      ),
       backgroundColor: ColorConstants.appColorBkg,
       body: Container(
+          width: double.infinity,
           color: ColorConstants.colorWhite,
           padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
           child: SingleChildScrollView(
