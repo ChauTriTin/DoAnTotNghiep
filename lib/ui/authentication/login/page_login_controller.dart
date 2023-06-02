@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/form.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../base/base_controller.dart';
 import '../../../common/const/string_constants.dart';
+import '../../../model/user.dart';
 import '../../../util/log_dog_utils.dart';
 import '../../../util/shared_preferences_util.dart';
 import '../../../util/ui_utils.dart';
@@ -15,7 +17,8 @@ import '../../home/home_screen.dart';
 class ControllerLogin extends BaseController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+  final CollectionReference _users =
+  FirebaseFirestore.instance.collection('users');
   var email = "".obs;
   var password = "".obs;
 
@@ -112,6 +115,7 @@ class ControllerLogin extends BaseController {
         UIUtils.showSnackBar(StringConstants.signin, StringConstants.signInSuccess);
 
         SharedPreferencesUtil.setUID(user.uid);
+        saveUserInfoToFirebaseDataStore(user);
         Get.offAll(const HomeScreen());
       }
     } catch (e) {
@@ -119,4 +123,22 @@ class ControllerLogin extends BaseController {
       UIUtils.showSnackBarError(StringConstants.error, "Login fail: $e");
     }
   }
+
+  Future<void> saveUserInfoToFirebaseDataStore(User user) async {
+    try {
+      var userData =
+      UserData(user.displayName??"", user.uid, user.email??"", user.photoURL??"");
+
+      log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
+      _users
+          .doc(user.uid)
+          .set(userData.toJson())
+          .then((value) => log("saveUserInfoToFirebaseDataStore User Added"))
+          .catchError((error) => log(
+          "saveUserInfoToFirebaseDataStore Failed to add user: $error"));
+    } catch (e) {
+      log('saveUserInfoToFirebaseDataStore: Error saving user to Firestore: $e');
+    }
+  }
+
 }

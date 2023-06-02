@@ -11,7 +11,7 @@ class HomeController extends BaseController {
   final CollectionReference _users =
   FirebaseFirestore.instance.collection('users');
 
-  var userData = UserData("", "", "", "", "").obs;
+  var userData = UserData("", "", "", "",).obs;
 
   String getName() {
     return userData.value.name;
