@@ -109,13 +109,14 @@ class ControllerLogin extends BaseController {
       final User? user = userCredential.user;
 
       if (user != null) {
-        setAppLoading(false, "Loading", TypeApp.login);
 
         Dog.d("signInWithGoogle: SignIn successfully ${user.toString()}");
         UIUtils.showSnackBar(StringConstants.signin, StringConstants.signInSuccess);
 
         SharedPreferencesUtil.setUID(user.uid);
         saveUserInfoToFirebaseDataStore(user);
+
+        setAppLoading(false, "Loading", TypeApp.login);
         Get.offAll(const HomeScreen());
       }
     } catch (e) {
