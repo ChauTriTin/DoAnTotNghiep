@@ -54,4 +54,10 @@ class StringConstants {
   static const String openCamera = "Chụp ảnh";
   static const String errorUploadAvatar = "Thay đổi avatar không thành công, vui lòng thử lại sau!";
   static const String successUploadAvatar = "Thay đổi avatar thành công.";
+
+  //Detail screen
+  static const String titleDetailDialog = "Chi tiết chuyến đi";
+  static const String titleCommentDialog = "Bình luận";
+  static const String titleJoinPrivateDialog = "Nhập mã tham gia";
+  static const String codeRouter = "Mã chuyến đi";
 }
