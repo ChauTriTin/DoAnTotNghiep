@@ -17,8 +17,7 @@ import '../../home/home_screen.dart';
 class ControllerLogin extends BaseController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final CollectionReference _users =
-  FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
   var email = "".obs;
   var password = "".obs;
 
@@ -109,7 +108,6 @@ class ControllerLogin extends BaseController {
       final User? user = userCredential.user;
 
       if (user != null) {
-
         Dog.d("signInWithGoogle: SignIn successfully ${user.toString()}");
         UIUtils.showSnackBar(StringConstants.signin, StringConstants.signInSuccess);
 
@@ -127,19 +125,16 @@ class ControllerLogin extends BaseController {
 
   Future<void> saveUserInfoToFirebaseDataStore(User user) async {
     try {
-      var userData =
-      UserData(user.displayName??"", user.uid, user.email??"", user.photoURL??"");
+      var userData = UserData(user.displayName ?? "", user.uid, user.email ?? "", user.photoURL ?? "");
 
       log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
       _users
           .doc(user.uid)
           .set(userData.toJson())
           .then((value) => log("saveUserInfoToFirebaseDataStore User Added"))
-          .catchError((error) => log(
-          "saveUserInfoToFirebaseDataStore Failed to add user: $error"));
+          .catchError((error) => log("saveUserInfoToFirebaseDataStore Failed to add user: $error"));
     } catch (e) {
       log('saveUserInfoToFirebaseDataStore: Error saving user to Firestore: $e');
     }
   }
-
 }
