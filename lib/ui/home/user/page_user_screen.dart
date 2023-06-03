@@ -81,8 +81,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 backgroundColor: ColorConstants.borderTextInputColor,
                 radius: DimenConstants.avatarProfile / 2,
                 child: CircleAvatar(
-                  radius: DimenConstants.avatarProfile / 2 -
-                      DimenConstants.logoStroke,
+                  radius: DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
                   backgroundImage: NetworkImage(_controller.getAvatar()),
                 ),
               )),
@@ -98,8 +97,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             height: DimenConstants.marginPaddingLarge,
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
+            padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
             child: Text(
               StringConstants.tripParticipated,
               style: UIUtils.getStyleText(),
@@ -137,12 +135,9 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
-                  getTextSpanCount(StringConstants.tripParticipatedCount,
-                      _controller.tripParticipatedCount.value),
-                  getTextSpanCount(StringConstants.leadTripCount,
-                      _controller.leadTripCount.value),
-                  getTextSpanCount(
-                      StringConstants.totalKm, _controller.totalKm.value),
+                  getTextSpanCount(StringConstants.tripParticipatedCount, _controller.tripParticipatedCount.value),
+                  getTextSpanCount(StringConstants.leadTripCount, _controller.leadTripCount.value),
+                  getTextSpanCount(StringConstants.totalKm, _controller.totalKm.value),
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
@@ -180,7 +175,9 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
     Get.offAll(const AuthenticationScreen());
   }
 
-  void _onAvatarPressed() {}
+  void _onAvatarPressed() {
+    _openSelectImageBottomSheet(context);
+  }
 
   Widget getTripRowItem(int index) {
     var place = _controller.places[index];
@@ -192,10 +189,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             height: MediaQuery.of(context).size.height * 1 / 7.5,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: SizedBox.fromSize(
-                  size: const Size.fromRadius(48),
-                  child: Image.network(StringConstants.linkImg,
-                      fit: BoxFit.cover)),
+              child: SizedBox.fromSize(size: const Size.fromRadius(48), child: Image.network(StringConstants.linkImg, fit: BoxFit.cover)),
             ),
           ),
           const SizedBox(
@@ -214,5 +208,46 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
 
   void _onPressTripItem(Place place) {
     Get.to(const DetailRouterScreen());
+  }
+
+  void _openSelectImageBottomSheet(BuildContext context) {
+    Get.bottomSheet(Container(
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(DimenConstants.borderBottomAuth),
+            topRight: Radius.circular(DimenConstants.borderBottomAuth),
+          )),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  _controller.openGallery();
+                  Get.back();
+                },
+                child: const ListTile(
+                  leading: Icon(Icons.photo),
+                  title: Text(StringConstants.openGallery),
+                ),
+              )),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                _controller.openCamera();
+                Get.back();
+              },
+              child: const ListTile(
+                leading: Icon(Icons.camera),
+                title: Text(StringConstants.openCamera),
+              ),
+            ),
+          )
+        ],
+      ),
+    ));
   }
 }

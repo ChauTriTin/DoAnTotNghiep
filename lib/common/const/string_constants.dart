@@ -49,4 +49,9 @@ class StringConstants {
       "https://i.pinimg.com/originals/91/98/48/91984862fad2e78a12cb202b3d06e727.gif";
   static const String linkImg =
       "https://i.pinimg.com/564x/e4/de/f2/e4def2d61e17614a4ef8f191277b3092.jpg";
+
+  static const String openGallery = "Chọn ảnh";
+  static const String openCamera = "Chụp ảnh";
+  static const String errorUploadAvatar = "Thay đổi avatar không thành công, vui lòng thử lại sau!";
+  static const String successUploadAvatar = "Thay đổi avatar thành công.";
 }
