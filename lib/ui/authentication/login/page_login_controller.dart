@@ -96,6 +96,8 @@ class ControllerLogin extends BaseController {
 
   Future<void> signInWithGoogle() async {
     try {
+      setAppLoading(true, "Loading", TypeApp.login);
+
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
 
