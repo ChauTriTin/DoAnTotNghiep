@@ -224,6 +224,21 @@ class UIUtils {
       fontSize: DimenConstants.txtMedium,
     );
   }
+  static TextStyle getStyleText500() {
+    return const TextStyle(
+      color: Colors.black,
+      fontSize: DimenConstants.txtMedium,
+        fontWeight: FontWeight.w500
+    );
+  }
+
+  static TextStyle getStyleTextLarge500() {
+    return const TextStyle(
+      color: Colors.black,
+      fontSize: DimenConstants.txtLarge,
+      fontWeight: FontWeight.w500
+    );
+  }
 
   static TextStyle getCustomFontTextStyle() {
     return const TextStyle(

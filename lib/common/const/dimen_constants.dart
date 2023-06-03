@@ -41,6 +41,8 @@ class DimenConstants {
   static const double iconSize = 36;
   static const double loginIconSize = 50;
   static const double iconSizePadding = 6;
+  static const double avatarProfile = 130;
+  static const double dividerHeight = 1;
 
 
 
