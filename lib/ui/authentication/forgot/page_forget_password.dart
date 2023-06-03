@@ -14,7 +14,7 @@ import '../../../util/ui_utils.dart';
 import '../../../util/validate_utils.dart';
 
 class PageForgetPassword extends StatefulWidget {
-  PageForgetPassword({
+  const PageForgetPassword({
     super.key,
     this.email,
   });

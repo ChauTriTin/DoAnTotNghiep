@@ -92,7 +92,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   ];
 
   Widget getRow(int i) {
-    return GestureDetector(
+    return InkWell(
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Container(
             color: Colors.white10,
@@ -192,15 +192,20 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
               ),
               Container(
                 height: MediaQuery.of(context).size.height * 1 / 5.5,
-                margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
+                margin: const EdgeInsets.only(top: 12),
                 child: ClipRect(
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
+                  child: ListView.separated(
+                    padding: const EdgeInsets.only(left: 24, right: 24),
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     itemCount: dataList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return getRow(index);
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(
+                        width: DimenConstants.marginPaddingMedium,
+                      );
                     },
                   ),
                 ),
@@ -217,14 +222,19 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
               ),
               Container(
                 height: MediaQuery.of(context).size.height * 1 / 5.5,
-                margin: const EdgeInsets.only(right: 24, left: 24, top: 12),
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
+                margin: const EdgeInsets.only(top: 12),
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(left: 24, right: 24),
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: dataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return getRow(index);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const SizedBox(
+                      width: DimenConstants.marginPaddingMedium,
+                    );
                   },
                 ),
               ),

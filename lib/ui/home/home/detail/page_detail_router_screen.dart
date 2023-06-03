@@ -1,10 +1,15 @@
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/util/TextInputField.dart';
+import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../common/const/color_constants.dart';
+import '../../../../common/const/dimen_constants.dart';
 import '../../../../view/profile_bar_widget.dart';
 
 class DetailRouterScreen extends StatefulWidget {
@@ -79,32 +84,35 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  color: Colors.redAccent,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Text(
-                        "+",
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    ],
+          InkWell(
+            onTap: () => {_showJoinPrivateRouterDialog()},
+            child: Column(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Text(
+                          "+",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                  margin: const EdgeInsets.only(top: 6),
-                  child: const Text("Tham gia",
-                      style: TextStyle(fontSize: 12, color: Colors.black)))
-            ],
+                Container(
+                    margin: const EdgeInsets.only(top: 6),
+                    child: const Text("Tham gia",
+                        style: TextStyle(fontSize: 12, color: Colors.black)))
+              ],
+            ),
           ),
           Column(
             children: [
@@ -130,25 +138,28 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                       style: TextStyle(fontSize: 12, color: Colors.black)))
             ],
           ),
-          Column(
-            children: [
-              const Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.comment,
-                      color: Colors.redAccent,
-                      size: 40.0,
-                    ),
-                  ],
+          InkWell(
+            onTap: () => {_showCommentDialog()},
+            child: Column(
+              children: [
+                const Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.comment,
+                        color: Colors.redAccent,
+                        size: 40.0,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                  margin: const EdgeInsets.only(top: 6),
-                  child: const Text("Bình luận",
-                      style: TextStyle(fontSize: 12, color: Colors.black)))
-            ],
+                Container(
+                    margin: const EdgeInsets.only(top: 6),
+                    child: const Text("Bình luận",
+                        style: TextStyle(fontSize: 12, color: Colors.black)))
+              ],
+            ),
           ),
         ],
       ),
@@ -163,12 +174,12 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 24, right: 24, top: 4),
+                margin: const EdgeInsets.only(left: 24, right: 24),
                 child: Row(
                   children: [
                     const Icon(
-                      Icons.sports_motorsports_outlined,
-                      color: Colors.blue,
+                      Icons.star,
+                      color: Colors.yellow,
                     ),
                     Container(
                       margin: const EdgeInsets.only(left: 12),
@@ -182,7 +193,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(left: 54, right: 24, top: 6),
+                margin: const EdgeInsets.only(left: 54, right: 24),
                 child: RatingBar.builder(
                   ignoreGestures: true,
                   initialRating: 3,
@@ -205,7 +216,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           ),
         ),
         Container(
-            margin: const EdgeInsets.only(right: 24, top: 6),
+            margin: const EdgeInsets.only(right: 24),
             child: Center(
                 child: Image.network(
               "https://www.w3schools.com/howto/img_avatar.png",
@@ -228,7 +239,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       },
       child: Expanded(
           child: Container(
-        padding: const EdgeInsets.only(top: 6, bottom: 6),
+        margin: const EdgeInsets.only(top: 14, bottom: 16),
         child: const Center(
           child: Text(
             "Xem chi tiết chuyến đi",
@@ -239,8 +250,81 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     );
   }
 
+  Widget getItemRow(int i) {
+    return InkWell(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Container(
+            color: Colors.white10,
+            width: MediaQuery.of(context).size.height * 1 / 7.5,
+            height: MediaQuery.of(context).size.height * 1 / 7.5,
+            margin: const EdgeInsets.only(right: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: SizedBox.fromSize(
+                  size: const Size.fromRadius(48),
+                  child: Image.network(StringConstants.linkImg,
+                      fit: BoxFit.cover)),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: const Text("Du lich"),
+          )
+        ]),
+        onTap: () {
+          Get.to(const DetailRouterScreen());
+          setState(
+            () {
+              // widgets.add(getRow(widgets.length + 1));
+              print('row $i');
+            },
+          );
+        });
+  }
+
+  final List<String> dataList = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+  ];
+
+  Widget _otherRouter() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 1 / 5.5,
+      child: ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        scrollDirection: Axis.horizontal,
+        itemCount: dataList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return getItemRow(index);
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _headerDialog(String title) {
+    return Center(
+      child: Text(
+        title,
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
+      ),
+    );
+  }
+
   void _showDetailRouterDialog() {
-    showCupertinoModalBottomSheet(
+    showMaterialModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       context: context,
       builder: (context) => SingleChildScrollView(
         controller: ModalScrollController.of(context),
@@ -248,6 +332,102 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           height: 300,
           width: double.infinity,
           color: ColorConstants.colorGrey,
+          child: ListView(
+            children: [
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              _headerDialog(StringConstants.titleDetailDialog),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionRouter() {
+    return SizedBox(
+      child: Row(
+        children: [
+
+        ],
+      ),
+    );
+  }
+
+  void _showCommentDialog() {
+    showMaterialModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30.0),
+        ),
+      ),
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMedium),
+        controller: ModalScrollController.of(context),
+        child: SizedBox(
+          height: 300,
+          width: double.infinity,
+          child: ListView(
+            padding: const EdgeInsets.all(0),
+            children: [
+              _headerDialog(StringConstants.titleCommentDialog),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showJoinPrivateRouterDialog() {
+    showMaterialModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30.0),
+        ),
+      ),
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: DimenConstants.marginPaddingMedium),
+        controller: ModalScrollController.of(context),
+        child: SizedBox(
+          height: 220,
+          width: double.infinity,
+          child: ListView(
+            padding: const EdgeInsets.all(0),
+            children: [
+              _headerDialog(StringConstants.titleJoinPrivateDialog),
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: DimenConstants.marginPaddingExtraLarge),
+                width: double.infinity,
+                child: TextField(
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      hintText: StringConstants.codeRouter),
+                ),
+              ),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: DimenConstants.marginPaddingExtraLarge),
+                child: UIUtils.getOutlineButton1(
+                    StringConstants.confirm,
+                    () {},
+                    Colors.red,
+                    DimenConstants.marginPaddingMedium,
+                    Colors.white,
+                    Colors.red),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -256,6 +436,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: 0,
         backgroundColor: ColorConstants.appColor,
@@ -279,8 +460,17 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                   _listButtonEvent(),
                   _divider(12),
                   _leader(),
-                  _divider(12),
-                  _seeMore()
+                  _divider(0),
+                  _seeMore(),
+                  const SizedBox(height: DimenConstants.marginPaddingLarge),
+                  Container(
+                      margin: const EdgeInsets.only(right: 24, left: 24),
+                      child: const Text(
+                        "Chuyến đi khác",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )),
+                  const SizedBox(height: DimenConstants.marginPaddingMedium),
+                  _otherRouter()
                 ],
               ),
             ),
