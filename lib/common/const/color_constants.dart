@@ -21,6 +21,7 @@ class ColorConstants {
   static Color errorBorderTextInputColor = const Color(0xFFFDC10B);
   static const Color textColorForgotPassword = Color(0xFFFFE49A);
   static const Color iconColor = Colors.white;
+  static const Color dividerColor =  Color(0xFFFDC2C2);
 
   static getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())

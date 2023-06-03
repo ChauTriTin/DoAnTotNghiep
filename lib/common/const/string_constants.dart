@@ -40,6 +40,11 @@ class StringConstants {
   static const String facebookLoginError = "App chưa hỗ trợ đăng nhập bằng facebook";
   static const String signOut = "Đăng xuất";
 
+  static const String tripParticipated = "Chuyến đi đã tham gia";
+  static const String tripParticipatedCount = "Số chuyến đi đã tham gia: ";
+  static const String leadTripCount = "Số chuyến đi đã làm trưởng đoàn: ";
+  static const String totalKm = "Tổng số km đã di chuyển: ";
+
   static const String linkImgMinaCrying =
       "https://i.pinimg.com/originals/91/98/48/91984862fad2e78a12cb202b3d06e727.gif";
   static const String linkImg =

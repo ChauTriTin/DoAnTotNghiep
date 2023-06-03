@@ -8,8 +8,7 @@ import 'package:get/get.dart';
 import '../../model/user.dart';
 
 class HomeController extends BaseController {
-  final CollectionReference _users =
-  FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
 
   var userData = UserData("", "", "", "",).obs;
 
@@ -29,15 +28,14 @@ class HomeController extends BaseController {
   Future<void> getUserInfo() async {
     try {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
-      DocumentSnapshot<Map<String, dynamic>>? userMap = (await _users
-          .doc(uid)
-          .get()) as DocumentSnapshot<Map<String, dynamic>>?;
+      _users.doc(uid).snapshots().listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? userMap = value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (userMap == null || userMap.data() == null) return;
 
-      if (userMap == null || userMap.data() == null) return;
-
-      var user = UserData.fromJson(userMap.data()!);
-      userData.value = user;
-      log("getUserInfo success: ${user.toString()}");
+        var user = UserData.fromJson((userMap).data()!);
+        userData.value = user;
+        log("getUserInfo success: ${user.toString()}");
+      });
     } catch (e) {
       log("getUserInfo get user info fail: $e");
     }
