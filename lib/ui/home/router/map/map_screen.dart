@@ -262,7 +262,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              _showBottomSheet();
+              _showBottomSheetSos();
             },
             child: const Icon(Icons.pan_tool),
           ),
@@ -282,7 +282,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              showSnackBarFull(StringConstants.warning, "TODO");
+              _showBottomSheetWarning();
             },
             child: const Icon(Icons.priority_high),
           ),
@@ -357,7 +357,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     );
   }
 
-  void _showBottomSheet() {
+  void _showBottomSheetSos() {
     showBarModalBottomSheet(
       context: context,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -486,6 +486,150 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   ),
                   child: const Text(
                     'Cần người giúp khẩn cấp',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showBottomSheetWarning() {
+    showBarModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (context) {
+        return Material(
+          child: Container(
+            width: Get.width,
+            height: 420,
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Cảnh báo".toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: DimenConstants.txtHeader1,
+                    color: ColorConstants.appColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorConstants.appColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Có cảnh sát',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Đường xấu',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Sắp có mưa',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyan,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Giữ khoảng cách',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Dừng khẩn cấp',
                     style: TextStyle(
                       fontSize: DimenConstants.txtMedium,
                       color: Colors.white,
