@@ -63,6 +63,7 @@ class ProfileBarWidget extends StatelessWidget {
                   child: SizedBox.fromSize(
                     size: const Size.fromRadius(48), // Image radius
                     child: Image.network(
+                      fit: BoxFit.fill,
                       linkAvatar,
                       height: 45,
                       width: 45,
