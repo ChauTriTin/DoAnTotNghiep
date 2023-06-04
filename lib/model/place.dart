@@ -12,7 +12,7 @@ class Place {
 
   var lat = defaultLat;
   var long = defaultLong;
-  var name = "Da Nang";
+  var name = "Chọn địa điểm";
 
   bool isDefaultPlace() {
     if (lat == defaultLat && long == defaultLong) {

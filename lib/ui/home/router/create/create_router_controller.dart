@@ -2,7 +2,6 @@ import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
@@ -21,8 +20,8 @@ class CreateRouterController extends BaseController {
   var listPlaceStop = <Place>[].obs;
 
   // final dateTimeDefault = DateTime(1111, 1, 11);
-  var dateTimeStart = DateTime.now().obs;
-  var dateTimeEnd = DateTime.now().add(const Duration(days: 3)).obs;
+  var dateTimeStart = DateTime.now().add(const Duration(days: 7)).obs;
+  var dateTimeEnd = DateTime.now().add(const Duration(days: 6)).obs;
   var isPublic = true.obs;
 
   var isCreateRouteSuccess = false.obs;
@@ -69,13 +68,13 @@ class CreateRouterController extends BaseController {
     debugPrint(">>> dt ${dt.microsecondsSinceEpoch}");
     debugPrint(">>> dateTimeEnd ${dateTimeEnd.value.microsecondsSinceEpoch}");
     var diff =
-        dt.microsecondsSinceEpoch < dateTimeEnd.value.microsecondsSinceEpoch;
+        dt.microsecondsSinceEpoch > dateTimeEnd.value.microsecondsSinceEpoch;
     debugPrint(">>> diff $diff");
     if (diff) {
       dateTimeStart.value = dt;
     } else {
       showSnackBarFullError(StringConstants.warning,
-          "Thời gian khởi hành phải trước thời gian ngừng đăng kí");
+          "Thời gian khởi hành phải sau thời gian ngừng đăng kí");
     }
   }
 
@@ -102,13 +101,13 @@ class CreateRouterController extends BaseController {
     debugPrint(">>> dt ${dt.microsecondsSinceEpoch}");
     debugPrint(">>> dateTimeEnd ${dateTimeStart.value.microsecondsSinceEpoch}");
     var diff =
-        dt.microsecondsSinceEpoch > dateTimeStart.value.microsecondsSinceEpoch;
+        dt.microsecondsSinceEpoch < dateTimeStart.value.microsecondsSinceEpoch;
     debugPrint(">>> diff $diff");
     if (diff) {
       dateTimeEnd.value = dt;
     } else {
       showSnackBarFullError(StringConstants.warning,
-          "Thời gian ngừng đăng ký phải lớn hơn thời gian khởi hành");
+          "Thời gian ngừng đăng ký phải trước hơn thời gian khởi hành");
     }
   }
 
@@ -116,7 +115,7 @@ class CreateRouterController extends BaseController {
     isPublic.value = value;
   }
 
-  void createRouter() {
+  Future<void> createRouter() async {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
     String sRequire = tecRequire.text.toString().trim();
@@ -200,15 +199,32 @@ class CreateRouterController extends BaseController {
     }
 
     setAppLoading(true, "Loading", TypeApp.createRouter);
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      isCreateRouteSuccess.value = true;
+    // Future.delayed(const Duration(milliseconds: 2000), () {
+    //   isCreateRouteSuccess.value = true;
+    //
+    //   //TODO delete later
+    //   if (kDebugMode) {
+    //     isCreateRouteSuccess.value = false;
+    //   }
+    //
+    //   setAppLoading(false, "Loading", TypeApp.createRouter);
+    // });
 
-      //TODO delete later
-      if (kDebugMode) {
-        isCreateRouteSuccess.value = false;
-      }
-
-      setAppLoading(false, "Loading", TypeApp.createRouter);
-    });
+    // try {
+    //   var userData = UserData(user.displayName ?? "", user.uid,
+    //       user.email ?? "", user.photoURL ?? "");
+    //
+    //   Dog.d('createRouter: user: ${userData.toJson()}');
+    //   FirebaseHelper.collectionReferenceRouter
+    //       .doc(user.uid)
+    //       .set(userData.toJson())
+    //       .then((value) {
+    //     Dog.d("saveUserInfoToFirebaseDataStore User Added");
+    //   }).catchError((error) {
+    //     Dog.d("saveUserInfoToFirebaseDataStore Failed to add user: $error");
+    //   });
+    // } catch (e) {
+    //   Dog.e('createRouter: $e');
+    // }
   }
 }
