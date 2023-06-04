@@ -230,17 +230,30 @@ class CreateRouterController extends BaseController {
     trip.des = sDescription;
     trip.listImg = <String>[];
 
-    for (var element in sImages) {
-      // debugPrint("element ${element.name} ${element.path}");
-      if (element.path != null) {
-        var file = File(element.path!);
-        if (await file.exists()) {
+    // for (var element in sImages) {
+    //   // debugPrint("element ${element.name} ${element.path}");
+    //   if (element.path != null) {
+    //     var file = File(element.path!);
+    //     if (await file.exists()) {
+    //       var base64 = imageToBase64(file);
+    //       debugPrint("element ${element.name} ${element.path} base64 $base64");
+    //       trip.listImg?.add(base64);
+    //     }
+    //   }
+    // }
+    await Future.wait(
+      sImages.map(
+        (element) async {
+          // var body = (await api.get(item.url)).bodyBytes;
+          // await file.writeAsBytes(body);
+
+          var file = File(element.path!);
           var base64 = imageToBase64(file);
           debugPrint("element ${element.name} ${element.path} base64 $base64");
           trip.listImg?.add(base64);
-        }
-      }
-    }
+        },
+      ),
+    );
 
     trip.placeStart = sPlaceStart;
     trip.placeEnd = sPlaceEnd;
