@@ -146,6 +146,19 @@ class UIUtils {
     );
   }
 
+  static Widget getTextSpan(String title, String name) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
+      child: RichText(
+          text: TextSpan(text: title, style: UIUtils.getStyleText(), children: [
+            TextSpan(
+              text: name,
+              style: UIUtils.getStyleText500(),
+            ),
+          ])),
+    );
+  }
+
   static OutlinedButton getOutlineButton1(
     String text,
     VoidCallback? onPressed,

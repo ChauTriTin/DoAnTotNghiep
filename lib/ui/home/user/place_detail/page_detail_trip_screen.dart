@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
@@ -82,6 +84,7 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
   }
 
   Widget buildBody() {
+    var trip = widget.tripData;
     return Container(
         width: MediaQuery.of(context).size.width,
         color: ColorConstants.colorWhite,
@@ -98,45 +101,77 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
                   height: DimenConstants.marginPaddingExtraLarge,
                 ),
 
-                UIUtils.getTextSpanCount(StringConstants.leadTripName,
-                    _controller.tripParticipatedCount.value),
+                UIUtils.getTextSpan(StringConstants.leadTripName,
+                    _controller.userHostTrip.value.name),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(
-                    StringConstants.totalKm, _controller.leadTripCount.value),
+                    StringConstants.totalKm, _controller.totalKm.value),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(
-                    StringConstants.pitStopCount, _controller.totalKm.value),
+                    StringConstants.pitStopCount, trip.listPlace?.length ?? 0),
 
                 ListView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   physics: const BouncingScrollPhysics(),
-                  itemCount: widget.tripData.listPlace?.length ?? 0,
+                  itemCount: trip.listPlace?.length ?? 0,
                   itemBuilder: (BuildContext context, int index) {
-                    return _getPlaces(index);
+                    var place = widget.tripData.listPlace?[index];
+                    return _getRowItem(index, place?.name ?? "");
                   },
                 ),
 
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(StringConstants.participantsCount,
-                    _controller.totalKm.value),
-                UIUtils.getTextSpanCount(
-                    StringConstants.pitStopCount, _controller.totalKm.value),
-                UIUtils.getTextSpanCount(
-                    StringConstants.startDay, _controller.totalKm.value),
-                UIUtils.getTextSpanCount(
-                    StringConstants.endDay, _controller.totalKm.value),
+                    trip.listIdMember?.length ?? 0),
+
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: _controller.usersParticipated.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var userName =
+                        _controller.usersParticipated.value[index].name;
+                    return _getRowItem(index, userName);
+                  },
+                ),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                UIUtils.getTextSpan(
+                    StringConstants.startDay, trip.timeStart ?? ""),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                UIUtils.getTextSpan(StringConstants.endDay, trip.timeEnd ?? ""),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(
                     StringConstants.totalTravelDay, _controller.totalKm.value),
               ],
             )));
   }
 
-  Widget _getPlaces(int index) {
-    var place = widget.tripData.listPlace?[index];
-    if (place == null) return Container();
+  Widget _getRowItem(int index, String? value) {
+    if (value == null) return Container();
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: DimenConstants.marginPaddingSmall),
       child: Text(
-        "• ${place.name}",
+        "• $value",
         style: UIUtils.getStyleText(),
       ),
     );
@@ -157,7 +192,6 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: SizedBox.fromSize(
-              size: const Size.fromRadius(48),
               child: CachedMemoryImage(
                   fit: BoxFit.cover,
                   width: itemSize,
