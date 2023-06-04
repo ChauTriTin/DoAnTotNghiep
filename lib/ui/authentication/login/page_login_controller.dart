@@ -125,16 +125,26 @@ class ControllerLogin extends BaseController {
     }
   }
 
+  Future<bool> isUserExist(String uid) async {
+    final DocumentReference documentRef = _users.doc(uid);
+    final DocumentSnapshot snapshot = await documentRef.get();
+    return snapshot.exists;
+  }
+
   Future<void> saveUserInfoToFirebaseDataStore(User user) async {
     try {
-      var userData = UserData(user.displayName ?? "", user.uid, user.email ?? "", user.photoURL ?? "");
+      if (await isUserExist(user.uid)) return;
+
+      var userData = UserData(user.displayName ?? "", user.uid,
+          user.email ?? "", user.photoURL ?? "");
 
       log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
       _users
           .doc(user.uid)
           .set(userData.toJson())
           .then((value) => log("saveUserInfoToFirebaseDataStore User Added"))
-          .catchError((error) => log("saveUserInfoToFirebaseDataStore Failed to add user: $error"));
+          .catchError((error) => log(
+              "saveUserInfoToFirebaseDataStore Failed to add user: $error"));
     } catch (e) {
       log('saveUserInfoToFirebaseDataStore: Error saving user to Firestore: $e');
     }
