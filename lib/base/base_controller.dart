@@ -85,4 +85,5 @@ enum TypeApp {
   register,
   logout,
   uploadAvatar,
+  loadingData,
 }
