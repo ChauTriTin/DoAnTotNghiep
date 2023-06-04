@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -84,7 +85,7 @@ class PageUserController extends BaseController {
   String getAvatar() {
     String avatarUrl = userData.value.avatar;
     if (avatarUrl.isEmpty) {
-      return "https://img.myloview.com/stickers/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg";
+      return StringConstants.avatarImgDefault;
     } else {
       return avatarUrl;
     }
