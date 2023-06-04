@@ -1,13 +1,25 @@
+import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../common/const/string_constants.dart';
+
 part 'user.g.dart';
 
 @JsonSerializable()
 class UserData {
-  String name;
-  String uid;
-  String email;
-  String avatar;
+  var name = "";
+  var uid = "";
+  var email = "";
+  var avatar = "";
 
+  String getAvatar() {
+    if (avatar == null || avatar?.isEmpty == true) {
+      return avatar!;
+    }
+    else {
+      return StringConstants.avatarImgDefault;
+    }
+  }
 
   UserData(this.name, this.uid, this.email, this.avatar);
 

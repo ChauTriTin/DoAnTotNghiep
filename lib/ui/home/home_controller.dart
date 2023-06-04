@@ -5,6 +5,7 @@ import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../../common/const/string_constants.dart';
 import '../../model/user.dart';
 
 class HomeController extends BaseController {
@@ -19,7 +20,7 @@ class HomeController extends BaseController {
   String getAvatar() {
     String avatarUrl = userData.value.avatar;
     if (avatarUrl.isEmpty) {
-      return "https://img.myloview.com/stickers/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg";
+      return StringConstants.avatarImgDefault;
     } else {
       return avatarUrl;
     }

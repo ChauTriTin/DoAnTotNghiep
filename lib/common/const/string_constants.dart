@@ -44,6 +44,16 @@ class StringConstants {
   static const String tripParticipatedCount = "Số chuyến đi đã tham gia: ";
   static const String leadTripCount = "Số chuyến đi đã làm trưởng đoàn: ";
   static const String totalKm = "Tổng số km đã di chuyển: ";
+  static const String leadTripName = "Trưởng đoàn: ";
+  static const String pitStopCount = "Điểm dừng chân: ";
+  static const String participantsCount = "Số người tham gia: ";
+  static const String startDay = "Ngày đi: ";
+  static const String endDay = "Ngày về: ";
+  static const String totalTravelDay = "Tổng ngày đi: ";
+
+  static const String avatarImgDefault = "https://img.myloview.com/stickers/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg";
+  static const String placeImgDefault = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
+
 
   static const String linkImgMinaCrying =
       "https://i.pinimg.com/originals/91/98/48/91984862fad2e78a12cb202b3d06e727.gif";

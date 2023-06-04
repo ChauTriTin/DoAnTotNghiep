@@ -4,6 +4,7 @@ import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
+import 'package:appdiphuot/ui/home/user/place_detail/page_detail_trip_screen.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -137,11 +138,11 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
-                  getTextSpanCount(StringConstants.tripParticipatedCount,
+                  UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount,
                       _controller.tripParticipatedCount.value),
-                  getTextSpanCount(StringConstants.leadTripCount,
+                  UIUtils.getTextSpanCount(StringConstants.leadTripCount,
                       _controller.leadTripCount.value),
-                  getTextSpanCount(
+                  UIUtils.getTextSpanCount(
                       StringConstants.totalKm, _controller.totalKm.value),
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
@@ -160,19 +161,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 ],
               )),
         ]));
-  }
-
-  Widget getTextSpanCount(String title, int count) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
-      child: RichText(
-          text: TextSpan(text: title, style: UIUtils.getStyleText(), children: [
-        TextSpan(
-          text: count.toString(),
-          style: UIUtils.getStyleText500(),
-        ),
-      ])),
-    );
   }
 
   void _signOut() {
@@ -194,7 +182,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
               borderRadius: BorderRadius.circular(20),
               child: SizedBox.fromSize(
                   size: const Size.fromRadius(48),
-                  child: Image.network(StringConstants.linkImg,
+                  child: Image.network(place.getFirstImageUrl(),
                       fit: BoxFit.cover)),
             ),
           ),
@@ -213,6 +201,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
   }
 
   void _onPressTripItem(Place place) {
-    Get.to(const DetailRouterScreen());
+    Get.to(const PageDetailTrip());
   }
 }
