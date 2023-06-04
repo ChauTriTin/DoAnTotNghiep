@@ -132,6 +132,8 @@ class CreateRouterController extends BaseController {
   }
 
   Future<void> createRouter() async {
+    setAppLoading(true, "Loading", TypeApp.createRouter);
+
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
     String sRequire = tecRequire.text.toString().trim();
@@ -156,12 +158,14 @@ class CreateRouterController extends BaseController {
     if (sTitle.isEmpty) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng nhập tiêu đề chuyến đi của bạn");
+      setAppLoading(false, "", TypeApp.createRouter);
       return;
     }
     debugPrint("sDescription $sDescription");
     if (sDescription.isEmpty) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng nhập mô tả chuyến đi");
+      setAppLoading(false, "", TypeApp.createRouter);
       return;
     }
     debugPrint("sRequire $sRequire");
@@ -169,6 +173,7 @@ class CreateRouterController extends BaseController {
     if (sImages.isEmpty) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng đính kèm hình ảnh");
+      setAppLoading(false, "", TypeApp.createRouter);
       return;
     }
     // for (var element in sImages) {
@@ -179,11 +184,13 @@ class CreateRouterController extends BaseController {
     if (sPlaceStart.name == null || sPlaceStart.name?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm bắt đầu");
+      setAppLoading(false, "", TypeApp.createRouter);
       return;
     }
     if (sPlaceEnd.name == null || sPlaceEnd.name?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm kết thúc");
+      setAppLoading(false, "", TypeApp.createRouter);
       return;
     }
     debugPrint("sListPlaceStop ${sListPlaceStop.length}");
@@ -211,6 +218,7 @@ class CreateRouterController extends BaseController {
     if (sRequire.isEmpty) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng nhập yêu cầu với người tham gia");
+      setAppLoading(false, "", TypeApp.createRouter);
       return;
     }
     var trip = Trip();
@@ -222,17 +230,30 @@ class CreateRouterController extends BaseController {
     trip.des = sDescription;
     trip.listImg = <String>[];
 
-    for (var element in sImages) {
-      // debugPrint("element ${element.name} ${element.path}");
-      if (element.path != null) {
-        var file = File(element.path!);
-        if (await file.exists()) {
+    // for (var element in sImages) {
+    //   // debugPrint("element ${element.name} ${element.path}");
+    //   if (element.path != null) {
+    //     var file = File(element.path!);
+    //     if (await file.exists()) {
+    //       var base64 = imageToBase64(file);
+    //       debugPrint("element ${element.name} ${element.path} base64 $base64");
+    //       trip.listImg?.add(base64);
+    //     }
+    //   }
+    // }
+    await Future.wait(
+      sImages.map(
+        (element) async {
+          // var body = (await api.get(item.url)).bodyBytes;
+          // await file.writeAsBytes(body);
+
+          var file = File(element.path!);
           var base64 = imageToBase64(file);
           debugPrint("element ${element.name} ${element.path} base64 $base64");
           trip.listImg?.add(base64);
-        }
-      }
-    }
+        },
+      ),
+    );
 
     trip.placeStart = sPlaceStart;
     trip.placeEnd = sPlaceEnd;
@@ -244,7 +265,6 @@ class CreateRouterController extends BaseController {
 
     debugPrint(">>>trip ${trip.toJson()}");
 
-    setAppLoading(true, "Loading", TypeApp.createRouter);
     Future.delayed(const Duration(milliseconds: 500), () {
       isCreateRouteSuccess.value = true;
 
@@ -261,8 +281,6 @@ class CreateRouterController extends BaseController {
       } catch (e) {
         Dog.e('createRouter: $e');
       }
-      setAppLoading(false, "Loading", TypeApp.createRouter);
-
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
   }
