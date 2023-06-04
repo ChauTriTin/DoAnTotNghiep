@@ -9,8 +9,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../db/firebase_helper.dart';
 import '../../../model/place.dart';
+import '../../../model/trip.dart';
 import '../../../model/user.dart';
+import '../../../util/log_dog_utils.dart';
 import '../../../util/shared_preferences_util.dart';
 import '../../../util/ui_utils.dart';
 
@@ -26,7 +29,6 @@ class PageUserController extends BaseController {
   File? get selectedImage => _selectedImage.value;
 
   var tripParticipatedCount = 0.obs;
-  var leadTripCount = 0.obs;
   var totalKm = 0.obs;
 
   var userData = UserData(
@@ -36,17 +38,8 @@ class PageUserController extends BaseController {
     "",
   ).obs;
 
-  var places = <Place>[
-    Place(),
-    Place(),
-    Place(),
-    Place(),
-    Place(),
-    Place(),
-    Place(),
-    Place(),
-    Place(),
-  ].obs;
+  var trips = <Trip>[].obs;
+  var tripsHost = <Trip>[].obs;
 
   void clearOnDispose() {
     Get.delete<PageUserController>();
@@ -60,9 +53,9 @@ class PageUserController extends BaseController {
   }
 
   Future<void> getData() async {
-    getUserInfo();
-    getTotalTripCount();
+    await getUserInfo();
     getTrip();
+    getTripHost();
     getTotalTripCount();
   }
 
@@ -97,8 +90,69 @@ class PageUserController extends BaseController {
   }
 
   Future<void> getTrip() async {
-    // List<Place> fakePlace = fakePlace();
-    // places.value = fakePlace;
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      log("getTrip: userid $uid");
+      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
+          FirebaseHelper.listIdMember,
+          arrayContainsAny: [uid]).snapshots();
+
+      var routerSnapshots =
+          routerStream.map((querySnapshot) => querySnapshot.docs);
+
+      routerSnapshots.listen((routerSnapshots) {
+        var tempTrips = <Trip>[];
+
+        for (var routerSnapshot in routerSnapshots) {
+          log("getTrip: $routerSnapshot");
+
+          DocumentSnapshot<Map<String, dynamic>>? tripMap =
+              routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (tripMap == null || tripMap.data() == null) return;
+
+          var trip = Trip.fromJson((tripMap).data()!);
+          tempTrips.add(trip);
+        }
+
+        trips.value = tempTrips;
+      });
+    } catch (e) {
+      log("getTrip: $e");
+    }
+  }
+
+  Future<void> getTripHost() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      log("getTripHost: userid $uid");
+      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
+          FirebaseHelper.userIdHost,
+          isEqualTo: uid).snapshots();
+
+      var routerSnapshots =
+          routerStream.map((querySnapshot) => querySnapshot.docs);
+
+      routerSnapshots.listen((routerSnapshots) {
+        var tempTrips = <Trip>[];
+
+        for (var routerSnapshot in routerSnapshots) {
+          log("getTripHost: $routerSnapshot");
+
+          DocumentSnapshot<Map<String, dynamic>>? tripMap =
+              routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (tripMap == null || tripMap.data() == null) return;
+
+          var trip = Trip.fromJson((tripMap).data()!);
+          tempTrips.add(trip);
+        }
+
+        tripsHost.value = tempTrips;
+      });
+    } catch (e) {
+      log("getTripHost: $e");
+    }
   }
 
   Future<void> getTotalKm() async {

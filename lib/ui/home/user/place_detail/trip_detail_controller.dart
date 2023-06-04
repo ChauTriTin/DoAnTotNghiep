@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/trip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,12 @@ class TripDetailController extends BaseController {
   var tripParticipatedCount = 0.obs;
   var leadTripCount = 0.obs;
   var totalKm = 0.obs;
-  var pitStops = ["Đà Nẵng thu hai la ngay dau tuan, thu ba thu tu thu nam", "Huế", "Hội An", "Trạm dừng chân số 1"].obs;
+
+  var tripData = Trip().obs;
+
+  void setTripData(Trip data) {
+    tripData.value = data;
+  }
 
   void clearOnDispose() {
     Get.delete<TripDetailController>();
