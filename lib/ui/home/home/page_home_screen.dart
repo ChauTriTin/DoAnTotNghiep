@@ -6,9 +6,11 @@ import 'package:appdiphuot/ui/home/home/detail/page_detail_router_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
 import 'package:appdiphuot/view/state_home_widget.dart';
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../view/profile_bar_widget.dart';
 
@@ -28,10 +30,17 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   void initState() {
     super.initState();
     _setupListen();
+    _controller.getAllRouter();
   }
 
   void _setupListen() {
-    _controller.appLoading.listen((appLoading) {});
+    _controller.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
     _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
@@ -92,34 +101,44 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   ];
 
   Widget getRow(int i) {
+    var imageTrip = "";
+    var title = "";
+    var id = "";
+    var listTrip = _controller.listTripWithState;
+    if (listTrip.isNotEmpty) {
+      imageTrip = listTrip[i].listImg?[0] ?? "";
+      title = listTrip[i].title ?? "";
+      id = listTrip[0].id ?? "";
+    }
     return InkWell(
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Container(
-            color: Colors.white10,
+            decoration: const BoxDecoration(
+                color: Colors.white10,
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
             width: MediaQuery.of(context).size.height * 1 / 7.5,
             height: MediaQuery.of(context).size.height * 1 / 7.5,
             margin: const EdgeInsets.only(right: 10),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               child: SizedBox.fromSize(
                   size: const Size.fromRadius(48),
-                  child: Image.network(StringConstants.linkImg,
-                      fit: BoxFit.cover)),
+                  child: CachedMemoryImage(
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.height * 1 / 7.5,
+                      height: MediaQuery.of(context).size.height * 1 / 7.5,
+                      uniqueKey: imageTrip,
+                      base64: imageTrip)),
             ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 8),
-            child: Text("Du lich"),
+            child: Text(title),
           )
         ]),
         onTap: () {
+          _controller.idItemDetail = id;
           Get.to(const DetailRouterScreen());
-          setState(
-            () {
-              // widgets.add(getRow(widgets.length + 1));
-              print('row $i');
-            },
-          );
         });
   }
 
@@ -131,74 +150,107 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         backgroundColor: ColorConstants.appColor,
       ),
       backgroundColor: ColorConstants.appColorBkg,
-      body: Container(
-          color: ColorConstants.appColorBkg,
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              banner,
-              Container(
-                padding: const EdgeInsets.only(left: 24, right: 24),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      StateHomeWidget(
-                        isChoose:
-                            _controller.buttonChoose.value == 0 ? true : false,
-                        icon: const Icon(Icons.done_all,
-                            size: 14, color: Colors.blue),
-                        text: "Tất cả",
-                        onPress: () {
-                          setState(() {
-                            _controller.buttonChoose.value = 0;
-                          });
-                        },
-                      ),
-                      StateHomeWidget(
-                        isChoose:
-                            _controller.buttonChoose.value == 1 ? true : false,
-                        icon: const Icon(Icons.public,
-                            size: 14, color: Colors.blue),
-                        text: "Công khai",
-                        onPress: () {
-                          setState(() {
-                            _controller.buttonChoose.value = 1;
-                          });
-                        },
-                      ),
-                      StateHomeWidget(
-                        isChoose:
-                            _controller.buttonChoose.value == 2 ? true : false,
-                        icon: const Icon(Icons.lock,
-                            size: 14, color: Colors.blue),
-                        text: "Cá nhân",
-                        onPress: () {
-                          setState(() {
-                            _controller.buttonChoose.value = 2;
-                          });
-                        },
-                      )
-                    ]),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 12, left: 24),
-                child: const Text(
-                  "Chuyen đi đang mở",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+      body: Obx(() {
+        return Container(
+            color: ColorConstants.appColorBkg,
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                banner,
+                Container(
+                  padding: const EdgeInsets.only(left: 24, right: 24),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        StateHomeWidget(
+                          isChoose: _controller.buttonChoose.value == 0
+                              ? true
+                              : false,
+                          icon: const Icon(Icons.done_all,
+                              size: 14, color: Colors.blue),
+                          text: "Tất cả",
+                          onPress: () {
+                            setState(() {
+                              _controller.setButtonChoose(0);
+                            });
+                          },
+                        ),
+                        StateHomeWidget(
+                          isChoose: _controller.buttonChoose.value == 1
+                              ? true
+                              : false,
+                          icon: const Icon(Icons.public,
+                              size: 14, color: Colors.blue),
+                          text: "Công khai",
+                          onPress: () {
+                            setState(() {
+                              _controller.setButtonChoose(1);
+                            });
+                          },
+                        ),
+                        StateHomeWidget(
+                          isChoose: _controller.buttonChoose.value == 2
+                              ? true
+                              : false,
+                          icon: const Icon(Icons.lock,
+                              size: 14, color: Colors.blue),
+                          text: "Cá nhân",
+                          onPress: () {
+                            setState(() {
+                              _controller.setButtonChoose(2);
+                            });
+                          },
+                        )
+                      ]),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 1 / 5.5,
-                margin: const EdgeInsets.only(top: 12),
-                child: ClipRect(
+                Container(
+                  margin: const EdgeInsets.only(top: 12, left: 24),
+                  child: const Text(
+                    "Chuyen đi đang mở",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 1 / 5.5,
+                  margin: const EdgeInsets.only(top: 12),
+                  child: ClipRect(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.only(left: 24, right: 24),
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _controller.listTripWithState.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return getRow(index);
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(
+                          width: DimenConstants.marginPaddingMedium,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 12, left: 24),
+                  child: const Text(
+                    "Bai danh gia ve chuyen di da hoan thanh",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 1 / 5.5,
+                  margin: const EdgeInsets.only(top: 12),
                   child: ListView.separated(
                     padding: const EdgeInsets.only(left: 24, right: 24),
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    itemCount: dataList.length,
+                    itemCount: _controller.listTripWithState.length,
                     itemBuilder: (BuildContext context, int index) {
                       return getRow(index);
                     },
@@ -209,37 +261,9 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     },
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 12, left: 24),
-                child: const Text(
-                  "Bai danh gia ve chuyen di da hoan thanh",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 1 / 5.5,
-                margin: const EdgeInsets.only(top: 12),
-                child: ListView.separated(
-                  padding: const EdgeInsets.only(left: 24, right: 24),
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: dataList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return getRow(index);
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(
-                      width: DimenConstants.marginPaddingMedium,
-                    );
-                  },
-                ),
-              ),
-            ],
-          )),
+              ],
+            ));
+      }),
       floatingActionButton: FloatingActionButton(
         elevation: DimenConstants.elevationMedium,
         backgroundColor: ColorConstants.appColor,
