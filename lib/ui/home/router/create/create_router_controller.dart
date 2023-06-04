@@ -1,9 +1,12 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/trip.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
@@ -217,33 +220,26 @@ class CreateRouterController extends BaseController {
 
     debugPrint(">>>trip ${trip.toJson()}");
 
-    // setAppLoading(true, "Loading", TypeApp.createRouter);
-    // Future.delayed(const Duration(milliseconds: 2000), () {
-    //   isCreateRouteSuccess.value = true;
-    //
-    //   //TODO delete later
-    //   if (kDebugMode) {
-    //     isCreateRouteSuccess.value = false;
-    //   }
-    //
-    //   setAppLoading(false, "Loading", TypeApp.createRouter);
-    // });
+    setAppLoading(true, "Loading", TypeApp.createRouter);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      isCreateRouteSuccess.value = true;
 
-    // try {
-    //   var userData = UserData(user.displayName ?? "", user.uid,
-    //       user.email ?? "", user.photoURL ?? "");
-    //
-    //   Dog.d('createRouter: user: ${userData.toJson()}');
-    //   FirebaseHelper.collectionReferenceRouter
-    //       .doc(user.uid)
-    //       .set(userData.toJson())
-    //       .then((value) {
-    //     Dog.d("saveUserInfoToFirebaseDataStore User Added");
-    //   }).catchError((error) {
-    //     Dog.d("saveUserInfoToFirebaseDataStore Failed to add user: $error");
-    //   });
-    // } catch (e) {
-    //   Dog.e('createRouter: $e');
-    // }
+      try {
+        FirebaseHelper.collectionReferenceRouter
+            .doc(trip.id)
+            .set(trip.toJson())
+            .then((value) {
+          Dog.d("createRouter trip Added");
+          isCreateRouteSuccess.value = false;
+        }).catchError((error) {
+          Dog.d("createRouter Failed to add trip: $error");
+        });
+      } catch (e) {
+        Dog.e('createRouter: $e');
+      }
+      setAppLoading(false, "Loading", TypeApp.createRouter);
+
+      setAppLoading(false, "Loading", TypeApp.createRouter);
+    });
   }
 }
