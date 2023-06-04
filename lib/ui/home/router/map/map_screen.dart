@@ -380,7 +380,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ),
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorConstants.appColor,
                     shape: RoundedRectangleBorder(
@@ -400,7 +403,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ),
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     shape: RoundedRectangleBorder(
@@ -420,7 +426,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ),
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(
@@ -440,7 +449,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ),
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.cyan,
                     shape: RoundedRectangleBorder(
@@ -460,7 +472,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ),
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
