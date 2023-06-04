@@ -34,6 +34,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void initState() {
     super.initState();
     _setupListen();
+    _controller.getUserInfo();
   }
 
   void _setupListen() {
@@ -83,12 +84,13 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           color: ColorConstants.appColorBkg,
           child: Column(
             children: [
-              //TODO loitp
-              const ProfileBarWidget(
-                name: "Nguyen Hoang Giang",
-                state: "⬤ Online",
-                linkAvatar: StringConstants.linkImgMinaCrying,
-              ),
+              Obx(() {
+                return ProfileBarWidget(
+                  name: _controller.getName(),
+                  state: "⬤ Online",
+                  linkAvatar: _controller.getAvatar(),
+                );
+              }),
               const SizedBox(height: DimenConstants.marginPaddingTiny),
               Expanded(child: Obx(() {
                 return _buildBodyView();

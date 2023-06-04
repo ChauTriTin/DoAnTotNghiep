@@ -1,16 +1,29 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/common/const/convert_utils.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/trip.dart';
+import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/time_utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 class CreateRouterController extends BaseController {
+  var userData = UserData(
+    "",
+    "",
+    "",
+    "",
+  ).obs;
   final id = DateTime.now().microsecondsSinceEpoch.toString();
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
@@ -160,9 +173,9 @@ class CreateRouterController extends BaseController {
           StringConstants.warning, "Vui lòng đính kèm hình ảnh");
       return;
     }
-    for (var element in sImages) {
-      debugPrint("element ${element.name} ${element.path}");
-    }
+    // for (var element in sImages) {
+    //   debugPrint("element ${element.name} ${element.path}");
+    // }
     debugPrint("sPlaceStart $sPlaceStart");
     debugPrint("sPlaceEnd $sPlaceEnd");
     if (sPlaceStart.name == null || sPlaceStart.name?.isEmpty == true) {
@@ -202,14 +215,27 @@ class CreateRouterController extends BaseController {
           StringConstants.warning, "Vui lòng nhập yêu cầu với người tham gia");
       return;
     }
-
     var trip = Trip();
     trip.id = id;
-    trip.userIdHost = "123"; //TODO
-    trip.listIdMember = [];
+    trip.userIdHost = userData.value.uid;
+    trip.listIdMember = <String>[];
+    trip.listIdMember?.add(userData.value.uid);
     trip.title = sTitle;
     trip.des = sDescription;
-    trip.listImg = []; //TODO
+    trip.listImg = <String>[];
+
+    for (var element in sImages) {
+      // debugPrint("element ${element.name} ${element.path}");
+      if (element.path != null) {
+        var file = File(element.path!);
+        if (await file.exists()) {
+          var base64 = imageToBase64(file);
+          debugPrint("element ${element.name} ${element.path} base64 $base64");
+          trip.listImg?.add(base64);
+        }
+      }
+    }
+
     trip.placeStart = sPlaceStart;
     trip.placeEnd = sPlaceEnd;
     trip.listPlace = listPlaceStop;
@@ -241,5 +267,38 @@ class CreateRouterController extends BaseController {
 
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
+  }
+
+  String getName() {
+    return userData.value.name;
+  }
+
+  String getAvatar() {
+    String avatarUrl = userData.value.avatar;
+    if (avatarUrl.isEmpty) {
+      return StringConstants.avatarImgDefault;
+    } else {
+      return avatarUrl;
+    }
+  }
+
+  Future<void> getUserInfo() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      FirebaseHelper.collectionReferenceUser
+          .doc(uid)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? userMap =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (userMap == null || userMap.data() == null) return;
+
+        var user = UserData.fromJson((userMap).data()!);
+        userData.value = user;
+        debugPrint("getUserInfo success: ${user.toString()}");
+      });
+    } catch (e) {
+      debugPrint("getUserInfo get user info fail: $e");
+    }
   }
 }
