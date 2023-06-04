@@ -4,7 +4,7 @@ import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
-import 'package:appdiphuot/ui/home/router/createSuccess/create_success_screen.dart';
+import 'package:appdiphuot/ui/home/router/create_success/create_success_screen.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +34,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void initState() {
     super.initState();
     _setupListen();
+    _controller.getUserInfo();
   }
 
   void _setupListen() {
@@ -54,7 +55,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Get.back();
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
         Get.to(CreateSuccessScreen(
-          title: "AB0134NM45",
+          title: _controller.id,
           dateTimeEnd: _controller.dateTimeEnd.value,
           placeStart: _controller.placeStart.value,
           placeEnd: _controller.placeEnd.value,
@@ -83,11 +84,13 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           color: ColorConstants.appColorBkg,
           child: Column(
             children: [
-              const ProfileBarWidget(
-                name: "Nguyen Hoang Giang",
-                state: "⬤ Online",
-                linkAvatar: StringConstants.linkImgMinaCrying,
-              ),
+              Obx(() {
+                return ProfileBarWidget(
+                  name: _controller.getName(),
+                  state: "⬤ Online",
+                  linkAvatar: _controller.getAvatar(),
+                );
+              }),
               const SizedBox(height: DimenConstants.marginPaddingTiny),
               Expanded(child: Obx(() {
                 return _buildBodyView();
@@ -133,10 +136,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 ),
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Mã: AB0134NM45',
-                style: TextStyle(
+                'Mã: ${_controller.id}',
+                style: const TextStyle(
                   fontSize: DimenConstants.txtMedium,
                   color: ColorConstants.appColor,
                 ),
@@ -312,7 +315,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.placeStart.value.name,
+              _controller.placeStart.value.name ?? "Chọn địa điểm",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -351,7 +354,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.placeEnd.value.name,
+              _controller.placeEnd.value.name ?? "Chọn địa điểm",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -573,7 +576,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              place.name,
+              place.name ?? "",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,

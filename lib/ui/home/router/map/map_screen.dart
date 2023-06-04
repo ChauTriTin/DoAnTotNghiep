@@ -169,7 +169,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         var marker = create(
           i,
           _controller.getIdMarkerStop(i),
-          LatLng(placeStop.lat, placeStop.long),
+          LatLng(placeStop.lat ?? Place.defaultLat,
+              placeStop.long ?? Place.defaultLong),
         );
         list.add(marker);
       }

@@ -82,7 +82,8 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 backgroundColor: ColorConstants.borderTextInputColor,
                 radius: DimenConstants.avatarProfile / 2,
                 child: CircleAvatar(
-                  radius: DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
+                  radius: DimenConstants.avatarProfile / 2 -
+                      DimenConstants.logoStroke,
                   backgroundImage: NetworkImage(_controller.getAvatar()),
                 ),
               )),
@@ -98,7 +99,8 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             height: DimenConstants.marginPaddingLarge,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
+            padding:
+                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
             child: Text(
               StringConstants.tripParticipated,
               style: UIUtils.getStyleText(),
@@ -136,7 +138,8 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
-                  UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount,
+                  UIUtils.getTextSpanCount(
+                      StringConstants.tripParticipatedCount,
                       _controller.tripParticipatedCount.value),
                   UIUtils.getTextSpanCount(StringConstants.leadTripCount,
                       _controller.leadTripCount.value),
@@ -190,7 +193,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             height: DimenConstants.marginPaddingSmall,
           ),
           Text(
-            place.name,
+            "${place.name}",
             textAlign: TextAlign.start,
             style: UIUtils.getStyleText(),
           ),

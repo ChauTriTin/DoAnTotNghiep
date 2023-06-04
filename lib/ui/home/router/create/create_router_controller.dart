@@ -1,17 +1,33 @@
+import 'dart:io';
+
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/common/const/convert_utils.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/trip.dart';
+import 'package:appdiphuot/model/user.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
+import 'package:appdiphuot/util/time_utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 class CreateRouterController extends BaseController {
+  var userData = UserData(
+    "",
+    "",
+    "",
+    "",
+  ).obs;
+  final id = DateTime.now().microsecondsSinceEpoch.toString();
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
   final tecRequire = TextEditingController();
   final controllerImagePicker = MultiImagePickerController(
-    maxImages: 6,
+    maxImages: 3,
     withReadStream: true,
     allowedImageTypes: ['png', 'jpg', 'jpeg'],
   );
@@ -20,8 +36,8 @@ class CreateRouterController extends BaseController {
   var listPlaceStop = <Place>[].obs;
 
   // final dateTimeDefault = DateTime(1111, 1, 11);
-  var dateTimeStart = DateTime.now().obs;
-  var dateTimeEnd = DateTime.now().add(const Duration(days: 3)).obs;
+  var dateTimeStart = DateTime.now().add(const Duration(days: 7)).obs;
+  var dateTimeEnd = DateTime.now().add(const Duration(days: 6)).obs;
   var isPublic = true.obs;
 
   var isCreateRouteSuccess = false.obs;
@@ -68,13 +84,13 @@ class CreateRouterController extends BaseController {
     debugPrint(">>> dt ${dt.microsecondsSinceEpoch}");
     debugPrint(">>> dateTimeEnd ${dateTimeEnd.value.microsecondsSinceEpoch}");
     var diff =
-        dt.microsecondsSinceEpoch < dateTimeEnd.value.microsecondsSinceEpoch;
+        dt.microsecondsSinceEpoch > dateTimeEnd.value.microsecondsSinceEpoch;
     debugPrint(">>> diff $diff");
     if (diff) {
       dateTimeStart.value = dt;
     } else {
       showSnackBarFullError(StringConstants.warning,
-          "Thời gian khởi hành phải trước thời gian ngừng đăng kí");
+          "Thời gian khởi hành phải sau thời gian ngừng đăng kí");
     }
   }
 
@@ -101,13 +117,13 @@ class CreateRouterController extends BaseController {
     debugPrint(">>> dt ${dt.microsecondsSinceEpoch}");
     debugPrint(">>> dateTimeEnd ${dateTimeStart.value.microsecondsSinceEpoch}");
     var diff =
-        dt.microsecondsSinceEpoch > dateTimeStart.value.microsecondsSinceEpoch;
+        dt.microsecondsSinceEpoch < dateTimeStart.value.microsecondsSinceEpoch;
     debugPrint(">>> diff $diff");
     if (diff) {
       dateTimeEnd.value = dt;
     } else {
       showSnackBarFullError(StringConstants.warning,
-          "Thời gian ngừng đăng ký phải lớn hơn thời gian khởi hành");
+          "Thời gian ngừng đăng ký phải trước hơn thời gian khởi hành");
     }
   }
 
@@ -115,7 +131,7 @@ class CreateRouterController extends BaseController {
     isPublic.value = value;
   }
 
-  void createRouter() {
+  Future<void> createRouter() async {
     String sTitle = tecTitle.text.toString().trim();
     String sDescription = tecDescription.text.toString().trim();
     String sRequire = tecRequire.text.toString().trim();
@@ -155,30 +171,30 @@ class CreateRouterController extends BaseController {
           StringConstants.warning, "Vui lòng đính kèm hình ảnh");
       return;
     }
-    for (var element in sImages) {
-      debugPrint("element ${element.name} ${element.path}");
-    }
+    // for (var element in sImages) {
+    //   debugPrint("element ${element.name} ${element.path}");
+    // }
     debugPrint("sPlaceStart $sPlaceStart");
     debugPrint("sPlaceEnd $sPlaceEnd");
-    if (sPlaceStart.name.isEmpty) {
+    if (sPlaceStart.name == null || sPlaceStart.name?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm bắt đầu");
       return;
     }
-    if (sPlaceEnd.name.isEmpty) {
+    if (sPlaceEnd.name == null || sPlaceEnd.name?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm kết thúc");
       return;
     }
     debugPrint("sListPlaceStop ${sListPlaceStop.length}");
-    if (sListPlaceStop.isEmpty) {
-      showSnackBarFullError(
-          StringConstants.warning, "Vui lòng chọn điểm dừng chân");
-      return;
-    }
-    for (var element in sListPlaceStop) {
-      debugPrint("element ${element.name}");
-    }
+    // if (sListPlaceStop.isEmpty) {
+    //   showSnackBarFullError(
+    //       StringConstants.warning, "Vui lòng chọn điểm dừng chân");
+    //   return;
+    // }
+    // for (var element in sListPlaceStop) {
+    //   debugPrint("element ${element.name}");
+    // }
     debugPrint("sDateTimeStart $sDateTimeStart");
     // if (sDateTimeStart == dateTimeDefault) {
     //   showSnackBarFullError(
@@ -197,17 +213,90 @@ class CreateRouterController extends BaseController {
           StringConstants.warning, "Vui lòng nhập yêu cầu với người tham gia");
       return;
     }
+    var trip = Trip();
+    trip.id = id;
+    trip.userIdHost = userData.value.uid;
+    trip.listIdMember = <String>[];
+    trip.listIdMember?.add(userData.value.uid);
+    trip.title = sTitle;
+    trip.des = sDescription;
+    trip.listImg = <String>[];
+
+    for (var element in sImages) {
+      // debugPrint("element ${element.name} ${element.path}");
+      if (element.path != null) {
+        var file = File(element.path!);
+        if (await file.exists()) {
+          var base64 = imageToBase64(file);
+          debugPrint("element ${element.name} ${element.path} base64 $base64");
+          trip.listImg?.add(base64);
+        }
+      }
+    }
+
+    trip.placeStart = sPlaceStart;
+    trip.placeEnd = sPlaceEnd;
+    trip.listPlace = listPlaceStop;
+    trip.timeStart = TimeUtils.convert(dateTimeStart.value);
+    trip.timeEnd = TimeUtils.convert(dateTimeEnd.value);
+    trip.require = sRequire;
+    trip.isPublic = isPublic.value;
+
+    debugPrint(">>>trip ${trip.toJson()}");
 
     setAppLoading(true, "Loading", TypeApp.createRouter);
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       isCreateRouteSuccess.value = true;
 
-      //TODO delete later
-      if (kDebugMode) {
-        isCreateRouteSuccess.value = false;
+      try {
+        FirebaseHelper.collectionReferenceRouter
+            .doc(trip.id)
+            .set(trip.toJson())
+            .then((value) {
+          Dog.d("createRouter trip Added");
+          isCreateRouteSuccess.value = false;
+        }).catchError((error) {
+          Dog.d("createRouter Failed to add trip: $error");
+        });
+      } catch (e) {
+        Dog.e('createRouter: $e');
       }
+      setAppLoading(false, "Loading", TypeApp.createRouter);
 
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
+  }
+
+  String getName() {
+    return userData.value.name;
+  }
+
+  String getAvatar() {
+    String avatarUrl = userData.value.avatar;
+    if (avatarUrl.isEmpty) {
+      return StringConstants.avatarImgDefault;
+    } else {
+      return avatarUrl;
+    }
+  }
+
+  Future<void> getUserInfo() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      FirebaseHelper.collectionReferenceUser
+          .doc(uid)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? userMap =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (userMap == null || userMap.data() == null) return;
+
+        var user = UserData.fromJson((userMap).data()!);
+        userData.value = user;
+        debugPrint("getUserInfo success: ${user.toString()}");
+      });
+    } catch (e) {
+      debugPrint("getUserInfo get user info fail: $e");
+    }
   }
 }
