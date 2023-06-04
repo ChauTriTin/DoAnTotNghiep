@@ -83,6 +83,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           color: ColorConstants.appColorBkg,
           child: Column(
             children: [
+              //TODO loitp
               const ProfileBarWidget(
                 name: "Nguyen Hoang Giang",
                 state: "⬤ Online",
@@ -312,7 +313,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.placeStart.value.name,
+              _controller.placeStart.value.name ?? "Chọn địa điểm",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -351,7 +352,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.placeEnd.value.name,
+              _controller.placeEnd.value.name ?? "Chọn địa điểm",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -573,7 +574,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              place.name,
+              place.name ?? "",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,

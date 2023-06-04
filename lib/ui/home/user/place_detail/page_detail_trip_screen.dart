@@ -161,7 +161,7 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _controller.place.value.name,
+              "${_controller.place.value.name}",
               textAlign: TextAlign.start,
               style: UIUtils.getStyleTextLarge500(),
             ),

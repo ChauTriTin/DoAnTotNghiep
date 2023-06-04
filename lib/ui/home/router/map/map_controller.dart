@@ -40,8 +40,10 @@ class MapController extends BaseController {
     listPlaceStop.addAll(list);
     listPlaceStop.refresh();
 
-    kMapPlaceStart.value = LatLng(pStart.lat, pStart.long);
-    kMapPlaceEnd.value = LatLng(pEnd.lat, pEnd.long);
+    kMapPlaceStart.value = LatLng(
+        pStart.lat ?? Place.defaultLat, pStart.long ?? Place.defaultLong);
+    kMapPlaceEnd.value =
+        LatLng(pEnd.lat ?? Place.defaultLat, pEnd.long ?? Place.defaultLong);
 
     _genRouter();
   }
@@ -52,11 +54,14 @@ class MapController extends BaseController {
 
   List<LatLng> createPoints() {
     final List<LatLng> points = <LatLng>[];
-    points.add(LatLng(placeStart.value.lat, placeStart.value.long));
+    points.add(LatLng(placeStart.value.lat ?? Place.defaultLat,
+        placeStart.value.long ?? Place.defaultLong));
     for (var element in listPlaceStop) {
-      points.add(LatLng(element.lat, element.long));
+      points.add(LatLng(
+          element.lat ?? Place.defaultLat, element.long ?? Place.defaultLong));
     }
-    points.add(LatLng(placeEnd.value.lat, placeEnd.value.long));
+    points.add(LatLng(placeEnd.value.lat ?? Place.defaultLat,
+        placeEnd.value.long ?? Place.defaultLong));
     return points;
   }
 
@@ -101,8 +106,11 @@ class MapController extends BaseController {
         log("_genRouter $i - ${i + 1}");
         var eCurrent = listPlace[i];
         var eNext = listPlace[i + 1];
-        var listPolyline =
-            _getRoute(eCurrent.lat, eCurrent.long, eNext.lat, eNext.long);
+        var listPolyline = _getRoute(
+            eCurrent.lat ?? Place.defaultLat,
+            eCurrent.long ?? Place.defaultLong,
+            eNext.lat ?? Place.defaultLat,
+            eNext.long ?? Place.defaultLong);
         listPolyline.then((list) {
           listLatLong.addAll(list);
           log("_genRouter listPolyline list ${list.length} -> listLatLong ${listLatLong.length}");

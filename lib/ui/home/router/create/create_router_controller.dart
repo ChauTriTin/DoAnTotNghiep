@@ -1,6 +1,8 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/trip.dart';
+import 'package:appdiphuot/util/time_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
@@ -160,25 +162,25 @@ class CreateRouterController extends BaseController {
     }
     debugPrint("sPlaceStart $sPlaceStart");
     debugPrint("sPlaceEnd $sPlaceEnd");
-    if (sPlaceStart.name.isEmpty) {
+    if (sPlaceStart.name == null || sPlaceStart.name?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm bắt đầu");
       return;
     }
-    if (sPlaceEnd.name.isEmpty) {
+    if (sPlaceEnd.name == null || sPlaceEnd.name?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm kết thúc");
       return;
     }
     debugPrint("sListPlaceStop ${sListPlaceStop.length}");
-    if (sListPlaceStop.isEmpty) {
-      showSnackBarFullError(
-          StringConstants.warning, "Vui lòng chọn điểm dừng chân");
-      return;
-    }
-    for (var element in sListPlaceStop) {
-      debugPrint("element ${element.name}");
-    }
+    // if (sListPlaceStop.isEmpty) {
+    //   showSnackBarFullError(
+    //       StringConstants.warning, "Vui lòng chọn điểm dừng chân");
+    //   return;
+    // }
+    // for (var element in sListPlaceStop) {
+    //   debugPrint("element ${element.name}");
+    // }
     debugPrint("sDateTimeStart $sDateTimeStart");
     // if (sDateTimeStart == dateTimeDefault) {
     //   showSnackBarFullError(
@@ -198,7 +200,24 @@ class CreateRouterController extends BaseController {
       return;
     }
 
-    setAppLoading(true, "Loading", TypeApp.createRouter);
+    var trip = Trip();
+    trip.id = id;
+    trip.userIdHost = "123"; //TODO
+    trip.listIdMember = [];
+    trip.title = sTitle;
+    trip.des = sDescription;
+    trip.listImg = []; //TODO
+    trip.placeStart = sPlaceStart;
+    trip.placeEnd = sPlaceEnd;
+    trip.listPlace = listPlaceStop;
+    trip.timeStart = TimeUtils.convert(dateTimeStart.value);
+    trip.timeEnd = TimeUtils.convert(dateTimeEnd.value);
+    trip.require = sRequire;
+    trip.isPublic = isPublic.value;
+
+    debugPrint(">>>trip ${trip.toJson()}");
+
+    // setAppLoading(true, "Loading", TypeApp.createRouter);
     // Future.delayed(const Duration(milliseconds: 2000), () {
     //   isCreateRouteSuccess.value = true;
     //

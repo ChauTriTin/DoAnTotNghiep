@@ -10,14 +10,34 @@ class Place {
     return imageUrl?.firstOrNull ?? StringConstants.placeImgDefault;
   }
 
-  var lat = defaultLat;
-  var long = defaultLong;
-  var name = "Chọn địa điểm";
+  double? lat = defaultLat;
+  double? long = defaultLong;
+  String? name = "Ho Chi Minh";
 
   bool isDefaultPlace() {
     if (lat == defaultLat && long == defaultLong) {
       return true;
     }
     return false;
+  }
+
+  Place({
+    this.lat,
+    this.long,
+    this.name,
+  });
+
+  Place.fromJson(Map<String, dynamic> json) {
+    lat = json['lat'];
+    long = json['long'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['lat'] = lat;
+    data['long'] = long;
+    data['name'] = name;
+    return data;
   }
 }

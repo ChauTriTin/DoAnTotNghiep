@@ -27,14 +27,13 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
         options: const FirebaseOptions(
-          apiKey: "AIzaSyAWieQBegz81e5gIui9LQNHN7lNVJZpiDI",
-          appId: "1:529618153862:android:f0b7c1c484524d950d7c07",
-          messagingSenderId: "529618153862",
-          projectId: "doan-d1d53",
-        )
-    );
+      apiKey: "AIzaSyAWieQBegz81e5gIui9LQNHN7lNVJZpiDI",
+      appId: "1:529618153862:android:f0b7c1c484524d950d7c07",
+      messagingSenderId: "529618153862",
+      projectId: "doan-d1d53",
+    ));
   } on Exception catch (_) {
-    print('initializeApp fail');
+    debugPrint('initializeApp fail');
   }
 
   runApp(
