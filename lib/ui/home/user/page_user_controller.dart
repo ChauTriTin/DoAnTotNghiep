@@ -9,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../common/const/string_constants.dart';
 import '../../../model/place.dart';
 import '../../../model/user.dart';
 import '../../../util/shared_preferences_util.dart';
@@ -17,11 +16,13 @@ import '../../../util/ui_utils.dart';
 
 class PageUserController extends BaseController {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   final ImagePicker _imagePicker = ImagePicker();
-  Rx<File?> _selectedImage = Rx<File?>(null);
+  final Rx<File?> _selectedImage = Rx<File?>(null);
+
   File? get selectedImage => _selectedImage.value;
 
   var tripParticipatedCount = 0.obs;
@@ -141,14 +142,16 @@ class PageUserController extends BaseController {
 
       if (snapshot.state != TaskState.success) {
         setAppLoading(false, "Loading", TypeApp.uploadAvatar);
-        UIUtils.showSnackBarError(StringConstants.error, StringConstants.errorUploadAvatar);
+        UIUtils.showSnackBarError(
+            StringConstants.error, StringConstants.errorUploadAvatar);
         return;
       }
 
-      String imageUrl =  await snapshot.ref.getDownloadURL();
+      String imageUrl = await snapshot.ref.getDownloadURL();
       log("uploadAvatarToFirebase success: url: $imageUrl");
       _users.doc(userData.value.uid).update({"avatar": imageUrl});
-      UIUtils.showSnackBar(StringConstants.warning, StringConstants.successUploadAvatar);
+      UIUtils.showSnackBar(
+          StringConstants.warning, StringConstants.successUploadAvatar);
       setAppLoading(false, "Loading", TypeApp.uploadAvatar);
     } catch (e) {
       log("uploadAvatarToFirebase error: $e");
