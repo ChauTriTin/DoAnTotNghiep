@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
@@ -38,11 +36,7 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              Place p = Place();
-              p.lat = Place.defaultLat + Random().nextDouble();
-              p.long = Place.defaultLong + Random().nextDouble();
-              p.name = "Dummy city ${DateTime.now().microsecondsSinceEpoch}";
-              widget.callback.call(p);
+              widget.callback.call(Place.getRandomPlace());
               Get.back();
             },
             child: const Icon(Icons.place),

@@ -14,6 +14,7 @@ class Trip {
   String? timeEnd;
   String? require;
   bool? isPublic;
+  bool? isComplete;
 
   Trip({
     this.id,
@@ -29,6 +30,7 @@ class Trip {
     this.timeEnd,
     this.require,
     this.isPublic,
+    this.isComplete,
   });
 
   Trip.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,7 @@ class Trip {
     timeEnd = json['timeEnd'];
     require = json['require'];
     isPublic = json['isPublic'];
+    isComplete = json['isComplete'];
   }
 
   Map<String, dynamic> toJson() {
@@ -75,6 +78,7 @@ class Trip {
     data['timeEnd'] = timeEnd;
     data['require'] = require;
     data['isPublic'] = isPublic;
+    data['isComplete'] = isComplete;
     return data;
   }
 }

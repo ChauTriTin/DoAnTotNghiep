@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:appdiphuot/common/const/string_constants.dart';
 
 class Place {
@@ -39,5 +41,61 @@ class Place {
     data['long'] = long;
     data['name'] = name;
     return data;
+  }
+
+  static Place getRandomPlace() {
+    var list = <Place>[];
+    list.add(
+      Place(
+        lat: 10.762622,
+        long: 106.660172,
+        name: "Ho Chi Minh City, Vietnam",
+      ),
+    );
+    list.add(
+      Place(
+        lat: 20.865139,
+        long: 106.683830,
+        name: "Haiphong, Vietnam",
+      ),
+    );
+    list.add(
+      Place(
+        lat: 9.602521,
+        long: 105.97390,
+        name: "Sóc Trăng, Soc Trang, Vietnam",
+      ),
+    );
+    list.add(
+      Place(
+        lat: 16.463713,
+        long: 107.590866,
+        name: "Huế, Thua Thien Hue, Vietnam",
+      ),
+    );
+    list.add(
+      Place(
+        lat: 10.924067,
+        long: 106.713028,
+        name: "Thuận An, Binh Duong, Vietnam",
+      ),
+    );
+    list.add(
+      Place(
+        lat: 21.028511,
+        long: 105.804817,
+        name: "Hanoi, Vietnam",
+      ),
+    );
+    list.add(
+      Place(
+        lat: 10.964112,
+        long: 106.856461,
+        name: "Biên Hòa, Dong Nai, Vietnam",
+      ),
+    );
+
+    var ran = Random().nextInt(list.length - 1);
+    return list[ran];
   }
 }

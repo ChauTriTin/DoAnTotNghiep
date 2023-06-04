@@ -6,11 +6,12 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import "package:google_maps_directions/google_maps_directions.dart" as gmd;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -81,6 +82,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
               DimenConstants.marginPaddingMedium,
             ),
             child: FloatingActionButton(
+              heroTag: "clear",
               mini: true,
               elevation: DimenConstants.elevationMedium,
               backgroundColor: ColorConstants.appColor,
@@ -256,15 +258,17 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FloatingActionButton(
+            heroTag: "pan_tool",
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              showSnackBarFull(StringConstants.warning, "TODO");
+              _showBottomSheetSos();
             },
             child: const Icon(Icons.pan_tool),
           ),
           const SizedBox(height: DimenConstants.marginPaddingMedium),
           FloatingActionButton(
+            heroTag: "sms",
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
@@ -274,10 +278,11 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           ),
           const SizedBox(height: DimenConstants.marginPaddingMedium),
           FloatingActionButton(
+            heroTag: "priority_high",
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              showSnackBarFull(StringConstants.warning, "TODO");
+              _showBottomSheetWarning();
             },
             child: const Icon(Icons.priority_high),
           ),
@@ -349,6 +354,294 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           },
         ),
       ),
+    );
+  }
+
+  void _showBottomSheetSos() {
+    showBarModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (context) {
+        return Material(
+          child: Container(
+            width: Get.width,
+            height: 420,
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Text(
+                  "SOS",
+                  style: TextStyle(
+                    fontSize: DimenConstants.txtHeader1,
+                    color: ColorConstants.appColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorConstants.appColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Xe tôi hư',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Tôi lạc đường',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Tôi muốn dừng chân',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyan,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Tôi gặp trục trặc',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Cần người giúp khẩn cấp',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showBottomSheetWarning() {
+    showBarModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (context) {
+        return Material(
+          child: Container(
+            width: Get.width,
+            height: 420,
+            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Cảnh báo".toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: DimenConstants.txtHeader1,
+                    color: ColorConstants.appColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorConstants.appColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Có cảnh sát',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Đường xấu',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Sắp có mưa',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyan,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Giữ khoảng cách',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                ElevatedButton(
+                  onPressed: () {
+                    //TODO iplm
+                    Get.back(); //close this sheet
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DimenConstants.radiusRound),
+                    ),
+                    minimumSize: Size(Get.width, 50),
+                  ),
+                  child: const Text(
+                    'Dừng khẩn cấp',
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
