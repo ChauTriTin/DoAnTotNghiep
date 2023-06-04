@@ -27,7 +27,7 @@ class CreateRouterController extends BaseController {
   final tecDescription = TextEditingController();
   final tecRequire = TextEditingController();
   final controllerImagePicker = MultiImagePickerController(
-    maxImages: 6,
+    maxImages: 3,
     withReadStream: true,
     allowedImageTypes: ['png', 'jpg', 'jpeg'],
   );
