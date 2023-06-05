@@ -1,5 +1,7 @@
 import 'package:appdiphuot/model/place.dart';
 
+import '../common/const/string_constants.dart';
+
 class Trip {
   String? id;
   String? userIdHost;
@@ -32,6 +34,10 @@ class Trip {
     this.isPublic,
     this.isComplete,
   });
+
+  String getFirstImageUrl() {
+    return listImg?.firstOrNull ?? StringConstants.placeImgDefault;
+  }
 
   Trip.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -1,11 +1,15 @@
+import 'dart:ffi';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
 import 'package:appdiphuot/ui/home/user/place_detail/trip_detail_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
@@ -15,7 +19,10 @@ import '../../../../view/profile_bar_widget.dart';
 class PageDetailTrip extends StatefulWidget {
   const PageDetailTrip({
     super.key,
+    required this.tripData,
   });
+
+  final Trip tripData;
 
   @override
   State<PageDetailTrip> createState() => _PageDetailTrip();
@@ -28,6 +35,7 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
   void initState() {
     super.initState();
     _setupListen();
+    _controller.setTripData(widget.tripData);
     _controller.getData();
   }
 
@@ -61,21 +69,22 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
           backgroundColor: ColorConstants.appColor,
         ),
         backgroundColor: ColorConstants.colorWhite,
-        body: Column(
-          children: [
-            ProfileBarWidget(
-              name: _controller.getName(),
-              state: "⬤ Online",
-              linkAvatar: _controller.getAvatar(),
-            ),
-            Expanded(child: Obx(() {
-              return buildBody();
-            }))
-          ],
-        ));
+        body: Obx(() {
+          return Column(
+            children: [
+              ProfileBarWidget(
+                name: _controller.getName(),
+                state: "⬤ Online",
+                linkAvatar: _controller.getAvatar(),
+              ),
+              Expanded(child: buildBody())
+            ],
+          );
+        }));
   }
 
   Widget buildBody() {
+    var trip = widget.tripData;
     return Container(
         width: MediaQuery.of(context).size.width,
         color: ColorConstants.colorWhite,
@@ -89,53 +98,88 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
                 buildTopImageInfo(),
                 //
                 const SizedBox(
-                  height: DimenConstants.marginPaddingMedium,
+                  height: DimenConstants.marginPaddingExtraLarge,
                 ),
 
-                UIUtils.getTextSpanCount(StringConstants.leadTripName,
-                    _controller.tripParticipatedCount.value),
+                UIUtils.getTextSpan(StringConstants.leadTripName,
+                    _controller.userHostTrip.value.name),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(
-                    StringConstants.totalKm, _controller.leadTripCount.value),
+                    StringConstants.totalKm, _controller.totalKm.value),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(
-                    StringConstants.pitStopCount, _controller.totalKm.value),
+                    StringConstants.pitStopCount, trip.listPlace?.length ?? 0),
 
                 ListView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   physics: const BouncingScrollPhysics(),
-                  itemCount: _controller.pitStops.length,
+                  itemCount: trip.listPlace?.length ?? 0,
                   itemBuilder: (BuildContext context, int index) {
-                    return _getPitStop(index);
+                    var place = widget.tripData.listPlace?[index];
+                    return _getRowItem(index, place?.name ?? "");
                   },
                 ),
 
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(StringConstants.participantsCount,
-                    _controller.totalKm.value),
-                UIUtils.getTextSpanCount(
-                    StringConstants.pitStopCount, _controller.totalKm.value),
-                UIUtils.getTextSpanCount(
-                    StringConstants.startDay, _controller.totalKm.value),
-                UIUtils.getTextSpanCount(
-                    StringConstants.endDay, _controller.totalKm.value),
+                    trip.listIdMember?.length ?? 0),
+
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: _controller.usersParticipated.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var userName =
+                        _controller.usersParticipated.value[index].name;
+                    return _getRowItem(index, userName);
+                  },
+                ),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                UIUtils.getTextSpan(
+                    StringConstants.startDay, trip.timeStart ?? ""),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                UIUtils.getTextSpan(StringConstants.endDay, trip.timeEnd ?? ""),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
                 UIUtils.getTextSpanCount(
                     StringConstants.totalTravelDay, _controller.totalKm.value),
               ],
             )));
   }
 
-  Widget _getPitStop(int index) {
-    var pitstop = _controller.pitStops.value[index];
+  Widget _getRowItem(int index, String? value) {
+    if (value == null) return Container();
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: DimenConstants.marginPaddingSmall),
       child: Text(
-        "• $pitstop",
+        "• $value",
         style: UIUtils.getStyleText(),
       ),
     );
   }
 
   Widget buildTopImageInfo() {
+    var itemSize = MediaQuery.of(context).size.height * 1 / 6;
+    var trip = widget.tripData;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,14 +187,18 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
         // Image
         Container(
           color: Colors.white10,
-          width: MediaQuery.of(context).size.height * 1 / 6,
-          height: MediaQuery.of(context).size.height * 1 / 6,
+          width: itemSize,
+          height: itemSize,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: SizedBox.fromSize(
-                size: const Size.fromRadius(48),
-                child: Image.network(_controller.place.value.getFirstImageUrl(),
-                    fit: BoxFit.cover)),
+              child: CachedMemoryImage(
+                  fit: BoxFit.cover,
+                  width: itemSize,
+                  height: itemSize,
+                  uniqueKey: trip.getFirstImageUrl(),
+                  base64: trip.getFirstImageUrl()),
+            ),
           ),
         ),
         const SizedBox(
@@ -161,7 +209,7 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${_controller.place.value.name}",
+              "${trip.title}",
               textAlign: TextAlign.start,
               style: UIUtils.getStyleTextLarge500(),
             ),
@@ -172,20 +220,13 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
                 Text(
-                  "Desscription ...",
+                  "${trip.des}",
                   textAlign: TextAlign.start,
                   softWrap: true,
                   style: UIUtils.getStyleText(),
                 ),
               ],
             )
-
-            // Expanded(
-            //   child: Text(
-            //     'This is a long text that may exceed the available width of the column.',
-            //     softWrap: true,
-            //   ),
-            // )
           ],
         ))
       ],
