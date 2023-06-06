@@ -48,7 +48,7 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
   Widget _buildBodyView() {
     var useCurrentLocation = widget.defaultPlace?.isDefaultPlace();
     return PlacePicker(
-      apiKey: Constants.googleMapAPIKey,
+      apiKey: Constants.iLoveYou(),
       onPlacePicked: (result) {
         Place p = Place();
         p.lat = result.geometry?.location.lat ?? Place.defaultLat;
