@@ -5,8 +5,11 @@ import 'package:appdiphuot/ui/home/noti/page_noti_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_screen.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import '../../base/base_stateful_state.dart';
 import '../../common/const/color_constants.dart';
@@ -46,6 +49,10 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  int _totalNotifications = 0;
+  PushNotification? _notificationInfo;
+  late final FirebaseMessaging _messaging;
+
   int selectedPos = 0;
   final _controller = Get.put(HomeController());
 
@@ -87,9 +94,92 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    registerNotification();
+
     _navigationController = CircularBottomNavigationController(selectedPos);
     _setupListen();
     _controller.getUserInfo();
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      PushNotification notification = PushNotification(
+        title: message.notification?.title,
+        body: message.notification?.body,
+        dataTitle: message.data['title'],
+        dataBody: message.data['body'],
+      );
+
+      setState(() {
+        _notificationInfo = notification;
+        _totalNotifications++;
+      });
+    });
+
+    checkForInitialMessage();
+  }
+
+  checkForInitialMessage() async {
+    await Firebase.initializeApp();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      PushNotification notification = PushNotification(
+        title: initialMessage.notification?.title,
+        body: initialMessage.notification?.body,
+      );
+      setState(() {
+        _notificationInfo = notification;
+        _totalNotifications++;
+      });
+    }
+  }
+
+  Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    debugPrint("loitpp Handling a background message: ${message.messageId}");
+  }
+
+  void registerNotification() async {
+    await Firebase.initializeApp();
+    _messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      debugPrint('loitpp User granted permission');
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        debugPrint('loitpp listen RemoteMessage ${message.data}');
+        debugPrint('loitpp listen ${message.notification?.title}');
+        debugPrint('loitpp listen ${message.notification?.body}');
+        // Parse the message received
+        PushNotification notification = PushNotification(
+          title: message.notification?.title,
+          body: message.notification?.body,
+        );
+
+        showSimpleNotification(
+          Text(_notificationInfo?.title ?? "---"),
+          leading: NotificationBadge(totalNotifications: _totalNotifications),
+          subtitle: Text(_notificationInfo?.body ?? "---"),
+          background: ColorConstants.appColor,
+          duration: const Duration(seconds: 5),
+        );
+
+        setState(() {
+          _notificationInfo = notification;
+          _totalNotifications++;
+          debugPrint('loitpp _totalNotifications $_totalNotifications');
+        });
+      });
+    } else {
+      debugPrint('loitpp User declined or has not accepted permission');
+    }
   }
 
   void _setupListen() {
@@ -177,6 +267,47 @@ class HomePageState extends State<HomePage> {
           this.selectedPos = selectedPos ?? 0;
         });
       },
+    );
+  }
+}
+
+class PushNotification {
+  PushNotification({
+    this.title,
+    this.body,
+    this.dataTitle,
+    this.dataBody,
+  });
+
+  String? title;
+  String? body;
+  String? dataTitle;
+  String? dataBody;
+}
+
+class NotificationBadge extends StatelessWidget {
+  final int totalNotifications;
+
+  const NotificationBadge({super.key, required this.totalNotifications});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40.0,
+      height: 40.0,
+      decoration: const BoxDecoration(
+        color: Colors.red,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            '$totalNotifications',
+            style: const TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ),
     );
   }
 }

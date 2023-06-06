@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import 'ui/splash/page_splash_screen.dart';
 
@@ -37,17 +38,19 @@ void main() async {
   }
 
   runApp(
-    GetMaterialApp(
-      enableLog: true,
-      debugShowCheckedModeBanner: true,
-      defaultTransition: Transition.cupertino,
-      home: const MyApp(),
-      navigatorKey: navigatorKey,
-      theme: ThemeData(
-        primarySwatch: Colors.red,
+    OverlaySupport.global(
+      child: GetMaterialApp(
+        enableLog: true,
+        debugShowCheckedModeBanner: true,
+        defaultTransition: Transition.cupertino,
+        home: const MyApp(),
+        navigatorKey: navigatorKey,
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.light,
       ),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.light,
     ),
   );
 }
