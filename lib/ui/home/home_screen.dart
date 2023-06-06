@@ -1,3 +1,5 @@
+import 'package:appdiphuot/common/const/dimen_constants.dart';
+import 'package:appdiphuot/model/push_notification.dart';
 import 'package:appdiphuot/ui/home/chat/page_chat_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_screen.dart';
 import 'package:appdiphuot/ui/home/home_controller.dart';
@@ -49,13 +51,11 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int _totalNotifications = 0;
   PushNotification? _notificationInfo;
   late final FirebaseMessaging _messaging;
 
   int selectedPos = 0;
   final _controller = Get.put(HomeController());
-
   double bottomNavBarHeight = 60;
 
   List<TabItem> tabItems = List.of([
@@ -101,6 +101,26 @@ class HomePageState extends State<HomePage> {
     _controller.getUserInfo();
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      debugPrint('FCM listen onMessageOpenedApp ${message.data}');
+      PushNotification notification = PushNotification(
+        title: message.notification?.title,
+        body: message.notification?.body,
+        dataTitle: message.data['title'],
+        dataBody: message.data['body'],
+      );
+      setState(() {
+        _notificationInfo = notification;
+      });
+    });
+
+    checkForInitialMessage();
+  }
+
+  checkForInitialMessage() async {
+    await Firebase.initializeApp();
+    RemoteMessage? message =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (message != null) {
       PushNotification notification = PushNotification(
         title: message.notification?.title,
         body: message.notification?.body,
@@ -110,32 +130,14 @@ class HomePageState extends State<HomePage> {
 
       setState(() {
         _notificationInfo = notification;
-        _totalNotifications++;
-      });
-    });
-
-    checkForInitialMessage();
-  }
-
-  checkForInitialMessage() async {
-    await Firebase.initializeApp();
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      PushNotification notification = PushNotification(
-        title: initialMessage.notification?.title,
-        body: initialMessage.notification?.body,
-      );
-      setState(() {
-        _notificationInfo = notification;
-        _totalNotifications++;
+        debugPrint(
+            "FCM checkForInitialMessage notification ${notification.toString()}");
       });
     }
   }
 
   Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    debugPrint("loitpp Handling a background message: ${message.messageId}");
+    debugPrint("FCM Handling a background message: ${message.messageId}");
   }
 
   void registerNotification() async {
@@ -152,33 +154,41 @@ class HomePageState extends State<HomePage> {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      debugPrint('loitpp User granted permission');
+      debugPrint('FCM User granted permission');
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        debugPrint('loitpp listen RemoteMessage ${message.data}');
-        debugPrint('loitpp listen ${message.notification?.title}');
-        debugPrint('loitpp listen ${message.notification?.body}');
+        debugPrint('FCM listen RemoteMessage ${message.data}');
+        debugPrint('FCM listen ${message.notification?.title}');
+        debugPrint('FCM listen ${message.notification?.body}');
         // Parse the message received
         PushNotification notification = PushNotification(
           title: message.notification?.title,
           body: message.notification?.body,
         );
 
-        showSimpleNotification(
-          Text(_notificationInfo?.title ?? "---"),
-          leading: NotificationBadge(totalNotifications: _totalNotifications),
-          subtitle: Text(_notificationInfo?.body ?? "---"),
-          background: ColorConstants.appColor,
-          duration: const Duration(seconds: 5),
-        );
-
         setState(() {
           _notificationInfo = notification;
-          _totalNotifications++;
-          debugPrint('loitpp _totalNotifications $_totalNotifications');
+          debugPrint('FCM _totalNotifications ${notification.toString()}');
         });
+
+        showSimpleNotification(
+          Text(
+            _notificationInfo?.title ?? "---",
+            style: const TextStyle(fontSize: DimenConstants.txtLarge),
+          ),
+          // leading: Text(
+          //   "$_totalNotifications",
+          //   style: const TextStyle(fontSize: DimenConstants.txtLarge),
+          // ),
+          subtitle: Text(
+            _notificationInfo?.body ?? "---",
+            style: const TextStyle(fontSize: DimenConstants.txtMedium),
+          ),
+          background: Colors.green,
+          duration: const Duration(seconds: 10),
+        );
       });
     } else {
-      debugPrint('loitpp User declined or has not accepted permission');
+      debugPrint('FCM User declined or has not accepted permission');
     }
   }
 
@@ -267,47 +277,6 @@ class HomePageState extends State<HomePage> {
           this.selectedPos = selectedPos ?? 0;
         });
       },
-    );
-  }
-}
-
-class PushNotification {
-  PushNotification({
-    this.title,
-    this.body,
-    this.dataTitle,
-    this.dataBody,
-  });
-
-  String? title;
-  String? body;
-  String? dataTitle;
-  String? dataBody;
-}
-
-class NotificationBadge extends StatelessWidget {
-  final int totalNotifications;
-
-  const NotificationBadge({super.key, required this.totalNotifications});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 40.0,
-      height: 40.0,
-      decoration: const BoxDecoration(
-        color: Colors.red,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            '$totalNotifications',
-            style: const TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
-      ),
     );
   }
 }
