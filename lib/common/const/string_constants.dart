@@ -52,6 +52,7 @@ class StringConstants {
   static const String endDay = "Ngày về: ";
   static const String totalTravelDay = "Tổng ngày đi: ";
   static const String noTrip = "Bạn chưa có chuyến đi nào";
+  static const String gotoDetailRouter = "Xem chi tiết chuyến đi";
 
   static const String avatarImgDefault = "https://img.myloview.com/stickers/default-avatar-profile-icon-vector-social-media-user-photo-700-205577532.jpg";
   static const String placeImgDefault = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
