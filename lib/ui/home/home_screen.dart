@@ -1,5 +1,3 @@
-import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:appdiphuot/model/push_notification.dart';
 import 'package:appdiphuot/ui/home/chat/page_chat_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_screen.dart';
 import 'package:appdiphuot/ui/home/home_controller.dart';
@@ -7,11 +5,8 @@ import 'package:appdiphuot/ui/home/noti/page_noti_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_screen.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:overlay_support/overlay_support.dart';
 
 import '../../base/base_stateful_state.dart';
 import '../../common/const/color_constants.dart';
@@ -51,9 +46,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  PushNotification? _notificationInfo;
-  late final FirebaseMessaging _messaging;
-
+  // PushNotification? _notificationInfo;
+  // late final FirebaseMessaging _messaging;
   int selectedPos = 0;
   final _controller = Get.put(HomeController());
   double bottomNavBarHeight = 60;
@@ -94,103 +88,103 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    registerNotification();
+    // registerNotification();
 
     _navigationController = CircularBottomNavigationController(selectedPos);
     _setupListen();
     _controller.getUserInfo();
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      debugPrint('FCM listen onMessageOpenedApp ${message.data}');
-      PushNotification notification = PushNotification(
-        title: message.notification?.title,
-        body: message.notification?.body,
-        dataTitle: message.data['title'],
-        dataBody: message.data['body'],
-      );
-      setState(() {
-        _notificationInfo = notification;
-      });
-    });
-
-    checkForInitialMessage();
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   debugPrint('FCM listen onMessageOpenedApp ${message.data}');
+    //   PushNotification notification = PushNotification(
+    //     title: message.notification?.title,
+    //     body: message.notification?.body,
+    //     dataTitle: message.data['title'],
+    //     dataBody: message.data['body'],
+    //   );
+    //   setState(() {
+    //     _notificationInfo = notification;
+    //   });
+    // });
+    //
+    // checkForInitialMessage();
   }
 
-  checkForInitialMessage() async {
-    await Firebase.initializeApp();
-    RemoteMessage? message =
-        await FirebaseMessaging.instance.getInitialMessage();
-    if (message != null) {
-      PushNotification notification = PushNotification(
-        title: message.notification?.title,
-        body: message.notification?.body,
-        dataTitle: message.data['title'],
-        dataBody: message.data['body'],
-      );
+  // checkForInitialMessage() async {
+  //   await Firebase.initializeApp();
+  //   RemoteMessage? message =
+  //       await FirebaseMessaging.instance.getInitialMessage();
+  //   if (message != null) {
+  //     PushNotification notification = PushNotification(
+  //       title: message.notification?.title,
+  //       body: message.notification?.body,
+  //       dataTitle: message.data['title'],
+  //       dataBody: message.data['body'],
+  //     );
+  //
+  //     setState(() {
+  //       _notificationInfo = notification;
+  //       debugPrint(
+  //           "FCM checkForInitialMessage notification ${notification.toString()}");
+  //     });
+  //   }
+  // }
 
-      setState(() {
-        _notificationInfo = notification;
-        debugPrint(
-            "FCM checkForInitialMessage notification ${notification.toString()}");
-      });
-    }
-  }
+  // Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  //   debugPrint("FCM Handling a background message: ${message.messageId}");
+  // }
 
-  Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    debugPrint("FCM Handling a background message: ${message.messageId}");
-  }
-
-  void registerNotification() async {
-    await Firebase.initializeApp();
-    _messaging = FirebaseMessaging.instance;
-
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      provisional: false,
-      sound: true,
-    );
-
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      debugPrint('FCM User granted permission');
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        debugPrint('FCM listen RemoteMessage ${message.data}');
-        debugPrint('FCM listen ${message.notification?.title}');
-        debugPrint('FCM listen ${message.notification?.body}');
-        // Parse the message received
-        PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
-        );
-
-        setState(() {
-          _notificationInfo = notification;
-          debugPrint('FCM _totalNotifications ${notification.toString()}');
-        });
-
-        showSimpleNotification(
-          Text(
-            _notificationInfo?.title ?? "---",
-            style: const TextStyle(fontSize: DimenConstants.txtLarge),
-          ),
-          // leading: Text(
-          //   "$_totalNotifications",
-          //   style: const TextStyle(fontSize: DimenConstants.txtLarge),
-          // ),
-          subtitle: Text(
-            _notificationInfo?.body ?? "---",
-            style: const TextStyle(fontSize: DimenConstants.txtMedium),
-          ),
-          background: Colors.green,
-          duration: const Duration(seconds: 10),
-        );
-      });
-    } else {
-      debugPrint('FCM User declined or has not accepted permission');
-    }
-  }
+  // void registerNotification() async {
+  //   await Firebase.initializeApp();
+  //   _messaging = FirebaseMessaging.instance;
+  //
+  //   NotificationSettings settings = await _messaging.requestPermission(
+  //     alert: true,
+  //     badge: true,
+  //     provisional: false,
+  //     sound: true,
+  //   );
+  //
+  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //
+  //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+  //     debugPrint('FCM User granted permission');
+  //     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //       debugPrint('FCM listen RemoteMessage ${message.data}');
+  //       debugPrint('FCM listen ${message.notification?.title}');
+  //       debugPrint('FCM listen ${message.notification?.body}');
+  //       // Parse the message received
+  //       PushNotification notification = PushNotification(
+  //         title: message.notification?.title,
+  //         body: message.notification?.body,
+  //       );
+  //
+  //       setState(() {
+  //         _notificationInfo = notification;
+  //         debugPrint('FCM _totalNotifications ${notification.toString()}');
+  //       });
+  //
+  //       showSimpleNotification(
+  //         Text(
+  //           _notificationInfo?.title ?? "---",
+  //           style: const TextStyle(fontSize: DimenConstants.txtLarge),
+  //         ),
+  //         // leading: Text(
+  //         //   "$_totalNotifications",
+  //         //   style: const TextStyle(fontSize: DimenConstants.txtLarge),
+  //         // ),
+  //         subtitle: Text(
+  //           _notificationInfo?.body ?? "---",
+  //           style: const TextStyle(fontSize: DimenConstants.txtMedium),
+  //         ),
+  //         background: Colors.green,
+  //         duration: const Duration(seconds: 10),
+  //       );
+  //     });
+  //   } else {
+  //     debugPrint('FCM User declined or has not accepted permission');
+  //   }
+  // }
 
   void _setupListen() {
     _controller.appLoading.listen((appLoading) {});
