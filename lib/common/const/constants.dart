@@ -22,4 +22,7 @@ class Constants {
     debugPrint("iLoveYou $alice");
     return alice;
   }
+
+  static const String detailTrip = "detailTrip";
+
 }

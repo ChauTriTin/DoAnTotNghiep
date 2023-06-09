@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
@@ -12,6 +15,8 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
+import '../../../common/const/constants.dart';
+import '../../../model/trip.dart';
 import '../../../view/profile_bar_widget.dart';
 
 class PageHomeScreen extends StatefulWidget {
@@ -105,6 +110,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     var title = "";
     var id = "";
     var listTrip = _controller.listTripWithState;
+    Trip? trip = listTrip[i];
     if (listTrip.isNotEmpty) {
       imageTrip = listTrip[i].listImg?[0] ?? "";
       title = listTrip[i].title ?? "";
@@ -137,8 +143,10 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
           )
         ]),
         onTap: () {
-          _controller.idItemDetail = id;
-          Get.to(const DetailRouterScreen());
+          log("tripData: $trip");
+          Get.to(() => const DetailRouterScreen(), arguments: [
+            {Constants.detailTrip: jsonEncode(trip)},
+          ]);
         });
   }
 

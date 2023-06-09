@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/home/home/detail/page_detail_router_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
@@ -11,7 +16,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
 import '../../../../view/profile_bar_widget.dart';
-import '../page_home_controller.dart';
 
 class DetailRouterScreen extends StatefulWidget {
   const DetailRouterScreen({Key? key}) : super(key: key);
@@ -21,23 +25,27 @@ class DetailRouterScreen extends StatefulWidget {
 }
 
 class _DetailRouterScreenState extends State<DetailRouterScreen> {
-  final PageHomeController _controllerHome = Get.find();
   final DetailRouterController _controller = Get.put(DetailRouterController());
+
+  Trip? tripData;
 
   @override
   void initState() {
     super.initState();
-    _controller.getUserInfo(_controllerHome.listTrips
-            .firstWhere((p0) => p0.id == _controllerHome.idItemDetail)
-            .userIdHost ??
-        "");
+    var data = Get.arguments[0][Constants.detailTrip];
+    log("initState: tripData: ${data.toString()}");
+    try {
+      tripData = Trip.fromJson(jsonDecode(data ?? ""));
+    }catch(e){
+      log("Get trip data ex: $e");
+    }
+
+    _controller.getUserInfo(tripData?.userIdHost ?? "");
   }
 
   List<Widget> listImage() {
     var list = <Widget>[];
-    var images = _controllerHome.listTrips
-        .firstWhere((p0) => p0.id == _controllerHome.idItemDetail)
-        .listImg;
+    var images = tripData?.listImg;
     images?.forEach((element) {
       list.add(CachedMemoryImage(
           fit: BoxFit.cover, uniqueKey: element, base64: element));
@@ -56,13 +64,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
         print('Page changed: $value');
       },
       autoPlayInterval: 3000,
-      isLoop: _controllerHome.listTrips
-                  .firstWhere((p0) => p0.id == _controllerHome.idItemDetail)
-                  .listImg!
-                  .length >
-              1
-          ? true
-          : false,
+      isLoop: (tripData?.listImg?.length ?? 0) > 1 ? true : false,
       children: listImage(),
     );
   }

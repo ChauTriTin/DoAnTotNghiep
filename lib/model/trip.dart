@@ -6,6 +6,12 @@ class Trip {
   String? id;
   String? userIdHost;
   List<String>? listIdMember;
+
+  @override
+  String toString() {
+    return 'Trip{id: $id, userIdHost: $userIdHost, listIdMember: $listIdMember, title: $title, des: $des, listImg: $listImg, placeStart: $placeStart, placeEnd: $placeEnd, listPlace: $listPlace, timeStart: $timeStart, timeEnd: $timeEnd, require: $require, isPublic: $isPublic, isComplete: $isComplete}';
+  }
+
   String? title;
   String? des;
   List<String>? listImg;
