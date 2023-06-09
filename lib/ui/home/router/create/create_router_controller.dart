@@ -143,7 +143,7 @@ class CreateRouterController extends BaseController {
         ],
         title: "Example",
         body: "Token message send using Flutter FCM Wrapper",
-        androidChannelID: "example",
+        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );
       debugPrint("FCM sendTopicMessage result $result");

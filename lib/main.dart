@@ -85,7 +85,6 @@ class Messaging {
       dataBody: message.data['body'],
     );
     debugPrint('FCM main Handling a notification ${notification.toString()}');
-    //TODO loitp
     Get.dialog(
       AlertDialog(
         title: Text(notification.title ?? ""),
@@ -99,6 +98,7 @@ class Messaging {
           ),
         ],
       ),
+      barrierDismissible: false,
     );
   }
 
