@@ -24,5 +24,4 @@ class Constants {
   }
 
   static const String detailTrip = "detailTrip";
-
 }
