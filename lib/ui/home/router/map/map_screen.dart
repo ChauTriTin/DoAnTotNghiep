@@ -6,7 +6,6 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
@@ -45,6 +44,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     super.initState();
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
+    _controller.getUserInfo();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
   }
 
@@ -381,8 +381,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Xe tôi hư");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorConstants.appColor,
@@ -404,8 +404,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Tôi lạc đường");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
@@ -427,8 +427,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Tôi muốn dừng chân");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -450,8 +450,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Tôi gặp trục trặc");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.cyan,
@@ -473,8 +473,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Cần người giúp khẩn cấp");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
@@ -525,8 +525,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Có cảnh sát");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorConstants.appColor,
@@ -548,8 +548,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Đường xấu");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
@@ -571,8 +571,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Sắp có mưa");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -594,8 +594,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Giữ khoảng cách");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.cyan,
@@ -617,8 +617,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
                 ElevatedButton(
                   onPressed: () {
-                    //TODO iplm
                     Get.back(); //close this sheet
+                    _controller.postFCM("Dừng khẩn cấp");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,

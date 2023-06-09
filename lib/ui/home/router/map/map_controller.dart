@@ -1,8 +1,14 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/user.dart';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
@@ -13,6 +19,7 @@ class MapController extends BaseController {
     debugPrint("MapController $s");
   }
 
+  var userData = UserData().obs;
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
@@ -46,8 +53,42 @@ class MapController extends BaseController {
         LatLng(pEnd.lat ?? Place.defaultLat, pEnd.long ?? Place.defaultLong);
 
     _genRouter();
-    _genDistance();
-    _genDuration();
+    //TODO loitp
+    // _genDistance();
+    // _genDuration();
+  }
+
+  String getName() {
+    return userData.value.name ?? "";
+  }
+
+  String getAvatar() {
+    String avatarUrl = userData.value.avatar ?? "";
+    if (avatarUrl.isEmpty) {
+      return StringConstants.avatarImgDefault;
+    } else {
+      return avatarUrl;
+    }
+  }
+
+  Future<void> getUserInfo() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      FirebaseHelper.collectionReferenceUser
+          .doc(uid)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? userMap =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (userMap == null || userMap.data() == null) return;
+
+        var user = UserData.fromJson((userMap).data()!);
+        userData.value = user;
+        debugPrint("getUserInfo success: ${user.toString()}");
+      });
+    } catch (e) {
+      debugPrint("getUserInfo get user info fail: $e");
+    }
   }
 
   String getIdMarkerStop(int position) {
@@ -160,5 +201,32 @@ class MapController extends BaseController {
     String durationInMinutesOrHours = durationBetween.text;
     debugPrint(
         ">>>_genDuration seconds $seconds, durationInMinutesOrHours $durationInMinutesOrHours");
+  }
+
+  Future<void> postFCM(
+    String body,
+  ) async {
+    FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
+      apiKey:
+          "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL",
+      enableLog: true,
+      enableServerRespondLog: true,
+    );
+    try {
+      //TODO loitp
+      Map<String, dynamic> result =
+          await flutterFCMWrapper.sendMessageByTokenID(
+        userRegistrationTokens: [
+          "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh"
+        ],
+        title: "Thông báo khẩn cấp từ ${getName()}",
+        body: body,
+        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      );
+      debugPrint("FCM sendTopicMessage result $result");
+    } catch (e) {
+      debugPrint("FCM sendTopicMessage $e");
+    }
   }
 }
