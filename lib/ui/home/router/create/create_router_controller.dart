@@ -12,6 +12,7 @@ import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
@@ -132,6 +133,25 @@ class CreateRouterController extends BaseController {
   }
 
   Future<void> createRouter() async {
+    //TODO loitp
+    FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
+      apiKey:
+          "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL",
+      enableLog: true,
+      enableServerRespondLog: true,
+    );
+    try {
+      String result = await flutterFCMWrapper.sendTopicMessage(
+          topicName: "example",
+          title: "Example",
+          body: "Topic message send using Flutter FCM Wrapper",
+          androidChannelID: "example",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK");
+      debugPrint("sendTopicMessage result $result");
+    } catch (e) {
+      debugPrint("sendTopicMessage $e");
+    }
+
     setAppLoading(true, "Loading", TypeApp.createRouter);
 
     String sTitle = tecTitle.text.toString().trim();

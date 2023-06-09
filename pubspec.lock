@@ -486,6 +486,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.12"
+  flutter_fcm_wrapper:
+    dependency: "direct main"
+    description:
+      name: flutter_fcm_wrapper
+      sha256: "6a6156ce20a9654e2ded34acad89e2e4bdaceb59359839c40a5ad7d868e2caf7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   flutter_image_slideshow:
     dependency: "direct main"
     description:

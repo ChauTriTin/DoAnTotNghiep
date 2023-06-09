@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
 import 'package:get/get.dart';
@@ -84,6 +82,7 @@ class Messaging {
       dataBody: message.data['body'],
     );
     debugPrint('FCM main Handling a notification ${notification.toString()}');
+    //TODO loitp
   }
 
   @pragma('vm:entry-point')
