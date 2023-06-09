@@ -10,10 +10,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../db/firebase_helper.dart';
-import '../../../model/place.dart';
 import '../../../model/trip.dart';
 import '../../../model/user.dart';
-import '../../../util/log_dog_utils.dart';
 import '../../../util/shared_preferences_util.dart';
 import '../../../util/ui_utils.dart';
 
@@ -31,12 +29,7 @@ class PageUserController extends BaseController {
   var tripParticipatedCount = 0.obs;
   var totalKm = 0.obs;
 
-  var userData = UserData(
-    "",
-    "",
-    "",
-    "",
-  ).obs;
+  var userData = UserData().obs;
 
   var trips = <Trip>[].obs;
   var tripsHost = <Trip>[].obs;
@@ -77,7 +70,7 @@ class PageUserController extends BaseController {
   }
 
   String getAvatar() {
-    String avatarUrl = userData.value.avatar;
+    String avatarUrl = userData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
     } else {
@@ -86,7 +79,7 @@ class PageUserController extends BaseController {
   }
 
   String getName() {
-    return userData.value.name;
+    return userData.value.name ?? "";
   }
 
   Future<void> getTrip() async {
@@ -126,9 +119,9 @@ class PageUserController extends BaseController {
     try {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
       log("getTripHost: userid $uid");
-      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
-          FirebaseHelper.userIdHost,
-          isEqualTo: uid).snapshots();
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.userIdHost, isEqualTo: uid)
+          .snapshots();
 
       var routerSnapshots =
           routerStream.map((querySnapshot) => querySnapshot.docs);
@@ -189,7 +182,7 @@ class PageUserController extends BaseController {
 
   void _uploadAvatarToFirebase() async {
     try {
-      String fileName = userData.value.uid;
+      String fileName = userData.value.uid ?? "";
       Reference reference = _firebaseStorage.ref().child("avatars/$fileName");
       UploadTask uploadTask = reference.putFile(_selectedImage.value!);
       TaskSnapshot snapshot = await uploadTask;

@@ -99,8 +99,11 @@ class RegisterController extends BaseController {
 
   Future<void> saveUserInfoToFirebaseDataStore(User user) async {
     try {
-      var userData =
-          UserData(name.value, user.uid, email.value, "");
+      var userData = UserData();
+      userData.name = name.value;
+      userData.uid = user.uid ?? "";
+      userData.email = email.value;
+      userData.avatar = "";
 
       log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
       _users

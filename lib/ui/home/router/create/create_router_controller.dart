@@ -17,12 +17,7 @@ import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 class CreateRouterController extends BaseController {
-  var userData = UserData(
-    "",
-    "",
-    "",
-    "",
-  ).obs;
+  var userData = UserData().obs;
   final id = DateTime.now().microsecondsSinceEpoch.toString();
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
@@ -245,7 +240,9 @@ class CreateRouterController extends BaseController {
     trip.id = id;
     trip.userIdHost = userData.value.uid;
     trip.listIdMember = <String>[];
-    trip.listIdMember?.add(userData.value.uid);
+    if (userData.value.uid?.isNotEmpty == true) {
+      trip.listIdMember?.add(userData.value.uid ?? "");
+    }
     trip.title = sTitle;
     trip.des = sDescription;
     trip.listImg = <String>[];
@@ -307,11 +304,11 @@ class CreateRouterController extends BaseController {
   }
 
   String getName() {
-    return userData.value.name;
+    return userData.value.name ?? "";
   }
 
   String getAvatar() {
-    String avatarUrl = userData.value.avatar;
+    String avatarUrl = userData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
     } else {

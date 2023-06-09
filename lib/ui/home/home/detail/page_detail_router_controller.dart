@@ -11,12 +11,7 @@ class DetailRouterController extends BaseController {
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
 
-  var userData = UserData(
-    "",
-    "",
-    "",
-    "",
-  ).obs;
+  var userData = UserData().obs;
 
   Future<void> getUserInfo(String uid) async {
     try {
@@ -37,7 +32,7 @@ class DetailRouterController extends BaseController {
   }
 
   String getAvatar() {
-    String avatarUrl = userData.value.avatar;
+    String avatarUrl = userData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
     } else {
@@ -46,7 +41,7 @@ class DetailRouterController extends BaseController {
   }
 
   String getNameLeader() {
-    String name = userData.value.name;
+    String name = userData.value.name ?? "";
     if (name.isEmpty) {
       return "";
     } else {
