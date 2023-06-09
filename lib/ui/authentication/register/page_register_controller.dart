@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -104,6 +105,8 @@ class RegisterController extends BaseController {
       userData.uid = user.uid ?? "";
       userData.email = email.value;
       userData.avatar = "";
+      userData.fcmToken = await SharedPreferencesUtil.getString(
+          SharedPreferencesUtil.KEY_FCM_TOKEN);
 
       log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
       _users
