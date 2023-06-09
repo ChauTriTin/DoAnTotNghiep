@@ -128,7 +128,7 @@ class CreateRouterController extends BaseController {
   }
 
   Future<void> createRouter() async {
-    //TODO loitp
+    //TODO
     FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
       apiKey:
           "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL",
@@ -136,15 +136,19 @@ class CreateRouterController extends BaseController {
       enableServerRespondLog: true,
     );
     try {
-      String result = await flutterFCMWrapper.sendTopicMessage(
-          topicName: "example",
-          title: "Example",
-          body: "Topic message send using Flutter FCM Wrapper",
-          androidChannelID: "example",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK");
-      debugPrint("sendTopicMessage result $result");
+      Map<String, dynamic> result =
+          await flutterFCMWrapper.sendMessageByTokenID(
+        userRegistrationTokens: [
+          "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh"
+        ],
+        title: "Example",
+        body: "Token message send using Flutter FCM Wrapper",
+        androidChannelID: "example",
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      );
+      debugPrint("FCM sendTopicMessage result $result");
     } catch (e) {
-      debugPrint("sendTopicMessage $e");
+      debugPrint("FCM sendTopicMessage $e");
     }
 
     setAppLoading(true, "Loading", TypeApp.createRouter);

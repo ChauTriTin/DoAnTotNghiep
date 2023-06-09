@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
@@ -7,7 +9,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model/push_notification.dart';
 import 'ui/splash/page_splash_screen.dart';
@@ -85,6 +86,20 @@ class Messaging {
     );
     debugPrint('FCM main Handling a notification ${notification.toString()}');
     //TODO loitp
+    Get.dialog(
+      AlertDialog(
+        title: Text(notification.title ?? ""),
+        content: Text(notification.body ?? ""),
+        actions: [
+          TextButton(
+            child: const Text(StringConstants.confirm),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @pragma('vm:entry-point')
@@ -99,7 +114,7 @@ class Messaging {
           if (token != null) {
             SharedPreferencesUtil.setString(
                 SharedPreferencesUtil.KEY_FCM_TOKEN, token);
-            debugPrint('FCM main token  $token.');
+            debugPrint('FCM main token  $token');
             Messaging.token = token;
           }
         },
