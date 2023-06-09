@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model/push_notification.dart';
 import 'ui/splash/page_splash_screen.dart';
@@ -95,6 +97,8 @@ class Messaging {
         onNotificationPressed: (Map<String, dynamic> data) {},
         onTokenChanged: (String? token) {
           if (token != null) {
+            SharedPreferencesUtil.setString(
+                SharedPreferencesUtil.KEY_FCM_TOKEN, token);
             debugPrint('FCM main token  $token.');
             Messaging.token = token;
           }

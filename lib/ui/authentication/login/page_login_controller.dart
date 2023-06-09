@@ -146,6 +146,8 @@ class ControllerLogin extends BaseController {
       userData.uid = user.uid ?? "";
       userData.email = user.email ?? "";
       userData.avatar = user.photoURL ?? "";
+      userData.fcmToken = await SharedPreferencesUtil.getString(
+          SharedPreferencesUtil.KEY_FCM_TOKEN);
 
       log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
       _users
