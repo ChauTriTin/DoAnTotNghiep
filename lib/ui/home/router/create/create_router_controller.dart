@@ -12,16 +12,12 @@ import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 class CreateRouterController extends BaseController {
-  var userData = UserData(
-    "",
-    "",
-    "",
-    "",
-  ).obs;
+  var userData = UserData().obs;
   final id = DateTime.now().microsecondsSinceEpoch.toString();
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
@@ -132,6 +128,25 @@ class CreateRouterController extends BaseController {
   }
 
   Future<void> createRouter() async {
+    //TODO loitp
+    FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
+      apiKey:
+          "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL",
+      enableLog: true,
+      enableServerRespondLog: true,
+    );
+    try {
+      String result = await flutterFCMWrapper.sendTopicMessage(
+          topicName: "example",
+          title: "Example",
+          body: "Topic message send using Flutter FCM Wrapper",
+          androidChannelID: "example",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK");
+      debugPrint("sendTopicMessage result $result");
+    } catch (e) {
+      debugPrint("sendTopicMessage $e");
+    }
+
     setAppLoading(true, "Loading", TypeApp.createRouter);
 
     String sTitle = tecTitle.text.toString().trim();
@@ -225,7 +240,9 @@ class CreateRouterController extends BaseController {
     trip.id = id;
     trip.userIdHost = userData.value.uid;
     trip.listIdMember = <String>[];
-    trip.listIdMember?.add(userData.value.uid);
+    if (userData.value.uid?.isNotEmpty == true) {
+      trip.listIdMember?.add(userData.value.uid ?? "");
+    }
     trip.title = sTitle;
     trip.des = sDescription;
     trip.listImg = <String>[];
@@ -287,11 +304,11 @@ class CreateRouterController extends BaseController {
   }
 
   String getName() {
-    return userData.value.name;
+    return userData.value.name ?? "";
   }
 
   String getAvatar() {
-    String avatarUrl = userData.value.avatar;
+    String avatarUrl = userData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
     } else {

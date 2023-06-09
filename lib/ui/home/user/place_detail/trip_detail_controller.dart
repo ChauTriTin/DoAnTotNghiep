@@ -15,25 +15,11 @@ class TripDetailController extends BaseController {
       FirebaseFirestore.instance.collection('users');
 
   var place = Place().obs;
-  var userData = UserData(
-    "",
-    "",
-    "",
-    "",
-  ).obs;
-
+  var userData = UserData().obs;
   var usersParticipated = <UserData>[].obs;
-
-  var userHostTrip = UserData(
-    "",
-    "",
-    "",
-    "",
-  ).obs;
-
+  var userHostTrip = UserData().obs;
   var tripParticipatedCount = 0.obs;
   var totalKm = 0.obs;
-
   var tripData = Trip().obs;
 
   void setTripData(Trip data) {
@@ -84,11 +70,11 @@ class TripDetailController extends BaseController {
   }
 
   String getName() {
-    return userData.value.name;
+    return userData.value.name ?? "";
   }
 
   String getAvatar() {
-    String avatarUrl = userData.value.avatar;
+    String avatarUrl = userData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
     } else {
@@ -103,7 +89,7 @@ class TripDetailController extends BaseController {
       var tempUserList = <UserData>[];
       for (var uid in tripData.value.listIdMember!) {
         DocumentSnapshot userSnapshot = await _users.doc(uid).get();
-        if(!userSnapshot.exists){
+        if (!userSnapshot.exists) {
           continue;
         }
 

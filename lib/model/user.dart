@@ -1,35 +1,33 @@
-import 'package:get/get.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-import '../common/const/string_constants.dart';
-
-part 'user.g.dart';
-
-@JsonSerializable()
 class UserData {
-  var name = "";
-  var uid = "";
-  var email = "";
-  var avatar = "";
+  String? name;
+  String? uid;
+  String? email;
+  String? avatar;
+  String? fcmToken;
 
-  String getAvatar() {
-    if (avatar == null || avatar?.isEmpty == true) {
-      return avatar!;
-    }
-    else {
-      return StringConstants.avatarImgDefault;
-    }
+  UserData({
+    this.name,
+    this.uid,
+    this.email,
+    this.avatar,
+    this.fcmToken,
+  });
+
+  UserData.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    uid = json['uid'];
+    email = json['email'];
+    avatar = json['avatar'];
+    fcmToken = json['fcmToken'];
   }
 
-  UserData(this.name, this.uid, this.email, this.avatar);
-
-  factory UserData.fromJson(Map<String, dynamic> json) =>
-      _$UserDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UserDataToJson(this);
-
-  @override
-  String toString() {
-    return 'UserData{name: $name, uid: $uid, email: $email, avatar: $avatar}';
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['uid'] = uid;
+    data['email'] = email;
+    data['avatar'] = avatar;
+    data['fcmToken'] = fcmToken;
+    return data;
   }
 }

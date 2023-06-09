@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import 'package:google_maps_place_picker_mb/providers/place_provider.dart';
 
 import '../../../../common/const/dimen_constants.dart';
 
@@ -47,7 +48,7 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
   Widget _buildBodyView() {
     var useCurrentLocation = widget.defaultPlace?.isDefaultPlace();
     return PlacePicker(
-      apiKey: Constants.googleMapAPIKey,
+      apiKey: Constants.iLoveYou(),
       onPlacePicked: (result) {
         Place p = Place();
         p.lat = result.geometry?.location.lat ?? Place.defaultLat;

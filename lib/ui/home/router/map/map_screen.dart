@@ -43,7 +43,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   @override
   void initState() {
     super.initState();
-    GoogleMapsDirections.init(googleAPIKey: Constants.googleMapAPIKey);
+    GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
     _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
   }

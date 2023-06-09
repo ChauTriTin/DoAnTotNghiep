@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/src/widgets/form.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -17,7 +16,8 @@ import '../../home/home_screen.dart';
 class ControllerLogin extends BaseController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
   var email = "".obs;
   var password = "".obs;
 
@@ -54,7 +54,8 @@ class ControllerLogin extends BaseController {
         return;
       }
 
-      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
         email: emailStr,
         password: password.value,
       );
@@ -63,8 +64,10 @@ class ControllerLogin extends BaseController {
       if (user != null) {
         setAppLoading(false, "Loading", TypeApp.login);
 
-        Dog.d("signInWithEmailAndPassword: SignIn successfully ${user.toString()}");
-        UIUtils.showSnackBar(StringConstants.signin, StringConstants.signInSuccess);
+        Dog.d(
+            "signInWithEmailAndPassword: SignIn successfully ${user.toString()}");
+        UIUtils.showSnackBar(
+            StringConstants.signin, StringConstants.signInSuccess);
 
         SharedPreferencesUtil.setUID(user.uid);
         Get.offAll(const HomeScreen());
@@ -99,19 +102,22 @@ class ControllerLogin extends BaseController {
       setAppLoading(true, "Loading", TypeApp.login);
 
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
       final User? user = userCredential.user;
 
       if (user != null) {
         Dog.d("signInWithGoogle: SignIn successfully ${user.toString()}");
-        UIUtils.showSnackBar(StringConstants.signin, StringConstants.signInSuccess);
+        UIUtils.showSnackBar(
+            StringConstants.signin, StringConstants.signInSuccess);
 
         SharedPreferencesUtil.setUID(user.uid);
         saveUserInfoToFirebaseDataStore(user);
@@ -135,8 +141,13 @@ class ControllerLogin extends BaseController {
     try {
       if (await isUserExist(user.uid)) return;
 
-      var userData = UserData(user.displayName ?? "", user.uid,
-          user.email ?? "", user.photoURL ?? "");
+      var userData = UserData();
+      userData.name = user.displayName ?? "";
+      userData.uid = user.uid ?? "";
+      userData.email = user.email ?? "";
+      userData.avatar = user.photoURL ?? "";
+      userData.fcmToken = await SharedPreferencesUtil.getString(
+          SharedPreferencesUtil.KEY_FCM_TOKEN);
 
       log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
       _users
