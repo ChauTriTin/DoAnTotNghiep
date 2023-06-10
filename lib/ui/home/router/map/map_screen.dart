@@ -7,6 +7,7 @@ import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
@@ -332,6 +333,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
+            if (kDebugMode)
+              Container(
+                color: Colors.red,
+                child: Text(
+                  "${userData.lat}-${userData.long}",
+                  style: const TextStyle(
+                    fontSize: DimenConstants.txtTiny,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
           ],
         ),
       );
