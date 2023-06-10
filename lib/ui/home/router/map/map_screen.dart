@@ -30,11 +30,6 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
-  BitmapDescriptor? markerIconPlaceStart;
-  BitmapDescriptor? markerIconPlaceEnd;
-  List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
-  List<BitmapDescriptor?> listMarkerMember = <BitmapDescriptor?>[];
-  int countCreateMarker = 0;
 
   @override
   void initState() {
@@ -104,25 +99,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           currentUserData.uid == null ||
           currentUserData.uid?.isEmpty == true ||
           listMember.isEmpty) {
-        return Container(
-          width: Get.width,
-          height: Get.height,
-          color: ColorConstants.appColorBkg,
-          child: const Center(
-            child: CupertinoActivityIndicator(
-              radius: 20.0,
-              color: ColorConstants.appColor,
-            ),
-          ),
-        );
-      }
-      if (countCreateMarker <= 0) {
-        createMarker(context);
-        countCreateMarker++;
-      }
-      var isGenAllMarkerDone = _controller.isGenAllMarkerDone.value;
-      debugPrint("_buildMapView isGenAllMarkerDone $isGenAllMarkerDone");
-      if (isGenAllMarkerDone == false) {
         return Container(
           width: Get.width,
           height: Get.height,
@@ -214,12 +190,17 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     // debugPrint(">>>>_createMaker listStop.length ${listStop.length}");
 
     createMarkerMember() {
-      Future<Marker> create(int index, String markerId, LatLng position) async {
-        var iconUrl = StringConstants.linkImgMinaCrying;
-        var request = await http.get(Uri.parse(iconUrl));
+      Future<Marker> create(
+        int index,
+        String avt,
+        String markerId,
+        LatLng position,
+      ) async {
+        var request = await http.get(Uri.parse(avt));
         var bytes = request.bodyBytes;
         LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
         return Marker(
+          //TODO loitp set size
           icon: BitmapDescriptor.fromBytes(bytes.buffer.asUint8List(),
               size: const Size(50, 50)),
           markerId: MarkerId(lastMapPositionPoints.toString()),
@@ -234,6 +215,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         debugPrint(">>>_createMaker createMarkerMember i $i -> ${member.name}");
         var marker = create(
           i,
+          member.getAvatar(),
           "$i${member.uid}",
           LatLng(member.lat ?? defaultLat, member.long ?? defaultLong),
         );
@@ -256,121 +238,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     createMarkerPlaceStop();
 
     createMarkerMember();
-
-    // var iconUrl = StringConstants.linkImgMinaCrying;
-    // var request = http.get(Uri.parse(iconUrl));
-    // request.then((value) {
-    //   var bytes = value.bodyBytes;
-    //   LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
-    //   listMarkerResult.add(Marker(
-    //     icon: BitmapDescriptor.fromBytes(bytes.buffer.asUint8List()),
-    //     markerId: MarkerId(lastMapPositionPoints.toString()),
-    //     position: lastMapPositionPoints,
-    //   ));
-    //
-    //   debugPrint(
-    //       ">>>>_createMaker listMarkerResult ${listMarkerResult.toString()}");
-    //
-    //   listMarkerGoogleMap = listMarkerResult.toSet();
-    //   setState(() {
-    //     listMarkerGoogleMap;
-    //   });
-    // });
-  }
-
-  void createMarker(BuildContext context) {
-    Future<void> createMarkerPlaceStart(BuildContext context) async {
-      if (markerIconPlaceStart == null) {
-        final ImageConfiguration imageConfiguration =
-            createLocalImageConfiguration(context,
-                size: const Size.square(55.0));
-        var bitmap = await BitmapDescriptor.fromAssetImage(
-          imageConfiguration,
-          'assets/images/ic_marker_start.png',
-        );
-        debugPrint("done createMarkerPlaceStart");
-        setState(() {
-          markerIconPlaceStart = bitmap;
-        });
-        _controller.isGenDoneMarkerIconPlaceStart.value = true;
-        _controller.checkIsGenAllMarkerDone();
-      }
-    }
-
-    Future<void> createMarkerPlaceEnd(BuildContext context) async {
-      if (markerIconPlaceEnd == null) {
-        final ImageConfiguration imageConfiguration =
-            createLocalImageConfiguration(context,
-                size: const Size.square(55.0));
-        var bitmap = await BitmapDescriptor.fromAssetImage(
-          imageConfiguration,
-          'assets/images/ic_marker_end.png',
-        );
-        setState(() {
-          markerIconPlaceEnd = bitmap;
-        });
-        debugPrint("done createMarkerPlaceEnd");
-        _controller.isGenDoneMarkerIconPlaceEnd.value = true;
-        _controller.checkIsGenAllMarkerDone();
-      }
-    }
-
-    Future<void> createMarkerPlaceStop(BuildContext context) async {
-      Future<BitmapDescriptor> create() async {
-        final ImageConfiguration imageConfiguration =
-            createLocalImageConfiguration(context,
-                size: const Size.square(55.0));
-        var bitmap = await BitmapDescriptor.fromAssetImage(
-          imageConfiguration,
-          'assets/images/ic_marker_stop.png',
-        );
-        return bitmap;
-      }
-
-      for (var element in _controller.listPlaceStop) {
-        debugPrint(">>>createMarkerPlaceStop element ${element.name}");
-        var bmp = await create();
-        listMarkerIconPlaceStop.add(bmp);
-      }
-
-      debugPrint("done createMarkerPlaceStop");
-      setState(() {
-        listMarkerIconPlaceStop;
-      });
-      _controller.isGenDoneListMarkerIconPlaceStop.value = true;
-      _controller.checkIsGenAllMarkerDone();
-    }
-
-    Future<void> createMarkerMember(BuildContext context) async {
-      Future<BitmapDescriptor> create() async {
-        final ImageConfiguration imageConfiguration =
-            createLocalImageConfiguration(context,
-                size: const Size.square(55.0));
-        var bitmap = await BitmapDescriptor.fromAssetImage(
-          imageConfiguration,
-          'assets/images/ic_x.png',
-        );
-        return bitmap;
-      }
-
-      for (var element in _controller.listMember) {
-        debugPrint(">>>createMarkerMember element ${element.name}");
-        var bmp = await create();
-        listMarkerMember.add(bmp);
-      }
-
-      debugPrint("done createMarkerMember");
-      setState(() {
-        listMarkerMember;
-      });
-      _controller.isGenDoneListMarkerMember.value = true;
-      _controller.checkIsGenAllMarkerDone();
-    }
-
-    createMarkerPlaceStart(context);
-    createMarkerPlaceEnd(context);
-    createMarkerPlaceStop(context);
-    createMarkerMember(context);
   }
 
   Widget _buildHelperView() {
@@ -479,11 +346,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         return Container();
       }
 
-      //update the marker
-      if (_controller.isGenAllMarkerDone.value) {
-        //TODO
-        // _createMaker();
-      }
+      //TODO update position marker
+      // _createMaker();
 
       return Container(
         // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),

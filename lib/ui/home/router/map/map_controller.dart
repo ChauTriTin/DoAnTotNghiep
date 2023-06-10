@@ -27,12 +27,6 @@ class MapController extends BaseController {
   var currentUserData = UserData().obs;
   var listMember = <UserData>[].obs;
 
-  var isGenDoneMarkerIconPlaceStart = false.obs;
-  var isGenDoneMarkerIconPlaceEnd = false.obs;
-  var isGenDoneListMarkerIconPlaceStop = false.obs;
-  var isGenDoneListMarkerMember = false.obs;
-  var isGenAllMarkerDone = false.obs;
-
   var listMarkerGoogleMap = <Marker>[].obs;
 
   final polylineId = "polylineId";
@@ -355,18 +349,6 @@ class MapController extends BaseController {
 
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLoc();
-    });
-  }
-
-  void checkIsGenAllMarkerDone() {
-    if (isGenDoneMarkerIconPlaceStart.value == false ||
-        isGenDoneMarkerIconPlaceEnd.value == false ||
-        isGenDoneListMarkerIconPlaceStop.value == false ||
-        isGenDoneListMarkerMember.value == false) {
-      isGenAllMarkerDone.value = false;
-    }
-    Timer(const Duration(seconds: 1), () {
-      isGenAllMarkerDone.value = true;
     });
   }
 
