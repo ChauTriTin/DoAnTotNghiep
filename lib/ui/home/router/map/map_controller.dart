@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
@@ -35,8 +37,10 @@ class MapController extends BaseController {
   var listPlaceStop = <Place>[].obs;
 
   var polylines = <Polyline>[].obs;
+  Timer? timer;
 
   void clearOnDispose() {
+    timer?.cancel();
     Get.delete<MapController>();
   }
 
@@ -293,18 +297,30 @@ class MapController extends BaseController {
   }
 
   getLocation() async {
-    debugPrint("getLocation~~~");
-    LocationPermission permission = await Geolocator.requestPermission();
-    debugPrint("getLocation permission ${permission.toString()}");
+    Future<void> getLoc() async {
+      debugPrint("getLocation~~~ ${DateTime.now().toIso8601String()}");
+      LocationPermission permission = await Geolocator.requestPermission();
+      debugPrint("getLocation permission ${permission.toString()}");
 
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    double lat = position.latitude;
-    double long = position.longitude;
-    debugPrint("getLocation lat $lat");
-    debugPrint("getLocation long $long");
+      // if (permission != LocationPermission.always ||
+      //     permission != LocationPermission.whileInUse) {
+      //   debugPrint("getLocation permission return");
+      //   return;
+      // }
 
-    LatLng location = LatLng(lat, long);
-    debugPrint("getLocation $location");
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      double lat = position.latitude;
+      double long = position.longitude;
+      debugPrint("getLocation lat $lat");
+      debugPrint("getLocation long $long");
+
+      LatLng location = LatLng(lat, long);
+      debugPrint("getLocation $location");
+    }
+
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      getLoc();
+    });
   }
 }
