@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -289,5 +290,21 @@ class MapController extends BaseController {
     } catch (e) {
       debugPrint("FCM sendTopicMessage $e");
     }
+  }
+
+  getLocation() async {
+    debugPrint("getLocation~~~");
+    LocationPermission permission = await Geolocator.requestPermission();
+    debugPrint("getLocation permission ${permission.toString()}");
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    double lat = position.latitude;
+    double long = position.longitude;
+    debugPrint("getLocation lat $lat");
+    debugPrint("getLocation long $long");
+
+    LatLng location = LatLng(lat, long);
+    debugPrint("getLocation $location");
   }
 }

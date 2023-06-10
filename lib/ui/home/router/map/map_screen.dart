@@ -42,6 +42,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     _setupListen();
     _controller.getCurrentUserInfo();
     _controller.getRouter(widget.id);
+    _controller.getLocation();
   }
 
   void _setupListen() {
@@ -104,6 +105,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         ),
         markers: _createMaker(),
         polylines: Set.of(_controller.polylines),
+        myLocationEnabled: true,
+        compassEnabled: true,
         onMapCreated: (controllerParam) {
           setState(() {
             mapController = controllerParam;

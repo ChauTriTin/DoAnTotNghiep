@@ -4,6 +4,7 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
@@ -38,6 +39,9 @@ void main() async {
     debugPrint('initializeApp fail');
   }
   Messaging.initFCM();
+
+  LocationPermission permission = await Geolocator.requestPermission();
+  debugPrint("getLocation permission ${permission.toString()}");
 
   runApp(
     OverlaySupport.global(
