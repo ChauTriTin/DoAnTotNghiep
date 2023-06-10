@@ -34,8 +34,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   BitmapDescriptor? markerIconPlaceEnd;
   List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
   List<BitmapDescriptor?> listMarkerMember = <BitmapDescriptor?>[];
-  Set<Marker> listMarkerGoogleMap = <Marker>{};
-
   int countCreateMarker = 0;
 
   @override
@@ -137,12 +135,13 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           ),
         );
       }
+      _createMaker();
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
           zoom: 15.0,
         ),
-        markers: listMarkerGoogleMap,
+        markers: _controller.listMarkerGoogleMap.toSet(),
         polylines: Set.of(_controller.polylines),
         myLocationEnabled: true,
         compassEnabled: true,
@@ -156,54 +155,50 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   }
 
   void _createMaker() {
-    Marker createMarkerPlaceStart() {
-      if (markerIconPlaceStart == null) {
-        return Marker(
-          markerId: MarkerId(_controller.idMarkerStart),
-          position: _controller.kMapPlaceStart.value,
-        );
-      } else {
-        return Marker(
-          markerId: MarkerId(_controller.idMarkerStart),
-          position: _controller.kMapPlaceStart.value,
-          icon: markerIconPlaceStart!,
-        );
-      }
+    Future<Marker> createMarkerPlaceStart() async {
+      ImageConfiguration imageConfiguration =
+          createLocalImageConfiguration(context, size: const Size.square(55.0));
+      var bitmap = await BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/images/ic_marker_start.png',
+      );
+      return Marker(
+        markerId: MarkerId(_controller.idMarkerStart),
+        position: _controller.kMapPlaceStart.value,
+        icon: bitmap,
+      );
     }
 
-    Marker createMarkerPlaceEnd() {
-      if (markerIconPlaceEnd == null) {
-        return Marker(
-          markerId: MarkerId(_controller.idMarkerEnd),
-          position: _controller.kMapPlaceEnd.value,
-        );
-      } else {
-        return Marker(
-          markerId: MarkerId(_controller.idMarkerEnd),
-          position: _controller.kMapPlaceEnd.value,
-          icon: markerIconPlaceEnd!,
-        );
-      }
+    Future<Marker> createMarkerPlaceEnd() async {
+      ImageConfiguration imageConfiguration =
+          createLocalImageConfiguration(context, size: const Size.square(55.0));
+      var bitmap = await BitmapDescriptor.fromAssetImage(
+        imageConfiguration,
+        'assets/images/ic_marker_start.png',
+      );
+      return Marker(
+        markerId: MarkerId(_controller.idMarkerEnd),
+        position: _controller.kMapPlaceEnd.value,
+        icon: bitmap,
+      );
     }
 
-    List<Marker> createMarkerPlaceStop() {
-      Marker create(int index, String markerId, LatLng position) {
-        var markerIconPlaceStop = listMarkerIconPlaceStop[index];
-        if (markerIconPlaceStop == null) {
-          return Marker(
-            markerId: MarkerId(markerId),
-            position: position,
-          );
-        } else {
-          return Marker(
-            markerId: MarkerId(markerId),
-            position: position,
-            icon: markerIconPlaceStop,
-          );
-        }
+    void createMarkerPlaceStop() {
+      Future<Marker> create(int index, String markerId, LatLng position) async {
+        ImageConfiguration imageConfiguration = createLocalImageConfiguration(
+            context,
+            size: const Size.square(55.0));
+        var bitmap = await BitmapDescriptor.fromAssetImage(
+          imageConfiguration,
+          'assets/images/ic_marker_start.png',
+        );
+        return Marker(
+          markerId: MarkerId(markerId),
+          position: position,
+          icon: bitmap,
+        );
       }
 
-      var list = <Marker>[];
       for (int i = 0; i < _controller.listPlaceStop.length; i++) {
         var placeStop = _controller.listPlaceStop[i];
         var marker = create(
@@ -211,30 +206,27 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           _controller.getIdMarkerStop(i),
           LatLng(placeStop.lat ?? defaultLat, placeStop.long ?? defaultLong),
         );
-        list.add(marker);
+        marker.then((value) {
+          _controller.setMarkerGoogleMap(value);
+        });
       }
-      return list;
     }
     // debugPrint(">>>>_createMaker listStop.length ${listStop.length}");
 
-    List<Marker> createMarkerMember() {
-      Marker create(int index, String markerId, LatLng position) {
-        var markerMember = listMarkerMember[index];
-        if (markerMember == null) {
-          return Marker(
-            markerId: MarkerId(markerId),
-            position: position,
-          );
-        } else {
-          return Marker(
-            markerId: MarkerId(markerId),
-            position: position,
-            icon: markerMember,
-          );
-        }
+    createMarkerMember() {
+      Future<Marker> create(int index, String markerId, LatLng position) async {
+        var iconUrl = StringConstants.linkImgMinaCrying;
+        var request = await http.get(Uri.parse(iconUrl));
+        var bytes = request.bodyBytes;
+        LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
+        return Marker(
+          icon: BitmapDescriptor.fromBytes(bytes.buffer.asUint8List(),
+              size: const Size(50, 50)),
+          markerId: MarkerId(lastMapPositionPoints.toString()),
+          position: lastMapPositionPoints,
+        );
       }
 
-      var list = <Marker>[];
       var listMember = _controller.listMember;
       debugPrint(">>>_createMaker listMember length ${listMember.length}");
       for (int i = 0; i < listMember.length; i++) {
@@ -245,57 +237,45 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           "$i${member.uid}",
           LatLng(member.lat ?? defaultLat, member.long ?? defaultLong),
         );
-        list.add(marker);
+        marker.then((value) {
+          _controller.setMarkerGoogleMap(value);
+        });
       }
-      debugPrint(">>>_createMaker listMember list ${list.toString()}");
-      return list;
     }
 
-    var listMarkerResult = <Marker>[];
-
-    listMarkerResult.add(createMarkerPlaceStart());
-    var listStop = createMarkerPlaceStop();
-    for (var element in listStop) {
-      listMarkerResult.add(element);
-    }
-    listMarkerResult.add(createMarkerPlaceEnd());
-
-    //gen marker for member
-    var listMember = createMarkerMember();
-    debugPrint(">>>>_createMaker listMember ${listMember.toString()}");
-    for (var element in listMember) {
-      listMarkerResult.add(element);
-    }
-
-    debugPrint(
-        ">>>>_createMaker listMarkerResult.length ${listMarkerResult.length}");
-
-    var iconUrl = StringConstants.linkImgMinaCrying;
-    // var dataBytes;
-    var request = http.get(Uri.parse(iconUrl));
-    request.then((value) {
-      var bytes = value.bodyBytes;
-
-      // setState(() {
-      //   dataBytes = bytes;
-      // });
-
-      LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
-
-      listMarkerResult.add(Marker(
-        icon: BitmapDescriptor.fromBytes(bytes.buffer.asUint8List()),
-        markerId: MarkerId(lastMapPositionPoints.toString()),
-        position: lastMapPositionPoints,
-      ));
-
-      debugPrint(
-          ">>>>_createMaker listMarkerResult ${listMarkerResult.toString()}");
-
-      listMarkerGoogleMap = listMarkerResult.toSet();
-      setState(() {
-        listMarkerGoogleMap;
-      });
+    var listMarketPlaceStart = createMarkerPlaceStart();
+    listMarketPlaceStart.then((value) {
+      _controller.setMarkerGoogleMap(value);
     });
+
+    var listMarketPlaceEnd = createMarkerPlaceEnd();
+    listMarketPlaceEnd.then((value) {
+      _controller.setMarkerGoogleMap(value);
+    });
+
+    createMarkerPlaceStop();
+
+    createMarkerMember();
+
+    // var iconUrl = StringConstants.linkImgMinaCrying;
+    // var request = http.get(Uri.parse(iconUrl));
+    // request.then((value) {
+    //   var bytes = value.bodyBytes;
+    //   LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
+    //   listMarkerResult.add(Marker(
+    //     icon: BitmapDescriptor.fromBytes(bytes.buffer.asUint8List()),
+    //     markerId: MarkerId(lastMapPositionPoints.toString()),
+    //     position: lastMapPositionPoints,
+    //   ));
+    //
+    //   debugPrint(
+    //       ">>>>_createMaker listMarkerResult ${listMarkerResult.toString()}");
+    //
+    //   listMarkerGoogleMap = listMarkerResult.toSet();
+    //   setState(() {
+    //     listMarkerGoogleMap;
+    //   });
+    // });
   }
 
   void createMarker(BuildContext context) {
@@ -501,7 +481,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
       //update the marker
       if (_controller.isGenAllMarkerDone.value) {
-        _createMaker();
+        //TODO
+        // _createMaker();
       }
 
       return Container(

@@ -33,6 +33,8 @@ class MapController extends BaseController {
   var isGenDoneListMarkerMember = false.obs;
   var isGenAllMarkerDone = false.obs;
 
+  var listMarkerGoogleMap = <Marker>[].obs;
+
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
@@ -366,5 +368,38 @@ class MapController extends BaseController {
     Timer(const Duration(seconds: 1), () {
       isGenAllMarkerDone.value = true;
     });
+  }
+
+  bool isContainMarker(Marker m) {
+    for (var element in listMarkerGoogleMap) {
+      if (element.mapsId == m.mapsId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void setMarkerGoogleMap(Marker marker) {
+    if (isContainMarker(marker)) {
+      //do nothing
+    } else {
+      listMarkerGoogleMap.add(marker);
+      listMarkerGoogleMap.refresh();
+    }
+    debugPrint(
+        "_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
+  }
+
+  void setListMarkerGoogleMap(List<Marker> list) {
+    for (var element in list) {
+      if (isContainMarker(element)) {
+        //do nothing
+      } else {
+        listMarkerGoogleMap.add(element);
+      }
+    }
+    listMarkerGoogleMap.refresh();
+    debugPrint(
+        "_createMaker size setListMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
 }
