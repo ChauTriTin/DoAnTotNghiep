@@ -112,6 +112,12 @@ class MapController extends BaseController {
 
           var user = UserData.fromJson((userMap).data()!);
           debugPrint("_genListMember index $i: ${user.toJson()}");
+
+          var indexContain = hasContainUserInListMember(user);
+          debugPrint("getLocation indexContain $indexContain");
+          if (indexContain >= 0) {
+            listMember.removeAt(indexContain);
+          }
           listMember.add(user);
         });
       } catch (e) {
@@ -121,6 +127,15 @@ class MapController extends BaseController {
 
     debugPrint("_genListMember success listMember length ${listMember.length}");
     listMember.refresh();
+  }
+
+  int hasContainUserInListMember(UserData userData) {
+    for (int i = 0; i < listMember.length; i++) {
+      if (userData.uid == listMember[i].uid) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   String getCurrentUserName() {
