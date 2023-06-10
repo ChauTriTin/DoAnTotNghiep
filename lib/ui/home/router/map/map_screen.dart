@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui' as ui;
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
@@ -21,6 +24,7 @@ class MapScreen extends StatefulWidget {
     super.key,
     required this.id,
   });
+
   final String id;
 
   @override
@@ -130,6 +134,44 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     });
   }
 
+  Future<Uint8List?> getBytesFromCanvas(
+      int width, int height, Uint8List dataBytes) async {
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    final Paint paint = Paint()..color = Colors.transparent;
+    const Radius radius = Radius.circular(20.0);
+    canvas.drawRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(0.0, 0.0, width.toDouble(), height.toDouble()),
+          topLeft: radius,
+          topRight: radius,
+          bottomLeft: radius,
+          bottomRight: radius,
+        ),
+        paint);
+
+    var imaged = await loadImage(dataBytes.buffer.asUint8List());
+    canvas.drawImageRect(
+      imaged,
+      Rect.fromLTRB(
+          0.0, 0.0, imaged.width.toDouble(), imaged.height.toDouble()),
+      Rect.fromLTRB(0.0, 0.0, width.toDouble(), height.toDouble()),
+      Paint(),
+    );
+
+    final img = await pictureRecorder.endRecording().toImage(width, height);
+    final data = await img.toByteData(format: ui.ImageByteFormat.png);
+    return data?.buffer.asUint8List();
+  }
+
+  Future<ui.Image> loadImage(Uint8List img) async {
+    final Completer<ui.Image> completer = Completer();
+    ui.decodeImageFromList(img, (ui.Image img) {
+      return completer.complete(img);
+    });
+    return completer.future;
+  }
+
   void _createMaker() {
     Future<Marker> createMarkerPlaceStart() async {
       ImageConfiguration imageConfiguration =
@@ -199,10 +241,15 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         var request = await http.get(Uri.parse(avt));
         var bytes = request.bodyBytes;
         LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
+        var b = await getBytesFromCanvas(150, 150, bytes.buffer.asUint8List());
+        if (b == null) {
+          return Marker(
+            markerId: MarkerId(lastMapPositionPoints.toString()),
+            position: lastMapPositionPoints,
+          );
+        }
         return Marker(
-          //TODO loitp set size
-          icon: BitmapDescriptor.fromBytes(bytes.buffer.asUint8List(),
-              size: const Size(50, 50)),
+          icon: BitmapDescriptor.fromBytes(b),
           markerId: MarkerId(lastMapPositionPoints.toString()),
           position: lastMapPositionPoints,
         );
