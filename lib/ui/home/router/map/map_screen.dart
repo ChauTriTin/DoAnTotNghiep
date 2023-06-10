@@ -265,7 +265,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       listMarkerResult.add(element);
     }
 
-    debugPrint(">>>>_createMaker list.length ${listMarkerResult.length}");
+    debugPrint(
+        ">>>>_createMaker listMarkerResult.length ${listMarkerResult.length}");
     return listMarkerResult.toSet();
   }
 
@@ -471,7 +472,9 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
 
       //update the marker
-      // _createMaker();
+      if (_controller.isGenAllMarkerDone.value) {
+        _createMaker();
+      }
 
       return Container(
         // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
