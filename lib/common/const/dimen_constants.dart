@@ -15,6 +15,7 @@ class DimenConstants {
   static const int maxLengthPhoneNumber = 10;
   static const int maxLengthOTP = 6;
 
+  static const double txtTiny = 5.0;
   static const double txtSmall = 10.0;
   static const double txtMedium = 16.0;
   static const double txtLarge = 20.0;
@@ -44,10 +45,6 @@ class DimenConstants {
   static const double avatarProfile = 130;
   static const double dividerHeight = 1;
 
-
-
   // Icon Back Login Page
   static const double circleBackBg = 130;
-
-
 }

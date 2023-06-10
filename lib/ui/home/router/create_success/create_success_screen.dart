@@ -15,14 +15,14 @@ import 'create_success_controller.dart';
 class CreateSuccessScreen extends StatefulWidget {
   const CreateSuccessScreen({
     super.key,
-    required this.title,
+    required this.id,
     required this.dateTimeEnd,
     required this.placeStart,
     required this.placeEnd,
     required this.listPlaceStop,
   });
 
-  final String title;
+  final String id;
   final DateTime dateTimeEnd;
   final Place placeStart;
   final Place placeEnd;
@@ -90,7 +90,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                     ),
                     const SizedBox(height: DimenConstants.marginPaddingMedium),
                     Text(
-                      widget.title,
+                      widget.id,
                       style: const TextStyle(
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold,
@@ -191,13 +191,9 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
   void _tapGoNow() {
     void go() {
       Get.back(); //close this screen
-      var placeStart = widget.placeStart;
-      var placeEnd = widget.placeEnd;
-      var listPlaceStop = widget.listPlaceStop;
+      var id = widget.id;
       Get.to(MapScreen(
-        placeStart: placeStart,
-        placeEnd: placeEnd,
-        listPlaceStop: listPlaceStop,
+        id: id,
       ));
     }
 
