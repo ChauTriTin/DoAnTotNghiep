@@ -4,6 +4,7 @@ import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
@@ -287,7 +288,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   }
 
   Widget _buildPeopleView() {
-    Widget buildItem(int pos) {
+    Widget buildItem(UserData userData) {
       return SizedBox(
         width: 90,
         height: 90,
@@ -307,9 +308,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   child: SizedBox.fromSize(
                     size: const Size.fromRadius(48), // Image radius
                     child: Image.network(
-                      pos % 2 == 0
-                          ? "https://kenh14cdn.com/thumb_w/620/203336854389633024/2022/11/6/photo-4-16677111180281863259936.jpg"
-                          : "https://kenh14cdn.com/thumb_w/620/2019/11/30/0d19c07b6b3b8265db2a-15751098043831840905821.jpg",
+                      "${userData.avatar}",
                       height: 45,
                       width: 45,
                       fit: BoxFit.cover,
@@ -321,13 +320,13 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             Container(
               alignment: Alignment.bottomCenter,
               padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-              child: const Text(
-                "100m",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: DimenConstants.txtMedium,
+              child: Text(
+                userData.name ?? "",
+                style: const TextStyle(
+                  fontSize: DimenConstants.txtSmall,
                   color: Colors.white,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
           ],
@@ -335,21 +334,27 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       );
     }
 
-    return Container(
-      // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-      alignment: Alignment.bottomLeft,
-      child: SizedBox(
-        height: 100,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          itemCount: 15,
-          itemBuilder: (context, i) {
-            return buildItem(i);
-          },
+    return Obx(() {
+      var listMember = _controller.listMember;
+      if (listMember.isEmpty) {
+        return Container();
+      }
+      return Container(
+        // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        alignment: Alignment.bottomLeft,
+        child: SizedBox(
+          height: 100,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: listMember.length,
+            itemBuilder: (context, i) {
+              return buildItem(listMember[i]);
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _showBottomSheetSos() {
