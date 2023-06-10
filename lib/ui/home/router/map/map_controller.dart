@@ -363,6 +363,8 @@ class MapController extends BaseController {
         isGenDoneListMarkerMember.value == false) {
       isGenAllMarkerDone.value = false;
     }
-    isGenAllMarkerDone.value = true;
+    Timer(const Duration(seconds: 1), () {
+      isGenAllMarkerDone.value = true;
+    });
   }
 }

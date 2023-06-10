@@ -7,6 +7,7 @@ import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -107,6 +108,12 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           width: Get.width,
           height: Get.height,
           color: ColorConstants.appColorBkg,
+          child: const Center(
+            child: CupertinoActivityIndicator(
+              radius: 20.0,
+              color: ColorConstants.appColor,
+            ),
+          ),
         );
       }
       if (countCreateMarker <= 0) {
@@ -120,6 +127,12 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           width: Get.width,
           height: Get.height,
           color: ColorConstants.appColorBkg,
+          child: const Center(
+            child: CupertinoActivityIndicator(
+              radius: 20.0,
+              color: ColorConstants.appColor,
+            ),
+          ),
         );
       }
       return GoogleMap(
