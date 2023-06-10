@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MapScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   BitmapDescriptor? markerIconPlaceEnd;
   List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
   List<BitmapDescriptor?> listMarkerMember = <BitmapDescriptor?>[];
+  Set<Marker> listMarkerGoogleMap = <Marker>{};
 
   int countCreateMarker = 0;
 
@@ -140,7 +142,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           target: _controller.kMapPlaceStart.value,
           zoom: 15.0,
         ),
-        markers: _createMaker(),
+        markers: listMarkerGoogleMap,
         polylines: Set.of(_controller.polylines),
         myLocationEnabled: true,
         compassEnabled: true,
@@ -153,7 +155,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     });
   }
 
-  Set<Marker> _createMaker() {
+  void _createMaker() {
     Marker createMarkerPlaceStart() {
       if (markerIconPlaceStart == null) {
         return Marker(
@@ -267,7 +269,33 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
     debugPrint(
         ">>>>_createMaker listMarkerResult.length ${listMarkerResult.length}");
-    return listMarkerResult.toSet();
+
+    var iconUrl = StringConstants.linkImgMinaCrying;
+    // var dataBytes;
+    var request = http.get(Uri.parse(iconUrl));
+    request.then((value) {
+      var bytes = value.bodyBytes;
+
+      // setState(() {
+      //   dataBytes = bytes;
+      // });
+
+      LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
+
+      listMarkerResult.add(Marker(
+        icon: BitmapDescriptor.fromBytes(bytes.buffer.asUint8List()),
+        markerId: MarkerId(lastMapPositionPoints.toString()),
+        position: lastMapPositionPoints,
+      ));
+
+      debugPrint(
+          ">>>>_createMaker listMarkerResult ${listMarkerResult.toString()}");
+
+      listMarkerGoogleMap = listMarkerResult.toSet();
+      setState(() {
+        listMarkerGoogleMap;
+      });
+    });
   }
 
   void createMarker(BuildContext context) {
@@ -340,7 +368,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 size: const Size.square(55.0));
         var bitmap = await BitmapDescriptor.fromAssetImage(
           imageConfiguration,
-          'assets/images/ic_launcher.png',
+          'assets/images/ic_x.png',
         );
         return bitmap;
       }
