@@ -1,3 +1,5 @@
+import 'package:appdiphuot/common/const/string_constants.dart';
+
 class UserData {
   String? name;
   String? uid;
@@ -36,5 +38,12 @@ class UserData {
     data['fcmToken'] = fcmToken;
     data['long'] = long;
     return data;
+  }
+
+  String getAvatar() {
+    if (avatar == null || avatar?.isEmpty == true) {
+      return StringConstants.avatarImgDefault;
+    }
+    return avatar!;
   }
 }
