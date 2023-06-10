@@ -1,9 +1,13 @@
+import 'package:appdiphuot/common/const/string_constants.dart';
+
 class UserData {
   String? name;
   String? uid;
   String? email;
   String? avatar;
   String? fcmToken;
+  double? lat;
+  double? long;
 
   UserData({
     this.name,
@@ -11,6 +15,8 @@ class UserData {
     this.email,
     this.avatar,
     this.fcmToken,
+    this.lat,
+    this.long,
   });
 
   UserData.fromJson(Map<String, dynamic> json) {
@@ -19,6 +25,8 @@ class UserData {
     email = json['email'];
     avatar = json['avatar'];
     fcmToken = json['fcmToken'];
+    lat = json['lat'];
+    long = json['long'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +36,14 @@ class UserData {
     data['email'] = email;
     data['avatar'] = avatar;
     data['fcmToken'] = fcmToken;
+    data['long'] = long;
     return data;
+  }
+
+  String getAvatar() {
+    if (avatar == null || avatar?.isEmpty == true) {
+      return StringConstants.avatarImgDefault;
+    }
+    return avatar!;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,19 +26,24 @@ class MapController extends BaseController {
   var trip = Trip().obs;
   var currentUserData = UserData().obs;
   var listMember = <UserData>[].obs;
+
+  var listMarkerGoogleMap = <Marker>[].obs;
+
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
-  var kMapPlaceStart = const LatLng(Place.defaultLat, Place.defaultLong).obs;
-  var kMapPlaceEnd = const LatLng(Place.defaultLat, Place.defaultLong).obs;
+  var kMapPlaceStart = LatLng(defaultLat, defaultLong).obs;
+  var kMapPlaceEnd = LatLng(defaultLat, defaultLong).obs;
 
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
   var listPlaceStop = <Place>[].obs;
 
   var polylines = <Polyline>[].obs;
+  Timer? timer;
 
   void clearOnDispose() {
+    timer?.cancel();
     Get.delete<MapController>();
   }
 
@@ -80,10 +88,10 @@ class MapController extends BaseController {
     listPlaceStop.addAll(list);
     listPlaceStop.refresh();
 
-    kMapPlaceStart.value = LatLng(
-        pStart.lat ?? Place.defaultLat, pStart.long ?? Place.defaultLong);
+    kMapPlaceStart.value =
+        LatLng(pStart.lat ?? defaultLat, pStart.long ?? defaultLong);
     kMapPlaceEnd.value =
-        LatLng(pEnd.lat ?? Place.defaultLat, pEnd.long ?? Place.defaultLong);
+        LatLng(pEnd.lat ?? defaultLat, pEnd.long ?? defaultLong);
 
     _genRouter();
     //TODO loitp
@@ -107,6 +115,12 @@ class MapController extends BaseController {
 
           var user = UserData.fromJson((userMap).data()!);
           debugPrint("_genListMember index $i: ${user.toJson()}");
+
+          var indexContain = hasContainUserInListMember(user);
+          debugPrint("getLocation indexContain $indexContain");
+          if (indexContain >= 0) {
+            listMember.removeAt(indexContain);
+          }
           listMember.add(user);
         });
       } catch (e) {
@@ -116,6 +130,15 @@ class MapController extends BaseController {
 
     debugPrint("_genListMember success listMember length ${listMember.length}");
     listMember.refresh();
+  }
+
+  int hasContainUserInListMember(UserData userData) {
+    for (int i = 0; i < listMember.length; i++) {
+      if (userData.uid == listMember[i].uid) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   String getCurrentUserName() {
@@ -157,14 +180,14 @@ class MapController extends BaseController {
 
   List<LatLng> createPoints() {
     final List<LatLng> points = <LatLng>[];
-    points.add(LatLng(placeStart.value.lat ?? Place.defaultLat,
-        placeStart.value.long ?? Place.defaultLong));
+    points.add(LatLng(placeStart.value.lat ?? defaultLat,
+        placeStart.value.long ?? defaultLong));
     for (var element in listPlaceStop) {
-      points.add(LatLng(
-          element.lat ?? Place.defaultLat, element.long ?? Place.defaultLong));
+      points
+          .add(LatLng(element.lat ?? defaultLat, element.long ?? defaultLong));
     }
-    points.add(LatLng(placeEnd.value.lat ?? Place.defaultLat,
-        placeEnd.value.long ?? Place.defaultLong));
+    points.add(LatLng(
+        placeEnd.value.lat ?? defaultLat, placeEnd.value.long ?? defaultLong));
     return points;
   }
 
@@ -210,10 +233,10 @@ class MapController extends BaseController {
         var eCurrent = listPlace[i];
         var eNext = listPlace[i + 1];
         var listPolyline = _getRoute(
-            eCurrent.lat ?? Place.defaultLat,
-            eCurrent.long ?? Place.defaultLong,
-            eNext.lat ?? Place.defaultLat,
-            eNext.long ?? Place.defaultLong);
+            eCurrent.lat ?? defaultLat,
+            eCurrent.long ?? defaultLong,
+            eNext.lat ?? defaultLat,
+            eNext.long ?? defaultLong);
         listPolyline.then((list) {
           listLatLong.addAll(list);
           log("_genRouter listPolyline list ${list.length} -> listLatLong ${listLatLong.length}");
@@ -289,5 +312,76 @@ class MapController extends BaseController {
     } catch (e) {
       debugPrint("FCM sendTopicMessage $e");
     }
+  }
+
+  getLocation() async {
+    Future<void> getLoc() async {
+      debugPrint("getLocation~~~ ${DateTime.now().toIso8601String()}");
+      LocationPermission permission = await Geolocator.requestPermission();
+      debugPrint("getLocation permission ${permission.toString()}");
+
+      // if (permission != LocationPermission.always ||
+      //     permission != LocationPermission.whileInUse) {
+      //   debugPrint("getLocation permission return");
+      //   return;
+      // }
+
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      double lat = position.latitude;
+      double long = position.longitude;
+      debugPrint("getLocation lat $lat");
+      debugPrint("getLocation long $long");
+
+      LatLng location = LatLng(lat, long);
+      debugPrint("getLocation $location");
+
+      var currentUserId = currentUserData.value.uid;
+      if (currentUserId?.isNotEmpty == true) {
+        FirebaseHelper.collectionReferenceUser.doc(currentUserId).update({
+          "lat": lat,
+          "long": long,
+        });
+        debugPrint(
+            "getLocation collectionReferenceUser update currentUserId $currentUserId");
+      }
+    }
+
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      getLoc();
+    });
+  }
+
+  bool isContainMarker(Marker m) {
+    for (var element in listMarkerGoogleMap) {
+      if (element.mapsId == m.mapsId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void setMarkerGoogleMap(Marker marker) {
+    if (isContainMarker(marker)) {
+      //do nothing
+    } else {
+      listMarkerGoogleMap.add(marker);
+      listMarkerGoogleMap.refresh();
+    }
+    debugPrint(
+        "_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
+  }
+
+  void setListMarkerGoogleMap(List<Marker> list) {
+    for (var element in list) {
+      if (isContainMarker(element)) {
+        //do nothing
+      } else {
+        listMarkerGoogleMap.add(element);
+      }
+    }
+    listMarkerGoogleMap.refresh();
+    debugPrint(
+        "_createMaker size setListMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
 }
