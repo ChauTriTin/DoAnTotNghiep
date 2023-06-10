@@ -317,6 +317,16 @@ class MapController extends BaseController {
 
       LatLng location = LatLng(lat, long);
       debugPrint("getLocation $location");
+
+      var currentUserId = currentUserData.value.uid;
+      if (currentUserId?.isNotEmpty == true) {
+        FirebaseHelper.collectionReferenceUser.doc(currentUserId).update({
+          "lat": lat,
+          "long": long,
+        });
+        debugPrint(
+            "getLocation collectionReferenceUser update currentUserId $currentUserId");
+      }
     }
 
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
