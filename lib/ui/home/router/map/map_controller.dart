@@ -21,7 +21,8 @@ class MapController extends BaseController {
   }
 
   var trip = Trip().obs;
-  var userData = UserData().obs;
+  var currentUserData = UserData().obs;
+  var listMember = <UserData>[].obs;
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
@@ -52,12 +53,16 @@ class MapController extends BaseController {
         this.trip.value = trip;
         debugPrint("getRouter success: ${trip.toString()}");
 
+        //gen list router
         var pStart = this.trip.value.placeStart;
         var pEnd = this.trip.value.placeEnd;
         var list = this.trip.value.listPlace;
         if (pStart != null && pEnd != null && list != null) {
           _initRouter(pStart, pEnd, list);
         }
+
+        //gen list member
+        _genListMember(this.trip.value.listIdMember ?? List.empty());
       });
     } catch (e) {
       debugPrint("getRouter get user info fail: $e");
@@ -86,12 +91,39 @@ class MapController extends BaseController {
     // _genDuration();
   }
 
-  String getName() {
-    return userData.value.name ?? "";
+  void _genListMember(List<String> listIdMember) {
+    listMember.clear();
+
+    for (int i = 0; i < listIdMember.length; i++) {
+      try {
+        String id = listIdMember[i];
+        FirebaseHelper.collectionReferenceUser
+            .doc(id)
+            .snapshots()
+            .listen((value) {
+          DocumentSnapshot<Map<String, dynamic>>? userMap =
+              value as DocumentSnapshot<Map<String, dynamic>>?;
+          if (userMap == null || userMap.data() == null) return;
+
+          var user = UserData.fromJson((userMap).data()!);
+          debugPrint("_genListMember index $i: ${user.toJson()}");
+          listMember.add(user);
+        });
+      } catch (e) {
+        debugPrint("_genListMember get user info fail: $e");
+      }
+    }
+
+    debugPrint("_genListMember success listMember length ${listMember.length}");
+    listMember.refresh();
   }
 
-  String getAvatar() {
-    String avatarUrl = userData.value.avatar ?? "";
+  String getCurrentUserName() {
+    return currentUserData.value.name ?? "";
+  }
+
+  String getCurrentUserAvatar() {
+    String avatarUrl = currentUserData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
     } else {
@@ -99,7 +131,7 @@ class MapController extends BaseController {
     }
   }
 
-  Future<void> getUserInfo() async {
+  Future<void> getCurrentUserInfo() async {
     try {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
       FirebaseHelper.collectionReferenceUser
@@ -111,7 +143,7 @@ class MapController extends BaseController {
         if (userMap == null || userMap.data() == null) return;
 
         var user = UserData.fromJson((userMap).data()!);
-        userData.value = user;
+        currentUserData.value = user;
         debugPrint("getUserInfo success: ${user.toString()}");
       });
     } catch (e) {
@@ -248,7 +280,7 @@ class MapController extends BaseController {
           "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh",
           "e8hPdUzASaqjB7dU0TbT7R:APA91bHQImI50Fzhr8P1NoRcYMQMpfOhX8yGn4ZWXwLDQJgWbVgb7FYjz8DjdfAEvfN0o5_EQa0bw5lBFerkeAW0ScCfEmfGya9quF5kre27EdNzgznxFrJLzkbWAqGMkg7eSjXt0KMF"
         ],
-        title: "Thông báo khẩn cấp từ ${getName()}",
+        title: "Thông báo khẩn cấp từ ${getCurrentUserName()}",
         body: body,
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",

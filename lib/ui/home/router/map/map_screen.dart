@@ -39,7 +39,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     super.initState();
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
-    _controller.getUserInfo();
+    _controller.getCurrentUserInfo();
     _controller.getRouter(widget.id);
   }
 
