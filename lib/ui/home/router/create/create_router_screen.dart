@@ -55,7 +55,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Get.back();
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
         Get.to(CreateSuccessScreen(
-          title: _controller.id,
+          id: _controller.id,
           dateTimeEnd: _controller.dateTimeEnd.value,
           placeStart: _controller.placeStart.value,
           placeEnd: _controller.placeEnd.value,

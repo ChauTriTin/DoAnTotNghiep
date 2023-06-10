@@ -15,11 +15,13 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class MapScreen extends StatefulWidget {
   const MapScreen({
     super.key,
+    required this.id,
     required this.placeStart,
     required this.placeEnd,
     required this.listPlaceStop,
   });
 
+  final String id;
   final Place placeStart;
   final Place placeEnd;
   final List<Place> listPlaceStop;
@@ -45,7 +47,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
     _controller.getUserInfo();
-    _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
+    _controller.getRouter(widget.id);
+    // _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
   }
 
   void _setupListen() {

@@ -3,6 +3,7 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +20,7 @@ class MapController extends BaseController {
     debugPrint("MapController $s");
   }
 
+  var trip = Trip().obs;
   var userData = UserData().obs;
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
@@ -34,6 +36,25 @@ class MapController extends BaseController {
 
   void clearOnDispose() {
     Get.delete<MapController>();
+  }
+
+  Future<void> getRouter(String id) async {
+    try {
+      FirebaseHelper.collectionReferenceRouter
+          .doc(id)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? map =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (map == null || map.data() == null) return;
+
+        var trip = Trip.fromJson((map).data()!);
+        this.trip.value = trip;
+        debugPrint("getRouter success: ${trip.toString()}");
+      });
+    } catch (e) {
+      debugPrint("getRouter get user info fail: $e");
+    }
   }
 
   void init(
