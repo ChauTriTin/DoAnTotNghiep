@@ -17,7 +17,7 @@ import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 class CreateRouterController extends BaseController {
   var userData = UserData().obs;
-  final id = DateTime.now().microsecondsSinceEpoch.toString();
+  final id = DateTime.now().millisecondsSinceEpoch.toString();
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
   final tecRequire = TextEditingController();
