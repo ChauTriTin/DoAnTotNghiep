@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:appdiphuot/common/const/string_constants.dart';
 
-class Place {
-  static const defaultLat = 10.8231;
-  static const defaultLong = 106.6297;
+var defaultLat = 10.8231;
+var defaultLong = 106.6297;
 
+class Place {
   List<String>? imageUrl = [];
 
   String getFirstImageUrl() {

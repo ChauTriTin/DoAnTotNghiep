@@ -29,8 +29,8 @@ class MapController extends BaseController {
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
-  var kMapPlaceStart = const LatLng(Place.defaultLat, Place.defaultLong).obs;
-  var kMapPlaceEnd = const LatLng(Place.defaultLat, Place.defaultLong).obs;
+  var kMapPlaceStart = LatLng(defaultLat, defaultLong).obs;
+  var kMapPlaceEnd = LatLng(defaultLat, defaultLong).obs;
 
   var placeStart = Place().obs;
   var placeEnd = Place().obs;
@@ -85,10 +85,10 @@ class MapController extends BaseController {
     listPlaceStop.addAll(list);
     listPlaceStop.refresh();
 
-    kMapPlaceStart.value = LatLng(
-        pStart.lat ?? Place.defaultLat, pStart.long ?? Place.defaultLong);
+    kMapPlaceStart.value =
+        LatLng(pStart.lat ?? defaultLat, pStart.long ?? defaultLong);
     kMapPlaceEnd.value =
-        LatLng(pEnd.lat ?? Place.defaultLat, pEnd.long ?? Place.defaultLong);
+        LatLng(pEnd.lat ?? defaultLat, pEnd.long ?? defaultLong);
 
     _genRouter();
     //TODO loitp
@@ -177,14 +177,14 @@ class MapController extends BaseController {
 
   List<LatLng> createPoints() {
     final List<LatLng> points = <LatLng>[];
-    points.add(LatLng(placeStart.value.lat ?? Place.defaultLat,
-        placeStart.value.long ?? Place.defaultLong));
+    points.add(LatLng(placeStart.value.lat ?? defaultLat,
+        placeStart.value.long ?? defaultLong));
     for (var element in listPlaceStop) {
-      points.add(LatLng(
-          element.lat ?? Place.defaultLat, element.long ?? Place.defaultLong));
+      points
+          .add(LatLng(element.lat ?? defaultLat, element.long ?? defaultLong));
     }
-    points.add(LatLng(placeEnd.value.lat ?? Place.defaultLat,
-        placeEnd.value.long ?? Place.defaultLong));
+    points.add(LatLng(
+        placeEnd.value.lat ?? defaultLat, placeEnd.value.long ?? defaultLong));
     return points;
   }
 
@@ -230,10 +230,10 @@ class MapController extends BaseController {
         var eCurrent = listPlace[i];
         var eNext = listPlace[i + 1];
         var listPolyline = _getRoute(
-            eCurrent.lat ?? Place.defaultLat,
-            eCurrent.long ?? Place.defaultLong,
-            eNext.lat ?? Place.defaultLat,
-            eNext.long ?? Place.defaultLong);
+            eCurrent.lat ?? defaultLat,
+            eCurrent.long ?? defaultLong,
+            eNext.lat ?? defaultLat,
+            eNext.long ?? defaultLong);
         listPolyline.then((list) {
           listLatLong.addAll(list);
           log("_genRouter listPolyline list ${list.length} -> listLatLong ${listLatLong.length}");

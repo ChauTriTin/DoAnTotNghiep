@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
@@ -40,8 +41,7 @@ void main() async {
   }
   Messaging.initFCM();
 
-  LocationPermission permission = await Geolocator.requestPermission();
-  debugPrint("getLocation permission ${permission.toString()}");
+  getLoc();
 
   runApp(
     OverlaySupport.global(
@@ -128,4 +128,25 @@ class Messaging {
       debugPrint('FCM main e $e');
     }
   }
+}
+
+Future<void> getLoc() async {
+  // debugPrint("getLocation~~~ ${DateTime.now().toIso8601String()}");
+  LocationPermission permission = await Geolocator.requestPermission();
+  // debugPrint("getLocation permission ${permission.toString()}");
+
+  Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+  double lat = position.latitude;
+  double long = position.longitude;
+  debugPrint("getLoc lat $lat");
+  debugPrint("getLoc long $long");
+
+  LatLng location = LatLng(lat, long);
+  debugPrint("getLoc $location");
+
+  defaultLat = lat;
+  defaultLong = long;
+
+  debugPrint("defaultLat $defaultLat, defaultLong $defaultLong");
 }
