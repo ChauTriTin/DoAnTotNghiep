@@ -106,7 +106,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         return Container(
           width: Get.width,
           height: Get.height,
-          color: ColorConstants.appColor,
+          color: ColorConstants.appColorBkg,
         );
       }
       if (countCreateMarker <= 0) {
@@ -114,12 +114,12 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         countCreateMarker++;
       }
       var isGenAllMarkerDone = _controller.isGenAllMarkerDone.value;
-      debugPrint("loitpp _buildMapView isGenAllMarkerDone $isGenAllMarkerDone");
+      debugPrint("_buildMapView isGenAllMarkerDone $isGenAllMarkerDone");
       if (isGenAllMarkerDone == false) {
         return Container(
           width: Get.width,
           height: Get.height,
-          color: Colors.green,
+          color: ColorConstants.appColorBkg,
         );
       }
       return GoogleMap(
@@ -221,12 +221,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
       var list = <Marker>[];
       var listMember = _controller.listMember;
-      debugPrint(
-          "loitpp >>>_createMaker listMember length ${listMember.length}");
+      debugPrint(">>>_createMaker listMember length ${listMember.length}");
       for (int i = 0; i < listMember.length; i++) {
         var member = listMember[i];
-        debugPrint(
-            "loitpp >>>_createMaker createMarkerMember i $i -> ${member.name}");
+        debugPrint(">>>_createMaker createMarkerMember i $i -> ${member.name}");
         var marker = create(
           i,
           "$i${member.uid}",
@@ -234,7 +232,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         );
         list.add(marker);
       }
-      debugPrint("loitpp >>>_createMaker listMember list ${list.toString()}");
+      debugPrint(">>>_createMaker listMember list ${list.toString()}");
       return list;
     }
 
@@ -249,13 +247,12 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
     //gen marker for member
     var listMember = createMarkerMember();
-    debugPrint("loitpp >>>>_createMaker listMember ${listMember.toString()}");
+    debugPrint(">>>>_createMaker listMember ${listMember.toString()}");
     for (var element in listMember) {
       listMarkerResult.add(element);
     }
 
-    debugPrint(
-        "loitpp >>>>_createMaker list.length ${listMarkerResult.length}");
+    debugPrint(">>>>_createMaker list.length ${listMarkerResult.length}");
     return listMarkerResult.toSet();
   }
 
@@ -269,7 +266,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           imageConfiguration,
           'assets/images/ic_marker_start.png',
         );
-        debugPrint("loitpp done createMarkerPlaceStart");
+        debugPrint("done createMarkerPlaceStart");
         setState(() {
           markerIconPlaceStart = bitmap;
         });
@@ -290,7 +287,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         setState(() {
           markerIconPlaceEnd = bitmap;
         });
-        debugPrint("loitpp done createMarkerPlaceEnd");
+        debugPrint("done createMarkerPlaceEnd");
         _controller.isGenDoneMarkerIconPlaceEnd.value = true;
         _controller.checkIsGenAllMarkerDone();
       }
@@ -314,7 +311,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         listMarkerIconPlaceStop.add(bmp);
       }
 
-      debugPrint("loitpp done createMarkerPlaceStop");
+      debugPrint("done createMarkerPlaceStop");
       setState(() {
         listMarkerIconPlaceStop;
       });
@@ -340,7 +337,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         listMarkerMember.add(bmp);
       }
 
-      debugPrint("loitpp done createMarkerMember");
+      debugPrint("done createMarkerMember");
       setState(() {
         listMarkerMember;
       });
