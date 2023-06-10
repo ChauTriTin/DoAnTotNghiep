@@ -26,6 +26,13 @@ class MapController extends BaseController {
   var trip = Trip().obs;
   var currentUserData = UserData().obs;
   var listMember = <UserData>[].obs;
+
+  var isGenDoneMarkerIconPlaceStart = false.obs;
+  var isGenDoneMarkerIconPlaceEnd = false.obs;
+  var isGenDoneListMarkerIconPlaceStop = false.obs;
+  var isGenDoneListMarkerMember = false.obs;
+  var isGenAllMarkerDone = false.obs;
+
   final polylineId = "polylineId";
   final idMarkerStart = "idMarkerStart";
   final idMarkerEnd = "idMarkerEnd";
@@ -347,5 +354,15 @@ class MapController extends BaseController {
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLoc();
     });
+  }
+
+  void checkIsGenAllMarkerDone() {
+    if (isGenDoneMarkerIconPlaceStart.value == false ||
+        isGenDoneMarkerIconPlaceEnd.value == false ||
+        isGenDoneListMarkerIconPlaceStop.value == false ||
+        isGenDoneListMarkerMember.value == false) {
+      isGenAllMarkerDone.value = false;
+    }
+    isGenAllMarkerDone.value = true;
   }
 }

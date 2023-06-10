@@ -30,9 +30,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   GoogleMapController? mapController;
   BitmapDescriptor? markerIconPlaceStart;
   BitmapDescriptor? markerIconPlaceEnd;
-
-  // BitmapDescriptor? markerIconPlaceStop;
   List<BitmapDescriptor?> listMarkerIconPlaceStop = <BitmapDescriptor?>[];
+  List<BitmapDescriptor?> listMarkerMember = <BitmapDescriptor?>[];
 
   int countCreateMarker = 0;
 
@@ -63,10 +62,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (countCreateMarker <= 0) {
-      createMarker(context);
-      countCreateMarker++;
-    }
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: Stack(
@@ -99,6 +94,34 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   Widget _buildMapView() {
     return Obx(() {
+      var trip = _controller.trip.value;
+      var currentUserData = _controller.currentUserData.value;
+      var listMember = _controller.listMember;
+
+      if (trip.id == null ||
+          trip.id?.isEmpty == true ||
+          currentUserData.uid == null ||
+          currentUserData.uid?.isEmpty == true ||
+          listMember.isEmpty) {
+        return Container(
+          width: Get.width,
+          height: Get.height,
+          color: ColorConstants.appColor,
+        );
+      }
+      if (countCreateMarker <= 0) {
+        createMarker(context);
+        countCreateMarker++;
+      }
+      var isGenAllMarkerDone = _controller.isGenAllMarkerDone.value;
+      debugPrint("loitpp _buildMapView isGenAllMarkerDone $isGenAllMarkerDone");
+      if (isGenAllMarkerDone == false) {
+        return Container(
+          width: Get.width,
+          height: Get.height,
+          color: Colors.green,
+        );
+      }
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
@@ -177,17 +200,63 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
       return list;
     }
+    // debugPrint(">>>>_createMaker listStop.length ${listStop.length}");
 
-    var list = <Marker>[];
-    list.add(createMarkerPlaceStart());
+    List<Marker> createMarkerMember() {
+      Marker create(int index, String markerId, LatLng position) {
+        var markerMember = listMarkerMember[index];
+        if (markerMember == null) {
+          return Marker(
+            markerId: MarkerId(markerId),
+            position: position,
+          );
+        } else {
+          return Marker(
+            markerId: MarkerId(markerId),
+            position: position,
+            icon: markerMember,
+          );
+        }
+      }
+
+      var list = <Marker>[];
+      var listMember = _controller.listMember;
+      debugPrint(
+          "loitpp >>>_createMaker listMember length ${listMember.length}");
+      for (int i = 0; i < listMember.length; i++) {
+        var member = listMember[i];
+        debugPrint(
+            "loitpp >>>_createMaker createMarkerMember i $i -> ${member.name}");
+        var marker = create(
+          i,
+          "$i${member.uid}",
+          LatLng(member.lat ?? defaultLat, member.long ?? defaultLong),
+        );
+        list.add(marker);
+      }
+      debugPrint("loitpp >>>_createMaker listMember list ${list.toString()}");
+      return list;
+    }
+
+    var listMarkerResult = <Marker>[];
+
+    listMarkerResult.add(createMarkerPlaceStart());
     var listStop = createMarkerPlaceStop();
     for (var element in listStop) {
-      list.add(element);
+      listMarkerResult.add(element);
     }
-    list.add(createMarkerPlaceEnd());
-    // debugPrint(">>>>_createMaker listStop.length ${listStop.length}");
-    debugPrint(">>>>_createMaker list.length ${list.length}");
-    return list.toSet();
+    listMarkerResult.add(createMarkerPlaceEnd());
+
+    //gen marker for member
+    var listMember = createMarkerMember();
+    debugPrint("loitpp >>>>_createMaker listMember ${listMember.toString()}");
+    for (var element in listMember) {
+      listMarkerResult.add(element);
+    }
+
+    debugPrint(
+        "loitpp >>>>_createMaker list.length ${listMarkerResult.length}");
+    return listMarkerResult.toSet();
   }
 
   void createMarker(BuildContext context) {
@@ -200,9 +269,12 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           imageConfiguration,
           'assets/images/ic_marker_start.png',
         );
+        debugPrint("loitpp done createMarkerPlaceStart");
         setState(() {
           markerIconPlaceStart = bitmap;
         });
+        _controller.isGenDoneMarkerIconPlaceStart.value = true;
+        _controller.checkIsGenAllMarkerDone();
       }
     }
 
@@ -218,6 +290,9 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         setState(() {
           markerIconPlaceEnd = bitmap;
         });
+        debugPrint("loitpp done createMarkerPlaceEnd");
+        _controller.isGenDoneMarkerIconPlaceEnd.value = true;
+        _controller.checkIsGenAllMarkerDone();
       }
     }
 
@@ -239,14 +314,44 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         listMarkerIconPlaceStop.add(bmp);
       }
 
+      debugPrint("loitpp done createMarkerPlaceStop");
       setState(() {
         listMarkerIconPlaceStop;
       });
+      _controller.isGenDoneListMarkerIconPlaceStop.value = true;
+      _controller.checkIsGenAllMarkerDone();
+    }
+
+    Future<void> createMarkerMember(BuildContext context) async {
+      Future<BitmapDescriptor> create() async {
+        final ImageConfiguration imageConfiguration =
+            createLocalImageConfiguration(context,
+                size: const Size.square(55.0));
+        var bitmap = await BitmapDescriptor.fromAssetImage(
+          imageConfiguration,
+          'assets/images/ic_launcher.png',
+        );
+        return bitmap;
+      }
+
+      for (var element in _controller.listMember) {
+        debugPrint(">>>createMarkerMember element ${element.name}");
+        var bmp = await create();
+        listMarkerMember.add(bmp);
+      }
+
+      debugPrint("loitpp done createMarkerMember");
+      setState(() {
+        listMarkerMember;
+      });
+      _controller.isGenDoneListMarkerMember.value = true;
+      _controller.checkIsGenAllMarkerDone();
     }
 
     createMarkerPlaceStart(context);
     createMarkerPlaceEnd(context);
     createMarkerPlaceStop(context);
+    createMarkerMember(context);
   }
 
   Widget _buildHelperView() {
@@ -356,7 +461,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
 
       //update the marker
-      _createMaker();
+      // _createMaker();
 
       return Container(
         // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
