@@ -16,15 +16,8 @@ class MapScreen extends StatefulWidget {
   const MapScreen({
     super.key,
     required this.id,
-    required this.placeStart,
-    required this.placeEnd,
-    required this.listPlaceStop,
   });
-
   final String id;
-  final Place placeStart;
-  final Place placeEnd;
-  final List<Place> listPlaceStop;
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -48,7 +41,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     _setupListen();
     _controller.getUserInfo();
     _controller.getRouter(widget.id);
-    // _controller.init(widget.placeStart, widget.placeEnd, widget.listPlaceStop);
   }
 
   void _setupListen() {

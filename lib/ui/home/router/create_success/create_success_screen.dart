@@ -192,14 +192,8 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
     void go() {
       Get.back(); //close this screen
       var id = widget.id;
-      var placeStart = widget.placeStart;
-      var placeEnd = widget.placeEnd;
-      var listPlaceStop = widget.listPlaceStop;
       Get.to(MapScreen(
         id: id,
-        placeStart: placeStart,
-        placeEnd: placeEnd,
-        listPlaceStop: listPlaceStop,
       ));
     }
 

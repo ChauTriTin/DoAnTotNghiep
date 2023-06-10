@@ -51,13 +51,20 @@ class MapController extends BaseController {
         var trip = Trip.fromJson((map).data()!);
         this.trip.value = trip;
         debugPrint("getRouter success: ${trip.toString()}");
+
+        var pStart = this.trip.value.placeStart;
+        var pEnd = this.trip.value.placeEnd;
+        var list = this.trip.value.listPlace;
+        if (pStart != null && pEnd != null && list != null) {
+          _initRouter(pStart, pEnd, list);
+        }
       });
     } catch (e) {
       debugPrint("getRouter get user info fail: $e");
     }
   }
 
-  void init(
+  void _initRouter(
     Place pStart,
     Place pEnd,
     List<Place> list,
