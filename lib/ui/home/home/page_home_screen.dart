@@ -143,7 +143,6 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
           )
         ]),
         onTap: () {
-          log("tripData: $trip");
           Get.to(() => const DetailRouterScreen(), arguments: [
             {Constants.detailTrip: jsonEncode(trip)},
           ]);

@@ -1,3 +1,4 @@
+import 'package:appdiphuot/model/comment.dart';
 import 'package:appdiphuot/model/place.dart';
 
 import '../common/const/string_constants.dart';
@@ -23,6 +24,7 @@ class Trip {
   String? require;
   bool? isPublic;
   bool? isComplete;
+  List<Comment>? comments;
 
   Trip({
     this.id,
@@ -39,6 +41,7 @@ class Trip {
     this.require,
     this.isPublic,
     this.isComplete,
+    this.comments,
   });
 
   String getFirstImageUrl() {
@@ -62,6 +65,14 @@ class Trip {
         listPlace!.add(Place.fromJson(v));
       });
     }
+
+    if (json['comments'] != null) {
+      comments = <Comment>[];
+      json['comments'].forEach((v) {
+        comments!.add(Comment.fromJson(v));
+      });
+    }
+
     timeStart = json['timeStart'];
     timeEnd = json['timeEnd'];
     require = json['require'];
@@ -91,6 +102,7 @@ class Trip {
     data['require'] = require;
     data['isPublic'] = isPublic;
     data['isComplete'] = isComplete;
+    data['comments'] = comments;
     return data;
   }
 }

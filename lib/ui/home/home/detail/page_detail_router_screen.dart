@@ -7,6 +7,8 @@ import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/home/home/detail/page_detail_router_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
+import 'package:comment_tree/widgets/comment_tree_widget.dart';
+import 'package:comment_tree/widgets/tree_theme_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -15,6 +17,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
+import '../../../../model/comment.dart';
+import '../../../../util/log_dog_utils.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 
@@ -27,6 +31,9 @@ class DetailRouterScreen extends StatefulWidget {
 
 class _DetailRouterScreenState extends State<DetailRouterScreen> {
   final DetailRouterController _controller = Get.put(DetailRouterController());
+  final _commentController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
 
   Trip? tripData;
 
@@ -34,13 +41,24 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   void initState() {
     super.initState();
     var data = Get.arguments[0][Constants.detailTrip];
-    log("initState: tripData: ${data.toString()}");
     try {
       tripData = Trip.fromJson(jsonDecode(data ?? ""));
-    }catch(e){
+      _controller.detailRoute.value = tripData!;
+    } catch (e) {
       log("Get trip data ex: $e");
     }
 
+    _controller.getUserInfo(tripData?.userIdHost ?? "");
+    _controller.getCommentRoute(tripData?.id);
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    _commentController.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   List<Widget> listImage() {
@@ -60,9 +78,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       initialPage: 0,
       indicatorColor: Colors.redAccent,
       indicatorBackgroundColor: Colors.grey,
-      onPageChanged: (value) {
-        print('Page changed: $value');
-      },
+      onPageChanged: (value) {},
       autoPlayInterval: 3000,
       isLoop: (tripData?.listImg?.length ?? 0) > 1 ? true : false,
       children: listImage(),
@@ -99,41 +115,43 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   }
 
   Widget _listButtonEvent() {
+    bool isJoined = _controller.isWidgetJoinVisible.value;
     return Container(
       margin: const EdgeInsets.only(top: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          InkWell(
-            onTap: () => {_showJoinPrivateRouterDialog()},
-            child: Column(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: Colors.redAccent,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        Text(
-                          "+",
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ],
+          if (isJoined)
+            InkWell(
+              onTap: () => {_showJoinPrivateRouterDialog()},
+              child: Column(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Text(
+                            "+",
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                    margin: const EdgeInsets.only(top: 6),
-                    child: const Text("Tham gia",
-                        style: TextStyle(fontSize: 12, color: Colors.black)))
-              ],
+                  Container(
+                      margin: const EdgeInsets.only(top: 6),
+                      child: const Text("Tham gia",
+                          style: TextStyle(fontSize: 12, color: Colors.black))),
+                ],
+              ),
             ),
-          ),
           Column(
             children: [
               const Center(
@@ -227,9 +245,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     Icons.star,
                     color: Colors.red,
                   ),
-                  onRatingUpdate: (rating) {
-                    print(rating);
-                  },
+                  onRatingUpdate: (rating) {},
                 ),
               ),
             ],
@@ -296,7 +312,6 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           setState(
             () {
               // widgets.add(getRow(widgets.length + 1));
-              print('row $i');
             },
           );
         });
@@ -370,10 +385,172 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     );
   }
 
-  Widget _sectionRouter() {
+  List<Widget> _renderListComment() {
+    List<Widget> widgetList = [];
+    if (_controller.commentData.isEmpty) return widgetList;
+    _controller.commentData.map((element) => widgetList.add(_comment(element)));
+    return widgetList;
+  }
+
+  Widget _comment(Comment comment) {
+    return CommentTreeWidget<Comment, Comment>(
+      comment,
+      comment.replyComment ?? [],
+      treeThemeData:
+          const TreeThemeData(lineColor: Colors.transparent, lineWidth: 3),
+      avatarRoot: (context, data) => PreferredSize(
+        preferredSize: const Size.fromRadius(18),
+        child: CircleAvatar(
+          radius: 18,
+          backgroundColor: Colors.grey,
+          backgroundImage:
+              data.avatarUrl != null ? NetworkImage(data.avatarUrl!) : null,
+        ),
+      ),
+      avatarChild: (context, data) => PreferredSize(
+        preferredSize: const Size.fromRadius(12),
+        child: CircleAvatar(
+          radius: 12,
+          backgroundColor: Colors.grey,
+          backgroundImage:
+              data.avatarUrl != null ? NetworkImage(data.avatarUrl!) : null,
+        ),
+      ),
+      contentChild: (context, data) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.name ?? "",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w600, color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    data.content ?? "",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w300, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            DefaultTextStyle(
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.grey[700], fontWeight: FontWeight.bold),
+              child: const Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text('Like'),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text('Reply'),
+                  ],
+                ),
+              ),
+            )
+          ],
+        );
+      },
+      contentRoot: (context, data) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'dangerous',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w600, color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    data.content ?? "",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w300, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            DefaultTextStyle(
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.grey[700], fontWeight: FontWeight.bold),
+              child: const Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text('Like'),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text('Reply'),
+                  ],
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _sendBox() {
     return SizedBox(
+      height: 50,
       child: Row(
-        children: [],
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: Colors.grey,
+            backgroundImage: NetworkImage(_controller.getAvatar()),
+          ),
+          const SizedBox(width: DimenConstants.marginPaddingSmall, height: 0),
+          Expanded(
+            child: TextField(
+              controller: _commentController,
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+                hintText: 'Nhập bình luận',
+              ),
+            ),
+          ),
+          const SizedBox(width: DimenConstants.marginPaddingSmall, height: 0),
+          InkWell(
+            onTap: () {
+              _controller.addCommentRoute(
+                  tripData?.id, _commentController.text);
+            },
+            child: const Icon(
+              Icons.send,
+              color: Colors.blue,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -386,17 +563,25 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
         ),
       ),
       context: context,
-      builder: (context) => SingleChildScrollView(
-        padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMedium),
-        controller: ModalScrollController.of(context),
-        child: SizedBox(
-          height: 300,
+      builder: (context) => Container(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: DimenConstants.marginPaddingMedium,
+            right: DimenConstants.marginPaddingMedium,
+            top: DimenConstants.marginPaddingMedium),
+        child: Container(
+          height: MediaQuery.of(context).size.height / 2,
           width: double.infinity,
-          child: ListView(
-            padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
+          child: Column(
             children: [
               _headerDialog(StringConstants.titleCommentDialog),
               const SizedBox(height: DimenConstants.marginPaddingMedium),
+              Expanded(
+                  child: ListView(
+                children: _renderListComment(),
+              )),
+              _sendBox()
             ],
           ),
         ),
