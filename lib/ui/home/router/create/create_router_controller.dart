@@ -285,16 +285,4 @@ class CreateRouterController extends BaseController {
     });
   }
 
-  String getName() {
-    return userData.value.name ?? "";
-  }
-
-  String getAvatar() {
-    String avatarUrl = userData.value.avatar ?? "";
-    if (avatarUrl.isEmpty) {
-      return StringConstants.avatarImgDefault;
-    } else {
-      return avatarUrl;
-    }
-  }
 }

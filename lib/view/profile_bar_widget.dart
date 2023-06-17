@@ -11,11 +11,13 @@ class ProfileBarWidget extends StatelessWidget {
     required this.name,
     required this.state,
     required this.linkAvatar,
+    this.onAvatarPress,
   });
 
   final String name;
   final String state;
   final String linkAvatar;
+  final Function? onAvatarPress;
 
   @override
   Widget build(BuildContext context) {
@@ -56,17 +58,22 @@ class ProfileBarWidget extends StatelessWidget {
               repeat: true,
               showTwoGlows: true,
               repeatPauseDuration: const Duration(milliseconds: 100),
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: ClipOval(
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(48), // Image radius
-                    child: Image.network(
-                      fit: BoxFit.fill,
-                      linkAvatar,
-                      height: 45,
-                      width: 45,
+              child: InkWell(
+                onTap: () {
+                  if (onAvatarPress != null) onAvatarPress!();
+                },
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: ClipOval(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(48), // Image radius
+                      child: Image.network(
+                        fit: BoxFit.cover,
+                        linkAvatar,
+                        height: 45,
+                        width: 45,
+                      ),
                     ),
                   ),
                 ),
