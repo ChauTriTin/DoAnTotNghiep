@@ -286,7 +286,7 @@ class CreateRouterController extends BaseController {
       try {
         FirebaseHelper.collectionReferenceChat
             .doc(trip.id)
-            .set(Chat([]).toJson())
+            .set(<String, dynamic> {'messages' : []})
             .then((value) => Dog.d("createRouter -- create chat with route id ${trip.id} Added"))
             .catchError((error) => Dog.e("createRouter -- Failed to add chat: $error"));
       } catch (e) {

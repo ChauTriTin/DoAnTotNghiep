@@ -4,6 +4,7 @@ class FirebaseHelper {
   static String keyRouter = "router";
   static String keyUser = "users";
   static String keyChat = "chat";
+  static String messages = "messages";
   static String listIdMember = "listIdMember";
   static String userIdHost = "userIdHost";
 
