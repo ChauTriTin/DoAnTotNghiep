@@ -17,6 +17,7 @@ import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
+import '../../setting/setting_screen.dart';
 
 class DetailRouterScreen extends StatefulWidget {
   const DetailRouterScreen({Key? key}) : super(key: key);
@@ -37,10 +38,9 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     log("initState: tripData: ${data.toString()}");
     try {
       tripData = Trip.fromJson(jsonDecode(data ?? ""));
-    }catch(e){
+    } catch (e) {
       log("Get trip data ex: $e");
     }
-
   }
 
   List<Widget> listImage() {
@@ -239,7 +239,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             margin: const EdgeInsets.only(right: 24),
             child: Center(
                 child: Image.network(
-                  UserSingletonController.instance.getAvatar(),
+              UserSingletonController.instance.getAvatar(),
               height: 50,
               width: 50,
             ))),
@@ -471,10 +471,11 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           color: ColorConstants.appColorBkg,
           child: Column(
             children: [
-              const ProfileBarWidget(
-                name: "Nguyen Hoang Giang",
-                state: "⬤ Online",
-                linkAvatar: "https://www.w3schools.com/howto/img_avatar.png",
+              ProfileBarWidget(
+                name: UserSingletonController.instance.getName(),
+                state: StringConstants.status,
+                linkAvatar: UserSingletonController.instance.getAvatar(),
+                onAvatarPress: _navigateToSettingScreen,
               ),
               Expanded(
                 child: ListView(
@@ -504,5 +505,9 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
         );
       }),
     );
+  }
+
+  void _navigateToSettingScreen() {
+    Get.to(const PageSettingScreen());
   }
 }

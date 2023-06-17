@@ -2,6 +2,7 @@ import 'package:appdiphuot/ui/home/chat/page_chat_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_screen.dart';
 import 'package:appdiphuot/ui/home/home_controller.dart';
 import 'package:appdiphuot/ui/home/noti/page_noti_screen.dart';
+import 'package:appdiphuot/ui/home/setting/setting_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_screen.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
@@ -10,6 +11,7 @@ import 'package:get/get.dart';
 
 import '../../base/base_stateful_state.dart';
 import '../../common/const/color_constants.dart';
+import '../../common/const/string_constants.dart';
 import '../user_singleton_controller.dart';
 import '../../view/profile_bar_widget.dart';
 
@@ -211,8 +213,9 @@ class HomePageState extends State<HomePage> {
             children: [
               ProfileBarWidget(
                 name: UserSingletonController.instance.getName(),
-                state: "⬤ Online",
+                state: StringConstants.status,
                 linkAvatar: UserSingletonController.instance.getAvatar(),
+                onAvatarPress: _navigateToSettingScreen,
               ),
               Expanded(
                 child: Stack(
@@ -273,5 +276,9 @@ class HomePageState extends State<HomePage> {
         });
       },
     );
+  }
+
+  void _navigateToSettingScreen() {
+    Get.to(const PageSettingScreen());
   }
 }

@@ -17,6 +17,7 @@ import '../../../../common/const/constants.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 import '../../home/detail/page_detail_router_screen.dart';
+import '../../setting/setting_screen.dart';
 
 class PageDetailTrip extends StatefulWidget {
   const PageDetailTrip({
@@ -76,13 +77,18 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
             children: [
               ProfileBarWidget(
                 name: UserSingletonController.instance.getName(),
-                state: "⬤ Online",
+                state: StringConstants.status,
                 linkAvatar: UserSingletonController.instance.getAvatar(),
+                onAvatarPress: _navigateToSettingScreen,
               ),
               Expanded(child: buildBody())
             ],
           );
         }));
+  }
+
+  void _navigateToSettingScreen() {
+    Get.to(const PageSettingScreen());
   }
 
   Widget buildBody() {

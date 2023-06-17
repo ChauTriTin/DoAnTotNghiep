@@ -83,4 +83,5 @@ class StringConstants {
   static const String titleCommentDialog = "Bình luận";
   static const String titleJoinPrivateDialog = "Nhập mã tham gia";
   static const String codeRouter = "Mã chuyến đi";
+  static const String status = "⬤ Online";
 }

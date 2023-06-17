@@ -16,6 +16,8 @@ import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
+import '../../../user_singleton_controller.dart';
+import '../../setting/setting_screen.dart';
 import 'create_router_controller.dart';
 
 class CreateRouterScreen extends StatefulWidget {
@@ -85,9 +87,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             children: [
               Obx(() {
                 return ProfileBarWidget(
-                  name: _controller.getName(),
-                  state: "⬤ Online",
-                  linkAvatar: _controller.getAvatar(),
+                  name: UserSingletonController.instance.getName(),
+                  state: StringConstants.status,
+                  linkAvatar: UserSingletonController.instance.getAvatar(),
+                  onAvatarPress: _navigateToSettingScreen,
                 );
               }),
               const SizedBox(height: DimenConstants.marginPaddingTiny),
@@ -103,6 +106,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         },
       ),
     );
+  }
+
+  void _navigateToSettingScreen() {
+    Get.to(const PageSettingScreen());
   }
 
   Widget _buildBodyView() {

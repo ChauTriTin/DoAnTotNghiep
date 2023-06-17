@@ -31,7 +31,10 @@ class PageHomeController extends BaseController {
         listTripWithState.value = listTrips;
         setAppLoading(false, "Loading", TypeApp.loadingData);
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => {
+        setAppLoading(false, "Loading", TypeApp.loadingData),
+        print("Error completing: $e")
+      },
     );
   }
 
