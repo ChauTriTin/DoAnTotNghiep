@@ -283,15 +283,14 @@ class CreateRouterController extends BaseController {
         Dog.e('createRouter: $e');
       }
 
-      try {
-        FirebaseHelper.collectionReferenceChat
-            .doc(trip.id)
-            .set(<String, dynamic> {'messages' : []})
-            .then((value) => Dog.d("createRouter -- create chat with route id ${trip.id} Added"))
-            .catchError((error) => Dog.e("createRouter -- Failed to add chat: $error"));
-      } catch (e) {
-        Dog.e('createRouter: chat $e');
-      }
+      // try {
+      //   FirebaseHelper.collectionReferenceChat
+      //       .doc(trip.id)
+      //       .then((value) => Dog.d("createRouter -- create chat with route id ${trip.id} Added"))
+      //       .catchError((error) => Dog.e("createRouter -- Failed to add chat: $error"));
+      // } catch (e) {
+      //   Dog.e('createRouter: chat $e');
+      // }
 
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });

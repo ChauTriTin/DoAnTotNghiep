@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:appdiphuot/base/base_controller.dart';
-import 'package:appdiphuot/model/chat.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
