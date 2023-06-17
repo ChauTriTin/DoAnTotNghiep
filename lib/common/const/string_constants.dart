@@ -84,4 +84,16 @@ class StringConstants {
   static const String titleJoinPrivateDialog = "Nhập mã tham gia";
   static const String codeRouter = "Mã chuyến đi";
   static const String status = "⬤ Online";
+
+  // Setting
+  static const String editProfile = "Thay đổi thông tin";
+  static const String mode = "Mode";
+  static const String generalSetting = "Cài đặt";
+  static const String language = "Ngôn ngữ";
+  static const String about = "Thông tin";
+  static const String termCondition = "Chính sách và điều khoản";
+  static const String policy = "Chính sách bảo mật";
+  static const String rate = "Đánh giá app";
+
+
 }

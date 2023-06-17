@@ -8,7 +8,7 @@ class ColorConstants {
   static Color disabledColor = Colors.grey;
   static const Color colorWhite = Colors.white;
   static Color colorBlack = Colors.black;
-  static Color colorGrey = const Color(0xFFF2F2F2);
+  static const Color colorGrey = const Color(0xFFF2F2F2);
   static Color loginBtnBgColor = Colors.black;
 
   static Color bgBackCircleColor = Colors.black;
@@ -20,8 +20,16 @@ class ColorConstants {
   static Color focusBorderTextInputColor = Colors.white;
   static Color errorBorderTextInputColor = const Color(0xFFFDC10B);
   static const Color textColorForgotPassword = Color(0xFFFFE49A);
-  static const Color iconColor = Colors.white;
+  static const Color iconColor = Color(0xFF313131);
   static const Color dividerColor =  Color(0xFFFDC2C2);
+
+  static const Color colorProfile =  Color(0xFF04CB5B);
+  static const Color colorMode =  Color(0xFF3B3B3B);
+  static const Color colorLanguage =  Color(0xFFFFC037);
+  static const Color colorAbout =  Color(0xFFDFDFDF);
+  static const Color colorTermCondition =  Color(0xFF015DD6);
+  static const Color colorPolicy =  Color(0xFFCD0D0F);
+  static const Color colorRateApp =  Color(0xFF8C51FF);
 
   static getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())

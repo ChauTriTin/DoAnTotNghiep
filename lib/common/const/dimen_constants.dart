@@ -16,7 +16,7 @@ class DimenConstants {
   static const int maxLengthOTP = 6;
 
   static const double txtTiny = 7.0;
-  static const double txtSmall = 10.0;
+  static const double txtSmall = 12.0;
   static const double txtMedium = 16.0;
   static const double txtLarge = 20.0;
   static const double txtHeader = 45.0;
@@ -40,9 +40,12 @@ class DimenConstants {
 
   // Icon Back Login Page
   static const double iconSize = 36;
+  static const double iconSizeSmall = 24;
   static const double loginIconSize = 50;
   static const double iconSizePadding = 6;
   static const double avatarProfile = 130;
+  static const double avatarProfile2 = 100;
+  static const double circleShape = 40;
   static const double dividerHeight = 1;
 
   // Icon Back Login Page

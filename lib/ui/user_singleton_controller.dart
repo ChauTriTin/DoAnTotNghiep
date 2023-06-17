@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../common/const/string_constants.dart';
@@ -55,4 +56,9 @@ class UserSingletonController extends GetxController {
   String getName() {
     return userData.value.name ?? "";
   }
+
+  String getEmail() {
+    return userData.value.email ?? "";
+  }
+
 }

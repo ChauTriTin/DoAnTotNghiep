@@ -258,6 +258,31 @@ class UIUtils {
     );
   }
 
+  static TextStyle getStyleTextMedium600() {
+    return const TextStyle(
+        color: Colors.black,
+        fontSize: DimenConstants.txtMedium,
+        fontWeight: FontWeight.w600
+    );
+  }
+
+  static TextStyle getStyleTextSmall300() {
+    return const TextStyle(
+        color: Colors.black,
+        fontSize: DimenConstants.txtSmall,
+        fontWeight: FontWeight.w300
+    );
+  }
+
+
+  static TextStyle getStyleTextSmall400() {
+    return const TextStyle(
+        color: Colors.black,
+        fontSize: DimenConstants.txtSmall,
+        fontWeight: FontWeight.w400
+    );
+  }
+
   static TextStyle getStyleTextLarge500() {
     return const TextStyle(
       color: Colors.black,
