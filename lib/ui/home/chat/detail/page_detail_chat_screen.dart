@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/ui/home/chat/detail/page_detail_chat_controller.dart';
@@ -8,6 +10,10 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
+import '../../../../common/const/constants.dart';
+import '../../../../model/trip.dart';
+import '../../../../util/log_dog_utils.dart';
 
 class PageDetailChatScreen extends StatefulWidget {
   const PageDetailChatScreen({
@@ -23,6 +29,10 @@ class _PageDetailChatScreenState extends BaseStatefulState<PageDetailChatScreen>
 
   @override
   void initState() {
+    var tripData = Get.arguments[0][Constants.detailChat];
+    Dog.d("initState: tripData: ${tripData.toString()}");
+    _controller.tripData = Trip.fromJson(jsonDecode(tripData ?? ""));
+
     _controller.getData();
     super.initState();
   }

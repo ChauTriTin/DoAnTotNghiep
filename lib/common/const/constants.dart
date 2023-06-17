@@ -24,4 +24,5 @@ class Constants {
   }
 
   static const String detailTrip = "detailTrip";
+  static const String detailChat = "detailChat";
 }

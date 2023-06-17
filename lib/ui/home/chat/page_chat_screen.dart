@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
@@ -8,6 +10,9 @@ import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../common/const/constants.dart';
+import '../../../model/trip.dart';
 
 class PageChatScreen extends StatefulWidget {
   const PageChatScreen({
@@ -46,21 +51,23 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
-      body: ListView.separated(
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-        physics: const BouncingScrollPhysics(),
-        itemCount: 10,
-        separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox(height: DimenConstants.marginPaddingSmall);
-        },
-        itemBuilder: (BuildContext context, int index) {
-          return _getRowConversation(index);
-        },
-      ),
+      body: Obx(() {
+        return ListView.separated(
+          padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+          physics: const BouncingScrollPhysics(),
+          itemCount: _controller.trips.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return const SizedBox(height: DimenConstants.marginPaddingSmall);
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return _getRowConversation(index, _controller.trips[index]);
+          },
+        );
+      }),
     );
   }
 
-  Widget _getRowConversation(int index) {
+  Widget _getRowConversation(int index, Trip trip) {
     return Card(
       elevation: 4.0,
       child: InkWell(
@@ -70,28 +77,35 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
             children: [
               Expanded(
                   flex: 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: SizedBox.fromSize(
-                      size: const Size.fromRadius(24),
-                      child: const Icon(Icons.message),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(24),
+                        child: CachedMemoryImage(
+                          fit: BoxFit.cover,
+                          uniqueKey: trip.getFirstImageUrl(),
+                          base64: trip.getFirstImageUrl(),
+                        ),
+                      ),
                     ),
                   )),
               Expanded(
                 flex: 8,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  padding: const EdgeInsets.only(top: 16, bottom: 16, left: 4, right: 4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Title Message",
+                        trip.title ?? "",
                         style: UIUtils.getStyleText(),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
-                        "Description Message",
-                        style: TextStyle(fontSize: 12, color: Colors.black54),
+                      Text(
+                        trip.des ?? "",
+                        style: const TextStyle(fontSize: 12, color: Colors.black54),
                       )
                     ],
                   ),
@@ -100,7 +114,9 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
             ],
           ),
           onTap: () {
-            Get.to(const PageDetailChatScreen());
+            Get.to(() => const PageDetailChatScreen(), arguments: [
+              {Constants.detailChat: jsonEncode(trip)},
+            ]);
           }),
     );
   }
