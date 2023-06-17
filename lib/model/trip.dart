@@ -105,4 +105,43 @@ class Trip {
     data['comments'] = comments;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Trip &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          userIdHost == other.userIdHost &&
+          listIdMember == other.listIdMember &&
+          title == other.title &&
+          des == other.des &&
+          listImg == other.listImg &&
+          placeStart == other.placeStart &&
+          placeEnd == other.placeEnd &&
+          listPlace == other.listPlace &&
+          timeStart == other.timeStart &&
+          timeEnd == other.timeEnd &&
+          require == other.require &&
+          isPublic == other.isPublic &&
+          isComplete == other.isComplete &&
+          comments == other.comments;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      userIdHost.hashCode ^
+      listIdMember.hashCode ^
+      title.hashCode ^
+      des.hashCode ^
+      listImg.hashCode ^
+      placeStart.hashCode ^
+      placeEnd.hashCode ^
+      listPlace.hashCode ^
+      timeStart.hashCode ^
+      timeEnd.hashCode ^
+      require.hashCode ^
+      isPublic.hashCode ^
+      isComplete.hashCode ^
+      comments.hashCode;
 }

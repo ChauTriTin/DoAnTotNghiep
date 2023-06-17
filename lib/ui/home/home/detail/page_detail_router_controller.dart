@@ -10,22 +10,24 @@ import 'package:get/get.dart';
 import '../../../../common/const/string_constants.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
+import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
 
-  var userData = UserData().obs;
+  var userLeaderData = UserData().obs;
 
-  var detailRoute = Trip().obs;
+  var userData = UserSingletonController.instance.userData;
+
+  var detailTrip = Trip().obs;
 
   var commentData = <Comment>[].obs;
 
-  var isWidgetJoinVisible = true.obs;
+  var isWidgetJoinedVisible = true.obs;
 
   Future<void> getUserInfo(String uid) async {
     try {
-      log("getUserInfo uid: $uid");
       if (uid == "") return;
       _users.doc(uid).snapshots().listen((value) {
         DocumentSnapshot<Map<String, dynamic>>? userMap =
@@ -33,17 +35,37 @@ class DetailRouterController extends BaseController {
         if (userMap == null || userMap.data() == null) return;
 
         var user = UserData.fromJson((userMap).data()!);
-        userData.value = user;
-        if (detailRoute.value.listIdMember?.contains(user.uid) == true) {
-          isWidgetJoinVisible.value = true;
-        } else {
-          isWidgetJoinVisible.value = false;
-        }
+        Dog.d("userId : ${user.uid}");
+        Dog.d("isContain : ${user.avatar}");
+        userLeaderData.value = user;
         log("getUserInfo success: ${user.toString()}");
       });
     } catch (e) {
       log("getUserInfo get user info fail: $e");
     }
+  }
+
+  Future<void> getDetailTrip(String? id) async {
+    if (id == null) return;
+    FirebaseHelper.collectionReferenceRouter
+        .doc(id)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        try {
+          detailTrip.value =
+              Trip.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+          if (detailTrip.value.listIdMember?.contains(userData.value.uid) ==
+              true) {
+            isWidgetJoinedVisible.value = true;
+          } else {
+            isWidgetJoinedVisible.value = false;
+          }
+        } catch (ex) {
+          Dog.e("getDetailTrip: $ex");
+        }
+      }
+    });
   }
 
   Future<void> getCommentRoute(String? id) async {
@@ -70,8 +92,11 @@ class DetailRouterController extends BaseController {
       Dog.d("addCommentRoute id: $id");
       if (id == null) return;
       var listComment = commentData.value;
-      listComment.add(Comment(DateTime.now().millisecondsSinceEpoch.toString(),
-          getAvatar(), userData.value.name ?? "", text, <Comment>[]));
+      listComment.add(Comment(
+          DateTime.now().millisecondsSinceEpoch.toString(),
+          getLeaderAvatar(),
+          userLeaderData.value.name ?? "",
+          text, <Comment>[]));
 
       List<Map<String, dynamic>> commentsData =
           listComment.map((comment) => comment.toJson()).toList();
@@ -90,8 +115,34 @@ class DetailRouterController extends BaseController {
     }
   }
 
-  String getAvatar() {
-    String avatarUrl = userData.value.avatar ?? "";
+  Future<void> joinedRouter(String? code) async {
+    try {
+      var id = userData.value.uid;
+      Dog.e("joinedRouter id :$id");
+      var listMember = detailTrip.value.listIdMember;
+      if (detailTrip.value.id != code || code == null) {
+        Dog.e("detailRoute error: wrong code");
+      } else {
+        if (listMember?.contains(id) == false || listMember != null) {
+          listMember?.add(id!);
+          FirebaseHelper.collectionReferenceRouter
+              .doc(detailTrip.value.id)
+              .update({"listIdMember": listMember})
+              .then((value) => {
+                    isWidgetJoinedVisible.value = true,
+                    Dog.d("joinedRouter success")
+                  })
+              .catchError((error) => {Dog.e("joinedRouter error: $error")});
+        }
+      }
+    } catch (e) {
+      Dog.e("joinedRouter: $e");
+    }
+  }
+
+  String getLeaderAvatar() {
+    Dog.e("getLeaderAvatar: ${userLeaderData.value.avatar}");
+    String avatarUrl = userLeaderData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
     } else {
@@ -100,7 +151,7 @@ class DetailRouterController extends BaseController {
   }
 
   String getNameLeader() {
-    String name = userData.value.name ?? "";
+    String name = userLeaderData.value.name ?? "";
     if (name.isEmpty) {
       return "";
     } else {

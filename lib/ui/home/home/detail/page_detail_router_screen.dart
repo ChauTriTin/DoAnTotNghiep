@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/trip.dart';
@@ -18,7 +17,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
 import '../../../../model/comment.dart';
-import '../../../../util/log_dog_utils.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 
@@ -32,6 +30,7 @@ class DetailRouterScreen extends StatefulWidget {
 class _DetailRouterScreenState extends State<DetailRouterScreen> {
   final DetailRouterController _controller = Get.put(DetailRouterController());
   final _commentController = TextEditingController();
+  final _codeController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -42,14 +41,14 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     super.initState();
     var data = Get.arguments[0][Constants.detailTrip];
     try {
-      tripData = Trip.fromJson(jsonDecode(data ?? ""));
-      _controller.detailRoute.value = tripData!;
+      // tripData = Trip.fromJson(jsonDecode(data ?? ""));
+      _controller.getDetailTrip(Trip.fromJson(jsonDecode(data)).id);
     } catch (e) {
       log("Get trip data ex: $e");
     }
 
-    _controller.getUserInfo(tripData?.userIdHost ?? "");
-    _controller.getCommentRoute(tripData?.id);
+    _controller.getUserInfo(Trip.fromJson(jsonDecode(data)).userIdHost ?? "");
+    _controller.getCommentRoute(Trip.fromJson(jsonDecode(data)).id);
   }
 
   @override
@@ -63,7 +62,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
 
   List<Widget> listImage() {
     var list = <Widget>[];
-    var images = tripData?.listImg;
+    var images = _controller.detailTrip.value?.listImg;
     images?.forEach((element) {
       list.add(CachedMemoryImage(
           fit: BoxFit.cover, uniqueKey: element, base64: element));
@@ -80,7 +79,9 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       indicatorBackgroundColor: Colors.grey,
       onPageChanged: (value) {},
       autoPlayInterval: 3000,
-      isLoop: (tripData?.listImg?.length ?? 0) > 1 ? true : false,
+      isLoop: (_controller.detailTrip.value.listImg?.length ?? 0) > 1
+          ? true
+          : false,
       children: listImage(),
     );
   }
@@ -94,34 +95,35 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(right: 12),
-                  child: const Text(
-                    "Vinh Ha Long 3N3D",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  child: Text(
+                    _controller.detailTrip.value.title ?? "",
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-                const Icon(
-                  Icons.public,
+                Icon(
+                  _controller.detailTrip.value.isPublic == true
+                      ? Icons.public
+                      : Icons.lock,
                   color: Colors.blue,
                 )
               ],
             ),
             Container(
-              margin: const EdgeInsets.only(top: 12),
-              child: const Text(
-                  "Chuyến đi Hạ Long trong 3 ngày khởi hành từ tp.HCM ngày 15/5 Chuyến đi Hạ Long trong 3 ngày khởi hành từ tp.HCM ngày 15/5"),
-            )
+                margin: const EdgeInsets.only(top: 12),
+                child: Text(_controller.detailTrip.value.des ?? ""))
           ],
         ));
   }
 
   Widget _listButtonEvent() {
-    bool isJoined = _controller.isWidgetJoinVisible.value;
+    bool isJoined = _controller.isWidgetJoinedVisible.value;
     return Container(
       margin: const EdgeInsets.only(top: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          if (isJoined)
+          if (!isJoined)
             InkWell(
               onTap: () => {_showJoinPrivateRouterDialog()},
               child: Column(
@@ -222,7 +224,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     Container(
                       margin: const EdgeInsets.only(left: 12),
                       child: Text(
-                        "Leader: ${UserSingletonController.instance.getName()}",
+                        "Leader: ${_controller.userLeaderData.value.name}",
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
@@ -255,7 +257,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             margin: const EdgeInsets.only(right: 24),
             child: Center(
                 child: Image.network(
-                  UserSingletonController.instance.getAvatar(),
+              _controller.getLeaderAvatar(),
               height: 50,
               width: 50,
             ))),
@@ -527,7 +529,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           CircleAvatar(
             radius: 18,
             backgroundColor: Colors.grey,
-            backgroundImage: NetworkImage(_controller.getAvatar()),
+            backgroundImage: NetworkImage(_controller.getLeaderAvatar()),
           ),
           const SizedBox(width: DimenConstants.marginPaddingSmall, height: 0),
           Expanded(
@@ -543,7 +545,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           InkWell(
             onTap: () {
               _controller.addCommentRoute(
-                  tripData?.id, _commentController.text);
+                  _controller.detailTrip.value.id, _commentController.text);
             },
             child: const Icon(
               Icons.send,
@@ -615,6 +617,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     horizontal: DimenConstants.marginPaddingExtraLarge),
                 width: double.infinity,
                 child: TextField(
+                  controller: _codeController,
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -627,12 +630,9 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
               Container(
                 margin: const EdgeInsets.symmetric(
                     horizontal: DimenConstants.marginPaddingExtraLarge),
-                child: UIUtils.getOutlineButton1(
-                    StringConstants.confirm,
-                    () {},
-                    Colors.red,
-                    DimenConstants.marginPaddingMedium,
-                    Colors.white,
+                child: UIUtils.getOutlineButton1(StringConstants.confirm, () {
+                  _controller.joinedRouter(_codeController.text);
+                }, Colors.red, DimenConstants.marginPaddingMedium, Colors.white,
                     Colors.red),
               ),
             ],
@@ -656,11 +656,12 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           color: ColorConstants.appColorBkg,
           child: Column(
             children: [
-              const ProfileBarWidget(
-                name: "Nguyen Hoang Giang",
-                state: "⬤ Online",
-                linkAvatar: "https://www.w3schools.com/howto/img_avatar.png",
-              ),
+              ProfileBarWidget(
+                  name: UserSingletonController.instance.userData.value.name ??
+                      "",
+                  state: "⬤ Online",
+                  linkAvatar: UserSingletonController.instance.userData.value
+                      .getAvatar()),
               Expanded(
                 child: ListView(
                   physics: const BouncingScrollPhysics(),
