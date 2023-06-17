@@ -126,7 +126,11 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
         children: [
           if (!isJoined)
             InkWell(
-              onTap: () => {_showJoinPrivateRouterDialog()},
+              onTap: () => {
+                _controller.detailTrip.value.isPublic == true
+                    ? _controller.joinedRouter(_controller.detailTrip.value.id)
+                    : _showJoinPrivateRouterDialog()
+              },
               child: Column(
                 children: [
                   Container(
