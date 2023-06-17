@@ -15,6 +15,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
+import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 
 class DetailRouterScreen extends StatefulWidget {
@@ -40,7 +41,6 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       log("Get trip data ex: $e");
     }
 
-    _controller.getUserInfo(tripData?.userIdHost ?? "");
   }
 
   List<Widget> listImage() {
@@ -204,7 +204,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     Container(
                       margin: const EdgeInsets.only(left: 12),
                       child: Text(
-                        "Leader: ${_controller.getNameLeader()}",
+                        "Leader: ${UserSingletonController.instance.getName()}",
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       ),
@@ -239,7 +239,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             margin: const EdgeInsets.only(right: 24),
             child: Center(
                 child: Image.network(
-              _controller.getAvatar(),
+                  UserSingletonController.instance.getAvatar(),
               height: 50,
               width: 50,
             ))),

@@ -15,8 +15,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
+import '../../../user_singleton_controller.dart';
+
 class CreateRouterController extends BaseController {
-  var userData = UserData().obs;
+  var userData = UserSingletonController.instance.userData;
   final id = DateTime.now().millisecondsSinceEpoch.toString();
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
@@ -293,26 +295,6 @@ class CreateRouterController extends BaseController {
       return StringConstants.avatarImgDefault;
     } else {
       return avatarUrl;
-    }
-  }
-
-  Future<void> getUserInfo() async {
-    try {
-      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
-      FirebaseHelper.collectionReferenceUser
-          .doc(uid)
-          .snapshots()
-          .listen((value) {
-        DocumentSnapshot<Map<String, dynamic>>? userMap =
-            value as DocumentSnapshot<Map<String, dynamic>>?;
-        if (userMap == null || userMap.data() == null) return;
-
-        var user = UserData.fromJson((userMap).data()!);
-        userData.value = user;
-        debugPrint("getUserInfo success: ${user.toString()}");
-      });
-    } catch (e) {
-      debugPrint("getUserInfo get user info fail: $e");
     }
   }
 }

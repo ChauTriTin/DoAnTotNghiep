@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
+import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,7 +41,7 @@ void main() async {
     debugPrint('initializeApp fail');
   }
   Messaging.initFCM();
-
+  Get.put(UserSingletonController.instance);
   getLoc();
 
   runApp(

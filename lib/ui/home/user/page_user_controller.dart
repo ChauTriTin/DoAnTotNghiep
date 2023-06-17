@@ -14,6 +14,7 @@ import '../../../model/trip.dart';
 import '../../../model/user.dart';
 import '../../../util/shared_preferences_util.dart';
 import '../../../util/ui_utils.dart';
+import '../../user_singleton_controller.dart';
 
 class PageUserController extends BaseController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -29,7 +30,7 @@ class PageUserController extends BaseController {
   var tripParticipatedCount = 0.obs;
   var totalKm = 0.obs;
 
-  var userData = UserData().obs;
+  var userData = UserSingletonController.instance.userData;
 
   var trips = <Trip>[].obs;
   var tripsHost = <Trip>[].obs;
@@ -46,49 +47,18 @@ class PageUserController extends BaseController {
   }
 
   Future<void> getData() async {
-    await getUserInfo();
     getTrip();
     getTripHost();
     getTotalTripCount();
-  }
-
-  Future<void> getUserInfo() async {
-    try {
-      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
-      _users.doc(uid).snapshots().listen((value) {
-        DocumentSnapshot<Map<String, dynamic>>? userMap =
-            value as DocumentSnapshot<Map<String, dynamic>>?;
-        if (userMap == null || userMap.data() == null) return;
-
-        var user = UserData.fromJson((userMap).data()!);
-        userData.value = user;
-        log("getUserInfo success: ${user.toString()}");
-      });
-    } catch (e) {
-      log("getUserInfo get user info fail: $e");
-    }
-  }
-
-  String getAvatar() {
-    String avatarUrl = userData.value.avatar ?? "";
-    if (avatarUrl.isEmpty) {
-      return StringConstants.avatarImgDefault;
-    } else {
-      return avatarUrl;
-    }
-  }
-
-  String getName() {
-    return userData.value.name ?? "";
   }
 
   Future<void> getTrip() async {
     try {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
       log("getTrip: userid $uid");
-      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
-          FirebaseHelper.listIdMember,
-          arrayContainsAny: [uid]).snapshots();
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
+          .snapshots();
 
       var routerSnapshots =
           routerStream.map((querySnapshot) => querySnapshot.docs);

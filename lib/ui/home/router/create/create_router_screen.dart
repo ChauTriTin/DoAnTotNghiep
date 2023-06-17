@@ -34,7 +34,6 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void initState() {
     super.initState();
     _setupListen();
-    _controller.getUserInfo();
   }
 
   void _setupListen() {

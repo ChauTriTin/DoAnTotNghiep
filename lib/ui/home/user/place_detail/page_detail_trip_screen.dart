@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../../common/const/constants.dart';
+import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 import '../../home/detail/page_detail_router_screen.dart';
 
@@ -74,9 +75,9 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
           return Column(
             children: [
               ProfileBarWidget(
-                name: _controller.getName(),
+                name: UserSingletonController.instance.getName(),
                 state: "⬤ Online",
-                linkAvatar: _controller.getAvatar(),
+                linkAvatar: UserSingletonController.instance.getAvatar(),
               ),
               Expanded(child: buildBody())
             ],

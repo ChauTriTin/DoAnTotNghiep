@@ -15,6 +15,7 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import '../../../common/extension/build_context_extension.dart';
 import '../../../model/place.dart';
 import '../../../model/trip.dart';
+import '../../user_singleton_controller.dart';
 import '../home/detail/page_detail_router_screen.dart';
 
 class PageUserScreen extends StatefulWidget {
@@ -84,7 +85,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             height: DimenConstants.marginPaddingTiny,
           ),
           Text(
-            _controller.getName(),
+            UserSingletonController.instance.getName(),
             style: UIUtils.getStyleTextLarge500(),
             textAlign: TextAlign.center,
           ),
@@ -264,7 +265,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
           child: CircleAvatar(
             radius:
                 DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
-            backgroundImage: NetworkImage(_controller.getAvatar()),
+            backgroundImage: NetworkImage(UserSingletonController.instance.getAvatar()),
           ),
         ));
   }

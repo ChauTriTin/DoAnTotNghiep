@@ -18,13 +18,15 @@ import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../user_singleton_controller.dart';
+
 class MapController extends BaseController {
   void log(String s) {
     debugPrint("MapController $s");
   }
 
   var trip = Trip().obs;
-  var currentUserData = UserData().obs;
+  var currentUserData = UserSingletonController.instance.userData;
   var listMember = <UserData>[].obs;
 
   var listMarkerGoogleMap = <Marker>[].obs;
@@ -151,26 +153,6 @@ class MapController extends BaseController {
       return StringConstants.avatarImgDefault;
     } else {
       return avatarUrl;
-    }
-  }
-
-  Future<void> getCurrentUserInfo() async {
-    try {
-      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
-      FirebaseHelper.collectionReferenceUser
-          .doc(uid)
-          .snapshots()
-          .listen((value) {
-        DocumentSnapshot<Map<String, dynamic>>? userMap =
-            value as DocumentSnapshot<Map<String, dynamic>>?;
-        if (userMap == null || userMap.data() == null) return;
-
-        var user = UserData.fromJson((userMap).data()!);
-        currentUserData.value = user;
-        debugPrint("getUserInfo success: ${user.toString()}");
-      });
-    } catch (e) {
-      debugPrint("getUserInfo get user info fail: $e");
     }
   }
 

@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import '../../base/base_stateful_state.dart';
 import '../../common/const/color_constants.dart';
+import '../user_singleton_controller.dart';
 import '../../view/profile_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -92,7 +93,7 @@ class HomePageState extends State<HomePage> {
 
     _navigationController = CircularBottomNavigationController(selectedPos);
     _setupListen();
-    _controller.getUserInfo();
+    UserSingletonController.instance.getUserInfo();
 
     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     //   debugPrint('FCM listen onMessageOpenedApp ${message.data}');
@@ -209,9 +210,9 @@ class HomePageState extends State<HomePage> {
           return Column(
             children: [
               ProfileBarWidget(
-                name: _controller.getName(),
+                name: UserSingletonController.instance.getName(),
                 state: "⬤ Online",
-                linkAvatar: _controller.getAvatar(),
+                linkAvatar: UserSingletonController.instance.getAvatar(),
               ),
               Expanded(
                 child: Stack(

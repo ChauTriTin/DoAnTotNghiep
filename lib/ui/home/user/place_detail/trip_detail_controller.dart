@@ -15,7 +15,6 @@ class TripDetailController extends BaseController {
       FirebaseFirestore.instance.collection('users');
 
   var place = Place().obs;
-  var userData = UserData().obs;
   var usersParticipated = <UserData>[].obs;
   var userHostTrip = UserData().obs;
   var tripParticipatedCount = 0.obs;
@@ -32,25 +31,8 @@ class TripDetailController extends BaseController {
 
   Future<void> getData() async {
     var currentUid = await SharedPreferencesUtil.getUIDLogin() ?? "";
-    _getUserInfo(currentUid);
     _getUserHostTrip(tripData.value.userIdHost ?? "");
     _getUserParticipated(currentUid);
-  }
-
-  Future<void> _getUserInfo(String uid) async {
-    try {
-      _users.doc(uid).snapshots().listen((value) {
-        DocumentSnapshot<Map<String, dynamic>>? userMap =
-            value as DocumentSnapshot<Map<String, dynamic>>?;
-        if (userMap == null || userMap.data() == null) return;
-
-        var user = UserData.fromJson((userMap).data()!);
-        userData.value = user;
-        log("getUserInfo success: ${user.toString()}");
-      });
-    } catch (e) {
-      log("getUserInfo get user info fail: $e");
-    }
   }
 
   Future<void> _getUserHostTrip(String uid) async {
@@ -66,19 +48,6 @@ class TripDetailController extends BaseController {
       });
     } catch (e) {
       log("getUserHostTrip get user info fail: $e");
-    }
-  }
-
-  String getName() {
-    return userData.value.name ?? "";
-  }
-
-  String getAvatar() {
-    String avatarUrl = userData.value.avatar ?? "";
-    if (avatarUrl.isEmpty) {
-      return StringConstants.avatarImgDefault;
-    } else {
-      return avatarUrl;
     }
   }
 
