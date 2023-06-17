@@ -18,24 +18,48 @@ class PageHomeController extends BaseController {
     Get.delete<PageHomeController>();
   }
 
+  //
+  // for (var docSnapshot in querySnapshot.docs) {
+  // print('listTrips ${listTrips.length}');
+  // print('${docSnapshot.id} => ${docSnapshot.data()}');
+  // listTrips.add(Trip.fromJson(docSnapshot.data()));
+  // }
+  // listTripWithState.value = listTrips;
+  // setAppLoading(false, "Loading", TypeApp.loadingData);
+  //
   Future<void> getAllRouter() async {
     setAppLoading(true, "Loading", TypeApp.loadingData);
-    await db.collection("router").get().then(
-      (querySnapshot) {
-        print("Successfully completed");
-        for (var docSnapshot in querySnapshot.docs) {
+    var routerSnapshot = db.collection("router").snapshots();
+    routerSnapshot.listen((event) {
+      try {
+        for (var docSnapshot in event.docs) {
+          print('listTrips id ${docSnapshot.id} => ${docSnapshot.data()}');
+          var trip = Trip.fromJson(docSnapshot.data().cast<String, dynamic>());
+
+          if (listTrips.firstWhereOrNull(
+                  (element) => element.id == docSnapshot.id) ==
+              null) {
+            listTrips
+                .add(Trip.fromJson(docSnapshot.data().cast<String, dynamic>()));
+          } else {
+            if (listTrips.firstWhereOrNull(
+                    (element) => element.id == docSnapshot.id) ==
+                trip) {
+              var index =
+                  listTrips.indexWhere((element) => element.id == trip.id);
+              listTrips[index] = trip;
+            }
+          }
+
           print('listTrips ${listTrips.length}');
-          print('${docSnapshot.id} => ${docSnapshot.data()}');
-          listTrips.add(Trip.fromJson(docSnapshot.data()));
         }
         listTripWithState.value = listTrips;
         setAppLoading(false, "Loading", TypeApp.loadingData);
-      },
-      onError: (e) => {
-        setAppLoading(false, "Loading", TypeApp.loadingData),
-        print("Error completing: $e")
-      },
-    );
+      } catch (ex) {
+        print('listTrips error ${ex}');
+        setAppLoading(false, "Loading", TypeApp.loadingData);
+      }
+    });
   }
 
   List<Trip> getListTrip() {
