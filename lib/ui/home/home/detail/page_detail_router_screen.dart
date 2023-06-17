@@ -19,6 +19,7 @@ import '../../../../common/const/dimen_constants.dart';
 import '../../../../model/comment.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
+import '../../setting/setting_screen.dart';
 
 class DetailRouterScreen extends StatefulWidget {
   const DetailRouterScreen({Key? key}) : super(key: key);
@@ -690,5 +691,9 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
         );
       }),
     );
+  }
+
+  void _navigateToSettingScreen() {
+    Get.to(const PageSettingScreen());
   }
 }
