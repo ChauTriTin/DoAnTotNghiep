@@ -50,14 +50,15 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.appColorBkg,
+      backgroundColor: ColorConstants.colorWhite,
       body: Obx(() {
         return ListView.separated(
-          padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+          // padding: const EdgeInsets.only(),
           physics: const BouncingScrollPhysics(),
           itemCount: _controller.trips.length,
           separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(height: DimenConstants.marginPaddingSmall);
+            // return const SizedBox(height: DimenConstants.marginPaddingSmall);
+            return const Divider(height: DimenConstants.marginPaddingSmall);
           },
           itemBuilder: (BuildContext context, int index) {
             return _getRowConversation(index, _controller.trips[index]);
@@ -68,9 +69,9 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
   }
 
   Widget _getRowConversation(int index, Trip trip) {
-    return Card(
-      elevation: 4.0,
-      child: InkWell(
+    return InkWell(
+        child: Padding(
+          padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium, right: DimenConstants.marginPaddingMedium),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,9 +79,9 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
               Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(12),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(50),
                       child: SizedBox.fromSize(
                         size: const Size.fromRadius(24),
                         child: CachedMemoryImage(
@@ -113,11 +114,11 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
               )
             ],
           ),
-          onTap: () {
-            Get.to(() => const PageDetailChatScreen(), arguments: [
-              {Constants.detailChat: jsonEncode(trip)},
-            ]);
-          }),
-    );
+        ),
+        onTap: () {
+          Get.to(() => const PageDetailChatScreen(), arguments: [
+            {Constants.detailChat: jsonEncode(trip)},
+          ]);
+        });
   }
 }

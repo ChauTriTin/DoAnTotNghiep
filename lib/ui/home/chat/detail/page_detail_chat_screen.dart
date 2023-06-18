@@ -46,6 +46,10 @@ class _PageDetailChatScreenState extends BaseStatefulState<PageDetailChatScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorConstants.appColor,
+        title: Text(_controller.tripData?.title ?? ""),
+      ),
       backgroundColor: ColorConstants.appColorBkg,
       body: Obx(() {
         return Chat(

@@ -44,7 +44,7 @@ class PageChatController extends BaseController {
           if (tripMap == null || tripMap.data() == null) return;
 
           var trip = Trip.fromJson(tripMap.data()!);
-          tempTrips.add(trip);
+          tempTrips.insert(0, trip);
         }
 
         trips.value = tempTrips;

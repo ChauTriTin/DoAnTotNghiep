@@ -4,7 +4,6 @@ import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/convert_utils.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
-import 'package:appdiphuot/model/chat.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
@@ -281,16 +280,6 @@ class CreateRouterController extends BaseController {
         });
       } catch (e) {
         Dog.e('createRouter: $e');
-      }
-
-      try {
-        FirebaseHelper.collectionReferenceChat
-            .doc(trip.id)
-            .set(Chat([]).toJson())
-            .then((value) => Dog.d("createRouter -- create chat with route id ${trip.id} Added"))
-            .catchError((error) => Dog.e("createRouter -- Failed to add chat: $error"));
-      } catch (e) {
-        Dog.e('createRouter: chat $e');
       }
 
       setAppLoading(false, "Loading", TypeApp.createRouter);
