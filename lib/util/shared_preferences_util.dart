@@ -7,6 +7,7 @@ import '../model/user.dart';
 class SharedPreferencesUtil {
   static const KEY_GG = "KEY_GG";
   static const USER_UID = "USER_UID";
+  static const IS_DARK_MODE_ON = "IS_DARK_MODE_ON";
   static const USER_IFO = "USER_IFO";
   static const KEY_FCM_TOKEN = "KEY_FCM_TOKEN";
 
@@ -40,24 +41,6 @@ class SharedPreferencesUtil {
     return prefs.getBool(key);
   }
 
-// static Future<void> setGG(GG gg) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString(KEY_GG, jsonEncode(gg));
-// }
-//
-// static Future<GG?> getGG() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String? jsonString = prefs.getString(KEY_GG);
-//   if (jsonString == null) {
-//     return null;
-//   }
-//   try {
-//     return GG.fromJson(jsonDecode(jsonString));
-//   } catch (e) {
-//     return null;
-//   }
-// }
-
   static Future<String?> getUIDLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(USER_UID);
@@ -68,15 +51,4 @@ class SharedPreferencesUtil {
     await prefs.setString(USER_UID, userUID);
   }
 
-// static Future<UserData?> getUserData() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   var userJson = prefs.getString(USER_IFO);
-//   Map<String, dynamic>? userMap = jsonDecode(userJson ?? "");
-//   return UserData.fromJson(userMap!);
-// }
-//
-// static Future<void> setUserData(UserData userData) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString(USER_IFO, userData.toJson().toString());
-// }
 }

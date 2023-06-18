@@ -12,10 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/extension/build_context_extension.dart';
 import '../../../model/place.dart';
 import '../../../model/trip.dart';
+import '../../../util/theme_util.dart';
 import '../../../view/profile_bar_widget.dart';
 import '../../user_singleton_controller.dart';
 import '../home/detail/page_detail_router_screen.dart';
@@ -35,6 +37,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
   @override
   void initState() {
     super.initState();
+    _controller.getData();
     _setupListen();
   }
 
@@ -110,8 +113,8 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           const SizedBox(
             height: DimenConstants.marginPaddingLarge,
           ),
-          getText(
-              ColorConstants.colorProfile, StringConstants.editProfile, () {}),
+          getText(ColorConstants.colorProfile, StringConstants.editProfile,
+              _controller.navigateToEditProfile),
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
@@ -122,7 +125,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
               style: UIUtils.getStyleText(),
             ),
           ),
-          getDarkmode(),
+          getDarkMode(),
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
@@ -148,10 +151,19 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
+          UIUtils.getLoginOutlineButton(
+            StringConstants.signOut,
+            () {
+              _controller.signOut();
+            },
+          ),
+          const SizedBox(
+            height: DimenConstants.marginPaddingMedium,
+          ),
         ]));
   }
 
-  Widget getDarkmode() {
+  Widget getDarkMode() {
     return InkWell(
       onTap: () {},
       child: Row(
@@ -178,11 +190,12 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           const SizedBox(
             width: DimenConstants.marginPaddingMedium,
           ),
-          const Icon(
-            Icons.keyboard_arrow_right,
-            color: ColorConstants.iconColor,
-            size: DimenConstants.iconSizeSmall,
-          ),
+          Switch(
+              value: _controller.isDarkMode.value,
+              onChanged: (value) {
+                _controller.updateDarkModeStatus(value);
+                ThemeModeNotifier.instance.toggleTheme(value);
+              }),
           const SizedBox(
             width: DimenConstants.marginPaddingMedium,
           ),

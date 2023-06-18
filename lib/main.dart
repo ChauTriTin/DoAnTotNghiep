@@ -4,6 +4,7 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
+import 'package:appdiphuot/util/theme_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
 
 import 'model/push_notification.dart';
 import 'ui/splash/page_splash_screen.dart';
@@ -43,6 +45,7 @@ void main() async {
   Messaging.initFCM();
   Get.put(UserSingletonController.instance);
   getLoc();
+  ThemeModeNotifier.instance.getDarkModeStatus();
 
   runApp(
     OverlaySupport.global(
@@ -67,7 +70,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashScreen();
+    return Obx((){
+       return   MaterialApp(
+         title: 'Dark Mode Example',
+         theme: ThemeModeNotifier.instance.themeData,
+         home: const SplashScreen(),
+       );
+    });
   }
 }
 

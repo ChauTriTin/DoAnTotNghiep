@@ -107,10 +107,9 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
-
           Padding(
             padding:
-            const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
+                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
             child: Text(
               StringConstants.tripHost,
               style: UIUtils.getStyleText500(),
@@ -124,7 +123,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
         ]));
   }
 
-  Widget _listTrips(RxList<Trip> trips ) {
+  Widget _listTrips(RxList<Trip> trips) {
     if (trips.value.isEmpty) {
       return Container(
         margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
@@ -158,15 +157,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
         ),
       );
     }
-  }
-
-  void _signOut() {
-    _controller.signOut();
-    Get.offAll(const AuthenticationScreen());
-  }
-
-  void _onAvatarPressed() {
-    _openSelectImageBottomSheet(context);
   }
 
   Widget getTripRowItem(int index, Trip trip) {
@@ -214,58 +204,18 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
     Get.to(PageDetailTrip(tripData: trip));
   }
 
-  void _openSelectImageBottomSheet(BuildContext context) {
-    Get.bottomSheet(Container(
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(DimenConstants.borderBottomAuth),
-            topRight: Radius.circular(DimenConstants.borderBottomAuth),
-          )),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  _controller.openGallery();
-                  Get.back();
-                },
-                child: const ListTile(
-                  leading: Icon(Icons.photo),
-                  title: Text(StringConstants.openGallery),
-                ),
-              )),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                _controller.openCamera();
-                Get.back();
-              },
-              child: const ListTile(
-                leading: Icon(Icons.camera),
-                title: Text(StringConstants.openCamera),
-              ),
-            ),
-          )
-        ],
-      ),
-    ));
-  }
-
   Widget _buildAvatar() {
     return IconButton(
         iconSize: DimenConstants.avatarProfile,
-        onPressed: _onAvatarPressed,
+        onPressed: () {},
         icon: CircleAvatar(
           backgroundColor: ColorConstants.borderTextInputColor,
           radius: DimenConstants.avatarProfile / 2,
           child: CircleAvatar(
             radius:
                 DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
-            backgroundImage: NetworkImage(UserSingletonController.instance.getAvatar()),
+            backgroundImage:
+                NetworkImage(UserSingletonController.instance.getAvatar()),
           ),
         ));
   }
@@ -292,17 +242,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),
-            const Divider(
-              color: ColorConstants.dividerColor,
-              thickness: DimenConstants.dividerHeight,
-            ),
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
-            UIUtils.getLoginOutlineButton(
-              StringConstants.signOut,
-              _signOut,
-            )
           ],
         ));
   }

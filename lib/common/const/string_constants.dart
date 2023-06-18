@@ -94,6 +94,7 @@ class StringConstants {
   static const String termCondition = "Chính sách và điều khoản";
   static const String policy = "Chính sách bảo mật";
   static const String rate = "Đánh giá app";
+  static const String updateAvatar = "Đổi hình đại diện";
 
 
 }
