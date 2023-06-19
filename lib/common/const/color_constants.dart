@@ -15,6 +15,7 @@ class ColorConstants {
   static Color bgBackCircle50Color = const Color(0x8C000000);
   static Color loginBtnTextColor = Colors.white;
   static const Color textColor = const Color(0xFF000000);
+  static  Color textColorDisable = Color(0xA65D5D5D);
 
   static Color textEditBgColor = const Color(0x98000000);
   static Color borderTextInputColor = const Color(0xA6C2C2C2);
@@ -31,7 +32,7 @@ class ColorConstants {
   static const Color colorTermCondition =  Color(0xFF015DD6);
   static const Color colorPolicy =  Color(0xFFCD0D0F);
   static const Color colorRateApp =  Color(0xFF8C51FF);
-  static const Color colorBgEditTextField =  Color(0xFFA8A8A8);
+  static const Color colorBgEditTextField =  Color(0xFFE3E3E3);
   static const Color colorGenderSelected =  Color(0xFF3B4257);
 
   static getRandomColor() {

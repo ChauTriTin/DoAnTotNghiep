@@ -5,9 +5,10 @@ class UserData {
   String? uid;
   String? email;
   String? phone;
+  String? bsx;
   String? address;
   String? birthday;
-  String? gender;
+  int? gender; // 0: Male, 1: female, 2: other
 
   String? avatar;
   String? fcmToken;
@@ -19,6 +20,7 @@ class UserData {
     this.uid,
     this.email,
     this.phone,
+    this.bsx,
     this.address,
     this.birthday,
     this.gender,
@@ -33,6 +35,7 @@ class UserData {
     uid = json['uid'];
     email = json['email'];
     phone = json['phone'];
+    bsx = json['bsx'];
     address = json['address'];
     birthday = json['birthday'];
     gender = json['gender'];
@@ -48,6 +51,7 @@ class UserData {
     data['uid'] = uid;
     data['email'] = email;
     data['phone'] = phone;
+    data['bsx'] = bsx;
     data['address'] = address;
     data['birthday'] = birthday;
     data['gender'] = gender;

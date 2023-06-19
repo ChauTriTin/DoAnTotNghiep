@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -25,6 +27,7 @@ class EditProfileController extends BaseController {
   var email = UserSingletonController.instance.getEmail().obs;
   var name = UserSingletonController.instance.getName().obs;
   var phone = UserSingletonController.instance.getPhone().obs;
+  var bsx = UserSingletonController.instance.getBsx().obs;
   var address = UserSingletonController.instance.getAddress().obs;
   var birthday = UserSingletonController.instance.getBirthday().obs;
   var gender = UserSingletonController.instance.getGender().obs;
@@ -39,9 +42,11 @@ class EditProfileController extends BaseController {
   }
 
   void initGender() {
-    genders.add(Gender(StringConstants.male, Icons.male, true));
-    genders.add(Gender(StringConstants.female, Icons.female, false));
-    genders.add(Gender(StringConstants.other, Icons.transgender, false));
+    genders.add(Gender(StringConstants.male, Icons.male, gender.value == 1));
+    genders
+        .add(Gender(StringConstants.female, Icons.female, gender.value == 2));
+    genders.add(
+        Gender(StringConstants.other, Icons.transgender, gender.value == 3));
   }
 
   void openCamera() async {
@@ -89,7 +94,39 @@ class EditProfileController extends BaseController {
     }
   }
 
-  void saveUserInfo() {
+  Future<void> saveUserInfo() async {
+    try {
+      setAppLoading(true, "Loading", TypeApp.loadingData);
+      var userDataUpdated = userData.value;
+      userDataUpdated.name = name.value;
+      userDataUpdated.birthday = birthday.value;
+      userDataUpdated.address = address.value;
+      userDataUpdated.phone = phone.value;
+      userDataUpdated.bsx = bsx.value;
+      userDataUpdated.gender = gender.value;
 
+      await _users.doc(userData.value.uid).update(userDataUpdated.toJson());
+      Dog.d('saveUserInfo successfully.');
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+
+
+      UIUtils.showSnackBar(
+          StringConstants.success, StringConstants.updateUserDataSuccess);
+
+    } catch (error) {
+      Dog.d('saveUserInfo error: $error');
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      UIUtils.showSnackBar(
+          StringConstants.error, StringConstants.updateUserDataFail + error.toString());
+    }
+  }
+
+  void updateGender(int index) {
+    for (var gender in genders) {
+      gender.isSelected = false;
+    }
+    genders[index].isSelected = true;
+
+    gender.value = index + 1;
   }
 }

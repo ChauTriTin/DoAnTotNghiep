@@ -61,6 +61,10 @@ class UserSingletonController extends GetxController {
     return userData.value.phone ?? "";
   }
 
+  String getBsx() {
+    return userData.value.bsx ?? "";
+  }
+
   String getAddress() {
     return userData.value.address ?? "";
   }
@@ -69,8 +73,8 @@ class UserSingletonController extends GetxController {
     return userData.value.birthday ?? "";
   }
 
-  String getGender() {
-    return userData.value.gender ?? "";
+  int getGender() {
+    return userData.value.gender ?? 0;
   }
 
   String getEmail() {

@@ -87,13 +87,14 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
             _buildAvatar(),
             _changeAvatar(),
             const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
+              height: DimenConstants.marginPaddingTiny,
             ),
 
             // Name
             UIUtils.getTitleTextEditProfile(StringConstants.name),
             const SizedBox(height: DimenConstants.marginPaddingSmall),
             TextInputField(
+              textColor: ColorConstants.textColor,
               initalText: _controller.name.value,
               backgroundColor: ColorConstants.colorBgEditTextField,
               validator: ValidateUtils.validateUserName,
@@ -112,45 +113,12 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
             const SizedBox(height: DimenConstants.marginPaddingSmall),
             TextInputField(
               isDisable: true,
-              textColor: ColorConstants.textEditBgColor,
+              textColor: ColorConstants.textColorDisable,
               initalText: _controller.email.value,
               backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validateEmail,
               onChange: (String? value) {
                 _controller.email.value = value ?? "";
-              },
-            ),
-
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
-
-            // SDT
-            UIUtils.getTitleTextEditProfile(StringConstants.phone),
-            const SizedBox(height: DimenConstants.marginPaddingSmall),
-            TextInputField(
-              initalText: _controller.phone.value,
-              backgroundColor: ColorConstants.colorBgEditTextField,
-              validator: ValidateUtils.validateText,
-              keyboardType: TextInputType.phone,
-              onChange: (String? value) {
-                _controller.phone.value = value ?? "";
-              },
-            ),
-
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
-
-            // Address
-            UIUtils.getTitleTextEditProfile(StringConstants.address),
-            const SizedBox(height: DimenConstants.marginPaddingSmall),
-            TextInputField(
-              initalText: _controller.address.value,
-              backgroundColor: ColorConstants.colorBgEditTextField,
-              validator: ValidateUtils.validateText,
-              keyboardType: TextInputType.text,
-              onChange: (String? value) {
-                _controller.address.value = value ?? "";
               },
             ),
 
@@ -162,17 +130,72 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
             UIUtils.getTitleTextEditProfile(StringConstants.birthday),
             const SizedBox(height: DimenConstants.marginPaddingSmall),
             TextInputField(
+              textColor: ColorConstants.textColor,
               onTap: () {
                 _pickTimeBirthday();
               },
               controller: _birthdayController,
               backgroundColor: ColorConstants.colorBgEditTextField,
-              validator: ValidateUtils.validateText,
+              validator: ValidateUtils.validateBirthday,
               keyboardType: TextInputType.text,
               isDisable: true,
               onChange: (String? value) {
                 Dog.d("birthDayChanged: $value");
                 _controller.birthday.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // Address
+            UIUtils.getTitleTextEditProfile(StringConstants.address),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              textColor: ColorConstants.textColor,
+              initalText: _controller.address.value,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validateAddress,
+              keyboardType: TextInputType.emailAddress,
+              onChange: (String? value) {
+                _controller.address.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // SDT
+            UIUtils.getTitleTextEditProfile(StringConstants.phone),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              textColor: ColorConstants.textColor,
+              initalText: _controller.phone.value,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validatePhone,
+              keyboardType: TextInputType.phone,
+              onChange: (String? value) {
+                _controller.phone.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // Bsx
+            UIUtils.getTitleTextEditProfile(StringConstants.bsx),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              textColor: ColorConstants.textColor,
+              initalText: _controller.bsx.value,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validateBienSoXe,
+              keyboardType: TextInputType.streetAddress,
+              onChange: (String? value) {
+                _controller.bsx.value = value ?? "";
               },
             ),
 
@@ -189,12 +212,7 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
               height: DimenConstants.marginPaddingMedium,
             ),
 
-            Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: DimenConstants.marginPaddingExtraLarge),
-                child: UIUtils.getOutlineButton(
-                    StringConstants.update, _saveUserInfo)),
-
+            UIUtils.getOutlineButton(StringConstants.update, _saveUserInfo),
             const SizedBox(
               height: DimenConstants.marginPaddingLarge,
             ),
@@ -203,7 +221,15 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
   }
 
   void _saveUserInfo() {
-
+    _form.currentState!.save();
+    if (_form.currentState!.validate()) {
+      if (_controller.gender.value == 0) {
+        UIUtils.showSnackBar(
+            StringConstants.error, StringConstants.errorGenderEmpty);
+        return;
+      }
+      _controller.saveUserInfo();
+    }
   }
 
   void _pickTimeBirthday() async {
@@ -318,10 +344,7 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
               splashColor: Colors.pinkAccent,
               onTap: () {
                 setState(() {
-                  for (var gender in _controller.genders) {
-                    gender.isSelected = false;
-                  }
-                  gender.isSelected = true;
+                  _controller.updateGender(index);
                 });
               },
               child: CustomRadio(gender),
