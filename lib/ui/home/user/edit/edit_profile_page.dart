@@ -2,19 +2,17 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
-import 'package:appdiphuot/ui/home/setting/setting_controller.dart';
-import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
-import 'package:appdiphuot/ui/home/user/place_detail/page_detail_trip_screen.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
-import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
-import '../../../../view/profile_bar_widget.dart';
+import '../../../../util/TextInputField.dart';
+import '../../../../util/time_utils.dart';
+import '../../../../util/validate_utils.dart';
 import '../../../user_singleton_controller.dart';
+import 'custom_radio.dart';
 import 'edit_profile_controller.dart';
 
 class PageEditProfile extends StatefulWidget {
@@ -28,6 +26,9 @@ class PageEditProfile extends StatefulWidget {
 
 class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
   final _controller = Get.put(EditProfileController());
+  final _form = GlobalKey<FormState>();
+  late final TextEditingController _birthdayController =
+      TextEditingController(text: _controller.birthday.value);
 
   @override
   void initState() {
@@ -72,18 +73,161 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
   }
 
   Widget buildBody() {
-    return Container(
-        width: double.infinity,
-        color: ColorConstants.colorWhite,
-        child: ListView(physics: const BouncingScrollPhysics(), children: [
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _buildAvatar(),
-          _changeAvatar()
-        ]));
+    return Form(
+      key: _form,
+      child: Container(
+          width: MediaQuery.of(context).size.width,
+          color: ColorConstants.colorWhite,
+          margin: const EdgeInsets.symmetric(
+              horizontal: DimenConstants.marginPaddingExtraLarge),
+          child: ListView(physics: const BouncingScrollPhysics(), children: [
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+            _buildAvatar(),
+            _changeAvatar(),
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // Name
+            UIUtils.getTitleTextEditProfile(StringConstants.name),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              initalText: _controller.name.value,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validateUserName,
+              keyboardType: TextInputType.text,
+              onChange: (String? value) {
+                _controller.name.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // Email
+            UIUtils.getTitleTextEditProfile(StringConstants.email),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              isDisable: true,
+              textColor: ColorConstants.textEditBgColor,
+              initalText: _controller.email.value,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              onChange: (String? value) {
+                _controller.email.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // SDT
+            UIUtils.getTitleTextEditProfile(StringConstants.phone),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              initalText: _controller.phone.value,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validateText,
+              keyboardType: TextInputType.phone,
+              onChange: (String? value) {
+                _controller.phone.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // Address
+            UIUtils.getTitleTextEditProfile(StringConstants.address),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              initalText: _controller.address.value,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validateText,
+              keyboardType: TextInputType.text,
+              onChange: (String? value) {
+                _controller.address.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // Birthday
+            UIUtils.getTitleTextEditProfile(StringConstants.birthday),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            TextInputField(
+              onTap: () {
+                _pickTimeBirthday();
+              },
+              controller: _birthdayController,
+              backgroundColor: ColorConstants.colorBgEditTextField,
+              validator: ValidateUtils.validateText,
+              keyboardType: TextInputType.text,
+              isDisable: true,
+              onChange: (String? value) {
+                Dog.d("birthDayChanged: $value");
+                _controller.birthday.value = value ?? "";
+              },
+            ),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            // Gender
+            UIUtils.getTitleTextEditProfile(StringConstants.gender),
+            const SizedBox(height: DimenConstants.marginPaddingSmall),
+            _buildGender(),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingMedium,
+            ),
+
+            Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: DimenConstants.marginPaddingExtraLarge),
+                child: UIUtils.getOutlineButton(
+                    StringConstants.update, _saveUserInfo)),
+
+            const SizedBox(
+              height: DimenConstants.marginPaddingLarge,
+            ),
+          ])),
+    );
   }
 
+  void _saveUserInfo() {
+
+  }
+
+  void _pickTimeBirthday() async {
+    DateTime? dateTime = await showDatePicker(
+      context: context,
+      initialDate: TimeUtils.stringToDateTime(_controller.birthday.value) ??
+          DateTime.now(),
+      firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+      lastDate: DateTime.now().add(
+        const Duration(days: 3652),
+      ),
+      selectableDayPredicate: (dateTime) {
+        return true;
+      },
+    );
+    if (dateTime == null) return;
+
+    _controller.birthday.value = TimeUtils.dateTimeToString(dateTime);
+
+    setState(() {
+      _birthdayController.text = _controller.birthday.value;
+    });
+    Dog.d("datetime_birthday: ${_controller.birthday.value}");
+  }
 
   Widget _buildAvatar() {
     return IconButton(
@@ -94,7 +238,7 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
         child: CircleAvatar(
           radius: DimenConstants.avatarProfile2 / 2 - DimenConstants.logoStroke,
           backgroundImage:
-          NetworkImage(UserSingletonController.instance.getAvatar()),
+              NetworkImage(UserSingletonController.instance.getAvatar()),
         ),
       ),
       onPressed: () {},
@@ -103,20 +247,18 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
 
   Widget _changeAvatar() {
     return InkWell(
-      onTap: () {
-        _openSelectImageBottomSheet(context);
-      },
-      child: Expanded(
-          child: Container(
-            margin: const EdgeInsets.only(top: 14, bottom: 16),
-            child: const Center(
-              child: Text(
-                StringConstants.updateAvatar,
-                style: TextStyle(color: Colors.blue),
-              ),
+        onTap: () {
+          _openSelectImageBottomSheet(context);
+        },
+        child: Container(
+          margin: const EdgeInsets.only(top: 14, bottom: 16),
+          child: const Center(
+            child: Text(
+              StringConstants.updateAvatar,
+              style: TextStyle(color: Colors.blue),
             ),
-          )),
-    );
+          ),
+        ));
   }
 
   void _openSelectImageBottomSheet(BuildContext context) {
@@ -160,4 +302,31 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
     ));
   }
 
+  Widget _buildGender() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.width / 3 -
+          DimenConstants.marginPaddingMedium * 2,
+      child: ListView.builder(
+          key: UniqueKey(),
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemCount: _controller.genders.length,
+          itemBuilder: (context, index) {
+            var gender = _controller.genders[index];
+            return InkWell(
+              splashColor: Colors.pinkAccent,
+              onTap: () {
+                setState(() {
+                  for (var gender in _controller.genders) {
+                    gender.isSelected = false;
+                  }
+                  gender.isSelected = true;
+                });
+              },
+              child: CustomRadio(gender),
+            );
+          }),
+    );
+  }
 }

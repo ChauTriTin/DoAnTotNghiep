@@ -151,12 +151,15 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
-          UIUtils.getLoginOutlineButton(
-            StringConstants.signOut,
-            () {
-              _controller.signOut();
-            },
-          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
+              child: UIUtils.getOutlineButton(
+                StringConstants.signOut,
+                () {
+                  _controller.signOut();
+                },
+              )),
+
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),

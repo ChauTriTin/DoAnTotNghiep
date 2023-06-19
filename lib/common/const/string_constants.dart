@@ -16,6 +16,7 @@ class StringConstants {
   static const String errorEmailRegex = "Vui lòng nhập email hợp lệ";
 
   static const String errorNameEmpty = "Vui lòng nhập tên";
+  static const String errorEmpty = "Vui lòng không để trống";
   static const String errorNameRegex =
       "Tên ít nhất 1 kí tự, A-Z, a-z, 0-9, và 1 số kí tự đặc biệt";
 
@@ -36,6 +37,15 @@ class StringConstants {
 
   static const String email = "Email";
   static const String name = "Tên";
+  static const String phone = "Số điện thoại";
+  static const String address = "Địa chỉ";
+  static const String birthday = "Ngày sinh";
+  static const String pickBirthday = "Chọn ngày sinh";
+  static const String gender = "Giới tính";
+  static const String male = "Nam";
+  static const String female = "Nữ";
+  static const String update = "Cập nhật";
+  static const String other = "Khác";
   static const String password = "Mật khẩu";
   static const String passwordConfirm = "Xác nhận mật khẩu";
   static const String signInSuccess = "Đăng nhập thành công";

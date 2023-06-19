@@ -1,4 +1,6 @@
+import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:date_format/date_format.dart';
+import 'package:intl/intl.dart';
 
 class TimeUtils {
   static String convert(DateTime dateTime) {
@@ -6,5 +8,30 @@ class TimeUtils {
       return "Chọn thời gian";
     }
     return formatDate(dateTime, [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
+  }
+
+  static DateTime? stringToDateTime(String? dateTimeString) {
+    if (dateTimeString == null || dateTimeString.isEmpty) {
+      return null;
+    }
+
+    try {
+      DateFormat format = DateFormat('dd/MM/yyyy HH:mm');
+      DateTime dateTime = format.parse(dateTimeString);
+      return dateTime;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static String dateTimeToString(DateTime? dateTime) {
+    try {
+      if (dateTime == null || dateTime == DateTime(1111, 1, 11)) {
+        return "";
+      }
+      return formatDate(dateTime, [dd, '/', mm, '/', yyyy]);
+    } catch (e) {
+      return "";
+    }
   }
 }

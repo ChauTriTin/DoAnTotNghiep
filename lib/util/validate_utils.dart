@@ -49,6 +49,20 @@ class ValidateUtils {
     return null;
   }
 
+  static String? validatePhone(String? value) {
+    if (value!.isEmpty) return StringConstants.errorNameEmpty;
+    if (!ValidateUtils.isValidNameFormat(value)) {
+      return StringConstants.errorNameRegex;
+    }
+    return null;
+  }
+
+  static String? validateText(String? value) {
+    if (value!.isEmpty) return StringConstants.errorEmpty;
+    return null;
+  }
+
+
   static String? validatePassword(String? value) {
     if (value!.isEmpty) return StringConstants.errorPasswordEmpty;
     if (!ValidateUtils.isValidPasswordFormat(value)) {

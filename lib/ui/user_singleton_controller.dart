@@ -57,6 +57,22 @@ class UserSingletonController extends GetxController {
     return userData.value.name ?? "";
   }
 
+  String getPhone() {
+    return userData.value.phone ?? "";
+  }
+
+  String getAddress() {
+    return userData.value.address ?? "";
+  }
+
+  String getBirthday() {
+    return userData.value.birthday ?? "";
+  }
+
+  String getGender() {
+    return userData.value.gender ?? "";
+  }
+
   String getEmail() {
     return userData.value.email ?? "";
   }

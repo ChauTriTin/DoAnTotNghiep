@@ -234,6 +234,19 @@ class UIUtils {
     );
   }
 
+  static Widget getTitleTextEditProfile(String text) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
+      child: Text(text,
+          style: const TextStyle(
+            color: ColorConstants.textColor,
+            fontSize: DimenConstants.txtMedium,
+          )),
+    );
+  }
+
   static InputBorder getOutlineFocus(Color? outLineColor) {
     return OutlineInputBorder(
       borderSide: BorderSide(

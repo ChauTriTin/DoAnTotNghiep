@@ -1,6 +1,3 @@
-
-
-
 import 'dart:developer';
 import 'dart:io';
 
@@ -8,29 +5,43 @@ import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../common/const/string_constants.dart';
+import '../../../../model/gender.dart';
 import '../../../../util/shared_preferences_util.dart';
 import '../../../../util/ui_utils.dart';
 import '../../../authentication/landing_page/page_authentication_screen.dart';
 
-class EditProfileController extends BaseController{
-
+class EditProfileController extends BaseController {
   final ImagePicker _imagePicker = ImagePicker();
   final Rx<File?> _selectedImage = Rx<File?>(null);
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   final _users = FirebaseHelper.collectionReferenceUser;
 
-  var userData = UserSingletonController.instance.userData;
+  final userData = UserSingletonController.instance.userData;
+  var email = UserSingletonController.instance.getEmail().obs;
+  var name = UserSingletonController.instance.getName().obs;
+  var phone = UserSingletonController.instance.getPhone().obs;
+  var address = UserSingletonController.instance.getAddress().obs;
+  var birthday = UserSingletonController.instance.getBirthday().obs;
+  var gender = UserSingletonController.instance.getGender().obs;
+  var genders = <Gender>[].obs;
 
   void clearOnDispose() {
     Get.delete<EditProfileController>();
   }
 
   void getData() {
+    initGender();
+  }
 
+  void initGender() {
+    genders.add(Gender(StringConstants.male, Icons.male, true));
+    genders.add(Gender(StringConstants.female, Icons.female, false));
+    genders.add(Gender(StringConstants.other, Icons.transgender, false));
   }
 
   void openCamera() async {
@@ -52,6 +63,7 @@ class EditProfileController extends BaseController{
   }
 
   void _uploadAvatarToFirebase() async {
+    log("uploadAvatarToFirebase");
     try {
       String fileName = userData.value.uid ?? "";
       Reference reference = _firebaseStorage.ref().child("avatars/$fileName");
@@ -75,5 +87,9 @@ class EditProfileController extends BaseController{
       log("uploadAvatarToFirebase error: $e");
       setAppLoading(false, "Loading", TypeApp.uploadAvatar);
     }
+  }
+
+  void saveUserInfo() {
+
   }
 }
