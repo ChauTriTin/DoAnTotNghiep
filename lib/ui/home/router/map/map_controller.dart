@@ -7,10 +7,8 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
-import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
@@ -28,6 +26,7 @@ class MapController extends BaseController {
   var trip = Trip().obs;
   var currentUserData = UserSingletonController.instance.userData;
   var listMember = <UserData>[].obs;
+  var listFcmToken = <String>[];
 
   var listMarkerGoogleMap = <Marker>[].obs;
 
@@ -96,7 +95,6 @@ class MapController extends BaseController {
         LatLng(pEnd.lat ?? defaultLat, pEnd.long ?? defaultLong);
 
     _genRouter();
-    //TODO loitp
     // _genDistance();
     // _genDuration();
   }
@@ -278,13 +276,25 @@ class MapController extends BaseController {
       enableServerRespondLog: true,
     );
     try {
-      //TODO loitp
+      var listFcmToken = <String>[];
+      if (kDebugMode) {
+        listFcmToken.add(
+            "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh");
+        listFcmToken.add(
+            "e8hPdUzASaqjB7dU0TbT7R:APA91bHQImI50Fzhr8P1NoRcYMQMpfOhX8yGn4ZWXwLDQJgWbVgb7FYjz8DjdfAEvfN0o5_EQa0bw5lBFerkeAW0ScCfEmfGya9quF5kre27EdNzgznxFrJLzkbWAqGMkg7eSjXt0KMF");
+      }
+      for (var element in listMember) {
+        var fcmToken = element.fcmToken;
+        debugPrint("***fcmToken $fcmToken");
+        if (fcmToken != null && fcmToken.isNotEmpty) {
+          listFcmToken.add(fcmToken);
+        }
+      }
+      debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
+
       Map<String, dynamic> result =
           await flutterFCMWrapper.sendMessageByTokenID(
-        userRegistrationTokens: [
-          "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh",
-          "e8hPdUzASaqjB7dU0TbT7R:APA91bHQImI50Fzhr8P1NoRcYMQMpfOhX8yGn4ZWXwLDQJgWbVgb7FYjz8DjdfAEvfN0o5_EQa0bw5lBFerkeAW0ScCfEmfGya9quF5kre27EdNzgznxFrJLzkbWAqGMkg7eSjXt0KMF"
-        ],
+        userRegistrationTokens: listFcmToken,
         title: "Thông báo khẩn cấp từ ${getCurrentUserName()}",
         body: body,
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
