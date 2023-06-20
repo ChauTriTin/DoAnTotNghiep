@@ -114,7 +114,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           ),
         );
       }
-      _createMaker();
+      _createMaker(false);
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
@@ -171,7 +171,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     return completer.future;
   }
 
-  void _createMaker() {
+  void _createMaker(bool isUpdateLatLong) {
     Future<Marker> createMarkerPlaceStart() async {
       ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context, size: const Size.square(55.0));
@@ -228,9 +228,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         });
       }
     }
-    // debugPrint(">>>>_createMaker listStop.length ${listStop.length}");
 
-    createMarkerMember() {
+    void createMarkerMember() {
       Future<Marker> create(
         int index,
         String avt,
@@ -271,19 +270,22 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
     }
 
-    var listMarketPlaceStart = createMarkerPlaceStart();
-    listMarketPlaceStart.then((value) {
-      _controller.setMarkerGoogleMap(value);
-    });
+    if (isUpdateLatLong) {
+      createMarkerMember();
+    } else {
+      var listMarketPlaceStart = createMarkerPlaceStart();
+      listMarketPlaceStart.then((value) {
+        _controller.setMarkerGoogleMap(value);
+      });
 
-    var listMarketPlaceEnd = createMarkerPlaceEnd();
-    listMarketPlaceEnd.then((value) {
-      _controller.setMarkerGoogleMap(value);
-    });
-
-    createMarkerPlaceStop();
-
-    createMarkerMember();
+      var listMarketPlaceEnd = createMarkerPlaceEnd();
+      listMarketPlaceEnd.then((value) {
+        _controller.setMarkerGoogleMap(value);
+      });
+      createMarkerPlaceStop();
+      createMarkerMember();
+    }
+    debugPrint(">>>>_createMaker success isUpdateLatLong $isUpdateLatLong");
   }
 
   Widget _buildHelperView() {
@@ -392,8 +394,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         return Container();
       }
 
-      //TODO update position marker
-      // _createMaker();
+      debugPrint(">>>_buildPeopleView update position marker");
+      _createMaker(true);
 
       return Container(
         // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
