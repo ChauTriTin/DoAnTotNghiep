@@ -224,8 +224,7 @@ class UIUtils {
     return Container(
       alignment: Alignment.centerLeft,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
-      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
+      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
       child: Text(text,
           style: const TextStyle(
             color: Colors.white,
