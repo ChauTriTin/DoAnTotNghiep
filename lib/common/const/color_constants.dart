@@ -16,6 +16,7 @@ class ColorConstants {
   static Color loginBtnTextColor = Colors.white;
   static const Color textColor = const Color(0xFF000000);
   static  Color textColorDisable = Color(0xA65D5D5D);
+  static  Color textColorDisable1 = Color(0xA6C7C7C7);
 
   static Color textEditBgColor = const Color(0x98000000);
   static Color borderTextInputColor = const Color(0xA6C2C2C2);

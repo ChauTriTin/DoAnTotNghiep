@@ -410,11 +410,11 @@ class UIUtils {
     );
   }
 
-  static void showSnackBar(
+  static SnackbarController showSnackBar(
     String title,
     String message,
   ) {
-    Get.snackbar(
+    return Get.snackbar(
         title, // title
         message, // message
         // barBlur: 20,

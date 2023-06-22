@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,12 +7,14 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../base/base_controller.dart';
+import '../../../common/const/constants.dart';
 import '../../../common/const/string_constants.dart';
 import '../../../model/user.dart';
 import '../../../util/log_dog_utils.dart';
 import '../../../util/shared_preferences_util.dart';
 import '../../../util/ui_utils.dart';
 import '../../home/home_screen.dart';
+import 'google/login_google_page.dart';
 
 class ControllerLogin extends BaseController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -23,18 +26,6 @@ class ControllerLogin extends BaseController {
 
   void clearOnDispose() {
     Get.delete<ControllerLogin>();
-  }
-
-  void setEmail(String? id) {
-    email.value = id ?? "";
-  }
-
-  String getEmail() {
-    return email.value ?? "";
-  }
-
-  void setPassword(String? pw) {
-    password.value = pw ?? "";
   }
 
   void doLogin() {
@@ -116,14 +107,35 @@ class ControllerLogin extends BaseController {
 
       if (user != null) {
         Dog.d("signInWithGoogle: SignIn successfully ${user.toString()}");
-        UIUtils.showSnackBar(
-            StringConstants.signin, StringConstants.signInSuccess);
-
-        SharedPreferencesUtil.setUID(user.uid);
-        saveUserInfoToFirebaseDataStore(user);
 
         setAppLoading(false, "Loading", TypeApp.login);
-        Get.offAll(const HomeScreen());
+
+        if (await isUserExist(user.uid)) {
+          UIUtils.showSnackBar(
+              StringConstants.signin, StringConstants.signInSuccess);
+
+          SharedPreferencesUtil.setUID(user.uid);
+          Get.offAll(const HomeScreen());
+          return;
+        }
+
+        var userData = UserData();
+        userData.name = user.displayName ?? "";
+        userData.uid = user.uid ?? "";
+        userData.email = user.email ?? "";
+        userData.phone = user.phoneNumber ?? "";
+        userData.gender = 0;
+        userData.avatar = user.photoURL ?? "";
+        userData.birthday = "";
+        userData.address = "";
+        userData.bsx = "";
+        userData.gender = 1;
+        userData.fcmToken = await SharedPreferencesUtil.getString(
+            SharedPreferencesUtil.KEY_FCM_TOKEN);
+
+        Get.to(() => const LoginGoogleScreen(), arguments: [
+          {Constants.user: jsonEncode(userData)},
+        ]);
       }
     } catch (e) {
       Dog.d("signInWithGoogle: SignIn failed $e");
@@ -135,29 +147,5 @@ class ControllerLogin extends BaseController {
     final DocumentReference documentRef = _users.doc(uid);
     final DocumentSnapshot snapshot = await documentRef.get();
     return snapshot.exists;
-  }
-
-  Future<void> saveUserInfoToFirebaseDataStore(User user) async {
-    try {
-      if (await isUserExist(user.uid)) return;
-
-      var userData = UserData();
-      userData.name = user.displayName ?? "";
-      userData.uid = user.uid ?? "";
-      userData.email = user.email ?? "";
-      userData.avatar = user.photoURL ?? "";
-      userData.fcmToken = await SharedPreferencesUtil.getString(
-          SharedPreferencesUtil.KEY_FCM_TOKEN);
-
-      log('saveUserInfoToFirebaseDataStore: user: ${userData.toJson()}');
-      _users
-          .doc(user.uid)
-          .set(userData.toJson())
-          .then((value) => log("saveUserInfoToFirebaseDataStore User Added"))
-          .catchError((error) => log(
-              "saveUserInfoToFirebaseDataStore Failed to add user: $error"));
-    } catch (e) {
-      log('saveUserInfoToFirebaseDataStore: Error saving user to Firestore: $e');
-    }
   }
 }

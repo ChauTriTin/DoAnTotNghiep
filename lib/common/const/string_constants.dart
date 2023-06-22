@@ -42,6 +42,7 @@ class StringConstants {
       "Reset password không thành công, vui lòng kiểm tra lại. \n Lỗi: ";
   static const String resetPw = "Reset password";
   static const String error = "Lỗi";
+  static const String notification = "Thông báo";
   static const String loginFail = "Mật khẩu không đúng, vui lòng kiểm tra lại";
   static const String loginFailWithError =
       "Email hoặc mật khẩu không đúng, vui lòng kiểm tra lại.";
@@ -59,6 +60,7 @@ class StringConstants {
   static const String male = "Nam";
   static const String female = "Nữ";
   static const String update = "Cập nhật";
+  static const String updateInfo = "Cập nhật thông tin";
   static const String other = "Khác";
   static const String password = "Mật khẩu";
   static const String passwordConfirm = "Xác nhận mật khẩu";
@@ -119,6 +121,7 @@ class StringConstants {
   static const String policy = "Chính sách bảo mật";
   static const String rate = "Đánh giá app";
   static const String updateAvatar = "Đổi hình đại diện";
+  static const String messageEditEmail = "Email không được thay đổi";
 
 
 }
