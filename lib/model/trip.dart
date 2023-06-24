@@ -2,6 +2,7 @@ import 'package:appdiphuot/model/comment.dart';
 import 'package:appdiphuot/model/place.dart';
 
 import '../common/const/string_constants.dart';
+import '../util/log_dog_utils.dart';
 
 class Trip {
   String? id;
@@ -57,11 +58,14 @@ class Trip {
     listImg = json['listImg'].cast<String>();
     placeStart =
         json['placeStart'] != null ? Place.fromJson(json['placeStart']) : null;
+    Dog.d("listPlaceccc: placeStart ${placeStart?.name}");
+
     placeEnd =
         json['placeEnd'] != null ? Place.fromJson(json['placeEnd']) : null;
     if (json['listPlace'] != null) {
       listPlace = <Place>[];
       json['listPlace'].forEach((v) {
+        Dog.d("listPlaceccc: ${v}");
         listPlace!.add(Place.fromJson(v));
       });
     }

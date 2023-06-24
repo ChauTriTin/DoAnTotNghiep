@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
 import '../../../model/trip.dart';
+import '../../../util/log_dog_utils.dart';
 
 class PageHomeController extends BaseController {
   var idItemDetail = "";
@@ -18,24 +19,13 @@ class PageHomeController extends BaseController {
     Get.delete<PageHomeController>();
   }
 
-  //
-  // for (var docSnapshot in querySnapshot.docs) {
-  // print('listTrips ${listTrips.length}');
-  // print('${docSnapshot.id} => ${docSnapshot.data()}');
-  // listTrips.add(Trip.fromJson(docSnapshot.data()));
-  // }
-  // listTripWithState.value = listTrips;
-  // setAppLoading(false, "Loading", TypeApp.loadingData);
-  //
   Future<void> getAllRouter() async {
     setAppLoading(true, "Loading", TypeApp.loadingData);
     var routerSnapshot = db.collection("router").snapshots();
     routerSnapshot.listen((event) {
       try {
         for (var docSnapshot in event.docs) {
-          print('listTrips id ${docSnapshot.id} => ${docSnapshot.data()}');
           var trip = Trip.fromJson(docSnapshot.data().cast<String, dynamic>());
-
           if (listTrips.firstWhereOrNull(
                   (element) => element.id == docSnapshot.id) ==
               null) {
