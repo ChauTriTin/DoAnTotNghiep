@@ -55,6 +55,7 @@ class DetailRouterController extends BaseController {
         try {
           detailTrip.value =
               Trip.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+
           if (detailTrip.value.listIdMember?.contains(userData.value.uid) ==
               true) {
             isWidgetJoinedVisible.value = true;
@@ -71,16 +72,16 @@ class DetailRouterController extends BaseController {
   Future<void> getCommentRoute(String? id) async {
     try {
       if (id == null) return;
-      var data = FirebaseHelper.collectionReferenceRouter
-          .doc(id)
-          .collection("comments")
-          .snapshots();
+      var data = FirebaseHelper.collectionReferenceRouter.doc(id).snapshots();
 
-      data.listen((snapshot) {
-        List<Comment> convertedList =
-            snapshot.docs.map((doc) => Comment.fromJson(doc.data())).toList();
-        Dog.d("getCommentRoute listen: ${convertedList.length}");
-        commentData.value = convertedList;
+      Dog.d("getCommentRoute id: $id");
+
+      data.listen((event) {
+        Dog.d("getCommentRoute: ${event.data()}");
+        commentData.clear();
+        commentData.addAll(Trip.fromJson(event.data() as Map<String, dynamic>)
+            .comments as Iterable<Comment>);
+        Dog.d("getCommentRoute: ${commentData.length}");
       });
     } catch (e) {
       Dog.e("getCommentRoute: $e");
@@ -91,23 +92,19 @@ class DetailRouterController extends BaseController {
     try {
       Dog.d("addCommentRoute id: $id");
       if (id == null) return;
-      var listComment = commentData.value;
+      var listComment = commentData;
       listComment.add(Comment(
           DateTime.now().millisecondsSinceEpoch.toString(),
-          getLeaderAvatar(),
-          userLeaderData.value.name ?? "",
+          userData.value.getAvatar(),
+          userData.value.name ?? "",
           text, <Comment>[]));
 
       List<Map<String, dynamic>> commentsData =
           listComment.map((comment) => comment.toJson()).toList();
 
-      Map<String, dynamic> data = {
-        'comments': commentsData,
-      };
-
       FirebaseHelper.collectionReferenceRouter
           .doc(id)
-          .set(data, SetOptions(merge: true))
+          .update({"comments": commentsData})
           .then((value) => Dog.d("addCommentRoute success"))
           .catchError((error) => Dog.e("addCommentRoute error: $error"));
     } catch (e) {
