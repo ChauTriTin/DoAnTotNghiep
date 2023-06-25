@@ -12,9 +12,11 @@ class FormScreen extends StatefulWidget {
   const FormScreen({
     super.key,
     required this.id,
+    required this.onRateSuccess,
   });
 
   final String id;
+  final VoidCallback onRateSuccess;
 
   @override
   State<FormScreen> createState() => _FormScreenState();
@@ -352,6 +354,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                         onPressed: () {
                           Get.back(); //close this popup
                           Get.back(); //close this screen
+                          widget.onRateSuccess.call();
                         },
                         style: ElevatedButton.styleFrom(
                           shape: const StadiumBorder(),
