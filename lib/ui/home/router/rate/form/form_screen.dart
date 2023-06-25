@@ -50,7 +50,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
               width: Get.width,
             ),
           ),
-          _buildList(),
+          Obx(() {
+            return _buildList();
+          }),
           Padding(
             padding: const EdgeInsets.fromLTRB(
               DimenConstants.marginPaddingMedium,
@@ -96,21 +98,47 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         const SizedBox(height: DimenConstants.marginPaddingMedium),
         _buildItem(
           _controller.currentUserData.value.getAvatar(),
+          null,
           "Trưởng đoàn",
           _controller.currentUserData.value.name ?? "",
         ),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
         const Divider(),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
+        _buildItem(
+          null,
+          "assets/images/ic_launcher_2.png",
+          "Về chuyến đi",
+          _controller.trip.value.title ?? "",
+        ),
       ],
     );
   }
 
   Widget _buildItem(
-    String urlNetwork,
+    String? urlNetwork,
+    String? urlAsset,
     String text1,
     String text2,
   ) {
+    Widget buildImg() {
+      if (urlNetwork == null || urlNetwork.isEmpty) {
+        return Image.asset(
+          urlAsset ?? "",
+          height: 50,
+          width: 50,
+          fit: BoxFit.scaleDown,
+        );
+      } else {
+        return Image.network(
+          urlNetwork,
+          height: 50,
+          width: 50,
+          fit: BoxFit.cover,
+        );
+      }
+    }
+
     return Row(
       children: [
         AvatarGlow(
@@ -126,12 +154,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
             child: ClipOval(
               child: SizedBox.fromSize(
                 size: const Size.fromRadius(48), // Image radius
-                child: Image.network(
-                  urlNetwork,
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
-                ),
+                child: buildImg(),
               ),
             ),
           ),
