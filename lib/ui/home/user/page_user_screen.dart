@@ -272,7 +272,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             const SizedBox(
               height: DimenConstants.marginPaddingSmall,
             ),
-            UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount,
+            UIUtils.getTextSpanCount(""+StringConstants.tripParticipatedCount,
                 _controller.trips.length),
             UIUtils.getTextSpanCount(
                 StringConstants.leadTripCount, _controller.tripsHost.length),
@@ -368,7 +368,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                     height: DimenConstants.marginMMedium,
                   ),
                   Text(
-                    "🕰️ ${StringConstants.time}${trip.timeStart}",
+                    "🕒 ${StringConstants.time}${trip.timeStart}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                         color: ColorConstants.textColor,
