@@ -11,9 +11,11 @@ class RateScreen extends StatefulWidget {
   const RateScreen({
     super.key,
     required this.id,
+    required this.onRateSuccess,
   });
 
   final String id;
+  final VoidCallback onRateSuccess;
 
   @override
   State<RateScreen> createState() => _RateScreenState();
@@ -74,9 +76,12 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Get.back(); //close this screen
                       Get.to(FormScreen(
                         id: widget.id,
+                        onRateSuccess: () {
+                          Get.back(); //close this screen
+                          widget.onRateSuccess.call();
+                        },
                       ));
                     },
                     child: Container(

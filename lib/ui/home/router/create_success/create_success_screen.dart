@@ -204,7 +204,8 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
 
   void _tapGoNow() {
     void go() {
-      Get.back(); //close this screen
+      // Get.back(); //warning don't use go back
+      Navigator.pop(context);
       var id = widget.id;
       Get.to(MapScreen(
         id: id,
