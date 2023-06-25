@@ -120,6 +120,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           "Điểm xuất phát",
           _controller.trip.value.placeStart?.name ?? "",
         ),
+        _buildStopView(),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
         const Divider(),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
@@ -130,6 +131,25 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           _controller.trip.value.placeEnd?.name ?? "",
         ),
       ],
+    );
+  }
+
+  Widget _buildStopView() {
+    var list = _controller.trip.value.listPlace ?? List.empty();
+    if (list.isEmpty) {
+      return Container();
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: list.length,
+      itemBuilder: (context, i) {
+        return _buildItem(
+          null,
+          "assets/images/ic_marker_end.png",
+          "Địa điểm đến",
+          _controller.trip.value.placeEnd?.name ?? "",
+        );
+      },
     );
   }
 
