@@ -65,6 +65,15 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
         appBar: AppBar(
           backgroundColor: ColorConstants.appColor,
           title: const Text(StringConstants.editProfile),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          ),
         ),
         backgroundColor: ColorConstants.colorWhite,
         body: Obx(() {
