@@ -48,6 +48,14 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
               width: Get.width,
             ),
           ),
+          Center(
+            child: Lottie.asset(
+              'assets/files/fire.json',
+              fit: BoxFit.fitHeight,
+              width: Get.width,
+              height: Get.height / 2,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             child: Center(
