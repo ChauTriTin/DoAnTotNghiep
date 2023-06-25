@@ -1,8 +1,10 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
+import 'package:appdiphuot/model/rate.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -90,7 +92,20 @@ class FormController extends BaseController {
     return -1;
   }
 
-  void rate() {}
+  void rate() {
+    Rate rate = Rate();
+    rate.rateLeader = rateLeader.value;
+    rate.rateTrip = rateTrip.value;
+    rate.ratePlaceStart = ratePlaceStart.value;
+    rate.ratePlaceEnd = ratePlaceEnd.value;
+
+    var listTmp = <double>[];
+    for (var element in rateListPlaceStop) {
+      listTmp.add(element);
+    }
+    rate.rateListPlaceStop = listTmp;
+    Dog.e(">>>rate ${rate.toJson()}");
+  }
 
   void setRateLeader(double value) {
     rateLeader.value = value;
