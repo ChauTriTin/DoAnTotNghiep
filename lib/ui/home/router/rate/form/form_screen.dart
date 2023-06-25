@@ -82,7 +82,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         DimenConstants.marginPaddingMedium,
         DimenConstants.marginPadding98,
         DimenConstants.marginPaddingMedium,
-        DimenConstants.marginPaddingMedium,
+        DimenConstants.splashIconSize,
       ),
       children: [
         const Center(
@@ -140,14 +140,24 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
       return Container();
     }
     return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: list.length,
       itemBuilder: (context, i) {
-        return _buildItem(
-          null,
-          "assets/images/ic_marker_end.png",
-          "Địa điểm dừng chân ${i + 1}",
-          list[i].name ?? "",
+        return Column(
+          children: [
+            if (i != 0)
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+            if (i != 0) const Divider(),
+            if (i != 0)
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+            _buildItem(
+              null,
+              "assets/images/ic_marker_end.png",
+              "Địa điểm dừng chân ${i + 1}",
+              list[i].name ?? "",
+            ),
+          ],
         );
       },
     );
@@ -218,7 +228,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                 ),
               ),
               Rate(
-                iconSize: 40,
+                iconSize: 50,
                 color: Colors.orange,
                 allowHalf: false,
                 allowClear: true,
