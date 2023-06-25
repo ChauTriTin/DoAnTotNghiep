@@ -8,7 +8,7 @@ class UserData {
   String? bsx;
   String? address;
   String? birthday;
-  int? gender; // 0: Male, 1: female, 2: other
+  int? gender; // 1: Male, 2: female, 3: other
 
   String? avatar;
   String? fcmToken;
