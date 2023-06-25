@@ -4,13 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
 import '../../../model/trip.dart';
-import '../../../util/log_dog_utils.dart';
 
 class PageHomeController extends BaseController {
   var idItemDetail = "";
   var buttonChoose = 0.obs;
   var listTrips = <Trip>[].obs;
   var listTripWithState = <Trip>[].obs;
+  var listTripWithSearch = <Trip>[].obs;
 
   var db = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref().child("files/uid");
@@ -74,5 +74,6 @@ class PageHomeController extends BaseController {
     }
 
     listTripWithState.value = list;
+    listTripWithSearch.value = list;
   }
 }
