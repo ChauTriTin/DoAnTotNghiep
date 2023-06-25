@@ -334,10 +334,10 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                     borderRadius: const BorderRadius.all(
                         Radius.circular(DimenConstants.radiusMedium)),
                   ),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "CẢM ƠN BẠN VÌ NHỮNG ĐÁNH GIÁ NÀY NHÉ!",
                         style: TextStyle(
                           fontSize: DimenConstants.txtLarge,
@@ -345,6 +345,22 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                           color: Colors.black,
                         ),
                         textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                          height: DimenConstants.marginPaddingMedium),
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back(); //close this popup
+                          Get.back(); //close this screen
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text(
+                          '          OK          ',
+                          //warning do not remove space letter
+                          style: TextStyle(fontSize: DimenConstants.txtLarge),
+                        ),
                       ),
                     ],
                   ),
@@ -354,6 +370,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           ),
         ),
       ),
+      barrierDismissible: false,
     );
   }
 }
