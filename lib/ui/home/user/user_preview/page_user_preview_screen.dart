@@ -108,14 +108,14 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
 
   Widget _buildAvatar() {
     return IconButton(
-        iconSize: DimenConstants.avatarProfile,
+        iconSize: DimenConstants.avatarProfile2,
         onPressed: () {},
         icon: CircleAvatar(
           backgroundColor: ColorConstants.borderTextInputColor,
-          radius: DimenConstants.avatarProfile / 2,
+          radius: DimenConstants.avatarProfile2 / 2,
           child: CircleAvatar(
             radius:
-                DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
+                DimenConstants.avatarProfile2 / 2 - DimenConstants.logoStroke,
             backgroundImage:
                 NetworkImage(_controller.userData.value.avatar ?? StringConstants.avatarImgDefault)),
           ),

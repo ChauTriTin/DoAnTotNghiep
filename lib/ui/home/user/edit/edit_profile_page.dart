@@ -84,7 +84,6 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),
-            _buildAvatar(),
             _changeAvatar(),
             const SizedBox(
               height: DimenConstants.marginPaddingTiny,
@@ -255,36 +254,46 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
     Dog.d("datetime_birthday: ${_controller.birthday.value}");
   }
 
-  Widget _buildAvatar() {
-    return IconButton(
-      iconSize: DimenConstants.avatarProfile2,
-      icon: CircleAvatar(
-        backgroundColor: ColorConstants.borderTextInputColor,
-        radius: DimenConstants.avatarProfile2 / 2,
-        child: CircleAvatar(
-          radius: DimenConstants.avatarProfile2 / 2 - DimenConstants.logoStroke,
-          backgroundImage:
-              NetworkImage(UserSingletonController.instance.getAvatar()),
-        ),
-      ),
-      onPressed: () {},
-    );
-  }
-
   Widget _changeAvatar() {
-    return InkWell(
-        onTap: () {
-          _openSelectImageBottomSheet(context);
-        },
-        child: Container(
-          margin: const EdgeInsets.only(top: 14, bottom: 16),
-          child: const Center(
-            child: Text(
-              StringConstants.updateAvatar,
-              style: TextStyle(color: Colors.blue),
+    return SizedBox(
+      height: DimenConstants.avatarProfile,
+      width: DimenConstants.avatarProfile,
+      child: Stack(
+        clipBehavior: Clip.none,
+        fit: StackFit.expand,
+        children: [
+          IconButton(
+            iconSize: DimenConstants.avatarProfile,
+            icon: CircleAvatar(
+              backgroundColor: ColorConstants.borderTextInputColor,
+              radius: DimenConstants.avatarProfile / 2,
+              child: CircleAvatar(
+                radius: DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
+                backgroundImage:
+                NetworkImage(UserSingletonController.instance.getAvatar()),
+              ),
             ),
+            onPressed: () {
+
+            },
           ),
-        ));
+          Positioned(
+              bottom: 0,
+              right: 0,
+              left: 100 ,
+              child: RawMaterialButton(
+                onPressed: () {
+                  _openSelectImageBottomSheet(context);
+                },
+                elevation: 3,
+                fillColor: ColorConstants.colorWhite,
+                padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                shape: const CircleBorder(),
+                child: const Icon(Icons.camera_alt_outlined, color: Colors.blue,),
+              )),
+        ],
+      ),
+    );
   }
 
   void _openSelectImageBottomSheet(BuildContext context) {
