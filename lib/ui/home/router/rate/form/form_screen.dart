@@ -6,6 +6,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rate/rate.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({
@@ -130,26 +131,37 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
             ),
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              text1,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: ColorConstants.textColorDisable,
-                fontSize: DimenConstants.txtMedium,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                text1,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: ColorConstants.textColorDisable,
+                  fontSize: DimenConstants.txtMedium,
+                ),
               ),
-            ),
-            Text(
-              text2,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: ColorConstants.appColor,
-                fontSize: DimenConstants.txtLarge,
+              Text(
+                text2,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: ColorConstants.appColor,
+                  fontSize: DimenConstants.txtLarge,
+                ),
               ),
-            ),
-          ],
+              Rate(
+                iconSize: 40,
+                color: Colors.orange,
+                allowHalf: false,
+                allowClear: true,
+                initialValue: 3.0,
+                readOnly: false,
+                onChange: (value) {},
+              ),
+            ],
+          ),
         ),
       ],
     );
