@@ -67,10 +67,10 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 0,
           backgroundColor: ColorConstants.appColor,
+          title: const Text(StringConstants.about),
         ),
-        backgroundColor: ColorConstants.colorWhite,
+        backgroundColor: ColorConstants.screenBg,
         body: Obx(() {
           return buildBody();
         }));
@@ -79,12 +79,39 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
   Widget buildBody() {
     return Container(
         width: double.infinity,
-        color: ColorConstants.colorWhite,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
+
+          _buildAvatar(),
+          _buildUserInfo(),
+          _buildTripInfo(),
+        ]));
+  }
+
+  Widget _buildAvatar() {
+    return Card(
+      shape: UIUtils.getCardCorner(),
+      margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+      color: ColorConstants.cardBg,
+      shadowColor: Colors.grey,
+      elevation: DimenConstants.cardElevation,
+      child: Column(
+        children: [
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
-          _buildAvatar(),
+          IconButton(
+              iconSize: DimenConstants.avatarProfile2,
+              onPressed: () {},
+              icon: CircleAvatar(
+                backgroundColor: ColorConstants.borderTextInputColor,
+                radius: DimenConstants.avatarProfile2 / 2,
+                child: CircleAvatar(
+                  radius:
+                      DimenConstants.avatarProfile2 / 2 - DimenConstants.logoStroke,
+                  backgroundImage:
+                      NetworkImage(_controller.userData.value.avatar ?? StringConstants.avatarImgDefault)),
+                ),
+              ),
           const SizedBox(
             height: DimenConstants.marginPaddingTiny,
           ),
@@ -96,33 +123,56 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
           const SizedBox(
             height: DimenConstants.marginPaddingLarge,
           ),
-          _buildUserInfo(Icons.email, StringConstants.email, _controller.userData.value.email ?? ""),
-          _buildUserInfo(Icons.calendar_month, StringConstants.birthday, _controller.userData.value.birthday ?? ""),
-          _buildUserInfo(Icons.location_city, StringConstants.address, _controller.userData.value.address ?? ""),
-          _buildUserInfo(Icons.phone_android, StringConstants.phone, _controller.userData.value.phone ?? ""),
-          _buildUserInfo(Icons.pedal_bike, StringConstants.bsx, _controller.userData.value.bsx ?? ""),
-          _buildUserInfo(Icons.transgender, StringConstants.gender, _controller.getUserGender()),
-          _buildTripInfo(),
-        ]));
+        ],
+      ),
+    );
   }
 
-  Widget _buildAvatar() {
-    return IconButton(
-        iconSize: DimenConstants.avatarProfile2,
-        onPressed: () {},
-        icon: CircleAvatar(
-          backgroundColor: ColorConstants.borderTextInputColor,
-          radius: DimenConstants.avatarProfile2 / 2,
-          child: CircleAvatar(
-            radius:
-                DimenConstants.avatarProfile2 / 2 - DimenConstants.logoStroke,
-            backgroundImage:
-                NetworkImage(_controller.userData.value.avatar ?? StringConstants.avatarImgDefault)),
-          ),
-        );
+  Widget _buildUserInfo() {
+    return Card(
+      shape: UIUtils.getCardCorner(),
+      margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+      color: ColorConstants.cardBg,
+      shadowColor: Colors.grey,
+      elevation: DimenConstants.cardElevation,
+      child: Padding(
+        padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMLarge, bottom: DimenConstants.marginPaddingMLarge),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingMLarge),
+              child: Text(
+                StringConstants.about,
+                style: UIUtils.getStyleText500Medium1(),
+              ),
+            ),
+            const SizedBox(
+              height: DimenConstants.marginPaddingSmall,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingMLarge),
+              child: Divider(
+                color: ColorConstants.dividerColor,
+                thickness: DimenConstants.dividerHeight,
+              ),
+            ),
+            const SizedBox(
+              height: DimenConstants.marginPaddingSmall,
+            ),
+            _buildRowUserInfo(Icons.email, StringConstants.email, _controller.userData.value.email ?? ""),
+            _buildRowUserInfo(Icons.calendar_month, StringConstants.birthday, _controller.userData.value.birthday ?? ""),
+            _buildRowUserInfo(Icons.location_city, StringConstants.address, _controller.userData.value.address ?? ""),
+            _buildRowUserInfo(Icons.phone_android, StringConstants.phone, _controller.userData.value.phone ?? ""),
+            _buildRowUserInfo(Icons.pedal_bike, StringConstants.bsx, _controller.userData.value.bsx ?? ""),
+            _buildRowUserInfo(Icons.transgender, StringConstants.gender, _controller.getUserGender()),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget _buildUserInfo(IconData icon, String title, String value) {
+  Widget _buildRowUserInfo(IconData icon, String title, String value) {
     return Padding(
       padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium, right: DimenConstants.marginPaddingMedium),
       child: Row(
@@ -157,25 +207,40 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
   }
 
   Widget _buildTripInfo() {
-    return Padding(
-        padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMedium, left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingLarge),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Divider(
-              color: ColorConstants.dividerGreyColor,
-              thickness: DimenConstants.dividerHeight,
-            ),
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
-            UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount, _controller.trips.length),
-            UIUtils.getTextSpanCount(StringConstants.leadTripCount, _controller.tripsHost.length),
-            UIUtils.getTextSpanCount(StringConstants.totalKm, _controller.totalKm.value),
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
-          ],
-        ));
+    return Card(
+      shape: UIUtils.getCardCorner(),
+      margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+      color: ColorConstants.cardBg,
+      shadowColor: Colors.grey,
+      elevation: DimenConstants.cardElevation,
+      child: Padding(
+          padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMLarge, bottom: DimenConstants.marginPaddingSmall, left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingLarge),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                StringConstants.statistic,
+                style: UIUtils.getStyleText500Medium1(),
+              ),
+              const SizedBox(
+                height: DimenConstants.marginPaddingSmall,
+              ),
+              const Divider(
+                color: ColorConstants.dividerColor,
+                thickness: DimenConstants.dividerHeight,
+              ),
+              const SizedBox(
+                height: DimenConstants.marginPaddingSmall,
+              ),
+              UIUtils.getTextSpanCount(
+                  "👨‍👧‍👦 ${StringConstants.tripParticipatedCount}",
+                  _controller.trips.length + _controller.tripsInProgress.length),
+              UIUtils.getTextSpanCount("🤴 ${StringConstants.leadTripCount}",
+                  _controller.tripsHost.length),
+              UIUtils.getTextSpanCountDouble(
+                  "📏 ${StringConstants.totalKm}", _controller.totalKm.value),
+            ],
+          )),
+    );
   }
 }
