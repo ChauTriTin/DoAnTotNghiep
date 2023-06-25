@@ -2,6 +2,7 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/ui/home/router/rate/form/form_controller.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -80,8 +81,8 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         DimenConstants.marginPaddingMedium,
         DimenConstants.marginPaddingMedium,
       ),
-      children: const [
-        Text(
+      children: [
+        const Text(
           'ĐÁNH GIÁ VỀ CHUYẾN ĐI',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -89,7 +90,41 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
             fontSize: DimenConstants.txtLarge,
           ),
         ),
+        const SizedBox(height: DimenConstants.marginPaddingMedium),
+        _buildItem(_controller.currentUserData.value.getAvatar() ?? ""),
       ],
+    );
+  }
+
+  Widget _buildItem(String urlNetwork) {
+    return Container(
+      child: Row(
+        children: [
+          AvatarGlow(
+            glowColor: Colors.red,
+            endRadius: 50,
+            duration: const Duration(milliseconds: 2000),
+            repeat: true,
+            showTwoGlows: true,
+            repeatPauseDuration: const Duration(milliseconds: 100),
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: ClipOval(
+                child: SizedBox.fromSize(
+                  size: const Size.fromRadius(48), // Image radius
+                  child: Image.network(
+                    urlNetwork,
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
