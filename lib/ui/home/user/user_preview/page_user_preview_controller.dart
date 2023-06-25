@@ -13,6 +13,7 @@ import '../../../../db/firebase_helper.dart';
 import '../../../../model/place.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
+import '../../../../util/distance_util.dart';
 import '../../../../util/log_dog_utils.dart';
 import '../../../../util/shared_preferences_util.dart';
 import '../../../user_singleton_controller.dart';
@@ -41,6 +42,7 @@ class PageUserPreviewController extends BaseController {
     getTrip();
     getTripHost();
     getTripInProgress();
+    getTripIsCompleted();
   }
 
   Future<void> getUserDetail() async {
@@ -167,44 +169,39 @@ class PageUserPreviewController extends BaseController {
     }
   }
 
-  Future<void> getTotalKm(List<Trip> trips) async {
-    // try {
-    double totalKmTemp = 0;
-    for (var trip in trips) {
-      if (trip.listPlace == null || trip.listPlace?.isEmpty == true) {
-        double km = await _genDistance(trip.placeStart, trip.placeEnd);
-        totalKmTemp = totalKmTemp + km;
-        Dog.d("getTotalKm km of ${trip.title}: $km");
-      } else {
-        Place? startPlace = trip.placeStart;
-        trip.listPlace?.forEach((place) async {
-          double km = await _genDistance(startPlace, place);
-          totalKmTemp = totalKmTemp + km;
+  Future<void> getTripIsCompleted() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      log("getTrip: userid $uid");
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
+          .where(FirebaseHelper.isComplete, isEqualTo: true)
+          .snapshots();
 
-          startPlace = place;
-        });
+      var routerSnapshots =
+      routerStream.map((querySnapshot) => querySnapshot.docs);
 
+      routerSnapshots.listen((routerSnapshots) async {
+        var tempTrips = <Trip>[];
 
-        double km = await _genDistance(startPlace, trip.placeEnd);
-        totalKmTemp = totalKmTemp + km;
-      }
+        for (var routerSnapshot in routerSnapshots) {
+          log("getTrip: $routerSnapshot");
+
+          DocumentSnapshot<Map<String, dynamic>>? tripMap =
+          routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (tripMap == null || tripMap.data() == null) return;
+
+          var trip = Trip.fromJson((tripMap).data()!);
+          tempTrips.add(trip);
+        }
+
+        trips.value = tempTrips;
+
+        totalKm.value = await DistanceUtil.getTotalKm(tempTrips);
+      });
+    } catch (e) {
+      log("getTrip: $e");
     }
-    Dog.d("getTotalKm km: $totalKmTemp");
-    totalKm.value = totalKmTemp;
-  }
-
-  Future<double> _genDistance(Place? placeA, Place? placeB) async {
-    Dog.d("_genDistance: - A: ${placeA?.lat} - ${placeA?.long},  B: ${placeB?.lat} - ${placeB?.long}");
-    if (placeA == null || placeB == null) return 0;
-    DistanceValue distanceBetween = await distance(
-      placeA.lat ?? 0,
-      placeA.long ?? 0,
-      placeB.lat ?? 0,
-      placeB.long ?? 0,
-    );
-    int meters = distanceBetween.meters;
-    String textInKmOrMeters = distanceBetween.text;
-    debugPrint(">>>_genDistance meters $meters, textInKmOrMeters $textInKmOrMeters");
-    return meters / 1000;
   }
 }
