@@ -87,7 +87,7 @@ class PageUserPreviewController extends BaseController {
 
   Future<void> getTripHost() async {
     try {
-      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      String uid = userChat.value.id;
       log("getTripHost: userid $uid");
       var routerStream = FirebaseHelper.collectionReferenceRouter
           .where(FirebaseHelper.userIdHost, isEqualTo: uid)
