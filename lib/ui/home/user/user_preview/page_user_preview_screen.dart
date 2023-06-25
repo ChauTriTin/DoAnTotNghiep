@@ -174,7 +174,7 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
 
   Widget _buildRowUserInfo(IconData icon, String title, String value) {
     return Padding(
-      padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium, right: DimenConstants.marginPaddingMedium),
+      padding: const EdgeInsets.only(left: DimenConstants.marginPaddingSmall, right: DimenConstants.marginPaddingSmall),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
