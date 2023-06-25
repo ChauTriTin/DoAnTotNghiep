@@ -262,6 +262,7 @@ class UIUtils {
       fontSize: DimenConstants.txtMedium,
     );
   }
+
   static TextStyle getStyleText500() {
     return const TextStyle(
       color: Colors.black,

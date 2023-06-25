@@ -66,7 +66,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
           toolbarHeight: 0,
           backgroundColor: ColorConstants.appColor,
         ),
-        backgroundColor: ColorConstants.colorWhite,
+        backgroundColor: ColorConstants.screenBg,
         body: Obx(() {
           return buildBody();
         }));
@@ -75,51 +75,74 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
   Widget buildBody() {
     return Container(
         width: double.infinity,
-        color: ColorConstants.colorWhite,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _buildAvatar(),
-          const SizedBox(
-            height: DimenConstants.marginPaddingTiny,
-          ),
-          Text(
-            UserSingletonController.instance.getName(),
-            style: UIUtils.getStyleTextLarge500(),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingLarge,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
-            child: Text(
-              StringConstants.tripParticipated,
-              style: UIUtils.getStyleText500(),
+          Card(
+            margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+            color: ColorConstants.cardBg,
+            shadowColor: Colors.grey,
+            elevation: DimenConstants.cardElevation,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                // Chuyến đi đã tham gia
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: DimenConstants.marginPaddingMedium),
+                  child: Text(
+                    StringConstants.tripParticipated,
+                    style: UIUtils.getStyleTextLarge500(),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                _listTrips(_controller.trips),
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+              ],
             ),
           ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _listTrips(_controller.trips),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
-            child: Text(
-              StringConstants.tripHost,
-              style: UIUtils.getStyleText500(),
-            ),
-          ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _listTrips(_controller.tripsHost),
-          _buildTripInfo(),
+          Card(
+              margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+              color: ColorConstants.cardBg,
+              shadowColor: Colors.grey,
+              elevation: DimenConstants.cardElevation,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: DimenConstants.marginPaddingMedium,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: DimenConstants.marginPaddingMedium),
+                    child: Text(
+                      StringConstants.tripHost,
+                      style: UIUtils.getStyleText500(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: DimenConstants.marginPaddingMedium,
+                  ),
+                  _listTrips(_controller.tripsHost),
+
+                ],
+              )),
+
+          Card(
+              margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+              color: ColorConstants.cardBg,
+              shadowColor: Colors.grey,
+              elevation: DimenConstants.cardElevation,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, children: [
+                _buildTripInfo(),
+              ])),
         ]));
   }
 
@@ -226,10 +249,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(
-              color: ColorConstants.dividerColor,
-              thickness: DimenConstants.dividerHeight,
-            ),
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),

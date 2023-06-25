@@ -43,10 +43,11 @@ class DimenConstants {
   static const double iconSizeSmall = 24;
   static const double loginIconSize = 50;
   static const double iconSizePadding = 6;
-  static const double avatarProfile = 130;
+  static const double avatarProfile = 100;
   static const double avatarProfile2 = 100;
   static const double circleShape = 40;
   static const double dividerHeight = 1;
+  static const double cardElevation = 2;
 
   // Icon Back Login Page
   static const double circleBackBg = 130;

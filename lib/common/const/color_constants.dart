@@ -37,6 +37,9 @@ class ColorConstants {
   static const Color colorRateApp =  Color(0xFF8C51FF);
   static const Color colorBgEditTextField =  Color(0xFFE3E3E3);
   static const Color colorGenderSelected =  Color(0xFF772323);
+  static Color screenBg = const Color(0xFFF1F1F1);
+  static Color cardBg = const Color(0xFFFFFFFF);
+  static Color cardShadow = const Color(0xFF7A7A7A);
 
   static getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
