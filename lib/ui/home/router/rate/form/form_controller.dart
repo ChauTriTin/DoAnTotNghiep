@@ -11,6 +11,11 @@ class FormController extends BaseController {
   var trip = Trip().obs;
   var currentUserData = UserSingletonController.instance.userData;
   var listMember = <UserData>[].obs;
+  var rateLeader = 0.0.obs;
+  var rateTrip = 0.0.obs;
+  var ratePlaceStart = 0.0.obs;
+  var ratePlaceEnd = 0.0.obs;
+  var rateListPlaceStop = [].obs;
 
   void clearOnDispose() {
     Get.delete<FormController>();
@@ -29,6 +34,11 @@ class FormController extends BaseController {
         var trip = Trip.fromJson((map).data()!);
         this.trip.value = trip;
         debugPrint("getRouter success: ${trip.toString()}");
+
+        //set default value for rate list place stop
+        this.trip.value.listPlace?.forEach((element) {
+          rateListPlaceStop.add(0.0);
+        });
 
         //gen list member
         _genListMember(this.trip.value.listIdMember ?? List.empty());
@@ -81,4 +91,24 @@ class FormController extends BaseController {
   }
 
   void rate() {}
+
+  void setRateLeader(double value) {
+    rateLeader.value = value;
+  }
+
+  void setRateTrip(double value) {
+    rateTrip.value = value;
+  }
+
+  void setPlaceStart(double value) {
+    ratePlaceStart.value = value;
+  }
+
+  void setPlaceEnd(double value) {
+    ratePlaceEnd.value = value;
+  }
+
+  void setPlaceStopWithIndex(double value, int index) {
+    rateListPlaceStop[index] = value;
+  }
 }

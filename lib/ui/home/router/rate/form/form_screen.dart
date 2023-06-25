@@ -112,6 +112,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           null,
           "Trưởng đoàn",
           _controller.currentUserData.value.name ?? "",
+          (rate) {
+            _controller.setRateLeader(rate);
+          },
         ),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
         const Divider(),
@@ -121,6 +124,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           "assets/images/ic_launcher_2.png",
           "Về chuyến đi",
           _controller.trip.value.title ?? "",
+          (rate) {
+            _controller.setRateTrip(rate);
+          },
         ),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
         const Divider(),
@@ -130,6 +136,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           "assets/images/ic_marker_start.png",
           "Điểm xuất phát",
           _controller.trip.value.placeStart?.name ?? "",
+          (rate) {
+            _controller.setPlaceStart(rate);
+          },
         ),
         _buildStopView(),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
@@ -140,6 +149,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           "assets/images/ic_marker_end.png",
           "Địa điểm đến",
           _controller.trip.value.placeEnd?.name ?? "",
+          (rate) {
+            _controller.setPlaceEnd(rate);
+          },
         ),
       ],
     );
@@ -167,6 +179,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
               "assets/images/ic_marker_end.png",
               "Địa điểm dừng chân ${i + 1}",
               list[i].name ?? "",
+              (rate) {
+                _controller.setPlaceStopWithIndex(rate, i);
+              },
             ),
           ],
         );
@@ -179,6 +194,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
     String? urlAsset,
     String text1,
     String text2,
+    Function(double value)? onChange,
   ) {
     Widget buildImg() {
       if (urlNetwork == null || urlNetwork.isEmpty) {
@@ -243,9 +259,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                 color: Colors.orange,
                 allowHalf: false,
                 allowClear: true,
-                initialValue: 3.0,
+                initialValue: 0.0,
                 readOnly: false,
-                onChange: (value) {},
+                onChange: onChange,
               ),
             ],
           ),
