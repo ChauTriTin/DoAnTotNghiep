@@ -338,6 +338,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
+              _controller.completeTrip();
               Get.to(RateScreen(
                 id: widget.id,
                 onRateSuccess: () {

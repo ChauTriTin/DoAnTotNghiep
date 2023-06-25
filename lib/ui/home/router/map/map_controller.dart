@@ -7,6 +7,7 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
@@ -42,6 +43,23 @@ class MapController extends BaseController {
 
   var polylines = <Polyline>[].obs;
   Timer? timer;
+
+  void completeTrip() {
+    try {
+      // Get the reference to the document you want to update
+      DocumentReference documentRef =
+          FirebaseHelper.collectionReferenceRouter.doc(trip.value.id);
+
+      // Update the specific field
+      documentRef.update({FirebaseHelper.isComplete: true}).then((value) {
+        Dog.d("completeTrip success");
+      }).catchError((error) {
+        Dog.e("completeTrip error: $error");
+      });
+    } catch (e) {
+      Dog.e("completeTrip error: $e");
+    }
+  }
 
   void clearOnDispose() {
     timer?.cancel();
