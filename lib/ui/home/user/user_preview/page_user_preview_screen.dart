@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
@@ -33,9 +35,9 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
   void initState() {
     super.initState();
     _setupListen();
-    var userChatData = Get.arguments[0][Constants.user];
-    Dog.d("initState: userChatData: ${userChatData.toString()}");
-    _controller.userChat.value = User.fromJson(userChatData);
+    var userId = Get.arguments[0][Constants.user];
+    Dog.d("initState: userId: ${userId.toString()}");
+    _controller.userId.value = userId;
     _controller.getData();
   }
 
@@ -87,123 +89,21 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
             height: DimenConstants.marginPaddingTiny,
           ),
           Text(
-            UserSingletonController.instance.getName(),
+            _controller.userData.value.name ?? "",
             style: UIUtils.getStyleTextLarge500(),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
             height: DimenConstants.marginPaddingLarge,
           ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
-            child: Text(
-              StringConstants.tripParticipated,
-              style: UIUtils.getStyleText500(),
-            ),
-          ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _listTrips(_controller.trips),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
-            child: Text(
-              StringConstants.tripHost,
-              style: UIUtils.getStyleText500(),
-            ),
-          ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _listTrips(_controller.tripsHost),
+          _buildUserInfo(Icons.email, StringConstants.email, _controller.userData.value.email ?? ""),
+          _buildUserInfo(Icons.calendar_month, StringConstants.birthday, _controller.userData.value.birthday ?? ""),
+          _buildUserInfo(Icons.location_city, StringConstants.address, _controller.userData.value.address ?? ""),
+          _buildUserInfo(Icons.phone_android, StringConstants.phone, _controller.userData.value.phone ?? ""),
+          _buildUserInfo(Icons.pedal_bike, StringConstants.bsx, _controller.userData.value.bsx ?? ""),
+          _buildUserInfo(Icons.transgender, StringConstants.gender, _controller.getUserGender()),
           _buildTripInfo(),
         ]));
-  }
-
-  Widget _listTrips(RxList<Trip> trips) {
-    if (trips.value.isEmpty) {
-      return Container(
-        margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-        child: Column(
-          children: [
-            Lottie.asset('assets/files/no_data.json'),
-            Text(
-              StringConstants.noTrip,
-              style: UIUtils.getStyleText(),
-            )
-          ],
-        ),
-      );
-    } else {
-      return SizedBox(
-        height: MediaQuery.of(context).size.height * 1 / 5.5,
-        child: ListView.separated(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemCount: trips.length,
-          itemBuilder: (BuildContext context, int index) {
-            var trip = trips[index];
-            return getTripRowItem(index, trip);
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(
-              width: DimenConstants.marginPaddingMedium,
-            );
-          },
-        ),
-      );
-    }
-  }
-
-  Widget getTripRowItem(int index, Trip trip) {
-    var itemSize = MediaQuery.of(context).size.height * 1 / 7.5;
-    return InkWell(
-        child: Container(
-          constraints: BoxConstraints(maxWidth: itemSize),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Container(
-              color: Colors.white10,
-              width: itemSize,
-              height: itemSize,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: SizedBox.fromSize(
-                  size: const Size.fromRadius(48),
-                  child: CachedMemoryImage(
-                      fit: BoxFit.cover,
-                      width: itemSize,
-                      height: itemSize,
-                      uniqueKey: trip.getFirstImageUrl(),
-                      base64: trip.getFirstImageUrl()),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: DimenConstants.marginPaddingSmall,
-            ),
-            Text(
-              "${trip.title}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.start,
-              style: UIUtils.getStyleText(),
-            )
-          ]),
-        ),
-        onTap: () {
-          _onPressTripItem(trip);
-        });
-  }
-
-  void _onPressTripItem(Trip trip) {
-    Get.to(PageDetailTrip(tripData: trip));
   }
 
   Widget _buildAvatar() {
@@ -217,19 +117,62 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
             radius:
                 DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
             backgroundImage:
-                NetworkImage(_controller.userChat.value.imageUrl ?? _controller.userData.value.avatar ?? StringConstants.avatarImgDefault)),
+                NetworkImage(_controller.userData.value.avatar ?? StringConstants.avatarImgDefault)),
           ),
         );
   }
 
+  Widget _buildUserInfo(IconData icon, String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium, right: DimenConstants.marginPaddingMedium),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(24),
+                    child: Icon(icon),
+                  ),
+                ),
+              )),
+          Expanded(
+            flex: 8,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 4, right: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                  ),
+                  Text(
+                    value,
+                    style: UIUtils.getStyleText(),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _buildTripInfo() {
     return Padding(
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMedium, left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingLarge),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Divider(
-              color: ColorConstants.dividerColor,
+              color: ColorConstants.dividerGreyColor,
               thickness: DimenConstants.dividerHeight,
             ),
             const SizedBox(

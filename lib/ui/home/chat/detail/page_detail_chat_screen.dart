@@ -77,7 +77,7 @@ class _PageDetailChatScreenState extends BaseStatefulState<PageDetailChatScreen>
   
   void _handleTabAvatar(User user) {
     Get.to(() => const PageUserPreviewScreen(), arguments: [
-      { Constants.user: user.toJson() }
+      { Constants.user: user.id }
     ]);
   }
 }

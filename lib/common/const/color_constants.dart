@@ -25,6 +25,7 @@ class ColorConstants {
   static const Color textColorForgotPassword = Color(0xFFFFE49A);
   static const Color iconColor = Color(0xFF313131);
   static const Color dividerColor =  Color(0xFFFDC2C2);
+  static const Color dividerGreyColor =  Color(0xA6C7C7C7);
 
   static const Color colorProfile =  Color(0xFF04CB5B);
   static const Color colorMode =  Color(0xFF3B3B3B);

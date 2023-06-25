@@ -6,9 +6,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/const/string_constants.dart';
 import '../../../../db/firebase_helper.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
+import '../../../../util/log_dog_utils.dart';
 import '../../../../util/shared_preferences_util.dart';
 import '../../../user_singleton_controller.dart';
 
@@ -21,7 +23,7 @@ class PageUserPreviewController extends BaseController {
   var totalKm = 0.obs;
 
   var userData = UserData().obs;
-  var userChat = const User(id: "").obs;
+  var userId = "".obs;
 
   var trips = <Trip>[].obs;
   var tripsHost = <Trip>[].obs;
@@ -38,23 +40,24 @@ class PageUserPreviewController extends BaseController {
   }
 
   Future<void> getUserDetail() async {
+    Dog.d("getUserDetail: $userId");
     FirebaseHelper.collectionReferenceUser
-        .doc(userChat.value.id)
+        .doc(userId.value)
         .snapshots()
         .listen((value) {
-      DocumentSnapshot<Map<String, dynamic>>? userMap =
-      value as DocumentSnapshot<Map<String, dynamic>>?;
+      DocumentSnapshot<Map<String, dynamic>>? userMap = value as DocumentSnapshot<Map<String, dynamic>>?;
+      log("getUserDetail value: $value -- $userMap");
       if (userMap == null || userMap.data() == null) return;
 
       var user = UserData.fromJson((userMap).data()!);
       userData.value = user;
-      log("getUserInfo success: ${user.toString()}");
+      log("getUserDetail success: ${user.toString()}");
     });
   }
 
   Future<void> getTrip() async {
     try {
-      String uid = userChat.value.id;
+      String uid = userId.value;
       log("getTrip: userid $uid");
       var routerStream = FirebaseHelper.collectionReferenceRouter
           .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
@@ -87,7 +90,7 @@ class PageUserPreviewController extends BaseController {
 
   Future<void> getTripHost() async {
     try {
-      String uid = userChat.value.id;
+      String uid = userId.value;
       log("getTripHost: userid $uid");
       var routerStream = FirebaseHelper.collectionReferenceRouter
           .where(FirebaseHelper.userIdHost, isEqualTo: uid)
@@ -128,4 +131,11 @@ class PageUserPreviewController extends BaseController {
     // places.value = fakePlace;
   }
 
+  String getUserGender() {
+    switch (userData.value.gender) {
+      case 0: return StringConstants.male;
+      case 1: return StringConstants.female;
+      default: return StringConstants.other;
+    }
+  }
 }
