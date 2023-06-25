@@ -135,4 +135,5 @@ class StringConstants {
   static const String tripPost = "Bài đăng";
   static const String tripTop = "Chuyến đi hàng đầu";
   static const String placeTop = "Địa điểm hàng đầu";
+  static const String tripDetail = "Chi tiết chuyến đi";
 }
