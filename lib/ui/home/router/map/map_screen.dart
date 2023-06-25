@@ -10,7 +10,7 @@ import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
-import 'package:appdiphuot/ui/home/router/rate/rate_screen.dart';
+import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_screen.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
