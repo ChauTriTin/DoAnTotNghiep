@@ -28,6 +28,7 @@ class PageUserController extends BaseController {
 
   var trips = <Trip>[].obs;
   var tripsHost = <Trip>[].obs;
+  var tripsInProgress = <Trip>[].obs;
 
   void clearOnDispose() {
     Get.delete<PageUserController>();
@@ -36,6 +37,7 @@ class PageUserController extends BaseController {
   Future<void> getData() async {
     getTrip();
     getTripHost();
+    getTripInProgress();
     getTotalTripCount();
   }
 
@@ -43,9 +45,9 @@ class PageUserController extends BaseController {
     try {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
       log("getTrip: userid $uid");
-      var routerStream = FirebaseHelper.collectionReferenceRouter
-          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
-          .snapshots();
+      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
+          FirebaseHelper.listIdMember,
+          arrayContainsAny: [uid]).snapshots();
 
       var routerSnapshots =
           routerStream.map((querySnapshot) => querySnapshot.docs);
@@ -105,6 +107,40 @@ class PageUserController extends BaseController {
     }
   }
 
+  Future<void> getTripInProgress() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      log("getTripInProgress: userid $uid");
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
+          .where(FirebaseHelper.isComplete, isEqualTo: false)
+          .snapshots();
+
+      var routerSnapshots =
+          routerStream.map((querySnapshot) => querySnapshot.docs);
+
+      routerSnapshots.listen((routerSnapshots) {
+        var tempTrips = <Trip>[];
+
+        for (var routerSnapshot in routerSnapshots) {
+          log("getTripInProgress: $routerSnapshot");
+
+          DocumentSnapshot<Map<String, dynamic>>? tripMap =
+              routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (tripMap == null || tripMap.data() == null) return;
+
+          var trip = Trip.fromJson((tripMap).data()!);
+          tempTrips.add(trip);
+        }
+
+        tripsInProgress.value = tempTrips;
+      });
+    } catch (e) {
+      log("getTripInProgress: $e");
+    }
+  }
+
   Future<void> getTotalKm() async {
     // List<Place> fakePlace = fakePlace();
     // places.value = fakePlace;
@@ -114,5 +150,4 @@ class PageUserController extends BaseController {
     // List<Place> fakePlace = fakePlace();
     // places.value = fakePlace;
   }
-
 }

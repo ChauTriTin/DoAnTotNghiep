@@ -7,6 +7,7 @@ import '../util/log_dog_utils.dart';
 class Trip {
   String? id;
   String? userIdHost;
+  String? userHostName;
   List<String>? listIdMember;
 
   @override
@@ -30,6 +31,7 @@ class Trip {
   Trip({
     this.id,
     this.userIdHost,
+    this.userHostName,
     this.listIdMember,
     this.title,
     this.des,
@@ -52,6 +54,7 @@ class Trip {
   Trip.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userIdHost = json['userIdHost'];
+    userHostName = json['userHostName'];
     listIdMember = json['listIdMember'].cast<String>();
     title = json['title'];
     des = json['des'];
@@ -88,6 +91,7 @@ class Trip {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['userIdHost'] = userIdHost;
+    data['userHostName'] = userHostName;
     data['listIdMember'] = listIdMember;
     data['title'] = title;
     data['des'] = des;
@@ -117,6 +121,7 @@ class Trip {
           runtimeType == other.runtimeType &&
           id == other.id &&
           userIdHost == other.userIdHost &&
+          userHostName == other.userHostName &&
           listIdMember == other.listIdMember &&
           title == other.title &&
           des == other.des &&
@@ -135,6 +140,7 @@ class Trip {
   int get hashCode =>
       id.hashCode ^
       userIdHost.hashCode ^
+      userHostName.hashCode ^
       listIdMember.hashCode ^
       title.hashCode ^
       des.hashCode ^
