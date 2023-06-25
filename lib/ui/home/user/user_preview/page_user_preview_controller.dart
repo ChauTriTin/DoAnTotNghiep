@@ -129,8 +129,8 @@ class PageUserPreviewController extends BaseController {
 
   String getUserGender() {
     switch (userData.value.gender) {
-      case 0: return StringConstants.male;
-      case 1: return StringConstants.female;
+      case 1: return StringConstants.male;
+      case 2: return StringConstants.female;
       default: return StringConstants.other;
     }
   }
