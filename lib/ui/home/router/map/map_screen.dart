@@ -10,6 +10,7 @@ import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
+import 'package:appdiphuot/ui/home/router/rate/rate_screen.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -325,6 +326,16 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
               _showBottomSheetWarning();
             },
             child: const Icon(Icons.priority_high),
+          ),
+          const SizedBox(height: DimenConstants.marginPaddingMedium),
+          FloatingActionButton(
+            heroTag: "priority_high",
+            elevation: DimenConstants.elevationMedium,
+            backgroundColor: ColorConstants.appColor,
+            onPressed: () {
+              Get.to(const RateScreen());
+            },
+            child: const Icon(Icons.rate_review),
           ),
         ],
       ),
