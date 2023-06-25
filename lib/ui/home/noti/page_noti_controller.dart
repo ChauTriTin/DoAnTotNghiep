@@ -1,20 +1,33 @@
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/model/push_notification.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:get/get.dart';
 
 class PageNotiController extends BaseController {
-  var number = 0.obs;
-  var list = <String>[].obs;
+  var listNotification = <PushNotification>[].obs;
 
   void clearOnDispose() {
     Get.delete<PageNotiController>();
   }
 
-  void addNumber() {
-    number.value++;
-  }
+  void getListNotification() {
+    setAppLoading(true, "Loading", TypeApp.getListPushNotification);
+    Dog.e(">>>getListNotification");
+    listNotification.clear();
+    var list = SharedPreferencesUtil.getListNotification(
+        SharedPreferencesUtil.KEY_LIST_NOTI);
 
-  void addString() {
-    list.add(DateTime.now().toString());
-    list.refresh();
+    list.then((value) {
+      for (var element in value) {
+        Dog.e(
+            ">>>getListNotification element ${element.title}~${element.body}");
+      }
+
+      listNotification.addAll(value);
+      listNotification.refresh();
+      setAppLoading(false, "Loading", TypeApp.getListPushNotification);
+      Dog.e(">>>getListNotification done ${listNotification.length}");
+    });
   }
 }

@@ -2,8 +2,9 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/home/chat/page_chat_controller.dart';
 import 'package:appdiphuot/ui/home/noti/page_noti_controller.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
+import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   void initState() {
     super.initState();
     _setupListen();
+    _controller.getListNotification();
   }
 
   void _setupListen() {
@@ -45,45 +47,36 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: Container(
-        color: Colors.red,
         padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-        child: Obx(() {
-          var number = _controller.number.value;
-          var list = _controller.list.toString();
-          return ListView(
-            children: [
-              const Text(
-                "This is Chat Page",
-                style: TextStyle(
-                  fontSize: DimenConstants.txtLarge,
-                  color: Colors.white,
-                ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  minimumSize: const Size(240, 50),
-                ),
-                onPressed: () {
-                  _controller.addNumber();
-                  _controller.addString();
-                },
-                child: const Text(
-                  '+',
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              Text("Number $number"),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-              Text("list $list"),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-            ],
-          );
-        }),
+        child: _buildList(),
       ),
     );
+  }
+
+  Widget _buildList() {
+    return Obx(() {
+      var list = _controller.listNotification;
+      Dog.e(">>>_buildList list $list");
+      if (list.isEmpty) {
+        return Center(
+          child: UIUtils.getText("No data"),
+        );
+      } else {
+        return ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (context, i) {
+            return Container(
+              padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+              child: Column(
+                children: [
+                  UIUtils.getText(list[i].title ?? ""),
+                  UIUtils.getText(list[i].body ?? ""),
+                ],
+              ),
+            );
+          },
+        );
+      }
+    });
   }
 }
