@@ -1,7 +1,7 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_controller.dart';
+import 'package:appdiphuot/ui/home/router/rate/form/form_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -19,11 +19,12 @@ class FormScreen extends StatefulWidget {
 }
 
 class _FormScreenState extends BaseStatefulState<FormScreen> {
-  final _controller = Get.put(RateController());
+  final _controller = Get.put(FormController());
 
   @override
   void initState() {
     super.initState();
+    _controller.getRouter(widget.id);
   }
 
   @override
