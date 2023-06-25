@@ -68,7 +68,6 @@ class PageDetailChatController extends BaseController {
 
   Future<void> _addMessageToFireStore(Message message) async {
     try {
-      var idMessage = DateTime.now().millisecondsSinceEpoch.toString();
       await _chat.doc(tripData?.id)
           .collection(FirebaseHelper.messages)
           .doc(message.createdAt.toString())
