@@ -93,7 +93,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                       left: DimenConstants.marginPaddingMedium),
                   child: Text(
                     StringConstants.tripParticipated,
-                    style: UIUtils.getStyleTextLarge500(),
+                    style: UIUtils.getStyleText500(),
                   ),
                 ),
 
