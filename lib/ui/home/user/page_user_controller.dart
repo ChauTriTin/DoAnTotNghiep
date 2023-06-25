@@ -40,44 +40,9 @@ class PageUserController extends BaseController {
   }
 
   Future<void> getData() async {
-    getTotalTrip();
     getTripIsCompleted();
     getTripHost();
     getTripInProgress();
-  }
-
-  Future<void> getTotalTrip() async {
-    try {
-      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
-      log("getTotalTrip: userid $uid");
-      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
-          FirebaseHelper.listIdMember,
-          arrayContainsAny: [uid]).snapshots();
-
-      var routerSnapshots =
-          routerStream.map((querySnapshot) => querySnapshot.docs);
-
-      routerSnapshots.listen((routerSnapshots) {
-        var tempTrips = <Trip>[];
-
-        for (var routerSnapshot in routerSnapshots) {
-          log("getTotalTrip: $routerSnapshot");
-
-          DocumentSnapshot<Map<String, dynamic>>? tripMap =
-              routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
-
-          if (tripMap == null || tripMap.data() == null) return;
-
-          var trip = Trip.fromJson((tripMap).data()!);
-          tempTrips.add(trip);
-        }
-
-        allTrip.value = tempTrips;
-        getTotalKm(tempTrips);
-      });
-    } catch (e) {
-      log("getTrip: $e");
-    }
   }
 
   Future<void> getTripIsCompleted() async {
@@ -108,6 +73,8 @@ class PageUserController extends BaseController {
         }
 
         trips.value = tempTrips;
+
+        getTotalKm(tempTrips);
       });
     } catch (e) {
       log("getTrip: $e");
