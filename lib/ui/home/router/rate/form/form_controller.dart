@@ -105,6 +105,21 @@ class FormController extends BaseController {
     }
     rate.rateListPlaceStop = listTmp;
     Dog.e(">>>rate ${rate.toJson()}");
+
+    try {
+      var tripId = trip.value.id;
+      if (tripId == null || tripId.isEmpty) {
+        return;
+      }
+      trip.value.rate = rate;
+      Dog.e(">>>rate trip ${trip.toJson()}");
+      FirebaseHelper.collectionReferenceRouter.doc(tripId).update({
+        "rate": rate,
+      });
+      Dog.e(">>>rate success");
+    } catch (e) {
+      Dog.e(">>>rate err $e");
+    }
   }
 
   void setRateLeader(double value) {
