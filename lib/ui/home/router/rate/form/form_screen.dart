@@ -91,40 +91,67 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           ),
         ),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
-        _buildItem(_controller.currentUserData.value.getAvatar() ?? ""),
+        _buildItem(
+          _controller.currentUserData.value.getAvatar(),
+          "Trưởng đoàn",
+          _controller.currentUserData.value.name ?? "",
+        ),
       ],
     );
   }
 
-  Widget _buildItem(String urlNetwork) {
-    return Container(
-      child: Row(
-        children: [
-          AvatarGlow(
-            glowColor: Colors.red,
-            endRadius: 50,
-            duration: const Duration(milliseconds: 2000),
-            repeat: true,
-            showTwoGlows: true,
-            repeatPauseDuration: const Duration(milliseconds: 100),
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: ClipOval(
-                child: SizedBox.fromSize(
-                  size: const Size.fromRadius(48), // Image radius
-                  child: Image.network(
-                    urlNetwork,
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  ),
+  Widget _buildItem(
+    String urlNetwork,
+    String text1,
+    String text2,
+  ) {
+    return Row(
+      children: [
+        AvatarGlow(
+          glowColor: Colors.red,
+          endRadius: 50,
+          duration: const Duration(milliseconds: 2000),
+          repeat: true,
+          showTwoGlows: true,
+          repeatPauseDuration: const Duration(milliseconds: 100),
+          child: SizedBox(
+            width: 50,
+            height: 50,
+            child: ClipOval(
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(48), // Image radius
+                child: Image.network(
+                  urlNetwork,
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text1,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.textColorDisable,
+                fontSize: DimenConstants.txtMedium,
+              ),
+            ),
+            Text(
+              text2,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.appColor,
+                fontSize: DimenConstants.txtLarge,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
