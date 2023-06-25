@@ -131,20 +131,11 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
         children: [
           Expanded(
               flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(24),
-                    child: Icon(icon),
-                  ),
-                ),
-              )),
+              child: Icon(icon)),
           Expanded(
             flex: 8,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 4, right: 4),
+              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -178,12 +169,9 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),
-            UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount,
-                _controller.trips.length),
-            UIUtils.getTextSpanCount(
-                StringConstants.leadTripCount, _controller.tripsHost.length),
-            UIUtils.getTextSpanCount(
-                StringConstants.totalKm, _controller.totalKm.value),
+            UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount, _controller.trips.length),
+            UIUtils.getTextSpanCount(StringConstants.leadTripCount, _controller.tripsHost.length),
+            UIUtils.getTextSpanCount(StringConstants.totalKm, _controller.totalKm.value),
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),
