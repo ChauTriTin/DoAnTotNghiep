@@ -77,7 +77,7 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
   }
 
   Widget buildBody() {
-    return Container(
+    return SizedBox(
         width: double.infinity,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
 
