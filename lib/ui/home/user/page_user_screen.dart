@@ -102,7 +102,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
-                  _buildListTripInProgress()
+                  _buildListTripInProgress(_controller.tripsInProgress)
                 ],
               )),
 
@@ -129,7 +129,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
-                  _listTrips(_controller.tripsHost),
+                  _buildListTripInProgress(_controller.tripsHost)
                 ],
               )),
           Card(
@@ -283,8 +283,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
         ));
   }
 
-  Widget _buildListTripInProgress() {
-    var trips = _controller.tripsInProgress;
+  Widget _buildListTripInProgress(List<Trip> trips) {
     if (trips.isEmpty) {
       return Container(
         margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
