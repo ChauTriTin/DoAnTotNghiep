@@ -20,7 +20,7 @@ import '../../../../util/PasswordField.dart';
 import '../../../../util/TextInputField.dart';
 import '../../../../util/log_dog_utils.dart';
 import '../../../../util/time_utils.dart';
-import '../../../home/user/edit/custom_radio.dart';
+import '../../../../view/custom_radio.dart';
 
 class LoginGoogleScreen extends StatefulWidget {
   const LoginGoogleScreen({super.key});

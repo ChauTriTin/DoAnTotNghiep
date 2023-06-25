@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/ui/home/chat/page_chat_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_screen.dart';
 import 'package:appdiphuot/ui/home/home_controller.dart';
@@ -12,8 +15,8 @@ import 'package:get/get.dart';
 import '../../base/base_stateful_state.dart';
 import '../../common/const/color_constants.dart';
 import '../../common/const/string_constants.dart';
-import '../user_singleton_controller.dart';
 import '../../view/profile_bar_widget.dart';
+import '../user_singleton_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -87,6 +90,7 @@ class HomePageState extends State<HomePage> {
   ]);
 
   late CircularBottomNavigationController _navigationController;
+  StreamSubscription? eventBusOnBackPress;
 
   @override
   void initState() {
@@ -95,6 +99,7 @@ class HomePageState extends State<HomePage> {
 
     _navigationController = CircularBottomNavigationController(selectedPos);
     _setupListen();
+    _listenBus();
     UserSingletonController.instance.getUserInfo();
 
     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -194,10 +199,22 @@ class HomePageState extends State<HomePage> {
     _controller.appError.listen((err) {});
   }
 
+  void _listenBus() {
+    eventBusOnBackPress = eventBus.on<OnBackPress>().listen((event) {
+      if (event.className == mapScreen) {
+        setState(() {
+          _navigationController.value = 1;
+          selectedPos = 1;
+        });
+      }
+    });
+  }
+
   @override
   void dispose() {
     _controller.clearOnDispose();
     _navigationController.dispose();
+    eventBusOnBackPress?.cancel();
     super.dispose();
   }
 

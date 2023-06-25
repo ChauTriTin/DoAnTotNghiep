@@ -12,7 +12,7 @@ import '../../../../util/TextInputField.dart';
 import '../../../../util/time_utils.dart';
 import '../../../../util/validate_utils.dart';
 import '../../../user_singleton_controller.dart';
-import 'custom_radio.dart';
+import '../../../../view/custom_radio.dart';
 import 'edit_profile_controller.dart';
 
 class PageEditProfile extends StatefulWidget {

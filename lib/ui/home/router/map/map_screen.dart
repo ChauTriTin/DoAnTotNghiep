@@ -6,9 +6,11 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
+import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_screen.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -242,22 +244,25 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         var b = await getBytesFromCanvas(150, 150, bytes.buffer.asUint8List());
         if (b == null) {
           return Marker(
-            markerId: MarkerId(lastMapPositionPoints.toString()),
+            // markerId: MarkerId(lastMapPositionPoints.toString()),
+            markerId: MarkerId(markerId),
             position: lastMapPositionPoints,
           );
         }
         return Marker(
           icon: BitmapDescriptor.fromBytes(b),
-          markerId: MarkerId(lastMapPositionPoints.toString()),
-          position: lastMapPositionPoints,
+          markerId: MarkerId(markerId),
+          // markerId: MarkerId(lastMapPositionPoints.toString()),
+          position: position,
         );
       }
 
       var listMember = _controller.listMember;
-      debugPrint(">>>_createMaker listMember length ${listMember.length}");
+      // debugPrint(">>>createMarkerMember listMember length ${listMember.length}, isUpdateLatLong $isUpdateLatLong");
       for (int i = 0; i < listMember.length; i++) {
         var member = listMember[i];
-        debugPrint(">>>_createMaker createMarkerMember i $i -> ${member.name}");
+        debugPrint(
+            ">>>createMarkerMember createMarkerMember i $i -> ${member.name}, ${member.uid}");
         var marker = create(
           i,
           member.getAvatar(),
@@ -265,6 +270,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           LatLng(member.lat ?? defaultLat, member.long ?? defaultLong),
         );
         marker.then((value) {
+          debugPrint(
+              ">>>createMarkerMember then ${value.markerId} -> ${member.name}");
           _controller.setMarkerGoogleMap(value);
         });
       }
@@ -310,7 +317,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              showSnackBarFull(StringConstants.warning, "TODO");
+              Get.back(); //close this screen
+              eventBus.fire(OnBackPress(mapScreen));
             },
             child: const Icon(Icons.sms),
           ),
@@ -324,6 +332,16 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             },
             child: const Icon(Icons.priority_high),
           ),
+          const SizedBox(height: DimenConstants.marginPaddingMedium),
+          FloatingActionButton(
+            heroTag: "priority_high",
+            elevation: DimenConstants.elevationMedium,
+            backgroundColor: ColorConstants.appColor,
+            onPressed: () {
+              Get.to(RateScreen(id: widget.id));
+            },
+            child: const Icon(Icons.rate_review),
+          ),
         ],
       ),
     );
@@ -331,59 +349,70 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   Widget _buildPeopleView() {
     Widget buildItem(UserData userData) {
-      return SizedBox(
-        width: 90,
-        height: 90,
-        child: Stack(
-          children: [
-            AvatarGlow(
-              glowColor: Colors.red,
-              endRadius: 60,
-              duration: const Duration(milliseconds: 2000),
-              repeat: true,
-              showTwoGlows: true,
-              repeatPauseDuration: const Duration(milliseconds: 100),
-              child: SizedBox(
-                width: 70,
-                height: 70,
-                child: ClipOval(
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(48), // Image radius
-                    child: Image.network(
-                      userData.getAvatar(),
-                      height: 45,
-                      width: 45,
-                      fit: BoxFit.cover,
+      return InkWell(
+        onTap: () {
+          var lat = userData.lat;
+          var long = userData.long;
+          if (lat != null && long != null) {
+            mapController?.animateCamera(
+                CameraUpdate.newLatLngZoom(LatLng(lat, long), 14));
+          }
+        },
+        child: SizedBox(
+          width: 90,
+          height: 90,
+          child: Stack(
+            children: [
+              AvatarGlow(
+                glowColor: Colors.red,
+                endRadius: 60,
+                duration: const Duration(milliseconds: 2000),
+                repeat: true,
+                showTwoGlows: true,
+                repeatPauseDuration: const Duration(milliseconds: 100),
+                child: SizedBox(
+                  width: 70,
+                  height: 70,
+                  child: ClipOval(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(48), // Image radius
+                      child: Image.network(
+                        userData.getAvatar(),
+                        height: 45,
+                        width: 45,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-              child: Text(
-                userData.name ?? "",
-                style: const TextStyle(
-                  fontSize: DimenConstants.txtSmall,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            if (kDebugMode)
               Container(
-                color: Colors.red,
+                alignment: Alignment.bottomCenter,
+                padding:
+                    const EdgeInsets.all(DimenConstants.marginPaddingMedium),
                 child: Text(
-                  "${userData.lat}-${userData.long}",
+                  userData.name ?? "",
                   style: const TextStyle(
-                    fontSize: DimenConstants.txtTiny,
+                    fontSize: DimenConstants.txtSmall,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-          ],
+              if (kDebugMode)
+                Container(
+                  color: Colors.red,
+                  child: Text(
+                    "${userData.lat}-${userData.long}",
+                    style: const TextStyle(
+                      fontSize: DimenConstants.txtTiny,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+            ],
+          ),
         ),
       );
     }
