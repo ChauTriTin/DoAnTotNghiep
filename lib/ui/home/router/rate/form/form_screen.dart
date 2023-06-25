@@ -72,6 +72,17 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        elevation: DimenConstants.elevationMedium,
+        backgroundColor: ColorConstants.colorWhite,
+        onPressed: () {
+          _controller.rate();
+        },
+        child: const Icon(
+          Icons.check,
+          color: ColorConstants.appColor,
+        ),
+      ),
     );
   }
 

@@ -79,4 +79,6 @@ class FormController extends BaseController {
     }
     return -1;
   }
+
+  void rate() {}
 }
