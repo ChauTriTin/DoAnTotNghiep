@@ -69,7 +69,7 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                     child: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: ColorConstants.appColor,
+                        color: ColorConstants.colorWhite,
                         border: Border.all(
                           color: ColorConstants.appColor,
                         ),
@@ -85,15 +85,19 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                         DimenConstants.marginPaddingExtraLarge,
                         DimenConstants.marginPaddingLarge,
                       ),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          Image.asset(
+                            "assets/images/ic_launcher_2.png",
+                            width: 200,
+                          ),
+                          const Text(
                             "HOÀN THÀNH",
                             style: TextStyle(
-                              fontSize: DimenConstants.txtLarge,
+                              fontSize: DimenConstants.txtHeader1,
                               fontWeight: FontWeight.bold,
-                              color: ColorConstants.colorWhite,
+                              color: ColorConstants.appColor,
                             ),
                             textAlign: TextAlign.center,
                           ),
