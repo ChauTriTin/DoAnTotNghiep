@@ -3,13 +3,12 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
-import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
 import 'package:appdiphuot/ui/home/user/place_detail/page_detail_trip_screen.dart';
 import 'package:appdiphuot/ui/home/user/user_preview/page_user_preview_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
@@ -36,6 +35,7 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
     _setupListen();
     var userChatData = Get.arguments[0][Constants.user];
     Dog.d("initState: userChatData: ${userChatData.toString()}");
+    _controller.userChat.value = User.fromJson(userChatData);
     _controller.getData();
   }
 
@@ -217,9 +217,9 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
             radius:
                 DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
             backgroundImage:
-                NetworkImage(UserSingletonController.instance.getAvatar()),
+                NetworkImage(_controller.userChat.value.imageUrl ?? _controller.userData.value.avatar ?? StringConstants.avatarImgDefault)),
           ),
-        ));
+        );
   }
 
   Widget _buildTripInfo() {
