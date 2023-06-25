@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -34,15 +37,26 @@ class CreateSuccessScreen extends StatefulWidget {
 
 class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
   final _controller = Get.put(CreateSuccessController());
+  StreamSubscription? eventBusOnBackPress;
 
   @override
   void initState() {
     super.initState();
+    _listenBus();
+  }
+
+  void _listenBus() {
+    eventBusOnBackPress = eventBus.on<OnBackPress>().listen((event) {
+      if (event.className == mapScreen) {
+        Get.back();
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.clearOnDispose();
+    eventBusOnBackPress?.cancel();
     super.dispose();
   }
 
@@ -190,7 +204,8 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
 
   void _tapGoNow() {
     void go() {
-      Get.back(); //close this screen
+      // Get.back(); //warning don't use go back
+      Navigator.pop(context);
       var id = widget.id;
       Get.to(MapScreen(
         id: id,

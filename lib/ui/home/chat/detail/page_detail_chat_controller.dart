@@ -5,7 +5,6 @@ import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +13,6 @@ import '../../../../util/log_dog_utils.dart';
 import '../../../../util/shared_preferences_util.dart';
 
 class PageDetailChatController extends BaseController {
-  final CollectionReference _users = FirebaseHelper.collectionReferenceUser;
   final CollectionReference _chat = FirebaseHelper.collectionReferenceChat;
 
   Trip? tripData;
@@ -70,7 +68,6 @@ class PageDetailChatController extends BaseController {
 
   Future<void> _addMessageToFireStore(Message message) async {
     try {
-      var idMessage = DateTime.now().millisecondsSinceEpoch.toString();
       await _chat.doc(tripData?.id)
           .collection(FirebaseHelper.messages)
           .doc(message.createdAt.toString())

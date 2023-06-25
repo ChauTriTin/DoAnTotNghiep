@@ -66,65 +66,113 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
           toolbarHeight: 0,
           backgroundColor: ColorConstants.appColor,
         ),
-        backgroundColor: ColorConstants.colorWhite,
+        backgroundColor: ColorConstants.screenBg,
         body: Obx(() {
           return buildBody();
         }));
   }
 
   Widget buildBody() {
-    return Container(
+    return SizedBox(
         width: double.infinity,
-        color: ColorConstants.colorWhite,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
-          _buildAvatar(),
-          const SizedBox(
-            height: DimenConstants.marginPaddingTiny,
-          ),
-          Text(
-            UserSingletonController.instance.getName(),
-            style: UIUtils.getStyleTextLarge500(),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingLarge,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
-            child: Text(
-              StringConstants.tripParticipated,
-              style: UIUtils.getStyleText500(),
-            ),
-          ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _listTrips(_controller.trips),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+          // Chuyến đi đang tham gia
+          Card(
+              margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+              color: ColorConstants.cardBg,
+              shadowColor: Colors.grey,
+              elevation: DimenConstants.cardElevation,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: DimenConstants.marginPaddingMedium,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: DimenConstants.marginPaddingMedium),
+                    child: Text(
+                      StringConstants.tripInProgress,
+                      style: UIUtils.getStyleText500Medium1(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: DimenConstants.marginPaddingMedium,
+                  ),
+                  _buildListTripInProgress()
+                ],
+              )),
 
-          Padding(
-            padding:
-            const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
-            child: Text(
-              StringConstants.tripHost,
-              style: UIUtils.getStyleText500(),
+          // Chuyến đi bạn tạo
+          Card(
+              margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+              color: ColorConstants.cardBg,
+              shadowColor: Colors.grey,
+              elevation: DimenConstants.cardElevation,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: DimenConstants.marginPaddingMedium,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: DimenConstants.marginPaddingMedium),
+                    child: Text(
+                      StringConstants.tripHost,
+                      style: UIUtils.getStyleText500Medium1(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: DimenConstants.marginPaddingMedium,
+                  ),
+                  _listTrips(_controller.tripsHost),
+                ],
+              )),
+          Card(
+            margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+            color: ColorConstants.cardBg,
+            shadowColor: Colors.grey,
+            elevation: DimenConstants.cardElevation,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                // Chuyến đi đã tham gia
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: DimenConstants.marginPaddingMedium),
+                  child: Text(
+                    StringConstants.tripParticipated,
+                    style: UIUtils.getStyleText500Medium1(),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                _listTrips(_controller.trips),
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+              ],
             ),
           ),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
-          _listTrips(_controller.tripsHost),
-          _buildTripInfo(),
+          Card(
+              margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
+              color: ColorConstants.cardBg,
+              shadowColor: Colors.grey,
+              elevation: DimenConstants.cardElevation,
+              child: _buildTripInfo()),
         ]));
   }
 
-  Widget _listTrips(RxList<Trip> trips ) {
+  Widget _listTrips(RxList<Trip> trips) {
     if (trips.value.isEmpty) {
       return Container(
         margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
@@ -160,15 +208,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
     }
   }
 
-  void _signOut() {
-    _controller.signOut();
-    Get.offAll(const AuthenticationScreen());
-  }
-
-  void _onAvatarPressed() {
-    _openSelectImageBottomSheet(context);
-  }
-
   Widget getTripRowItem(int index, Trip trip) {
     var itemSize = MediaQuery.of(context).size.height * 1 / 7.5;
     return InkWell(
@@ -199,7 +238,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             Text(
               "${trip.title}",
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.start,
               style: UIUtils.getStyleText(),
             )
@@ -214,74 +252,25 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
     Get.to(PageDetailTrip(tripData: trip));
   }
 
-  void _openSelectImageBottomSheet(BuildContext context) {
-    Get.bottomSheet(Container(
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(DimenConstants.borderBottomAuth),
-            topRight: Radius.circular(DimenConstants.borderBottomAuth),
-          )),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  _controller.openGallery();
-                  Get.back();
-                },
-                child: const ListTile(
-                  leading: Icon(Icons.photo),
-                  title: Text(StringConstants.openGallery),
-                ),
-              )),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                _controller.openCamera();
-                Get.back();
-              },
-              child: const ListTile(
-                leading: Icon(Icons.camera),
-                title: Text(StringConstants.openCamera),
-              ),
-            ),
-          )
-        ],
-      ),
-    ));
-  }
-
-  Widget _buildAvatar() {
-    return IconButton(
-        iconSize: DimenConstants.avatarProfile,
-        onPressed: _onAvatarPressed,
-        icon: CircleAvatar(
-          backgroundColor: ColorConstants.borderTextInputColor,
-          radius: DimenConstants.avatarProfile / 2,
-          child: CircleAvatar(
-            radius:
-                DimenConstants.avatarProfile / 2 - DimenConstants.logoStroke,
-            backgroundImage: NetworkImage(UserSingletonController.instance.getAvatar()),
-          ),
-        ));
-  }
-
   Widget _buildTripInfo() {
     return Padding(
         padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              StringConstants.statistic,
+              style: UIUtils.getStyleText500Medium1(),
+            ),
+            const SizedBox(
+              height: DimenConstants.marginPaddingSmall,
+            ),
             const Divider(
               color: ColorConstants.dividerColor,
               thickness: DimenConstants.dividerHeight,
             ),
             const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
+              height: DimenConstants.marginPaddingSmall,
             ),
             UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount,
                 _controller.trips.length),
@@ -292,18 +281,129 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),
-            const Divider(
-              color: ColorConstants.dividerColor,
-              thickness: DimenConstants.dividerHeight,
-            ),
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
-            UIUtils.getLoginOutlineButton(
-              StringConstants.signOut,
-              _signOut,
-            )
           ],
         ));
+  }
+
+  Widget _buildListTripInProgress() {
+    var trips = _controller.tripsInProgress;
+    if (trips.isEmpty) {
+      return Container(
+        margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        child: Column(
+          children: [
+            Lottie.asset('assets/files/no_data.json'),
+            const Text(
+              StringConstants.noTrip,
+              style: TextStyle(
+                color: ColorConstants.textColor1,
+                fontSize: DimenConstants.txtMedium,
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return ListView.separated(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: trips.length,
+        itemBuilder: (BuildContext context, int index) {
+          var trip = trips[index];
+          return getTripInProgressItem(index, trip);
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            color: ColorConstants.dividerColor,
+            thickness: DimenConstants.dividerHeight,
+          );
+        },
+      );
+    }
+  }
+
+  Widget getTripInProgressItem(int index, Trip trip) {
+    var itemSize = MediaQuery.of(context).size.height * 1 / 7.5;
+    return InkWell(
+        child: Container(
+          width: Get.width,
+          margin: const EdgeInsets.symmetric(
+              vertical: DimenConstants.marginMMedium),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              color: Colors.white10,
+              width: itemSize,
+              height: itemSize,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: SizedBox.fromSize(
+                  size: const Size.fromRadius(48),
+                  child: CachedMemoryImage(
+                      fit: BoxFit.cover,
+                      width: itemSize,
+                      height: itemSize,
+                      uniqueKey: trip.getFirstImageUrl(),
+                      base64: trip.getFirstImageUrl()),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: DimenConstants.marginPaddingMedium,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${trip.title}",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        color: ColorConstants.colorTitleTrip,
+                        fontSize: DimenConstants.txtMedium,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(
+                    height: DimenConstants.marginMMedium,
+                  ),
+                  Text(
+                    "🕰️ ${StringConstants.time}${trip.timeStart}",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        color: ColorConstants.textColor,
+                        fontSize: DimenConstants.textSmall1,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(
+                    height: DimenConstants.marginMMedium,
+                  ),
+                  Text(
+                    "📍 ${StringConstants.startLocation}${trip.placeStart?.name ?? ""}",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        color: ColorConstants.textColor,
+                        fontSize: DimenConstants.textSmall1,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(
+                    height: DimenConstants.marginMMedium,
+                  ),
+                  Text(
+                    "👤 ${StringConstants.leadTripName}${trip.userHostName ?? ""}",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        color: ColorConstants.textColor,
+                        fontSize: DimenConstants.textSmall1,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+            )
+          ]),
+        ),
+        onTap: () {
+          _onPressTripItem(trip);
+        });
   }
 }

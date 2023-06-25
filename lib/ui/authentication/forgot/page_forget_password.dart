@@ -84,6 +84,8 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
         child: Container(
           decoration: UIUtils.getBoxDecorationLoginBg(),
           width: double.infinity,
+          padding: EdgeInsets.symmetric(
+              horizontal: DimenConstants.marginPaddingLarge),
           child: ListView(
             children: [
               Form(
@@ -119,17 +121,13 @@ class _PageForgetPasswordState extends BaseStatefulState<PageForgetPassword> {
   }
 
   Widget _getEmailTextInputWidget() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingExtraLarge),
-      child: TextInputField(
-        validator: _validateEmail,
-        keyboardType: TextInputType.emailAddress,
-        onChange: (String? value) {
-          controller.setEmail(value ?? "");
-        },
-        initalText: controller.getEmail(),
-      ),
+    return TextInputField(
+      validator: _validateEmail,
+      keyboardType: TextInputType.emailAddress,
+      onChange: (String? value) {
+        controller.setEmail(value ?? "");
+      },
+      initalText: controller.getEmail(),
     );
   }
 

@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
-import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
+import 'package:appdiphuot/util/theme_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
 import 'package:geolocator/geolocator.dart';
@@ -43,6 +44,7 @@ void main() async {
   Messaging.initFCM();
   Get.put(UserSingletonController.instance);
   getLoc();
+  ThemeModeNotifier.instance.getDarkModeStatus();
 
   runApp(
     OverlaySupport.global(
@@ -67,7 +69,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashScreen();
+    return Obx(() {
+      return MaterialApp(
+        title: 'Dark Mode Example',
+        theme: ThemeModeNotifier.instance.themeData,
+        home: const SplashScreen(),
+      );
+    });
   }
 }
 
@@ -82,14 +90,13 @@ class Messaging {
   @pragma('vm:entry-point')
   static Future<void> onNotificationReceived(RemoteMessage message) async {
     await Firebase.initializeApp();
-    debugPrint('FCM main Handling a message ${message.messageId}');
+    debugPrint('FCM main Handling a message messageId ${message.messageId}');
     PushNotification notification = PushNotification(
       title: message.notification?.title,
       body: message.notification?.body,
       dataTitle: message.data['title'],
       dataBody: message.data['body'],
     );
-    debugPrint('FCM main Handling a notification ${notification.toString()}');
     Get.dialog(
       AlertDialog(
         title: Text(notification.title ?? ""),
@@ -99,6 +106,8 @@ class Messaging {
             child: const Text(StringConstants.confirm),
             onPressed: () {
               Get.back();
+              SharedPreferencesUtil.addNotification(
+                  SharedPreferencesUtil.KEY_LIST_NOTI, notification);
             },
           ),
         ],

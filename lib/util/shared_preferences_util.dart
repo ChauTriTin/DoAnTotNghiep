@@ -1,14 +1,16 @@
 import 'dart:convert';
 
+import 'package:appdiphuot/model/push_notification.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../model/user.dart';
 
 class SharedPreferencesUtil {
   static const KEY_GG = "KEY_GG";
   static const USER_UID = "USER_UID";
+  static const IS_DARK_MODE_ON = "IS_DARK_MODE_ON";
   static const USER_IFO = "USER_IFO";
   static const KEY_FCM_TOKEN = "KEY_FCM_TOKEN";
+  static const KEY_LIST_NOTI = "KEY_LIST_NOTI";
 
   static Future<void> setString(String key, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,23 +42,55 @@ class SharedPreferencesUtil {
     return prefs.getBool(key);
   }
 
-// static Future<void> setGG(GG gg) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString(KEY_GG, jsonEncode(gg));
-// }
-//
-// static Future<GG?> getGG() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String? jsonString = prefs.getString(KEY_GG);
-//   if (jsonString == null) {
-//     return null;
-//   }
-//   try {
-//     return GG.fromJson(jsonDecode(jsonString));
-//   } catch (e) {
-//     return null;
-//   }
-// }
+  static Future<void> addNotification(
+      String key, PushNotification notification) async {
+    debugPrint('addNotification');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var list = getListNotification(key);
+    list.then((value) {
+      debugPrint('~~~addNotification list ${jsonEncode(value)}');
+
+      var listTmp = <PushNotification>[];
+      for (var element in value) {
+        listTmp.add(element);
+      }
+
+      if (listTmp.isEmpty) {
+        listTmp.add(notification);
+      } else {
+        listTmp.insert(0, notification);
+      }
+
+      debugPrint('addNotification ~~~ listTmp length ${listTmp.length}');
+      for (var element in listTmp) {
+        debugPrint(
+            'addNotification element ${element.title} - ${element.body}');
+      }
+
+      String rawJson = jsonEncode(listTmp);
+      debugPrint('addNotification rawJson $rawJson');
+
+      prefs.setString(key, rawJson);
+      debugPrint('addNotification done ${jsonEncode(listTmp)}');
+    });
+  }
+
+  static Future<List<PushNotification>> getListNotification(String key) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final rawJson = prefs.getString(key) ?? '';
+      debugPrint('getListNotification rawJson $rawJson');
+
+      List<PushNotification> list = List<PushNotification>.from(
+          jsonDecode(rawJson).map((x) => PushNotification.fromJson(x)));
+
+      debugPrint('getListNotification list ${list.length}');
+      return list;
+    } catch (e) {
+      debugPrint('getListNotification e ${e.toString()}');
+      return List.empty();
+    }
+  }
 
   static Future<String?> getUIDLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,16 +101,4 @@ class SharedPreferencesUtil {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(USER_UID, userUID);
   }
-
-// static Future<UserData?> getUserData() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   var userJson = prefs.getString(USER_IFO);
-//   Map<String, dynamic>? userMap = jsonDecode(userJson ?? "");
-//   return UserData.fromJson(userMap!);
-// }
-//
-// static Future<void> setUserData(UserData userData) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString(USER_IFO, userData.toJson().toString());
-// }
 }

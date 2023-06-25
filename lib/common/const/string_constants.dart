@@ -19,6 +19,20 @@ class StringConstants {
   static const String errorNameRegex =
       "Tên ít nhất 1 kí tự, A-Z, a-z, 0-9, và 1 số kí tự đặc biệt";
 
+
+  static const String errorPhoneEmpty = "Vui lòng nhập số điện thoại";
+  static const String errorPhoneRegex = "Số điện thoại không đúng";
+
+  static const String errorAddressEmpty = "Vui lòng nhập địa chỉ";
+  static const String errorGenderEmpty = "Vui lòng chọn giới tính";
+
+  static const String errorBirthdayEmpty = "Vui lòng chọn ngày sinh";
+  static const String errorBSXEmpty = "Vui lòng nhập biển số xe";
+  static const String updateUserDataSuccess = "Cập nhật thông tin thành công";
+  static const String updateUserDataFail = "Cập nhật thông tin không thành công\n"
+      "Lỗi: ";
+  static const String success = "Thành công";
+
   static const String errorPasswordEmpty = "Vui lòng nhập mật khẩu";
   static const String errorPasswordRegex = "Mật khẩu phải ít nhất 6 kí tự";
   static const String errorPasswordNotMatch = "Mật khẩu không trùng";
@@ -28,6 +42,7 @@ class StringConstants {
       "Reset password không thành công, vui lòng kiểm tra lại. \n Lỗi: ";
   static const String resetPw = "Reset password";
   static const String error = "Lỗi";
+  static const String notification = "Thông báo";
   static const String loginFail = "Mật khẩu không đúng, vui lòng kiểm tra lại";
   static const String loginFailWithError =
       "Email hoặc mật khẩu không đúng, vui lòng kiểm tra lại.";
@@ -36,6 +51,17 @@ class StringConstants {
 
   static const String email = "Email";
   static const String name = "Tên";
+  static const String phone = "Số điện thoại";
+  static const String bsx = "Biển số xe";
+  static const String address = "Địa chỉ";
+  static const String birthday = "Ngày sinh";
+  static const String pickBirthday = "Chọn ngày sinh";
+  static const String gender = "Giới tính";
+  static const String male = "Nam";
+  static const String female = "Nữ";
+  static const String update = "Cập nhật";
+  static const String updateInfo = "Cập nhật thông tin";
+  static const String other = "Khác";
   static const String password = "Mật khẩu";
   static const String passwordConfirm = "Xác nhận mật khẩu";
   static const String signInSuccess = "Đăng nhập thành công";
@@ -47,7 +73,9 @@ class StringConstants {
   static const String signOut = "Đăng xuất";
 
   static const String tripParticipated = "Chuyến đi đã tham gia";
+  static const String statistic = "Thống kê";
   static const String tripHost = "Chuyến đi làm trưởng đoàn";
+  static const String tripInProgress = "Chuyến đi đang diễn ra";
   static const String tripParticipatedCount = "Số chuyến đi đã tham gia: ";
   static const String leadTripCount = "Số chuyến đi đã làm trưởng đoàn: ";
   static const String totalKm = "Tổng số km đã di chuyển: ";
@@ -84,6 +112,23 @@ class StringConstants {
   static const String titleJoinPrivateDialog = "Nhập mã tham gia";
   static const String codeRouter = "Mã chuyến đi";
   static const String status = "⬤ Online";
+
+  // Setting
+  static const String editProfile = "Thay đổi thông tin";
+  static const String mode = "Mode";
+  static const String generalSetting = "Cài đặt";
+  static const String language = "Ngôn ngữ";
+  static const String about = "Thông tin";
+  static const String termCondition = "Chính sách và điều khoản";
+  static const String policy = "Chính sách bảo mật";
+  static const String rate = "Đánh giá app";
+  static const String updateAvatar = "Đổi hình đại diện";
+  static const String messageEditEmail = "Email không được thay đổi";
+
+  static const String time = "Thời gian: ";
+  static const String startLocation = "Địa điểm xuất phát: ";
+
+
 
   //Home screen
   static const String tripOpen = "Chuyến đi đang mở";

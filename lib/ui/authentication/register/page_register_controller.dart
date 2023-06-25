@@ -7,8 +7,10 @@ import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../model/gender.dart';
 import '../../../model/user.dart';
 import '../../../util/log_dog_utils.dart';
 
@@ -20,35 +22,27 @@ class RegisterController extends BaseController {
   var email = "".obs;
   var password = "".obs;
   var confirmPassword = "".obs;
+  var phone = "".obs;
+  var bsx = "".obs;
+  var address = "".obs;
+  var birthday = "".obs;
+  var gender = 1.obs;
+  var genders = <Gender>[].obs;
+
+  void getData() {
+    initGender();
+  }
+
+  void initGender() {
+    genders.add(Gender(StringConstants.male, Icons.male, gender.value == 1));
+    genders
+        .add(Gender(StringConstants.female, Icons.female, gender.value == 2));
+    genders.add(
+        Gender(StringConstants.other, Icons.transgender, gender.value == 3));
+  }
 
   void clearOnDispose() {
     Get.delete<RegisterController>();
-  }
-
-  void setName(String value) {
-    name.value = value;
-  }
-
-  void setEmail(String value) {
-    email.value = value;
-  }
-
-  void setPassword(String value) {
-    Dog.d("setPassword: $value");
-    password.value = value;
-  }
-
-  String getPw() {
-    return password.value;
-  }
-
-  String getConfirmPw() {
-    return confirmPassword.value ?? "";
-  }
-
-  void setConfirmPassword(String value) {
-    Dog.d("setConfirmPassword: $value");
-    confirmPassword.value = value;
   }
 
   void doRegister() {
@@ -105,6 +99,11 @@ class RegisterController extends BaseController {
       userData.uid = user.uid ?? "";
       userData.email = email.value;
       userData.avatar = "";
+      userData.birthday = birthday.value;
+      userData.address = address.value;
+      userData.phone = phone.value;
+      userData.bsx = bsx.value;
+      userData.gender = gender.value;
       userData.fcmToken = await SharedPreferencesUtil.getString(
           SharedPreferencesUtil.KEY_FCM_TOKEN);
 
@@ -132,5 +131,15 @@ class RegisterController extends BaseController {
 
     UIUtils.showSnackBarError(StringConstants.error, errorMsg);
     log("registerFail fail: $e");
+  }
+
+
+  void updateGender(int index) {
+    for (var gender in genders) {
+      gender.isSelected = false;
+    }
+    genders[index].isSelected = true;
+
+    gender.value = index + 1;
   }
 }

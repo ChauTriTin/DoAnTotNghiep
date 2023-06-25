@@ -137,7 +137,10 @@ class UIUtils {
     return Padding(
       padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
       child: RichText(
-          text: TextSpan(text: title, style: UIUtils.getStyleText(), children: [
+          text: TextSpan(text: title, style: const TextStyle(
+            color: ColorConstants.textColor1,
+            fontSize: DimenConstants.txtMedium,
+          ), children: [
             TextSpan(
               text: count.toString(),
               style: UIUtils.getStyleText500(),
@@ -224,11 +227,23 @@ class UIUtils {
     return Container(
       alignment: Alignment.centerLeft,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
-      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
+      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
       child: Text(text,
           style: const TextStyle(
             color: Colors.white,
+            fontSize: DimenConstants.txtMedium,
+          )),
+    );
+  }
+
+  static Widget getTitleTextEditProfile(String text) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
+      child: Text(text,
+          style: const TextStyle(
+            color: ColorConstants.textColor,
             fontSize: DimenConstants.txtMedium,
           )),
     );
@@ -250,11 +265,45 @@ class UIUtils {
       fontSize: DimenConstants.txtMedium,
     );
   }
+
   static TextStyle getStyleText500() {
     return const TextStyle(
       color: Colors.black,
       fontSize: DimenConstants.txtMedium,
         fontWeight: FontWeight.w500
+    );
+  }
+
+  static TextStyle getStyleText500Medium1() {
+    return const TextStyle(
+      color: ColorConstants.titleColor,
+      fontSize: DimenConstants.txtMedium1,
+        fontWeight: FontWeight.w600
+    );
+  }
+
+  static TextStyle getStyleTextMedium600() {
+    return const TextStyle(
+        color: Colors.black,
+        fontSize: DimenConstants.txtMedium,
+        fontWeight: FontWeight.w600
+    );
+  }
+
+  static TextStyle getStyleTextSmall300() {
+    return const TextStyle(
+        color: Colors.black,
+        fontSize: DimenConstants.txtSmall,
+        fontWeight: FontWeight.w300
+    );
+  }
+
+
+  static TextStyle getStyleTextSmall400() {
+    return const TextStyle(
+        color: Colors.black,
+        fontSize: DimenConstants.txtSmall,
+        fontWeight: FontWeight.w400
     );
   }
 
@@ -373,11 +422,11 @@ class UIUtils {
     );
   }
 
-  static void showSnackBar(
+  static SnackbarController showSnackBar(
     String title,
     String message,
   ) {
-    Get.snackbar(
+    return Get.snackbar(
         title, // title
         message, // message
         // barBlur: 20,

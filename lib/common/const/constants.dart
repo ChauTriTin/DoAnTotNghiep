@@ -23,6 +23,7 @@ class Constants {
     return alice;
   }
 
+  static const String user = "user";
   static const String detailTrip = "detailTrip";
   static const String detailChat = "detailChat";
 }

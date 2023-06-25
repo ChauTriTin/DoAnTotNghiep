@@ -28,20 +28,21 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ColorConstants.appColorBkg,
-        body: _buildBodyView(),
-        floatingActionButton: Visibility(
-          visible: kDebugMode,
-          child: FloatingActionButton(
-            elevation: DimenConstants.elevationMedium,
-            backgroundColor: ColorConstants.appColor,
-            onPressed: () {
-              widget.callback.call(Place.getRandomPlace());
-              Get.back();
-            },
-            child: const Icon(Icons.place),
-          ),
-        ));
+      backgroundColor: ColorConstants.appColorBkg,
+      body: _buildBodyView(),
+      floatingActionButton: Visibility(
+        visible: kDebugMode,
+        child: FloatingActionButton(
+          elevation: DimenConstants.elevationMedium,
+          backgroundColor: ColorConstants.appColor,
+          onPressed: () {
+            widget.callback.call(Place.getRandomPlace());
+            Get.back();
+          },
+          child: const Icon(Icons.place),
+        ),
+      ),
+    );
   }
 
   Widget _buildBodyView() {

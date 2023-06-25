@@ -80,6 +80,8 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
     return Expanded(
         flex: 5,
         child: Container(
+          padding: const EdgeInsets.symmetric(
+              horizontal: DimenConstants.marginPaddingLarge),
           decoration: UIUtils.getBoxDecorationLoginBg(),
           width: double.infinity,
           child: SingleChildScrollView(
@@ -190,33 +192,25 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
   }
 
   void _navigateToForgotPasswordScreen() {
-    Get.to(PageForgetPassword(email: loginController.getEmail()));
+    Get.to(PageForgetPassword(email: loginController.email.value));
   }
 
   Widget _getPasswordWidget() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingExtraLarge),
-      child: PasswordField(
-        validator: ValidateUtils.validatePassword,
-        onChange: (String? value) {
-          loginController.setPassword(value);
-        },
-      ),
+    return PasswordField(
+      validator: ValidateUtils.validatePassword,
+      onChange: (String? value) {
+        loginController.password.value = value ?? "";
+      },
     );
   }
 
   Widget _getEmailTextInputWidget() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-          horizontal: DimenConstants.marginPaddingExtraLarge),
-      child: TextInputField(
-        validator: ValidateUtils.validateEmail,
-        keyboardType: TextInputType.emailAddress,
-        onChange: (String? value) {
-          loginController.setEmail(value);
-        },
-      ),
+    return TextInputField(
+      validator: ValidateUtils.validateEmail,
+      keyboardType: TextInputType.emailAddress,
+      onChange: (String? value) {
+        loginController.email.value = value ?? "";
+      },
     );
   }
 
