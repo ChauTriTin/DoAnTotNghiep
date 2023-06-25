@@ -1,19 +1,19 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
+import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_controller.dart';
+import 'package:appdiphuot/ui/home/router/rate/form/form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-import 'rate_controller.dart';
-
 class RateScreen extends StatefulWidget {
   const RateScreen({
     super.key,
-    // required this.id,
+    required this.id,
   });
 
-  // final String id;
+  final String id;
 
   @override
   State<RateScreen> createState() => _RateScreenState();
@@ -73,7 +73,12 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                     textAlign: TextAlign.center,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.back(); //close this screen
+                      Get.to(FormScreen(
+                        id: widget.id,
+                      ));
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
