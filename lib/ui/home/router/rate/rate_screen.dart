@@ -1,17 +1,9 @@
-import 'dart:async';
-
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/model/bus/event_bus.dart';
-import 'package:appdiphuot/model/place.dart';
-import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:slide_countdown/slide_countdown.dart';
 
 import 'rate_controller.dart';
 
@@ -63,45 +55,23 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "TẠO THÀNH CÔNG",
+                  Text(
+                    "Bạn cảm thấy như thế nào\nvề chuyến đi?\nHãy đánh giá ngay nhé!!!",
                     style: TextStyle(
-                      fontSize: 30.0,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: ColorConstants.appColor,
+                      color: ColorConstants.textColorDisable,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: DimenConstants.marginPaddingSmall),
-                  const Text(
-                    "Chuyến đi của bạn đã được tạo với mã",
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: DimenConstants.marginPaddingMedium),
-                  const Text(
-                    "111",
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold,
-                      color: ColorConstants.appColor,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: DimenConstants.marginPaddingLarge),
                   InkWell(
                     onTap: () {},
                     child: Container(
                       alignment: Alignment.center,
-                      width: Get.width,
-                      height: Get.height / 5,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: ColorConstants.appColor,
                         border: Border.all(
-                          color: Colors.white,
+                          color: ColorConstants.appColor,
                         ),
                         borderRadius: const BorderRadius.all(
                           Radius.circular(DimenConstants.radiusRound),
@@ -109,15 +79,21 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                       ),
                       padding: const EdgeInsets.all(
                           DimenConstants.marginPaddingMedium),
+                      margin: const EdgeInsets.fromLTRB(
+                        DimenConstants.marginPaddingExtraLarge,
+                        DimenConstants.marginPaddingLarge,
+                        DimenConstants.marginPaddingExtraLarge,
+                        DimenConstants.marginPaddingLarge,
+                      ),
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "ĐI THÔI",
+                            "HOÀN THÀNH",
                             style: TextStyle(
-                              fontSize: DimenConstants.txtMedium,
+                              fontSize: DimenConstants.txtLarge,
                               fontWeight: FontWeight.bold,
-                              color: ColorConstants.appColor,
+                              color: ColorConstants.colorWhite,
                             ),
                             textAlign: TextAlign.center,
                           ),
