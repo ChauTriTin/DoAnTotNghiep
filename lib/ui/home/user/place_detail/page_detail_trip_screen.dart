@@ -68,19 +68,22 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 0,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          ),
           backgroundColor: ColorConstants.appColor,
+          title: const Text(StringConstants.tripDetail),
         ),
         backgroundColor: ColorConstants.colorWhite,
         body: Obx(() {
           return Column(
             children: [
-              ProfileBarWidget(
-                name: UserSingletonController.instance.getName(),
-                state: StringConstants.status,
-                linkAvatar: UserSingletonController.instance.getAvatar(),
-                onAvatarPress: _navigateToSettingScreen,
-              ),
               Expanded(child: buildBody())
             ],
           );
@@ -94,7 +97,10 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
   Widget buildBody() {
     var trip = widget.tripData;
     return Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         color: ColorConstants.colorWhite,
         padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
         child: SingleChildScrollView(
@@ -187,14 +193,14 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
       },
       child: Expanded(
           child: Container(
-        margin: const EdgeInsets.only(top: 14, bottom: 16),
-        child: const Center(
-          child: Text(
-            StringConstants.gotoDetailRouter,
-            style: TextStyle(color: Colors.blue),
-          ),
-        ),
-      )),
+            margin: const EdgeInsets.only(top: 14, bottom: 16),
+            child: const Center(
+              child: Text(
+                StringConstants.gotoDetailRouter,
+                style: TextStyle(color: Colors.blue),
+              ),
+            ),
+          )),
     );
   }
 
@@ -211,7 +217,10 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
   }
 
   Widget buildTopImageInfo() {
-    var itemSize = MediaQuery.of(context).size.height * 1 / 6;
+    var itemSize = MediaQuery
+        .of(context)
+        .size
+        .height * 1 / 6;
     var trip = widget.tripData;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -239,29 +248,29 @@ class _PageDetailTrip extends BaseStatefulState<PageDetailTrip> {
         ),
         Expanded(
             child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${trip.title}",
-              textAlign: TextAlign.start,
-              style: UIUtils.getStyleTextLarge500(),
-            ),
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${trip.des}",
+                  "${trip.title}",
                   textAlign: TextAlign.start,
-                  softWrap: true,
-                  style: UIUtils.getStyleText(),
+                  style: UIUtils.getStyleTextLarge500(),
                 ),
+                const SizedBox(
+                  height: DimenConstants.marginPaddingMedium,
+                ),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  children: [
+                    Text(
+                      "${trip.des}",
+                      textAlign: TextAlign.start,
+                      softWrap: true,
+                      style: UIUtils.getStyleText(),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
-        ))
+            ))
       ],
     );
   }
