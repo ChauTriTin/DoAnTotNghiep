@@ -344,59 +344,70 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   Widget _buildPeopleView() {
     Widget buildItem(UserData userData) {
-      return SizedBox(
-        width: 90,
-        height: 90,
-        child: Stack(
-          children: [
-            AvatarGlow(
-              glowColor: Colors.red,
-              endRadius: 60,
-              duration: const Duration(milliseconds: 2000),
-              repeat: true,
-              showTwoGlows: true,
-              repeatPauseDuration: const Duration(milliseconds: 100),
-              child: SizedBox(
-                width: 70,
-                height: 70,
-                child: ClipOval(
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(48), // Image radius
-                    child: Image.network(
-                      userData.getAvatar(),
-                      height: 45,
-                      width: 45,
-                      fit: BoxFit.cover,
+      return InkWell(
+        onTap: () {
+          var lat = userData.lat;
+          var long = userData.long;
+          if (lat != null && long != null) {
+            mapController?.animateCamera(
+                CameraUpdate.newLatLngZoom(LatLng(lat, long), 14));
+          }
+        },
+        child: SizedBox(
+          width: 90,
+          height: 90,
+          child: Stack(
+            children: [
+              AvatarGlow(
+                glowColor: Colors.red,
+                endRadius: 60,
+                duration: const Duration(milliseconds: 2000),
+                repeat: true,
+                showTwoGlows: true,
+                repeatPauseDuration: const Duration(milliseconds: 100),
+                child: SizedBox(
+                  width: 70,
+                  height: 70,
+                  child: ClipOval(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(48), // Image radius
+                      child: Image.network(
+                        userData.getAvatar(),
+                        height: 45,
+                        width: 45,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-              child: Text(
-                userData.name ?? "",
-                style: const TextStyle(
-                  fontSize: DimenConstants.txtSmall,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            if (kDebugMode)
               Container(
-                color: Colors.red,
+                alignment: Alignment.bottomCenter,
+                padding:
+                    const EdgeInsets.all(DimenConstants.marginPaddingMedium),
                 child: Text(
-                  "${userData.lat}-${userData.long}",
+                  userData.name ?? "",
                   style: const TextStyle(
-                    fontSize: DimenConstants.txtTiny,
+                    fontSize: DimenConstants.txtSmall,
                     color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-          ],
+              if (kDebugMode)
+                Container(
+                  color: Colors.red,
+                  child: Text(
+                    "${userData.lat}-${userData.long}",
+                    style: const TextStyle(
+                      fontSize: DimenConstants.txtTiny,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+            ],
+          ),
         ),
       );
     }
