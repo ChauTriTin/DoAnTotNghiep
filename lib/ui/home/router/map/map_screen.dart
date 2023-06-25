@@ -244,22 +244,25 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         var b = await getBytesFromCanvas(150, 150, bytes.buffer.asUint8List());
         if (b == null) {
           return Marker(
-            markerId: MarkerId(lastMapPositionPoints.toString()),
+            // markerId: MarkerId(lastMapPositionPoints.toString()),
+            markerId: MarkerId(markerId),
             position: lastMapPositionPoints,
           );
         }
         return Marker(
           icon: BitmapDescriptor.fromBytes(b),
-          markerId: MarkerId(lastMapPositionPoints.toString()),
-          position: lastMapPositionPoints,
+          markerId: MarkerId(markerId),
+          // markerId: MarkerId(lastMapPositionPoints.toString()),
+          position: position,
         );
       }
 
       var listMember = _controller.listMember;
-      debugPrint(">>>_createMaker listMember length ${listMember.length}");
+      // debugPrint(">>>createMarkerMember listMember length ${listMember.length}, isUpdateLatLong $isUpdateLatLong");
       for (int i = 0; i < listMember.length; i++) {
         var member = listMember[i];
-        debugPrint(">>>_createMaker createMarkerMember i $i -> ${member.name}");
+        debugPrint(
+            ">>>createMarkerMember createMarkerMember i $i -> ${member.name}, ${member.uid}");
         var marker = create(
           i,
           member.getAvatar(),
@@ -267,6 +270,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           LatLng(member.lat ?? defaultLat, member.long ?? defaultLong),
         );
         marker.then((value) {
+          debugPrint(
+              ">>>createMarkerMember then ${value.markerId} -> ${member.name}");
           _controller.setMarkerGoogleMap(value);
         });
       }

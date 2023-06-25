@@ -354,14 +354,15 @@ class MapController extends BaseController {
   }
 
   void setMarkerGoogleMap(Marker marker) {
+    debugPrint("setMarkerGoogleMap ${marker.mapsId}");
     if (isContainMarker(marker)) {
-      //do nothing
+      // debugPrint("isContainMarker -> do nothing, ${marker.mapsId}");
     } else {
+      // debugPrint("!isContainMarker -> ${marker.mapsId}");
       listMarkerGoogleMap.add(marker);
       listMarkerGoogleMap.refresh();
     }
-    debugPrint(
-        "_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
+    // debugPrint("_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
 
   void setListMarkerGoogleMap(List<Marker> list) {
