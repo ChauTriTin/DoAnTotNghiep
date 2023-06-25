@@ -219,6 +219,7 @@ class CreateRouterController extends BaseController {
     var trip = Trip();
     trip.id = id;
     trip.userIdHost = userData.value.uid;
+    trip.userHostName = userData.value.name;
     trip.listIdMember = <String>[];
     if (userData.value.uid?.isNotEmpty == true) {
       trip.listIdMember?.add(userData.value.uid ?? "");

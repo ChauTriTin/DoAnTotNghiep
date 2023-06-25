@@ -137,7 +137,10 @@ class UIUtils {
     return Padding(
       padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
       child: RichText(
-          text: TextSpan(text: title, style: UIUtils.getStyleText(), children: [
+          text: TextSpan(text: title, style: const TextStyle(
+            color: ColorConstants.textColor1,
+            fontSize: DimenConstants.txtMedium,
+          ), children: [
             TextSpan(
               text: count.toString(),
               style: UIUtils.getStyleText500(),
@@ -262,11 +265,20 @@ class UIUtils {
       fontSize: DimenConstants.txtMedium,
     );
   }
+
   static TextStyle getStyleText500() {
     return const TextStyle(
       color: Colors.black,
       fontSize: DimenConstants.txtMedium,
         fontWeight: FontWeight.w500
+    );
+  }
+
+  static TextStyle getStyleText500Medium1() {
+    return const TextStyle(
+      color: ColorConstants.titleColor,
+      fontSize: DimenConstants.txtMedium1,
+        fontWeight: FontWeight.w600
     );
   }
 

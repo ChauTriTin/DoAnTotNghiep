@@ -73,7 +73,9 @@ class StringConstants {
   static const String signOut = "Đăng xuất";
 
   static const String tripParticipated = "Chuyến đi đã tham gia";
+  static const String statistic = "Thống kê";
   static const String tripHost = "Chuyến đi làm trưởng đoàn";
+  static const String tripInProgress = "Chuyến đi đang diễn ra";
   static const String tripParticipatedCount = "Số chuyến đi đã tham gia: ";
   static const String leadTripCount = "Số chuyến đi đã làm trưởng đoàn: ";
   static const String totalKm = "Tổng số km đã di chuyển: ";
@@ -122,6 +124,9 @@ class StringConstants {
   static const String rate = "Đánh giá app";
   static const String updateAvatar = "Đổi hình đại diện";
   static const String messageEditEmail = "Email không được thay đổi";
+
+  static const String time = "Thời gian: ";
+  static const String startLocation = "Địa điểm xuất phát: ";
 
 
 }
