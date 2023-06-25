@@ -71,6 +71,7 @@ class StringConstants {
   static const String facebookLoginError =
       "App chưa hỗ trợ đăng nhập bằng facebook";
   static const String signOut = "Đăng xuất";
+  static const String signOutWarning = "Bạn có chắc chắn muốn đăng xuất không?";
 
   static const String tripParticipated = "Chuyến đi đã tham gia";
   static const String statistic = "Thống kê";
@@ -119,15 +120,38 @@ class StringConstants {
   static const String generalSetting = "Cài đặt";
   static const String language = "Ngôn ngữ";
   static const String about = "Thông tin";
+  static const String aboutDetail = "App đi phượt là app được dùng để tạo ra những hành trình thú vị, "
+      "giúp kết nối cộng đồng đam mêm phượt."
+      "Giúp tracking hành trình, đánh giá, tham gia những chuyến đi tuyệt vời,....\n\n"
+      "Người thực hiện: \n\n"
+      "   ✅ Nguyễn Hoàng Giang\n\n"
+      "   ✅ Châu Trí Tín\n\n"
+      "📱 Version: 1.0.0\n\n"
+      "Rất mong được đông đảo các bạn sử dụng";
   static const String termCondition = "Chính sách và điều khoản";
+  static const String policyDetail = "Điều khoản riêng tư này "
+      "mô tả về các chính sách và phương pháp thu nhập, sử dụng và trình bày thông "
+      "tin của bạn khi sử dụng app AppDiPhuot. Chúng tôi sẽ không sử dụng hoặc tết lộ"
+      " thông tin của bạn cho bất cứ ai, ngoại trừ được mô tả trong chính sách bảo mật.";
   static const String policy = "Chính sách bảo mật";
+  static const String termConditionDetail = "Ứng dụng nhận được thông tin bạn cung cấp khi bạn tải xuống "
+      "và đăng ký Ứng dụng. Đăng ký với chúng tôi là tùy chọn, tuy nhiên, xin lưu ý rằng bạn không thể "
+      "sử dụng một số tính năng được Ứng dụng cung cấp trừ khi bạn đăng ký với chúng tôi."
+  "Khi bạn đăng ký với chúng tôi và sử dụng Ứng dụng, bạn thường cung cấp\n\n\n"
+      "(a) tên, số điện thoại, địa chỉ email, tuổi, tên người dùng, mật khẩu và các thông tin đăng ký khác\n\n"
+      "(b) thông tin liên quan đến giao dịch, chẳng hạn như khi bạn thực hiện giao dịch mua, trả lời mọi \n"
+      "phiếu mua hàng hoặc tải xuống hoặc sử dụng các ứng dụng từ chúng tôi\n\n"
+  "(c) thông tin bạn cung cấp cho chúng tôi khi bạn liên hệ với chúng tôi để được trợ giúp\n\n"
+  "(d) thông tin thẻ tín dụng để giao dịch trên ứng dụng và sử dụng ứng dụng\n\n"
+      "(e) thông tin bạn nhập vào hệ thống của chúng tôi khi sử dụng Ứng dụng, "
+      "chẳng hạn như thông tin liên hệ và thông tin quản lý dự án.\n\n"
+      "Chúng tôi cũng có thể sử dụng thông tin bạn cung cấp cho chúng tôi để liên hệ với bạn theo thời gian để cung cấp cho bạn thông tin quan trọng, thông báo bắt buộc và các chương trình khuyến mãi tiếp thị.";
   static const String rate = "Đánh giá app";
   static const String updateAvatar = "Đổi hình đại diện";
   static const String messageEditEmail = "Email không được thay đổi";
 
   static const String time = "Thời gian: ";
   static const String startLocation = "Địa điểm xuất phát: ";
-
 
 
   //Home screen

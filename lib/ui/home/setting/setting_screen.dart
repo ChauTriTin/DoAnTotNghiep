@@ -6,6 +6,7 @@ import 'package:appdiphuot/ui/home/setting/setting_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../util/theme_util.dart';
@@ -69,13 +70,13 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
                 state: StringConstants.status,
                 linkAvatar: UserSingletonController.instance.getAvatar(),
               ),
-              Expanded(child: buildBody())
+              Expanded(child: buildBody(context))
             ],
           );
         }));
   }
 
-  Widget buildBody() {
+  Widget buildBody(BuildContext context) {
     return Container(
         width: double.infinity,
         color: ColorConstants.colorWhite,
@@ -124,14 +125,23 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             height: DimenConstants.marginPaddingSmall,
           ),
           getDivider(),
-          getText(ColorConstants.colorAbout, StringConstants.about, () {}),
+          getText(ColorConstants.colorAbout, StringConstants.about, () {
+            _showDialogMsg(StringConstants.about, StringConstants.aboutDetail);
+          }),
 
           getDivider(),
-          getText(ColorConstants.colorTermCondition,
-              StringConstants.termCondition, () {}),
+          getText(
+              ColorConstants.colorTermCondition, StringConstants.termCondition,
+              () {
+            _showDialogMsg(StringConstants.termCondition,
+                StringConstants.termConditionDetail);
+          }),
 
           getDivider(),
-          getText(ColorConstants.colorPolicy, StringConstants.policy, () {}),
+          getText(ColorConstants.colorPolicy, StringConstants.policy, () {
+            _showDialogMsg(
+                StringConstants.policy, StringConstants.policyDetail);
+          }),
 
           getDivider(),
           getText(ColorConstants.colorRateApp, StringConstants.rate, () {}),
@@ -146,7 +156,15 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
               child: UIUtils.getOutlineButton(
                 StringConstants.signOut,
                 () {
-                  _controller.signOut();
+                  UIUtils.showAlertDialog(
+                    context,
+                    StringConstants.warning,
+                    StringConstants.signOutWarning,
+                    StringConstants.cancel,
+                    null,
+                    StringConstants.signOut,
+                    _controller.signOut,
+                  );
                 },
               )),
 
@@ -154,6 +172,47 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             height: DimenConstants.marginPaddingMedium,
           ),
         ]));
+  }
+
+  void _showDialogMsg(String title, String body) {
+    showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
+          ),
+        ),
+        context: context,
+        builder: (context) => _buildBodyDialog(title, body));
+  }
+
+  Widget _buildBodyDialog(String title, String body) {
+    return Container(
+      padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: DimenConstants.marginPaddingMedium,
+          right: DimenConstants.marginPaddingMedium,
+          top: DimenConstants.marginPaddingMedium),
+      child: Container(
+        height: MediaQuery.of(context).size.height / 2,
+        width: double.infinity,
+        padding: const EdgeInsets.all(0),
+        child: Column(
+          children: [
+            const SizedBox(height: DimenConstants.marginPaddingMedium),
+            UIUtils.headerDialog(title),
+            const SizedBox(height: DimenConstants.marginPaddingMedium),
+            Expanded(
+                child: SingleChildScrollView(
+              child: Text(
+                body,
+                style: UIUtils.getStyleText(),
+              ),
+            )),
+            const SizedBox(height: DimenConstants.marginPaddingLarge),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget getDivider() {
