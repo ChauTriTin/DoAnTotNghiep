@@ -129,4 +129,10 @@ class StringConstants {
   static const String startLocation = "Địa điểm xuất phát: ";
 
 
+
+  //Home screen
+  static const String tripOpen = "Chuyến đi đang mở";
+  static const String tripPost = "Bài đăng";
+  static const String tripTop = "Chuyến đi hàng đầu";
+  static const String placeTop = "Địa điểm hàng đầu";
 }
