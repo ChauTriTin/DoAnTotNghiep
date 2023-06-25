@@ -767,6 +767,16 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     _slideShowImage(context),
                     _infoRouter(),
                     _listButtonEvent(),
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          left: DimenConstants.marginPaddingMedium),
+                      child: Text(
+                        "*** Yêu cầu: ${_controller.detailTrip.value.require}",
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     _divider(12),
                     _leader(),
                     _divider(0),

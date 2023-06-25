@@ -33,6 +33,15 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   final _controller = Get.put(PageHomeController());
   final _searchController = TextEditingController();
 
+  final List<String> itemsDropdown = [
+    StringConstants.tripOpen,
+    StringConstants.tripPost,
+    StringConstants.tripTop,
+    StringConstants.placeTop,
+  ];
+
+  String? selectedValue;
+
   @override
   void initState() {
     super.initState();
@@ -267,6 +276,45 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         });
   }
 
+  Widget _dropDown() {
+    return Container(
+      margin: const EdgeInsets.only(
+          left: DimenConstants.marginPaddingLarge,
+          right: DimenConstants.marginPaddingLarge),
+      child: DropdownButtonFormField(
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+        ),
+        hint: Text(
+          itemsDropdown.first,
+          style: const TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        items: itemsDropdown
+            .map((String item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        onChanged: (String? value) {
+          setState(() {
+            selectedValue = value;
+            _controller.setTypeTrip(value!);
+          });
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -279,6 +327,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         return Container(
             color: ColorConstants.appColorBkg,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 banner,
                 Container(
@@ -331,16 +380,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       ]),
                 ),
                 searchBox(),
-                Container(
-                  margin: const EdgeInsets.only(top: 12, left: 24),
-                  child: const Text(
-                    "Chuyen đi đang mở",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
+                _dropDown(),
                 Expanded(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 1 / 5.5,
@@ -349,7 +389,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                         padding: const EdgeInsets.only(left: 24, right: 24),
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
-                        itemCount:  _controller.listTripWithSearch.length,
+                        itemCount: _controller.listTripWithSearch.length,
                         itemBuilder: (BuildContext context, int index) {
                           return getRow(index);
                         },

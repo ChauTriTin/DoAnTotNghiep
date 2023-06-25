@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
+import '../../../common/const/string_constants.dart';
 import '../../../model/trip.dart';
 
 class PageHomeController extends BaseController {
@@ -44,6 +45,8 @@ class PageHomeController extends BaseController {
           print('listTrips ${listTrips.length}');
         }
         listTripWithState.value = listTrips;
+        listTripWithSearch.value =
+            listTrips.where((p0) => p0.isComplete == false).toList();
         setAppLoading(false, "Loading", TypeApp.loadingData);
       } catch (ex) {
         print('listTrips error ${ex}');
@@ -54,6 +57,36 @@ class PageHomeController extends BaseController {
 
   List<Trip> getListTrip() {
     return listTrips;
+  }
+
+  void setTypeTrip(String type) {
+    var list = <Trip>[];
+
+    switch (type) {
+      case StringConstants.tripOpen:
+        var temp = listTrips.where((p0) => p0.isComplete == false);
+        list.addAll(temp);
+        break;
+      case StringConstants.tripPost:
+        var temp = listTrips.where((p0) => p0.isComplete == true);
+        list.addAll(temp);
+        break;
+      case StringConstants.tripTop:
+        listTrips.sort((a, b) {
+          var aLength = a.listIdMember?.length ?? 1;
+          var bLength = b.listIdMember?.length ?? 1;
+
+          return bLength.compareTo(aLength);
+        });
+        list = listTrips;
+        break;
+      case StringConstants.placeTop:
+        // list = listTrips.where((i) => i.isPublic == false).toList();
+        break;
+    }
+
+    listTripWithState.value = list;
+    listTripWithSearch.value = list;
   }
 
   void setButtonChoose(int number) {

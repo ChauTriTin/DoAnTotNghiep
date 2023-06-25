@@ -84,4 +84,10 @@ class StringConstants {
   static const String titleJoinPrivateDialog = "Nhập mã tham gia";
   static const String codeRouter = "Mã chuyến đi";
   static const String status = "⬤ Online";
+
+  //Home screen
+  static const String tripOpen = "Chuyến đi đang mở";
+  static const String tripPost = "Bài đăng";
+  static const String tripTop = "Chuyến đi hàng đầu";
+  static const String placeTop = "Địa điểm hàng đầu";
 }
