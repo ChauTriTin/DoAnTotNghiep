@@ -279,18 +279,79 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         child: Material(
           type: MaterialType.transparency,
           child: Container(
-              width: Get.width * 80 / 100,
-              // height: Get.height / 2,
-              padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-              decoration: BoxDecoration(
+            width: Get.width * 80 / 100,
+            // height: Get.height / 2,
+            // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            decoration: BoxDecoration(
+              color: ColorConstants.appColor,
+              border: Border.all(
                 color: ColorConstants.appColor,
-                border: Border.all(
-                  color: ColorConstants.appColor,
-                ),
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(DimenConstants.radiusMedium)),
               ),
-              child: Text("aaa")),
+              borderRadius: const BorderRadius.all(
+                  Radius.circular(DimenConstants.radiusMedium)),
+            ),
+            child: Wrap(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    DimenConstants.marginPaddingSmall,
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingSmall,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: Get.width,
+                  margin: const EdgeInsets.fromLTRB(
+                    DimenConstants.marginPaddingSmall,
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingSmall,
+                    DimenConstants.marginPaddingSmall,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingMedium,
+                  ),
+                  decoration: BoxDecoration(
+                    color: ColorConstants.textColorForgotPassword,
+                    border: Border.all(
+                      color: ColorConstants.textColorForgotPassword,
+                    ),
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(DimenConstants.radiusMedium)),
+                  ),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "CẢM ƠN BẠN VÌ NHỮNG ĐÁNH GIÁ NÀY NHÉ!",
+                        style: TextStyle(
+                          fontSize: DimenConstants.txtLarge,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
