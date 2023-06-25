@@ -76,7 +76,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         elevation: DimenConstants.elevationMedium,
         backgroundColor: ColorConstants.colorWhite,
         onPressed: () {
-          _controller.rate();
+          _controller.rate(() {
+            showDialogRateSuccess();
+          });
         },
         child: const Icon(
           Icons.check,
@@ -269,4 +271,6 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
       ],
     );
   }
+
+  void showDialogRateSuccess() {}
 }

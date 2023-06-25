@@ -92,7 +92,7 @@ class FormController extends BaseController {
     return -1;
   }
 
-  void rate() {
+  void rate(VoidCallback voidCallback) {
     Rate rate = Rate();
     rate.rateLeader = rateLeader.value;
     rate.rateTrip = rateTrip.value;
@@ -120,6 +120,7 @@ class FormController extends BaseController {
     } catch (e) {
       Dog.e(">>>rate err $e");
     }
+    voidCallback.call();
   }
 
   void setRateLeader(double value) {
