@@ -105,24 +105,23 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           const SizedBox(
             height: DimenConstants.marginPaddingTiny,
           ),
+
+          // Mail
           Text(
             UserSingletonController.instance.getEmail(),
             style: UIUtils.getStyleTextSmall300(),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
-            height: DimenConstants.marginPaddingLarge,
-          ),
-          getText(ColorConstants.colorProfile, StringConstants.editProfile,
-              _controller.navigateToEditProfile),
-          const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
+
+          // Setting
           Padding(
             padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             child: Text(
               StringConstants.generalSetting,
-              style: UIUtils.getStyleText(),
+              style: UIUtils.getStyleTextLarge500(),
             ),
           ),
           getDarkMode(),

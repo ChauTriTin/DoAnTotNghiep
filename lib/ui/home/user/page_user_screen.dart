@@ -15,6 +15,7 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import '../../../common/extension/build_context_extension.dart';
 import '../../../model/place.dart';
 import '../../../model/trip.dart';
+import '../../../view/avatar_widget.dart';
 import '../../user_singleton_controller.dart';
 import '../home/detail/page_detail_router_screen.dart';
 
@@ -76,9 +77,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
     return SizedBox(
         width: double.infinity,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+          AvatarWidget(),
           // Chuyến đi đang tham gia
           Card(
               margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
@@ -272,10 +271,13 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             const SizedBox(
               height: DimenConstants.marginPaddingSmall,
             ),
-            UIUtils.getTextSpanCount("👨‍👧‍👦 ${StringConstants.tripParticipatedCount}",
+            UIUtils.getTextSpanCount(
+                "👨‍👧‍👦 ${StringConstants.tripParticipatedCount}",
                 _controller.trips.length + _controller.tripsInProgress.length),
-            UIUtils.getTextSpanCount("🤴 ${StringConstants.leadTripCount}", _controller.tripsHost.length),
-            UIUtils.getTextSpanCountDouble("📏 ${StringConstants.totalKm}", _controller.totalKm.value),
+            UIUtils.getTextSpanCount("🤴 ${StringConstants.leadTripCount}",
+                _controller.tripsHost.length),
+            UIUtils.getTextSpanCountDouble(
+                "📏 ${StringConstants.totalKm}", _controller.totalKm.value),
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),
