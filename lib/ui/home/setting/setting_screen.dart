@@ -3,11 +3,13 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/setting/setting_controller.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../util/theme_util.dart';
 import '../../../view/profile_bar_widget.dart';
@@ -129,6 +131,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             _showDialogMsg(StringConstants.about, StringConstants.aboutDetail);
           }),
 
+          // Term & condition
           getDivider(),
           getText(
               ColorConstants.colorTermCondition, StringConstants.termCondition,
@@ -137,14 +140,17 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
                 StringConstants.termConditionDetail);
           }),
 
+          // Policy
           getDivider(),
           getText(ColorConstants.colorPolicy, StringConstants.policy, () {
             _showDialogMsg(
                 StringConstants.policy, StringConstants.policyDetail);
           }),
 
+          // Rating
           getDivider(),
-          getText(ColorConstants.colorRateApp, StringConstants.rate, () {}),
+          getText(ColorConstants.colorRateApp, StringConstants.rate,
+              _showRatingApp),
 
           getDivider(),
           const SizedBox(
@@ -172,6 +178,16 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             height: DimenConstants.marginPaddingMedium,
           ),
         ]));
+  }
+
+  void _showRatingApp() async {
+    const String packageName = 'com.booking'; // Replace with your app's package name on the Play Store
+    const String url = 'market://details?id=$packageName';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Dog.d('_showRatingApp Could not launch $url');
+    }
   }
 
   void _showDialogMsg(String title, String body) {
