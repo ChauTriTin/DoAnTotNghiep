@@ -74,8 +74,22 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
   Widget _buildList() {
     return ListView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-      children: [],
+      padding: const EdgeInsets.fromLTRB(
+        DimenConstants.marginPaddingMedium,
+        DimenConstants.marginPadding98,
+        DimenConstants.marginPaddingMedium,
+        DimenConstants.marginPaddingMedium,
+      ),
+      children: const [
+        Text(
+          'ĐÁNH GIÁ VỀ CHUYẾN ĐI',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: DimenConstants.txtLarge,
+          ),
+        ),
+      ],
     );
   }
 }
