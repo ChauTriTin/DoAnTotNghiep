@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:get/get.dart';
 
 import '../../../../db/firebase_helper.dart';
 import '../../../../model/trip.dart';
+import '../../../../model/user.dart';
 import '../../../../util/shared_preferences_util.dart';
 import '../../../user_singleton_controller.dart';
 
@@ -18,8 +20,8 @@ class PageUserPreviewController extends BaseController {
   var tripParticipatedCount = 0.obs;
   var totalKm = 0.obs;
 
-  var userData = UserSingletonController.instance.userData;
-  var userChatData = UserSingletonController.instance.userData;
+  var userData = UserData().obs;
+  var userChat = const User(id: "").obs;
 
   var trips = <Trip>[].obs;
   var tripsHost = <Trip>[].obs;
@@ -29,9 +31,25 @@ class PageUserPreviewController extends BaseController {
   }
 
   Future<void> getData() async {
+    getUserDetail();
     getTrip();
     getTripHost();
     getTotalTripCount();
+  }
+
+  Future<void> getUserDetail() async {
+    FirebaseHelper.collectionReferenceUser
+        .doc(userChat.value.id)
+        .snapshots()
+        .listen((value) {
+      DocumentSnapshot<Map<String, dynamic>>? userMap =
+      value as DocumentSnapshot<Map<String, dynamic>>?;
+      if (userMap == null || userMap.data() == null) return;
+
+      var user = UserData.fromJson((userMap).data()!);
+      userData.value = user;
+      log("getUserInfo success: ${user.toString()}");
+    });
   }
 
   Future<void> getTrip() async {
