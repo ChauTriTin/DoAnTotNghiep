@@ -67,6 +67,15 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          ),
           backgroundColor: ColorConstants.appColor,
           title: const Text(StringConstants.about),
         ),
