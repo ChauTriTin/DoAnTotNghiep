@@ -211,7 +211,7 @@ class _PageEditProfile extends BaseStatefulState<PageEditProfile> {
               height: DimenConstants.marginPaddingMedium,
             ),
 
-            UIUtils.getOutlineButton(StringConstants.update, _saveUserInfo),
+            UIUtils.getButtonFill(StringConstants.update, _saveUserInfo),
             const SizedBox(
               height: DimenConstants.marginPaddingLarge,
             ),
