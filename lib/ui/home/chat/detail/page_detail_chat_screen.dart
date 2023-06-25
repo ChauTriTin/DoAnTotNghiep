@@ -14,6 +14,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../../../../common/const/constants.dart';
 import '../../../../model/trip.dart';
 import '../../../../util/log_dog_utils.dart';
+import '../../user/user_preview/page_user_preview_screen.dart';
 
 class PageDetailChatScreen extends StatefulWidget {
   const PageDetailChatScreen({
@@ -55,6 +56,7 @@ class _PageDetailChatScreenState extends BaseStatefulState<PageDetailChatScreen>
         return Chat(
           messages: _controller.messages.value,
           onSendPressed: _handleSendPressed,
+          onAvatarTap: _handleTabAvatar,
           showUserAvatars: true,
           showUserNames: true,
           user: _controller.userChat.value,
@@ -71,5 +73,11 @@ class _PageDetailChatScreenState extends BaseStatefulState<PageDetailChatScreen>
       text: message.text,
     );
     _controller.addMessage(textMessage);
+  }
+  
+  void _handleTabAvatar(User user) {
+    Get.to(() => const PageUserPreviewScreen(), arguments: [
+      { Constants.user: jsonEncode(user) }
+    ]);
   }
 }
