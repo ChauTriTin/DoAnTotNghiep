@@ -86,4 +86,5 @@ enum TypeApp {
   logout,
   uploadAvatar,
   loadingData,
+  getListPushNotification,
 }

@@ -4,6 +4,7 @@ import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/home/home/detail/page_detail_router_controller.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:comment_tree/widgets/comment_tree_widget.dart';
@@ -17,9 +18,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
 import '../../../../model/comment.dart';
+import '../../../../model/place.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 import '../../setting/setting_screen.dart';
+import '../../user/user_preview/page_user_preview_screen.dart';
 
 class DetailRouterScreen extends StatefulWidget {
   const DetailRouterScreen({Key? key}) : super(key: key);
@@ -159,30 +162,31 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                 ],
               ),
             ),
-          Column(
-            children: [
-              const Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.favorite,
-                      color: Colors.redAccent,
-                      size: 40.0,
-                    ),
-                    Text(
-                      "1.7k",
-                      style: TextStyle(fontSize: 11, color: Colors.white),
-                    ),
-                  ],
+          Column(children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.redAccent,
+              ),
+              child: Center(
+                child: Text(
+                  _controller.detailTrip.value.listIdMember?.length
+                          .toString() ??
+                      "1",
+                  style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                  margin: const EdgeInsets.only(top: 6),
-                  child: const Text("Theo dõi",
-                      style: TextStyle(fontSize: 12, color: Colors.black)))
-            ],
-          ),
+            ),
+            Container(
+                margin: const EdgeInsets.only(top: 6),
+                child: const Text("Số người tham gia",
+                    style: TextStyle(fontSize: 12, color: Colors.black)))
+          ]),
           InkWell(
             onTap: () => {_showCommentDialog()},
             child: Column(
@@ -212,61 +216,68 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   }
 
   Widget _leader() {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 24, right: 24),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 12),
-                      child: Text(
-                        "Leader: ${_controller.userLeaderData.value.name}",
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+    return InkWell(
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 24, right: 24),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        color: Colors.yellow,
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 54, right: 24),
-                child: RatingBar.builder(
-                  ignoreGestures: true,
-                  initialRating: 3,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemSize: 20,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.red,
+                      Container(
+                        margin: const EdgeInsets.only(left: 12),
+                        child: Text(
+                          "Leader: ${_controller.userLeaderData.value.name}",
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
                   ),
-                  onRatingUpdate: (rating) {},
                 ),
-              ),
-            ],
+                Container(
+                  margin: const EdgeInsets.only(left: 54, right: 24),
+                  child: RatingBar.builder(
+                    ignoreGestures: true,
+                    initialRating: 3,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 20,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.red,
+                    ),
+                    onRatingUpdate: (rating) {},
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Container(
-            margin: const EdgeInsets.only(right: 24),
-            child: Center(
-                child: Image.network(
-              _controller.getLeaderAvatar(),
-              height: 50,
-              width: 50,
-            ))),
-      ],
+          Container(
+              margin: const EdgeInsets.only(right: 24),
+              child: Center(
+                  child: Image.network(
+                _controller.getLeaderAvatar(),
+                height: 50,
+                width: 50,
+              ))),
+        ],
+      ),
+      onTap: () {
+        Get.to(() => const PageUserPreviewScreen(), arguments: [
+          { Constants.user: _controller.userLeaderData.value.uid ?? "" }
+        ]);
+      },
     );
   }
 
@@ -364,38 +375,125 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
 
   void _showDetailRouterDialog() {
     showMaterialModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(30.0),
-        ),
-      ),
-      context: context,
-      builder: (context) => SingleChildScrollView(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: DimenConstants.marginPaddingMedium),
-        controller: ModalScrollController.of(context),
-        child: Container(
-          height: 300,
-          width: double.infinity,
-          color: ColorConstants.colorGrey,
-          child: ListView(
-            padding: const EdgeInsets.all(0),
-            children: [
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-              _headerDialog(StringConstants.titleDetailDialog),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-            ],
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
           ),
         ),
-      ),
+        context: context,
+        builder: (context) => Obx(() => Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  left: DimenConstants.marginPaddingMedium,
+                  right: DimenConstants.marginPaddingMedium,
+                  top: DimenConstants.marginPaddingSmall),
+              child: SizedBox(
+                height: 300,
+                width: MediaQuery.of(context).size.width,
+                child: ListView(
+                  padding: const EdgeInsets.all(0),
+                  children: [
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    _headerDialog(StringConstants.titleDetailDialog),
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    ...convertListLocation()
+                  ],
+                ),
+              ),
+            )));
+  }
+
+  Widget _locationTrip(Place place,
+      {bool isSubLocation = false, bool isStart = false}) {
+    return Row(
+      children: [
+        isSubLocation
+            ? Container(
+                width: 30,
+                height: 30,
+                margin: const EdgeInsets.only(
+                    left: DimenConstants.marginPaddingExtraLarge,
+                    right: DimenConstants.marginPaddingMedium,
+                    bottom: DimenConstants.marginPaddingMedium,
+                    top: DimenConstants.marginPaddingMedium),
+                child: Image.asset("assets/images/sub_location.png"))
+            : Container(
+                width: 40,
+                height: 40,
+                margin:
+                    const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                child: Image.asset("assets/images/location.png")),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Wrap(
+                children: [
+                  Text(
+                    place.name ?? "",
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+              if (!isSubLocation)
+                Container(
+                  padding: const EdgeInsets.only(
+                      right: DimenConstants.marginPaddingMedium,
+                      top: DimenConstants.marginPaddingMedium),
+                  child: Text(
+                    isStart
+                        ? "Thời gian: ${_controller.detailTrip.value.timeStart}"
+                        : "Thời gian: ${_controller.detailTrip.value.timeEnd}",
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                )
+            ],
+          ),
+        )
+      ],
     );
+  }
+
+  List<Widget> convertListLocation() {
+    var list = <Widget>[];
+
+    if (_controller.detailTrip.value.placeStart != null) {
+      list.add(_locationTrip(_controller.detailTrip.value.placeStart!,
+          isStart: true));
+    }
+    Dog.d(
+        "convertListLocation : ${_controller.detailTrip.value.listPlace?.length}");
+    Dog.d(
+        "convertListLocation : ${_controller.detailTrip.value.placeStart?.name}");
+    Dog.d(
+        "convertListLocation : ${_controller.detailTrip.value.placeEnd?.name}");
+    _controller.detailTrip.value.listPlace?.forEach((element) {
+      list.add(_locationTrip(element, isSubLocation: true));
+    });
+
+    if (_controller.detailTrip.value.placeEnd != null) {
+      list.add(_locationTrip(_controller.detailTrip.value.placeEnd!));
+    }
+
+    return list;
   }
 
   List<Widget> _renderListComment() {
     List<Widget> widgetList = [];
-    if (_controller.commentData.isEmpty) return widgetList;
-    _controller.commentData.map((element) => widgetList.add(_comment(element)));
+    Dog.d("_renderListComment: ${_controller.commentData.length}");
+    try {
+      if (_controller.commentData.isEmpty) return widgetList;
+      for (var element in _controller.commentData) {
+        Dog.d("_renderListComment: ${element.content}");
+        widgetList.add(_comment(element));
+      }
+    } catch (ex) {
+      Dog.e("_renderListComment: $ex");
+    }
+    Dog.d("_renderListComment widgetList: ${widgetList.length}");
     return widgetList;
   }
 
@@ -454,18 +552,18 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             DefaultTextStyle(
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Colors.grey[700], fontWeight: FontWeight.bold),
-              child: const Padding(
-                padding: EdgeInsets.only(top: 4),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
                 child: Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
-                    Text('Like'),
-                    SizedBox(
+                    const Text('Like'),
+                    const SizedBox(
                       width: 24,
                     ),
-                    Text('Reply'),
+                    InkWell(onTap: () {}, child: const Text('Reply')),
                   ],
                 ),
               ),
@@ -486,7 +584,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'dangerous',
+                    data.name ?? "No name",
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         fontWeight: FontWeight.w600, color: Colors.black),
                   ),
@@ -534,7 +632,8 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           CircleAvatar(
             radius: 18,
             backgroundColor: Colors.grey,
-            backgroundImage: NetworkImage(_controller.getLeaderAvatar()),
+            backgroundImage: NetworkImage(
+                UserSingletonController.instance.userData.value.getAvatar()),
           ),
           const SizedBox(width: DimenConstants.marginPaddingSmall, height: 0),
           Expanded(
@@ -564,36 +663,38 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
 
   void _showCommentDialog() {
     showMaterialModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(30.0),
-        ),
-      ),
-      context: context,
-      builder: (context) => Container(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: DimenConstants.marginPaddingMedium,
-            right: DimenConstants.marginPaddingMedium,
-            top: DimenConstants.marginPaddingMedium),
-        child: Container(
-          height: MediaQuery.of(context).size.height / 2,
-          width: double.infinity,
-          padding: const EdgeInsets.all(0),
-          child: Column(
-            children: [
-              _headerDialog(StringConstants.titleCommentDialog),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-              Expanded(
-                  child: ListView(
-                children: _renderListComment(),
-              )),
-              _sendBox()
-            ],
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
           ),
         ),
-      ),
-    );
+        context: context,
+        builder: (context) => Obx(
+              () => Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                    left: DimenConstants.marginPaddingMedium,
+                    right: DimenConstants.marginPaddingMedium,
+                    top: DimenConstants.marginPaddingMedium),
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 2,
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(0),
+                  child: Column(
+                    children: [
+                      _headerDialog(StringConstants.titleCommentDialog),
+                      const SizedBox(
+                          height: DimenConstants.marginPaddingMedium),
+                      Expanded(
+                          child: ListView(
+                        children: _renderListComment(),
+                      )),
+                      _sendBox()
+                    ],
+                  ),
+                ),
+              ),
+            ));
   }
 
   void _showJoinPrivateRouterDialog() {
@@ -674,6 +775,16 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     _slideShowImage(context),
                     _infoRouter(),
                     _listButtonEvent(),
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          left: DimenConstants.marginPaddingMedium),
+                      child: Text(
+                        "*** Yêu cầu: ${_controller.detailTrip.value.require}",
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     _divider(12),
                     _leader(),
                     _divider(0),

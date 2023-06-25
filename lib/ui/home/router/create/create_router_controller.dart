@@ -5,12 +5,10 @@ import 'package:appdiphuot/common/const/convert_utils.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/rate.dart';
 import 'package:appdiphuot/model/trip.dart';
-import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
-import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/time_utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
@@ -264,6 +262,14 @@ class CreateRouterController extends BaseController {
     trip.isPublic = isPublic.value;
     trip.isComplete = false;
 
+    var rate = Rate();
+    rate.rateLeader = 0.0;
+    rate.rateTrip = 0.0;
+    rate.ratePlaceStart = 0.0;
+    rate.ratePlaceEnd = 0.0;
+    rate.rateListPlaceStop = List.empty();
+    trip.rate = rate;
+
     debugPrint(">>>trip ${trip.toJson()}");
 
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -286,5 +292,4 @@ class CreateRouterController extends BaseController {
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
   }
-
 }

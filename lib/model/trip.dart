@@ -1,7 +1,9 @@
 import 'package:appdiphuot/model/comment.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/model/rate.dart';
 
 import '../common/const/string_constants.dart';
+import '../util/log_dog_utils.dart';
 
 class Trip {
   String? id;
@@ -17,6 +19,7 @@ class Trip {
   String? title;
   String? des;
   List<String>? listImg;
+  Rate? rate;
   Place? placeStart;
   Place? placeEnd;
   List<Place>? listPlace;
@@ -35,6 +38,7 @@ class Trip {
     this.title,
     this.des,
     this.listImg,
+    this.rate,
     this.placeStart,
     this.placeEnd,
     this.listPlace,
@@ -58,8 +62,10 @@ class Trip {
     title = json['title'];
     des = json['des'];
     listImg = json['listImg'].cast<String>();
+    rate = json['rate'] != null ? Rate.fromJson(json['rate']) : null;
     placeStart =
         json['placeStart'] != null ? Place.fromJson(json['placeStart']) : null;
+
     placeEnd =
         json['placeEnd'] != null ? Place.fromJson(json['placeEnd']) : null;
     if (json['listPlace'] != null) {
@@ -92,6 +98,9 @@ class Trip {
     data['title'] = title;
     data['des'] = des;
     data['listImg'] = listImg;
+    if (rate != null) {
+      data['rate'] = rate!.toJson();
+    }
     if (placeStart != null) {
       data['placeStart'] = placeStart!.toJson();
     }
@@ -122,6 +131,7 @@ class Trip {
           title == other.title &&
           des == other.des &&
           listImg == other.listImg &&
+          rate == other.rate &&
           placeStart == other.placeStart &&
           placeEnd == other.placeEnd &&
           listPlace == other.listPlace &&
@@ -141,6 +151,7 @@ class Trip {
       title.hashCode ^
       des.hashCode ^
       listImg.hashCode ^
+      rate.hashCode ^
       placeStart.hashCode ^
       placeEnd.hashCode ^
       listPlace.hashCode ^

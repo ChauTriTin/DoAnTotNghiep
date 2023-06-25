@@ -8,6 +8,7 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/home/detail/page_detail_router_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/view/state_home_widget.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +31,33 @@ class PageHomeScreen extends StatefulWidget {
 
 class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   final _controller = Get.put(PageHomeController());
+  final _searchController = TextEditingController();
+
+  final List<String> itemsDropdown = [
+    StringConstants.tripOpen,
+    StringConstants.tripPost,
+    StringConstants.tripTop,
+    StringConstants.placeTop,
+  ];
+
+  String? selectedValue;
 
   @override
   void initState() {
     super.initState();
     _setupListen();
     _controller.getAllRouter();
+  }
+
+  void _performSearch() {
+    String searchText = _searchController.text.toLowerCase();
+    setState(() {
+      Dog.d("_performSearch: $searchText");
+      _controller.listTripWithSearch.value =
+          _controller.listTripWithState.where((item) {
+        return item.des!.toLowerCase().contains(searchText);
+      }).toList();
+    });
   }
 
   void _setupListen() {
@@ -46,11 +68,14 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         OverlayLoadingProgress.stop();
       }
     });
+
     _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
       });
     });
+
+    _searchController.addListener(_performSearch);
   }
 
   @override
@@ -97,56 +122,197 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     ),
   );
 
-  final List<String> dataList = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
+  Widget searchBox() {
+    return Container(
+      margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.search),
+          hintText: 'Tìm kiếm',
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: const BorderSide(color: Colors.lightBlueAccent),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget getRow(int i) {
     var imageTrip = "";
     var title = "";
+    var startPlace = "";
+    var timeStart = "";
+    var numberJoin = "";
     var id = "";
-    var listTrip = _controller.listTripWithState;
-    Trip? trip = listTrip[i];
-    if (listTrip.isNotEmpty) {
-      imageTrip = listTrip[i].listImg?[0] ?? "";
-      title = listTrip[i].title ?? "";
-      id = listTrip[0].id ?? "";
+    Trip? trip = _controller.listTripWithSearch[i];
+    List<Trip> listTrips = _controller.listTripWithSearch;
+    if (listTrips.isNotEmpty) {
+      imageTrip = listTrips[i].listImg?[0] ?? "";
+      title = listTrips[i].title ?? "";
+      id = listTrips[0].id ?? "";
+      startPlace = listTrips[i].placeStart?.name ?? "";
+      timeStart = listTrips[i].timeStart ?? "";
+      numberJoin = listTrips[i].listIdMember?.length.toString() ?? "1";
     }
     return InkWell(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Container(
-            decoration: const BoxDecoration(
-                color: Colors.white10,
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            width: MediaQuery.of(context).size.height * 1 / 7.5,
-            height: MediaQuery.of(context).size.height * 1 / 7.5,
-            margin: const EdgeInsets.only(right: 10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox.fromSize(
-                  size: const Size.fromRadius(48),
-                  child: CachedMemoryImage(
-                      fit: BoxFit.cover,
-                      width: MediaQuery.of(context).size.height * 1 / 7.5,
-                      height: MediaQuery.of(context).size.height * 1 / 7.5,
-                      uniqueKey: imageTrip,
-                      base64: imageTrip)),
-            ),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            child: Text(title),
-          )
-        ]),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(10.0),
+                ),
+                child: CachedMemoryImage(
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.height * 1 / 7.5,
+                  height: MediaQuery.of(context).size.height * 1 / 7.5,
+                  uniqueKey: imageTrip,
+                  base64: imageTrip,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on, color: Colors.yellow),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            startPlace,
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.timer, color: Colors.yellow),
+                            const SizedBox(width: 8),
+                            Text(timeStart),
+                          ],
+                        ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const Icon(Icons.people, color: Colors.yellow),
+                              const SizedBox(width: 8),
+                              Text(numberJoin),
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Container(
+        //   margin: const EdgeInsets.only(
+        //       top: DimenConstants.marginPaddingMedium,
+        //       bottom: DimenConstants.marginPaddingSmall),
+        //   child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        //     Container(
+        //       decoration: const BoxDecoration(
+        //           color: Colors.white10,
+        //           borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        //       width: MediaQuery.of(context).size.height * 1 / 7.5,
+        //       height: MediaQuery.of(context).size.height * 1 / 7.5,
+        //       margin: const EdgeInsets.only(right: 10),
+        //       child: ClipRRect(
+        //         borderRadius: BorderRadius.circular(10),
+        //         child: SizedBox.fromSize(
+        //             size: const Size.fromRadius(48),
+        //             child: CachedMemoryImage(
+        //                 fit: BoxFit.cover,
+        //                 width: MediaQuery.of(context).size.height * 1 / 7.5,
+        //                 height: MediaQuery.of(context).size.height * 1 / 7.5,
+        //                 uniqueKey: imageTrip,
+        //                 base64: imageTrip)),
+        //       ),
+        //     ),
+        //     Container(
+        //       margin: const EdgeInsets.only(top: 8),
+        //       child: Text(title),
+        //     )
+        //   ]),
+        // ),
         onTap: () {
           Get.to(() => const DetailRouterScreen(), arguments: [
             {Constants.detailTrip: jsonEncode(trip)},
           ]);
         });
+  }
+
+  Widget _dropDown() {
+    return Container(
+      margin: const EdgeInsets.only(
+          left: DimenConstants.marginPaddingLarge,
+          right: DimenConstants.marginPaddingLarge),
+      child: DropdownButtonFormField(
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+        ),
+        hint: Text(
+          itemsDropdown.first,
+          style: const TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        items: itemsDropdown
+            .map((String item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        onChanged: (String? value) {
+          setState(() {
+            selectedValue = value;
+            _controller.setTypeTrip(value!);
+          });
+        },
+      ),
+    );
   }
 
   @override
@@ -160,8 +326,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
       body: Obx(() {
         return Container(
             color: ColorConstants.appColorBkg,
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 banner,
                 Container(
@@ -178,6 +344,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                           text: "Tất cả",
                           onPress: () {
                             setState(() {
+                              _searchController.clear();
                               _controller.setButtonChoose(0);
                             });
                           },
@@ -191,6 +358,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                           text: "Công khai",
                           onPress: () {
                             setState(() {
+                              _searchController.clear();
                               _controller.setButtonChoose(1);
                             });
                           },
@@ -204,68 +372,34 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                           text: "Cá nhân",
                           onPress: () {
                             setState(() {
+                              _searchController.clear();
                               _controller.setButtonChoose(2);
                             });
                           },
                         )
                       ]),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 12, left: 24),
-                  child: const Text(
-                    "Chuyen đi đang mở",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 1 / 5.5,
-                  margin: const EdgeInsets.only(top: 12),
-                  child: ClipRect(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.only(left: 24, right: 24),
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _controller.listTripWithState.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return getRow(index);
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(
-                          width: DimenConstants.marginPaddingMedium,
-                        );
-                      },
+                searchBox(),
+                _dropDown(),
+                Expanded(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 1 / 5.5,
+                    child: ClipRect(
+                      child: ListView.separated(
+                        padding: const EdgeInsets.only(left: 24, right: 24),
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: _controller.listTripWithSearch.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return getRow(index);
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const SizedBox(
+                            width: DimenConstants.marginPaddingMedium,
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 12, left: 24),
-                  child: const Text(
-                    "Bai danh gia ve chuyen di da hoan thanh",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 1 / 5.5,
-                  margin: const EdgeInsets.only(top: 12),
-                  child: ListView.separated(
-                    padding: const EdgeInsets.only(left: 24, right: 24),
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _controller.listTripWithState.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return getRow(index);
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(
-                        width: DimenConstants.marginPaddingMedium,
-                      );
-                    },
                   ),
                 ),
               ],
