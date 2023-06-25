@@ -146,8 +146,8 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         return _buildItem(
           null,
           "assets/images/ic_marker_end.png",
-          "Địa điểm đến",
-          _controller.trip.value.placeEnd?.name ?? "",
+          "Địa điểm dừng chân ${i + 1}",
+          list[i].name ?? "",
         );
       },
     );
