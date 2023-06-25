@@ -35,19 +35,20 @@ class PageUserController extends BaseController {
   }
 
   Future<void> getData() async {
-    getTrip();
+    getTripIsCompleted();
     getTripHost();
     getTripInProgress();
     getTotalTripCount();
   }
 
-  Future<void> getTrip() async {
+  Future<void> getTripIsCompleted() async {
     try {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
       log("getTrip: userid $uid");
-      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
-          FirebaseHelper.listIdMember,
-          arrayContainsAny: [uid]).snapshots();
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
+          .where(FirebaseHelper.isComplete, isEqualTo: true)
+          .snapshots();
 
       var routerSnapshots =
           routerStream.map((querySnapshot) => querySnapshot.docs);

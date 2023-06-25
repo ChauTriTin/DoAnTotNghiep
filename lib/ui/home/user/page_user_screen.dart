@@ -272,12 +272,10 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             const SizedBox(
               height: DimenConstants.marginPaddingSmall,
             ),
-            UIUtils.getTextSpanCount(""+StringConstants.tripParticipatedCount,
-                _controller.trips.length),
-            UIUtils.getTextSpanCount(
-                StringConstants.leadTripCount, _controller.tripsHost.length),
-            UIUtils.getTextSpanCount(
-                StringConstants.totalKm, _controller.totalKm.value),
+            UIUtils.getTextSpanCount("👨‍👧‍👦 ${StringConstants.tripParticipatedCount}",
+                _controller.trips.length + _controller.tripsInProgress.length),
+            UIUtils.getTextSpanCount("🤴 ${StringConstants.leadTripCount}", _controller.tripsHost.length),
+            UIUtils.getTextSpanCount("📏 ${StringConstants.totalKm}", _controller.totalKm.value),
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),
@@ -390,7 +388,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                     height: DimenConstants.marginMMedium,
                   ),
                   Text(
-                    "👤 ${StringConstants.leadTripName}${trip.userHostName ?? ""}",
+                    "💀 ${StringConstants.leadTripName}${trip.userHostName ?? ""}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                         color: ColorConstants.textColor,
