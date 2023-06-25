@@ -272,5 +272,27 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
     );
   }
 
-  void showDialogRateSuccess() {}
+  void showDialogRateSuccess() {
+    Get.dialog(
+      Container(
+        alignment: Alignment.center,
+        child: Material(
+          type: MaterialType.transparency,
+          child: Container(
+              width: Get.width * 80 / 100,
+              // height: Get.height / 2,
+              padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+              decoration: BoxDecoration(
+                color: ColorConstants.appColor,
+                border: Border.all(
+                  color: ColorConstants.appColor,
+                ),
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(DimenConstants.radiusMedium)),
+              ),
+              child: Text("aaa")),
+        ),
+      ),
+    );
+  }
 }
