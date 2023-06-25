@@ -1,23 +1,15 @@
-import 'dart:convert';
-
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/home/user/place_detail/page_detail_trip_screen.dart';
 import 'package:appdiphuot/ui/home/user/user_preview/page_user_preview_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
-import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
-import '../../../../model/trip.dart';
 import '../../../../util/log_dog_utils.dart';
-import '../../../user_singleton_controller.dart';
 
 class PageUserPreviewScreen extends StatefulWidget {
   const PageUserPreviewScreen({
@@ -28,7 +20,8 @@ class PageUserPreviewScreen extends StatefulWidget {
   State<PageUserPreviewScreen> createState() => _PageUserPreviewScreenState();
 }
 
-class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScreen> {
+class _PageUserPreviewScreenState
+    extends BaseStatefulState<PageUserPreviewScreen> {
   final _controller = Get.put(PageUserPreviewController());
 
   @override
@@ -89,7 +82,6 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
     return SizedBox(
         width: double.infinity,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
-
           _buildAvatar(),
           _buildUserInfo(),
           _buildTripInfo(),
@@ -109,18 +101,19 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
             height: DimenConstants.marginPaddingMedium,
           ),
           IconButton(
-              iconSize: DimenConstants.avatarProfile2,
-              onPressed: () {},
-              icon: CircleAvatar(
-                backgroundColor: ColorConstants.borderTextInputColor,
-                radius: DimenConstants.avatarProfile2 / 2,
-                child: CircleAvatar(
-                  radius:
-                      DimenConstants.avatarProfile2 / 2 - DimenConstants.logoStroke,
-                  backgroundImage:
-                      NetworkImage(_controller.userData.value.avatar ?? StringConstants.avatarImgDefault)),
-                ),
-              ),
+            iconSize: DimenConstants.avatarProfile2,
+            onPressed: () {},
+            icon: CircleAvatar(
+              backgroundColor: ColorConstants.borderTextInputColor,
+              radius: DimenConstants.avatarProfile2 / 2,
+              child: CircleAvatar(
+                  radius: DimenConstants.avatarProfile2 / 2 -
+                      DimenConstants.logoStroke,
+                  backgroundImage: NetworkImage(
+                      _controller.userData.value.avatar ??
+                          StringConstants.avatarImgDefault)),
+            ),
+          ),
           const SizedBox(
             height: DimenConstants.marginPaddingTiny,
           ),
@@ -145,12 +138,16 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
       shadowColor: Colors.grey,
       elevation: DimenConstants.cardElevation,
       child: Padding(
-        padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMLarge, bottom: DimenConstants.marginPaddingMLarge),
+        padding: const EdgeInsets.only(
+            top: DimenConstants.marginPaddingMLarge,
+            bottom: DimenConstants.marginPaddingMLarge),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingMLarge),
+              padding: const EdgeInsets.only(
+                  left: DimenConstants.marginPaddingLarge,
+                  right: DimenConstants.marginPaddingMLarge),
               child: Text(
                 StringConstants.about,
                 style: UIUtils.getStyleText500Medium1(),
@@ -160,7 +157,9 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
               height: DimenConstants.marginPaddingSmall,
             ),
             const Padding(
-              padding: EdgeInsets.only(left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingMLarge),
+              padding: EdgeInsets.only(
+                  left: DimenConstants.marginPaddingLarge,
+                  right: DimenConstants.marginPaddingMLarge),
               child: Divider(
                 color: ColorConstants.dividerColor,
                 thickness: DimenConstants.dividerHeight,
@@ -169,12 +168,18 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
             const SizedBox(
               height: DimenConstants.marginPaddingSmall,
             ),
-            _buildRowUserInfo(Icons.email, StringConstants.email, _controller.userData.value.email ?? ""),
-            _buildRowUserInfo(Icons.calendar_month, StringConstants.birthday, _controller.userData.value.birthday ?? ""),
-            _buildRowUserInfo(Icons.location_city, StringConstants.address, _controller.userData.value.address ?? ""),
-            _buildRowUserInfo(Icons.phone_android, StringConstants.phone, _controller.userData.value.phone ?? ""),
-            _buildRowUserInfo(Icons.pedal_bike, StringConstants.bsx, _controller.userData.value.bsx ?? ""),
-            _buildRowUserInfo(Icons.transgender, StringConstants.gender, _controller.getUserGender()),
+            _buildRowUserInfo(Icons.email, StringConstants.email,
+                _controller.userData.value.email ?? ""),
+            _buildRowUserInfo(Icons.calendar_month, StringConstants.birthday,
+                _controller.userData.value.birthday ?? ""),
+            _buildRowUserInfo(Icons.location_city, StringConstants.address,
+                _controller.userData.value.address ?? ""),
+            _buildRowUserInfo(Icons.phone_android, StringConstants.phone,
+                _controller.userData.value.phone ?? ""),
+            _buildRowUserInfo(Icons.pedal_bike, StringConstants.bsx,
+                _controller.userData.value.bsx ?? ""),
+            _buildRowUserInfo(Icons.transgender, StringConstants.gender,
+                _controller.getUserGender()),
           ],
         ),
       ),
@@ -183,18 +188,19 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
 
   Widget _buildRowUserInfo(IconData icon, String title, String value) {
     return Padding(
-      padding: const EdgeInsets.only(left: DimenConstants.marginPaddingSmall, right: DimenConstants.marginPaddingSmall),
+      padding: const EdgeInsets.only(
+          left: DimenConstants.marginPaddingSmall,
+          right: DimenConstants.marginPaddingSmall),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-              flex: 2,
-              child: Icon(icon)),
+          Expanded(flex: 2, child: Icon(icon)),
           Expanded(
             flex: 8,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -223,7 +229,11 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
       shadowColor: Colors.grey,
       elevation: DimenConstants.cardElevation,
       child: Padding(
-          padding: const EdgeInsets.only(top: DimenConstants.marginPaddingMLarge, bottom: DimenConstants.marginPaddingSmall, left: DimenConstants.marginPaddingLarge, right: DimenConstants.marginPaddingLarge),
+          padding: const EdgeInsets.only(
+              top: DimenConstants.marginPaddingMLarge,
+              bottom: DimenConstants.marginPaddingSmall,
+              left: DimenConstants.marginPaddingLarge,
+              right: DimenConstants.marginPaddingLarge),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -243,7 +253,8 @@ class _PageUserPreviewScreenState extends BaseStatefulState<PageUserPreviewScree
               ),
               UIUtils.getTextSpanCount(
                   "👨‍👧‍👦 ${StringConstants.tripParticipatedCount}",
-                  _controller.trips.length + _controller.tripsInProgress.length),
+                  _controller.trips.length +
+                      _controller.tripsInProgress.length),
               UIUtils.getTextSpanCount("🤴 ${StringConstants.leadTripCount}",
                   _controller.tripsHost.length),
               UIUtils.getTextSpanCountDouble(

@@ -2,25 +2,15 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
 import 'package:appdiphuot/ui/home/setting/setting_controller.dart';
-import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
-import 'package:appdiphuot/ui/home/user/place_detail/page_detail_trip_screen.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
-import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
-import 'package:provider/provider.dart';
 
-import '../../../common/extension/build_context_extension.dart';
-import '../../../model/place.dart';
-import '../../../model/trip.dart';
 import '../../../util/theme_util.dart';
 import '../../../view/profile_bar_widget.dart';
 import '../../user_singleton_controller.dart';
-import '../home/detail/page_detail_router_screen.dart';
 
 class PageSettingScreen extends StatefulWidget {
   const PageSettingScreen({
