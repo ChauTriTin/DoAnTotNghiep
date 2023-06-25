@@ -83,12 +83,14 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         DimenConstants.marginPaddingMedium,
       ),
       children: [
-        const Text(
-          'ĐÁNH GIÁ VỀ CHUYẾN ĐI',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: DimenConstants.txtLarge,
+        const Center(
+          child: Text(
+            'ĐÁNH GIÁ VỀ CHUYẾN ĐI',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: DimenConstants.txtLarge,
+            ),
           ),
         ),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
@@ -97,6 +99,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           "Trưởng đoàn",
           _controller.currentUserData.value.name ?? "",
         ),
+        const SizedBox(height: DimenConstants.marginPaddingMedium),
+        const Divider(),
+        const SizedBox(height: DimenConstants.marginPaddingMedium),
       ],
     );
   }
