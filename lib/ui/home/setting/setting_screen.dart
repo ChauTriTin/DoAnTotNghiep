@@ -89,6 +89,8 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
     return Container(
         width: double.infinity,
         color: ColorConstants.colorWhite,
+        margin: const EdgeInsets.symmetric(
+            horizontal: DimenConstants.marginPaddingMedium),
         child: ListView(physics: const BouncingScrollPhysics(), children: [
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
@@ -125,33 +127,32 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             ),
           ),
           getDarkMode(),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+          getDivider(),
           getText(
               ColorConstants.colorLanguage, StringConstants.language, () {}),
           const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
+            height: DimenConstants.marginPaddingSmall,
           ),
+          getDivider(),
           getText(ColorConstants.colorAbout, StringConstants.about, () {}),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+
+          getDivider(),
           getText(ColorConstants.colorTermCondition,
               StringConstants.termCondition, () {}),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+
+          getDivider(),
           getText(ColorConstants.colorPolicy, StringConstants.policy, () {}),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+
+          getDivider(),
           getText(ColorConstants.colorRateApp, StringConstants.rate, () {}),
+
+          getDivider(),
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: DimenConstants.marginPaddingExtraLarge),
               child: UIUtils.getOutlineButton(
                 StringConstants.signOut,
                 () {
@@ -163,6 +164,17 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             height: DimenConstants.marginPaddingMedium,
           ),
         ]));
+  }
+
+  Widget getDivider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingMLarge),
+      child: const Divider(
+        color: ColorConstants.dividerColor,
+        thickness: DimenConstants.dividerHeight,
+      ),
+    );
   }
 
   Widget getDarkMode() {
