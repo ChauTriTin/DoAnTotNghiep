@@ -17,6 +17,7 @@ class AvatarWidget extends StatelessWidget {
     return Column(
       children: [
         Card(
+            shape: UIUtils.getCardCorner(),
             margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
             color: ColorConstants.cardBg,
             shadowColor: Colors.grey,
@@ -66,6 +67,7 @@ class AvatarWidget extends StatelessWidget {
               ),
             )),
         Card(
+            shape: UIUtils.getCardCorner(),
             margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
             color: ColorConstants.cardBg,
             shadowColor: Colors.grey,

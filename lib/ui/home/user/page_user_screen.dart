@@ -77,9 +77,10 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
     return SizedBox(
         width: double.infinity,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
-          AvatarWidget(),
+          const AvatarWidget(),
           // Chuyến đi đang tham gia
           Card(
+              shape: UIUtils.getCardCorner(),
               margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
               color: ColorConstants.cardBg,
               shadowColor: Colors.grey,
@@ -88,11 +89,11 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: DimenConstants.marginPaddingMedium,
+                    height: DimenConstants.marginPaddingMLarge,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: DimenConstants.marginPaddingMedium),
+                        left: DimenConstants.marginPaddingLarge),
                     child: Text(
                       StringConstants.tripInProgress,
                       style: UIUtils.getStyleText500Medium1(),
@@ -107,6 +108,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
 
           // Chuyến đi bạn tạo
           Card(
+              shape: UIUtils.getCardCorner(),
               margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
               color: ColorConstants.cardBg,
               shadowColor: Colors.grey,
@@ -115,11 +117,11 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: DimenConstants.marginPaddingMedium,
+                    height: DimenConstants.marginPaddingMLarge,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: DimenConstants.marginPaddingMedium),
+                        left: DimenConstants.marginPaddingLarge),
                     child: Text(
                       StringConstants.tripHost,
                       style: UIUtils.getStyleText500Medium1(),
@@ -132,6 +134,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 ],
               )),
           Card(
+            shape: UIUtils.getCardCorner(),
             margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
             color: ColorConstants.cardBg,
             shadowColor: Colors.grey,
@@ -140,12 +143,12 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: DimenConstants.marginPaddingMedium,
+                  height: DimenConstants.marginPaddingMLarge,
                 ),
                 // Chuyến đi đã tham gia
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: DimenConstants.marginPaddingMedium),
+                      left: DimenConstants.marginPaddingLarge),
                   child: Text(
                     StringConstants.tripParticipated,
                     style: UIUtils.getStyleText500Medium1(),
@@ -163,6 +166,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             ),
           ),
           Card(
+              shape: UIUtils.getCardCorner(),
               margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
               color: ColorConstants.cardBg,
               shadowColor: Colors.grey,
@@ -253,7 +257,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
 
   Widget _buildTripInfo() {
     return Padding(
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        padding: const EdgeInsets.all(DimenConstants.marginPaddingLarge),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -278,9 +282,6 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 _controller.tripsHost.length),
             UIUtils.getTextSpanCountDouble(
                 "📏 ${StringConstants.totalKm}", _controller.totalKm.value),
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
           ],
         ));
   }

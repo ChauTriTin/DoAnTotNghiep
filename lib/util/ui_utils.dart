@@ -325,6 +325,12 @@ class UIUtils {
     );
   }
 
+  static RoundedRectangleBorder getCardCorner() {
+    return RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(DimenConstants.cardCorner),
+    );
+  }
+
   static TextStyle getStyleText() {
     return const TextStyle(
       color: Colors.black,
