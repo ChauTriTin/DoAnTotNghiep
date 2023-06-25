@@ -7,6 +7,7 @@ class ColorConstants {
   static Color appColorBkg = const Color(0xFFE8E3E3);
   static Color disabledColor = Colors.grey;
   static const Color colorWhite = Colors.white;
+  static const Color colorPink = const Color(0xFFF8A5A5);
   static Color colorBlack = Colors.black;
   static const Color colorGrey = const Color(0xFFF2F2F2);
   static Color loginBtnBgColor = Colors.black;
@@ -17,6 +18,7 @@ class ColorConstants {
   static const Color textColor = const Color(0xFF000000);
   static  Color textColorDisable = Color(0xA65D5D5D);
   static  Color textColorDisable1 = Color(0xA6C7C7C7);
+  static const Color bgDisable = const Color(0xFFEEEEEE);
 
   static Color textEditBgColor = const Color(0x98000000);
   static Color borderTextInputColor = const Color(0xA6C2C2C2);
@@ -34,7 +36,7 @@ class ColorConstants {
   static const Color colorPolicy =  Color(0xFFCD0D0F);
   static const Color colorRateApp =  Color(0xFF8C51FF);
   static const Color colorBgEditTextField =  Color(0xFFE3E3E3);
-  static const Color colorGenderSelected =  Color(0xFF3B4257);
+  static const Color colorGenderSelected =  Color(0xFF772323);
 
   static getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
