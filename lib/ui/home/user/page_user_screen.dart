@@ -275,7 +275,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             UIUtils.getTextSpanCount("👨‍👧‍👦 ${StringConstants.tripParticipatedCount}",
                 _controller.trips.length + _controller.tripsInProgress.length),
             UIUtils.getTextSpanCount("🤴 ${StringConstants.leadTripCount}", _controller.tripsHost.length),
-            UIUtils.getTextSpanCount("📏 ${StringConstants.totalKm}", _controller.totalKm.value),
+            UIUtils.getTextSpanCountDouble("📏 ${StringConstants.totalKm}", _controller.totalKm.value),
             const SizedBox(
               height: DimenConstants.marginPaddingMedium,
             ),

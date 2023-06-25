@@ -149,6 +149,22 @@ class UIUtils {
     );
   }
 
+  static Widget getTextSpanCountDouble(String title, double count) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
+      child: RichText(
+          text: TextSpan(text: title, style: const TextStyle(
+            color: ColorConstants.textColor1,
+            fontSize: DimenConstants.txtMedium,
+          ), children: [
+            TextSpan(
+              text: count.toString(),
+              style: UIUtils.getStyleText500(),
+            ),
+          ])),
+    );
+  }
+
   static Widget getTextSpan(String title, String name) {
     return Padding(
       padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
