@@ -6,6 +6,7 @@ class FirebaseHelper {
   static String keyChat = "chat";
   static String messages = "messages";
   static String listIdMember = "listIdMember";
+  static String isComplete = "isComplete";
   static String userIdHost = "userIdHost";
 
   static final CollectionReference collectionReferenceRouter =

@@ -3,7 +3,7 @@ import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../model/gender.dart';
+import '../model/gender.dart';
 
 class CustomRadio extends StatelessWidget {
   Gender _gender;

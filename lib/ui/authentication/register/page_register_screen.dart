@@ -13,7 +13,7 @@ import '../../../util/TextInputField.dart';
 import '../../../util/time_utils.dart';
 import '../../../util/ui_utils.dart';
 import '../../../util/validate_utils.dart';
-import '../../home/user/edit/custom_radio.dart';
+import '../../../view/custom_radio.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
