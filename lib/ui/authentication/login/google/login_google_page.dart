@@ -1,40 +1,56 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:appdiphuot/ui/authentication/register/page_register_controller.dart';
-import 'package:appdiphuot/util/log_dog_utils.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/user.dart';
+import 'package:appdiphuot/ui/authentication/login/google/loggin_google_controller.dart';
+import 'package:appdiphuot/ui/authentication/login/page_login_controller.dart';
+import 'package:appdiphuot/util/ui_utils.dart';
+import 'package:appdiphuot/util/validate_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
-import '../../../base/base_stateful_state.dart';
-import '../../../common/const/string_constants.dart';
-import '../../../util/PasswordField.dart';
-import '../../../util/TextInputField.dart';
-import '../../../util/time_utils.dart';
-import '../../../util/ui_utils.dart';
-import '../../../util/validate_utils.dart';
-import '../../home/user/edit/custom_radio.dart';
+import '../../../../base/base_stateful_state.dart';
+import '../../../../common/const/constants.dart';
+import '../../../../util/PasswordField.dart';
+import '../../../../util/TextInputField.dart';
+import '../../../../util/log_dog_utils.dart';
+import '../../../../util/time_utils.dart';
+import '../../../home/user/edit/custom_radio.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginGoogleScreen extends StatefulWidget {
+  const LoginGoogleScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _RegisterScreen();
+    return _LoginGoogleScreen();
   }
 }
 
-class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
+class _LoginGoogleScreen extends BaseStatefulState<LoginGoogleScreen> {
   final _formLoginKey = GlobalKey<FormState>();
-  final RegisterController _controller = Get.put(RegisterController());
+  final LoginGoogleController _controller = Get.put(LoginGoogleController());
   late final TextEditingController _birthdayController =
-      TextEditingController(text: _controller.birthday.value);
+      TextEditingController(text: _controller.userData.value.birthday);
 
   @override
   void initState() {
     super.initState();
-    _controller.getData();
     _setupListen();
+    var data = Get.arguments[0][Constants.user];
+    log("Get userData: $data");
+    try {
+      // tripData = Trip.fromJson(jsonDecode(data ?? ""));
+      _controller.userData.value = UserData.fromJson(jsonDecode(data));
+      _controller.getData();
+      log("Get userData: ${_controller.userData.value.toString()}");
+    } catch (e) {
+      log("Get userData ex: $e");
+    }
   }
 
   void _setupListen() {
@@ -74,7 +90,7 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
               UIUtils.getBackWidget(() {
                 Get.back();
               }),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              const SizedBox(height: DimenConstants.marginPaddingLarge),
               _buildLoginWidget()
             ],
           )),
@@ -96,23 +112,40 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Title: Register
+                      // Title: Update info
                       const SizedBox(height: DimenConstants.marginPaddingLarge),
-                      UIUtils.getTextHeaderAuth(StringConstants.registerTitle,
+                      UIUtils.getTextHeaderAuth(StringConstants.updateInfo,
                           ColorConstants.colorWhite),
                       const SizedBox(height: DimenConstants.marginPaddingLarge),
 
                       // Name
                       UIUtils.getTitleTextInputAuth(StringConstants.name),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
-                      _getTextInputWidget(false),
+                      TextInputField(
+                        initalText: _controller.userData.value.name,
+                        validator: ValidateUtils.validateUserName,
+                        keyboardType: TextInputType.text,
+                        onChange: (String? value) {
+                          _controller.userData.value.name = value ?? "";
+                        },
+                      ),
                       const SizedBox(
                           height: DimenConstants.marginPaddingMedium),
 
                       //Email
                       UIUtils.getTitleTextInputAuth(StringConstants.email),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
-                      _getTextInputWidget(true),
+                      TextInputField(
+                        isDisable: true,
+                        onTap: onTabEmail,
+                        textColor: ColorConstants.textColorDisable1,
+                        initalText: _controller.userData.value.email,
+                        validator: ValidateUtils.validateEmail,
+                        keyboardType: TextInputType.emailAddress,
+                        onChange: (String? value) {
+                          _controller.userData.value.email = value ?? "";
+                        },
+                      ),
                       const SizedBox(
                           height: DimenConstants.marginPaddingMedium),
 
@@ -129,7 +162,7 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                         isDisable: true,
                         onChange: (String? value) {
                           Dog.d("birthDayChanged: $value");
-                          _controller.birthday.value = value ?? "";
+                          _controller.userData.value.birthday = value ?? "";
                         },
                       ),
 
@@ -141,11 +174,11 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                       UIUtils.getTitleTextInputAuth(StringConstants.address),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       TextInputField(
-                        initalText: _controller.address.value,
+                        initalText: _controller.userData.value.address,
                         validator: ValidateUtils.validateAddress,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                         onChange: (String? value) {
-                          _controller.address.value = value ?? "";
+                          _controller.userData.value.address = value ?? "";
                         },
                       ),
 
@@ -157,11 +190,11 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                       UIUtils.getTitleTextInputAuth(StringConstants.phone),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       TextInputField(
-                        initalText: _controller.phone.value,
+                        initalText: _controller.userData.value.phone,
                         validator: ValidateUtils.validatePhone,
                         keyboardType: TextInputType.phone,
                         onChange: (String? value) {
-                          _controller.phone.value = value ?? "";
+                          _controller.userData.value.phone = value ?? "";
                         },
                       ),
 
@@ -173,11 +206,11 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                       UIUtils.getTitleTextInputAuth(StringConstants.bsx),
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       TextInputField(
-                        initalText: _controller.bsx.value,
+                        initalText: _controller.userData.value.bsx,
                         validator: ValidateUtils.validateBienSoXe,
                         keyboardType: TextInputType.streetAddress,
                         onChange: (String? value) {
-                          _controller.bsx.value = value ?? "";
+                          _controller.userData.value.bsx = value ?? "";
                         },
                       ),
 
@@ -194,26 +227,11 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
                         height: DimenConstants.marginPaddingMedium,
                       ),
 
-                      // Password
-                      UIUtils.getTitleTextInputAuth(StringConstants.password),
-                      const SizedBox(height: DimenConstants.marginPaddingSmall),
-                      _getPasswordWidget(false),
-                      const SizedBox(
-                          height: DimenConstants.marginPaddingMedium),
-
-                      // Confirm password
-                      UIUtils.getTitleTextInputAuth(
-                          StringConstants.passwordConfirm),
-                      const SizedBox(height: DimenConstants.marginPaddingSmall),
-                      _getPasswordWidget(true),
-                      const SizedBox(
-                          height: DimenConstants.marginPaddingMedium),
-
                       // Register btn
                       const SizedBox(height: DimenConstants.marginPaddingSmall),
                       UIUtils.getLoginOutlineButton(
-                        StringConstants.register,
-                        _doRegister,
+                        StringConstants.update,
+                        _doUpdateInfo,
                       ),
 
                       const SizedBox(
@@ -223,63 +241,19 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
         ));
   }
 
-  void _doRegister() {
+  void _doUpdateInfo() {
     _formLoginKey.currentState!.save();
     if (_formLoginKey.currentState!.validate()) {
-      _controller.doRegister();
+      _controller.saveUserToFirebase();
     }
-  }
-
-  Widget _getPasswordWidget(bool isConfirmPassword) {
-    return PasswordField(
-      validator: isConfirmPassword
-          ? validatePasswordConfirm
-          : ValidateUtils.validatePassword,
-      onChange: (String? value) {
-        if (isConfirmPassword) {
-          _controller.confirmPassword.value = value ?? "";
-        } else {
-          _controller.password.value = value ?? "";
-        }
-      },
-    );
-  }
-
-  String? validatePasswordConfirm(String? confirmPw) {
-    if (confirmPw!.isEmpty) {
-      return StringConstants.errorPasswordEmpty;
-    }
-
-    String? pw = _controller.password.value;
-
-    Dog.d("pw: $pw, confirmPw: $confirmPw");
-    if (!ValidateUtils.isValidPasswordRetype(pw, confirmPw)) {
-      return StringConstants.errorPasswordNotMatch;
-    }
-    return null;
-  }
-
-  Widget _getTextInputWidget(bool isEmail) {
-    return TextInputField(
-      validator: isEmail
-          ? ValidateUtils.validateEmail
-          : ValidateUtils.validateUserName,
-      keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
-      onChange: (String? value) {
-        if (isEmail) {
-          _controller.email.value = value ?? "";
-        } else {
-          _controller.name.value = value ?? "";
-        }
-      },
-    );
   }
 
   void _pickTimeBirthday() async {
     DateTime? dateTime = await showDatePicker(
       context: context,
-      initialDate: TimeUtils.stringToDateTime(_controller.birthday.value) ??
-          DateTime.now(),
+      initialDate:
+          TimeUtils.stringToDateTime(_controller.userData.value.birthday) ??
+              DateTime.now(),
       firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
       lastDate: DateTime.now().add(
         const Duration(days: 3652),
@@ -290,12 +264,12 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
     );
     if (dateTime == null) return;
 
-    _controller.birthday.value = TimeUtils.dateTimeToString(dateTime);
+    _controller.userData.value.birthday = TimeUtils.dateTimeToString(dateTime);
 
     setState(() {
-      _birthdayController.text = _controller.birthday.value;
+      _birthdayController.text = _controller.userData.value.birthday ?? "";
     });
-    Dog.d("datetime_birthday: ${_controller.birthday.value}");
+    Dog.d("datetime_birthday: ${_controller.userData.value.birthday}");
   }
 
   Widget _buildGender() {
@@ -321,5 +295,15 @@ class _RegisterScreen extends BaseStatefulState<RegisterScreen> {
             );
           }),
     );
+  }
+
+  SnackbarController? snackbar;
+
+  void onTabEmail() {
+    if (snackbar != null) {
+      snackbar?.close();
+    }
+    snackbar = UIUtils.showSnackBar(
+        StringConstants.notification, StringConstants.messageEditEmail);
   }
 }

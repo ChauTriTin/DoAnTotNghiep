@@ -4,6 +4,12 @@ class UserData {
   String? name;
   String? uid;
   String? email;
+  String? phone;
+  String? bsx;
+  String? address;
+  String? birthday;
+  int? gender; // 0: Male, 1: female, 2: other
+
   String? avatar;
   String? fcmToken;
   double? lat;
@@ -13,6 +19,11 @@ class UserData {
     this.name,
     this.uid,
     this.email,
+    this.phone,
+    this.bsx,
+    this.address,
+    this.birthday,
+    this.gender,
     this.avatar,
     this.fcmToken,
     this.lat,
@@ -23,6 +34,11 @@ class UserData {
     name = json['name'];
     uid = json['uid'];
     email = json['email'];
+    phone = json['phone'];
+    bsx = json['bsx'];
+    address = json['address'];
+    birthday = json['birthday'];
+    gender = json['gender'];
     avatar = json['avatar'];
     fcmToken = json['fcmToken'];
     lat = json['lat'];
@@ -34,6 +50,11 @@ class UserData {
     data['name'] = name;
     data['uid'] = uid;
     data['email'] = email;
+    data['phone'] = phone;
+    data['bsx'] = bsx;
+    data['address'] = address;
+    data['birthday'] = birthday;
+    data['gender'] = gender;
     data['avatar'] = avatar;
     data['fcmToken'] = fcmToken;
     data['long'] = long;

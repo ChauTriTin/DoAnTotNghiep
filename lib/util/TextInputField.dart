@@ -17,17 +17,27 @@ class TextInputField extends StatefulWidget {
     this.keyboardType,
     this.onChange,
     this.initalText,
+    this.backgroundColor,
+    this.textColor,
+    this.isDisable,
+    this.onTap,
+    this.controller,
   });
 
   final Key? fieldKey;
   final TextInputType? keyboardType;
   final String? labelText;
+  final bool? isDisable;
   final String? initalText;
   final String? helperText;
   final FormFieldSetter<String>? onSaved;
+  final Color? backgroundColor;
+  final Color? textColor;
   final ValueChanged<String>? onChange;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onFieldSubmitted;
+  final GestureTapCallback? onTap;
+  final TextEditingController? controller;
 
   @override
   _TextInputField createState() => _TextInputField();
@@ -36,8 +46,19 @@ class TextInputField extends StatefulWidget {
 class _TextInputField extends BaseStatefulState<TextInputField> {
   @override
   Widget build(BuildContext context) {
+    if (widget.onTap != null) {
+      return GestureDetector(onTap: widget.onTap, child: getTextEditField());
+    } else {
+      return getTextEditField();
+    }
+  }
+
+  Widget getTextEditField() {
     return TextFormField(
-      style: const TextStyle(color: Colors.white),
+      controller: widget.controller,
+      enabled: !(widget.isDisable ?? false),
+      // readOnly: !(widget.isDisable ?? false) ,
+      style: TextStyle(color: widget.textColor ?? Colors.white),
       key: widget.fieldKey,
       onSaved: widget.onSaved,
       initialValue: widget.initalText,
@@ -59,7 +80,7 @@ class _TextInputField extends BaseStatefulState<TextInputField> {
           filled: true,
           // errorStyle: ,
           hintStyle: TextStyle(color: ColorConstants.textEditBgColor),
-          fillColor: ColorConstants.textEditBgColor),
+          fillColor: widget.backgroundColor ?? ColorConstants.textEditBgColor),
     );
   }
 

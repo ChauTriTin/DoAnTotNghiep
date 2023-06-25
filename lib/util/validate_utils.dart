@@ -33,6 +33,12 @@ class ValidateUtils {
     return regExp.hasMatch(format);
   }
 
+  static bool isValidPhoneFormat(String format) {
+    String pattern = r'^(84|0[3|5|7|8|9])+([0-9]{8})\b$';
+    RegExp regExp = RegExp(pattern);
+    return regExp.hasMatch(format);
+  }
+
   static String? validateEmail(String? value) {
     if (value!.isEmpty) return StringConstants.errorEmailEmpty;
     if (!ValidateUtils.isValidEmailFormat(value)) {
@@ -43,9 +49,32 @@ class ValidateUtils {
 
   static String? validateUserName(String? value) {
     if (value!.isEmpty) return StringConstants.errorNameEmpty;
-    if (!ValidateUtils.isValidNameFormat(value)) {
-      return StringConstants.errorNameRegex;
+    // if (!ValidateUtils.isValidNameFormat(value)) {
+    //   return StringConstants.errorNameRegex;
+    // }
+    return null;
+  }
+
+  static String? validatePhone(String? value) {
+    if (value!.isEmpty) return StringConstants.errorPhoneEmpty;
+    if (!ValidateUtils.isValidPhoneFormat(value)) {
+      return StringConstants.errorPhoneRegex;
     }
+    return null;
+  }
+
+  static String? validateBienSoXe(String? value) {
+    if (value!.isEmpty) return StringConstants.errorBSXEmpty;
+    return null;
+  }
+
+  static String? validateBirthday(String? value) {
+    if (value!.isEmpty) return StringConstants.errorBirthdayEmpty;
+    return null;
+  }
+
+  static String? validateAddress(String? value) {
+    if (value!.isEmpty) return StringConstants.errorAddressEmpty;
     return null;
   }
 
