@@ -338,7 +338,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              Get.to(const RateScreen());
+              Get.to(RateScreen(id: widget.id));
             },
             child: const Icon(Icons.rate_review),
           ),

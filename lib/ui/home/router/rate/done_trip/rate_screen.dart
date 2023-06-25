@@ -10,10 +10,10 @@ import 'package:lottie/lottie.dart';
 class RateScreen extends StatefulWidget {
   const RateScreen({
     super.key,
-    // required this.id,
+    required this.id,
   });
 
-  // final String id;
+  final String id;
 
   @override
   State<RateScreen> createState() => _RateScreenState();
@@ -74,7 +74,10 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Get.to(const FormScreen());
+                      Get.back(); //close this screen
+                      Get.to(FormScreen(
+                        id: widget.id,
+                      ));
                     },
                     child: Container(
                       alignment: Alignment.center,
