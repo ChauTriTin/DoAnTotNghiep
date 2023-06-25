@@ -114,7 +114,7 @@ class FormController extends BaseController {
       trip.value.rate = rate;
       Dog.e(">>>rate trip ${trip.toJson()}");
       FirebaseHelper.collectionReferenceRouter.doc(tripId).update({
-        "rate": rate,
+        "rate": rate.toJson(),
       });
       Dog.e(">>>rate success");
     } catch (e) {
