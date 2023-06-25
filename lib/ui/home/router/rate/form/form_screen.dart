@@ -111,6 +111,24 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           "Về chuyến đi",
           _controller.trip.value.title ?? "",
         ),
+        const SizedBox(height: DimenConstants.marginPaddingMedium),
+        const Divider(),
+        const SizedBox(height: DimenConstants.marginPaddingMedium),
+        _buildItem(
+          null,
+          "assets/images/ic_marker_start.png",
+          "Điểm xuất phát",
+          _controller.trip.value.placeStart?.name ?? "",
+        ),
+        const SizedBox(height: DimenConstants.marginPaddingMedium),
+        const Divider(),
+        const SizedBox(height: DimenConstants.marginPaddingMedium),
+        _buildItem(
+          null,
+          "assets/images/ic_marker_end.png",
+          "Địa điểm đến",
+          _controller.trip.value.placeEnd?.name ?? "",
+        ),
       ],
     );
   }
@@ -176,7 +194,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: ColorConstants.appColor,
-                  fontSize: DimenConstants.txtLarge,
+                  fontSize: DimenConstants.txtMedium,
                 ),
               ),
               Rate(
