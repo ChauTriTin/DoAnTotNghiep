@@ -63,14 +63,39 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
         );
       } else {
         return ListView.builder(
+          physics: const BouncingScrollPhysics(),
           itemCount: list.length,
           itemBuilder: (context, i) {
             return Container(
+              decoration: BoxDecoration(
+                  color: ColorConstants.colorWhite,
+                  border: Border.all(
+                    color: ColorConstants.colorWhite,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(DimenConstants.radiusMedium))),
               padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+              margin: EdgeInsets.only(
+                  top: i == 0 ? 0.0 : DimenConstants.marginPaddingMedium),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  UIUtils.getText(list[i].title ?? ""),
-                  UIUtils.getText(list[i].body ?? ""),
+                  Text(
+                    list[i].title ?? "",
+                    style: TextStyle(
+                      fontSize: DimenConstants.txtSmall,
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.textColorDisable,
+                    ),
+                  ),
+                  const SizedBox(height: DimenConstants.marginPaddingMedium),
+                  Text(
+                    list[i].body ?? "",
+                    style: const TextStyle(
+                      fontSize: DimenConstants.txtMedium,
+                      color: Colors.black,
+                    ),
+                  ),
                 ],
               ),
             );
