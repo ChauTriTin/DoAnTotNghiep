@@ -338,13 +338,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              _controller.completeTrip();
-              Get.to(RateScreen(
-                id: widget.id,
-                onRateSuccess: () {
-                  Get.back(); //close this screen when rate successfully
-                },
-              ));
+              if (_controller.iAmLeader()) {
+                _controller.completeTrip();
+                Get.to(RateScreen(
+                  id: widget.id,
+                  onRateSuccess: () {
+                    Get.back(); //close this screen when rate successfully
+                  },
+                ));
+              } else {
+                showSnackBarFull(StringConstants.warning,
+                    'Chỉ có Leader mới được phép hoàn tất chuyến đi');
+              }
             },
             child: const Icon(Icons.rate_review),
           ),

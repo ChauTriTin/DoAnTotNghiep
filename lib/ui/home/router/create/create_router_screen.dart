@@ -57,10 +57,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
         Get.to(CreateSuccessScreen(
           id: _controller.id,
-          dateTimeEnd: _controller.dateTimeEnd.value,
-          placeStart: _controller.placeStart.value,
-          placeEnd: _controller.placeEnd.value,
-          listPlaceStop: _controller.listPlaceStop,
+          // dateTimeEnd: _controller.dateTimeEnd.value,
+          // placeStart: _controller.placeStart.value,
+          // placeEnd: _controller.placeEnd.value,
+          // listPlaceStop: _controller.listPlaceStop,
         ));
       }
     });

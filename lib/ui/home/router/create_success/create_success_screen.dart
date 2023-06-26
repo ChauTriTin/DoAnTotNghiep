@@ -5,7 +5,6 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/bus/event_bus.dart';
-import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,17 +18,17 @@ class CreateSuccessScreen extends StatefulWidget {
   const CreateSuccessScreen({
     super.key,
     required this.id,
-    required this.dateTimeEnd,
-    required this.placeStart,
-    required this.placeEnd,
-    required this.listPlaceStop,
+    // required this.dateTimeEnd,
+    // required this.placeStart,
+    // required this.placeEnd,
+    // required this.listPlaceStop,
   });
 
   final String id;
-  final DateTime dateTimeEnd;
-  final Place placeStart;
-  final Place placeEnd;
-  final List<Place> listPlaceStop;
+  // final DateTime dateTimeEnd;
+  // final Place placeStart;
+  // final Place placeEnd;
+  // final List<Place> listPlaceStop;
 
   @override
   State<CreateSuccessScreen> createState() => _CreateSuccessScreenState();
@@ -43,6 +42,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
   void initState() {
     super.initState();
     _listenBus();
+    _controller.getRouter(widget.id);
   }
 
   void _listenBus() {
@@ -158,7 +158,8 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                             Expanded(
                               child: SlideCountdownSeparated(
                                 showZeroValue: true,
-                                duration: widget.dateTimeEnd
+                                duration: _controller
+                                    .getDateTimeEnd()
                                     .difference(DateTime.now()),
                                 // separatorType: SeparatorType.title,
                                 // slideDirection: SlideDirection.up,

@@ -257,32 +257,32 @@ class MapController extends BaseController {
     }
   }
 
-  Future<void> _genDistance() async {
-    DistanceValue distanceBetween = await distance(
-      9.2460524,
-      1.2144565,
-      6.1271617,
-      1.2345417,
-    );
-    int meters = distanceBetween.meters;
-    String textInKmOrMeters = distanceBetween.text;
-    debugPrint(
-        ">>>_genDistance meters $meters, textInKmOrMeters $textInKmOrMeters");
-  }
-
-  Future<void> _genDuration() async {
-    DurationValue durationBetween = await duration(
-      9.2460524,
-      1.2144565,
-      6.1271617,
-      1.2345417,
-    );
-
-    int seconds = durationBetween.seconds;
-    String durationInMinutesOrHours = durationBetween.text;
-    debugPrint(
-        ">>>_genDuration seconds $seconds, durationInMinutesOrHours $durationInMinutesOrHours");
-  }
+  // Future<void> _genDistance() async {
+  //   DistanceValue distanceBetween = await distance(
+  //     9.2460524,
+  //     1.2144565,
+  //     6.1271617,
+  //     1.2345417,
+  //   );
+  //   int meters = distanceBetween.meters;
+  //   String textInKmOrMeters = distanceBetween.text;
+  //   debugPrint(
+  //       ">>>_genDistance meters $meters, textInKmOrMeters $textInKmOrMeters");
+  // }
+  //
+  // Future<void> _genDuration() async {
+  //   DurationValue durationBetween = await duration(
+  //     9.2460524,
+  //     1.2144565,
+  //     6.1271617,
+  //     1.2345417,
+  //   );
+  //
+  //   int seconds = durationBetween.seconds;
+  //   String durationInMinutesOrHours = durationBetween.text;
+  //   debugPrint(
+  //       ">>>_genDuration seconds $seconds, durationInMinutesOrHours $durationInMinutesOrHours");
+  // }
 
   Future<void> postFCM(
     String body,
@@ -395,5 +395,12 @@ class MapController extends BaseController {
     listMarkerGoogleMap.refresh();
     debugPrint(
         "_createMaker size setListMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
+  }
+
+  bool iAmLeader() {
+    if (currentUserData.value.uid == trip.value.userIdHost) {
+      return true;
+    }
+    return false;
   }
 }

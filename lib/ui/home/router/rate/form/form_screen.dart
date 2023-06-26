@@ -1,6 +1,7 @@
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/router/rate/form/form_controller.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
@@ -355,6 +356,8 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                           Get.back(); //close this popup
                           Get.back(); //close this screen
                           widget.onRateSuccess.call();
+                          showSnackBarFull(
+                              StringConstants.warning, "Đánh giá thành công");
                         },
                         style: ElevatedButton.styleFrom(
                           shape: const StadiumBorder(),
