@@ -197,7 +197,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                       child: Container(
                         alignment: Alignment.center,
                         width: Get.width,
-                        height: Get.height / 7,
+                        height: Get.height / 10,
                         decoration: BoxDecoration(
                           color: isDoneCountdown
                               ? Colors.white
@@ -211,8 +211,8 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                             Radius.circular(DimenConstants.radiusRound),
                           ),
                         ),
-                        padding: const EdgeInsets.all(
-                            DimenConstants.marginPaddingMedium),
+                        // padding: const EdgeInsets.all(
+                        //     DimenConstants.marginPaddingMedium),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -231,7 +231,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                             const SizedBox(
                                 width: DimenConstants.marginPaddingMedium),
                             Expanded(
-                              flex: 2,
+                              flex: 1,
                               child: Text(
                                 "${_controller.trip.value.listIdMember?.length ?? 0}",
                                 style: TextStyle(
@@ -260,9 +260,14 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                             const SizedBox(
                                 width: DimenConstants.marginPaddingMedium),
                             Expanded(
-                                flex: 1,
-                                child: Image.asset(
-                                    "assets/images/ic_launcher.png")),
+                              flex: 2,
+                              child: Lottie.asset(
+                                'assets/files/people.json',
+                                fit: BoxFit.fitWidth,
+                                width: Get.width,
+                                // height: Get.height,
+                              ),
+                            ),
                           ],
                         ),
                       ),
