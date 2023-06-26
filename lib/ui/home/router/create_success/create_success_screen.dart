@@ -25,6 +25,7 @@ class CreateSuccessScreen extends StatefulWidget {
   });
 
   final String id;
+
   // final DateTime dateTimeEnd;
   // final Place placeStart;
   // final Place placeEnd;
@@ -169,6 +170,60 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                                 replacement: Image.asset(
                                   "assets/images/ic_launcher.png",
                                 ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                        height: (DimenConstants.marginPaddingMedium) * 5),
+                    InkWell(
+                      onTap: () {},
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: Get.width,
+                        height: Get.height / 7,
+                        decoration: BoxDecoration(
+                          color: isDoneCountdown
+                              ? Colors.white
+                              : ColorConstants.colorLanguage.withOpacity(0.5),
+                          border: Border.all(
+                            color: isDoneCountdown
+                                ? Colors.white
+                                : ColorConstants.appColor.withOpacity(0.5),
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(DimenConstants.radiusRound),
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(
+                            DimenConstants.marginPaddingMedium),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                'SỐ NGƯỜI\nTHAM GIA',
+                                style: TextStyle(
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            const SizedBox(
+                                width: DimenConstants.marginPaddingMedium),
+                            Expanded(
+                              child: Text(
+                                "${_controller.trip.value.listIdMember?.length ?? 0}",
+                                style: const TextStyle(
+                                  fontSize: 80.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ],
