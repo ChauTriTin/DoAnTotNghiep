@@ -133,14 +133,69 @@ class UIUtils {
     );
   }
 
+  static Container getButtonFill(
+    String text,
+    VoidCallback? onPressed, {
+    double marginTop = DimenConstants.marginPaddingMedium,
+  }) {
+    return Container(
+        margin: EdgeInsets.only(top: marginTop),
+        height: DimenConstants.buttonHeight,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: ColorConstants.appColor,
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(DimenConstants.radiusMedium),
+                side: BorderSide(
+                  color: const Color(0xFF8C98A8).withOpacity(0.2),
+                  width: 0.5,
+                ),
+              ),
+            ),
+            onPressed: onPressed,
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: ColorConstants.colorWhite,
+                fontSize: DimenConstants.txtMedium,
+              ),
+            )));
+  }
+
   static Widget getTextSpanCount(String title, int count) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
+      padding:
+          const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
       child: RichText(
-          text: TextSpan(text: title, style: const TextStyle(
-            color: ColorConstants.textColor1,
-            fontSize: DimenConstants.txtMedium,
-          ), children: [
+          text: TextSpan(
+              text: title,
+              style: const TextStyle(
+                color: ColorConstants.textColor1,
+                fontSize: DimenConstants.txtMedium,
+              ),
+              children: [
+            TextSpan(
+              text: count.toString(),
+              style: UIUtils.getStyleText500(),
+            ),
+          ])),
+    );
+  }
+
+  static Widget getTextSpanCountDouble(String title, double count) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
+      child: RichText(
+          text: TextSpan(
+              text: title,
+              style: const TextStyle(
+                color: ColorConstants.textColor1,
+                fontSize: DimenConstants.txtMedium,
+              ),
+              children: [
             TextSpan(
               text: count.toString(),
               style: UIUtils.getStyleText500(),
@@ -151,14 +206,15 @@ class UIUtils {
 
   static Widget getTextSpan(String title, String name) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
+      padding:
+          const EdgeInsets.only(bottom: DimenConstants.marginPaddingMedium),
       child: RichText(
           text: TextSpan(text: title, style: UIUtils.getStyleText(), children: [
-            TextSpan(
-              text: name,
-              style: UIUtils.getStyleText500(),
-            ),
-          ])),
+        TextSpan(
+          text: name,
+          style: UIUtils.getStyleText500(),
+        ),
+      ])),
     );
   }
 
@@ -181,7 +237,8 @@ class UIUtils {
           color: borderColor ?? Colors.red,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
+          borderRadius:
+              BorderRadius.circular(DimenConstants.radiusLoginBtnRound),
         ),
       ),
       child: Text(text),
@@ -193,9 +250,16 @@ class UIUtils {
     VoidCallback? onPressed,
   ) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
+        margin: const EdgeInsets.symmetric(
+            horizontal: DimenConstants.marginPaddingExtraLarge),
         width: double.infinity,
-        child: UIUtils.getOutlineButton1(text, onPressed, ColorConstants.colorWhite, DimenConstants.paddingLoginBtn, ColorConstants.loginBtnTextColor, ColorConstants.loginBtnBgColor));
+        child: UIUtils.getOutlineButton1(
+            text,
+            onPressed,
+            ColorConstants.colorWhite,
+            DimenConstants.paddingLoginBtn,
+            ColorConstants.loginBtnTextColor,
+            ColorConstants.loginBtnBgColor));
   }
 
   static BoxDecoration getBoxDecorationLoginBg() {
@@ -227,7 +291,8 @@ class UIUtils {
     return Container(
       alignment: Alignment.centerLeft,
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingTiny),
       child: Text(text,
           style: const TextStyle(
             color: Colors.white,
@@ -240,7 +305,8 @@ class UIUtils {
     return Container(
       alignment: Alignment.centerLeft,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingTiny),
+      padding: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingTiny),
       child: Text(text,
           style: const TextStyle(
             color: ColorConstants.textColor,
@@ -259,6 +325,12 @@ class UIUtils {
     );
   }
 
+  static RoundedRectangleBorder getCardCorner() {
+    return RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(DimenConstants.cardCorner),
+    );
+  }
+
   static TextStyle getStyleText() {
     return const TextStyle(
       color: Colors.black,
@@ -268,51 +340,44 @@ class UIUtils {
 
   static TextStyle getStyleText500() {
     return const TextStyle(
-      color: Colors.black,
-      fontSize: DimenConstants.txtMedium,
-        fontWeight: FontWeight.w500
-    );
+        color: Colors.black,
+        fontSize: DimenConstants.txtMedium,
+        fontWeight: FontWeight.w500);
   }
 
   static TextStyle getStyleText500Medium1() {
     return const TextStyle(
-      color: ColorConstants.titleColor,
-      fontSize: DimenConstants.txtMedium1,
-        fontWeight: FontWeight.w600
-    );
+        color: ColorConstants.titleColor,
+        fontSize: DimenConstants.txtMedium1,
+        fontWeight: FontWeight.w600);
   }
 
   static TextStyle getStyleTextMedium600() {
     return const TextStyle(
         color: Colors.black,
         fontSize: DimenConstants.txtMedium,
-        fontWeight: FontWeight.w600
-    );
+        fontWeight: FontWeight.w600);
   }
 
   static TextStyle getStyleTextSmall300() {
     return const TextStyle(
         color: Colors.black,
         fontSize: DimenConstants.txtSmall,
-        fontWeight: FontWeight.w300
-    );
+        fontWeight: FontWeight.w300);
   }
-
 
   static TextStyle getStyleTextSmall400() {
     return const TextStyle(
         color: Colors.black,
         fontSize: DimenConstants.txtSmall,
-        fontWeight: FontWeight.w400
-    );
+        fontWeight: FontWeight.w400);
   }
 
   static TextStyle getStyleTextLarge500() {
     return const TextStyle(
-      color: Colors.black,
-      fontSize: DimenConstants.txtLarge,
-      fontWeight: FontWeight.w500
-    );
+        color: Colors.black,
+        fontSize: DimenConstants.txtLarge,
+        fontWeight: FontWeight.w500);
   }
 
   static TextStyle getCustomFontTextStyle() {
@@ -584,7 +649,8 @@ class UIUtils {
     );
   }
 
-  static Widget buildHorizontalDivider(Color color, double width, double height) {
+  static Widget buildHorizontalDivider(
+      Color color, double width, double height) {
     return Container(
       margin: const EdgeInsets.all(0.0),
       height: height,
@@ -602,7 +668,8 @@ class UIUtils {
     );
   }
 
-  static void showFullWidthSnackBar(String title, String message, {bool isTop = true}) {
+  static void showFullWidthSnackBar(String title, String message,
+      {bool isTop = true}) {
     Get.snackbar(
       title,
       message,
@@ -629,7 +696,8 @@ class UIUtils {
     );
   }
 
-  static void showFullWidthSnackBarError(String title, String message, {bool isTop = true}) {
+  static void showFullWidthSnackBarError(String title, String message,
+      {bool isTop = true}) {
     Get.snackbar(
       title,
       message,

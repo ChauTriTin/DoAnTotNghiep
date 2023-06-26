@@ -1,10 +1,10 @@
+import 'dart:convert';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
 import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
-import 'package:appdiphuot/ui/home/user/place_detail/page_detail_trip_screen.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +12,9 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
-import '../../../common/extension/build_context_extension.dart';
-import '../../../model/place.dart';
+import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
-import '../../user_singleton_controller.dart';
+import '../../../view/avatar_widget.dart';
 import '../home/detail/page_detail_router_screen.dart';
 
 class PageUserScreen extends StatefulWidget {
@@ -76,11 +75,10 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
     return SizedBox(
         width: double.infinity,
         child: ListView(physics: const BouncingScrollPhysics(), children: [
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+          const AvatarWidget(),
           // Chuyến đi đang tham gia
           Card(
+              shape: UIUtils.getCardCorner(),
               margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
               color: ColorConstants.cardBg,
               shadowColor: Colors.grey,
@@ -89,11 +87,11 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: DimenConstants.marginPaddingMedium,
+                    height: DimenConstants.marginPaddingMLarge,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: DimenConstants.marginPaddingMedium),
+                        left: DimenConstants.marginPaddingLarge),
                     child: Text(
                       StringConstants.tripInProgress,
                       style: UIUtils.getStyleText500Medium1(),
@@ -102,12 +100,13 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
-                  _buildListTripInProgress()
+                  _buildListTripInProgress(_controller.tripsInProgress)
                 ],
               )),
 
           // Chuyến đi bạn tạo
           Card(
+              shape: UIUtils.getCardCorner(),
               margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
               color: ColorConstants.cardBg,
               shadowColor: Colors.grey,
@@ -116,11 +115,11 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: DimenConstants.marginPaddingMedium,
+                    height: DimenConstants.marginPaddingMLarge,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: DimenConstants.marginPaddingMedium),
+                        left: DimenConstants.marginPaddingLarge),
                     child: Text(
                       StringConstants.tripHost,
                       style: UIUtils.getStyleText500Medium1(),
@@ -129,10 +128,11 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                   const SizedBox(
                     height: DimenConstants.marginPaddingMedium,
                   ),
-                  _listTrips(_controller.tripsHost),
+                  _buildListTripInProgress(_controller.tripsHost)
                 ],
               )),
           Card(
+            shape: UIUtils.getCardCorner(),
             margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
             color: ColorConstants.cardBg,
             shadowColor: Colors.grey,
@@ -141,12 +141,12 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: DimenConstants.marginPaddingMedium,
+                  height: DimenConstants.marginPaddingMLarge,
                 ),
                 // Chuyến đi đã tham gia
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: DimenConstants.marginPaddingMedium),
+                      left: DimenConstants.marginPaddingLarge),
                   child: Text(
                     StringConstants.tripParticipated,
                     style: UIUtils.getStyleText500Medium1(),
@@ -164,6 +164,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             ),
           ),
           Card(
+              shape: UIUtils.getCardCorner(),
               margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
               color: ColorConstants.cardBg,
               shadowColor: Colors.grey,
@@ -249,12 +250,14 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
   }
 
   void _onPressTripItem(Trip trip) {
-    Get.to(PageDetailTrip(tripData: trip));
+    Get.to(() => const DetailRouterScreen(), arguments: [
+      {Constants.detailTrip: jsonEncode(trip)},
+    ]);
   }
 
   Widget _buildTripInfo() {
     return Padding(
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        padding: const EdgeInsets.all(DimenConstants.marginPaddingLarge),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -272,21 +275,18 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
             const SizedBox(
               height: DimenConstants.marginPaddingSmall,
             ),
-            UIUtils.getTextSpanCount(StringConstants.tripParticipatedCount,
-                _controller.trips.length),
             UIUtils.getTextSpanCount(
-                StringConstants.leadTripCount, _controller.tripsHost.length),
-            UIUtils.getTextSpanCount(
-                StringConstants.totalKm, _controller.totalKm.value),
-            const SizedBox(
-              height: DimenConstants.marginPaddingMedium,
-            ),
+                "👨‍👧‍👦 ${StringConstants.tripParticipatedCount}",
+                _controller.trips.length + _controller.tripsInProgress.length),
+            UIUtils.getTextSpanCount("🤴 ${StringConstants.leadTripCount}",
+                _controller.tripsHost.length),
+            UIUtils.getTextSpanCountDouble(
+                "📏 ${StringConstants.totalKm}", _controller.totalKm.value),
           ],
         ));
   }
 
-  Widget _buildListTripInProgress() {
-    var trips = _controller.tripsInProgress;
+  Widget _buildListTripInProgress(List<Trip> trips) {
     if (trips.isEmpty) {
       return Container(
         margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
@@ -368,7 +368,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                     height: DimenConstants.marginMMedium,
                   ),
                   Text(
-                    "🕰️ ${StringConstants.time}${trip.timeStart}",
+                    "🕒 ${StringConstants.time}${trip.timeStart}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                         color: ColorConstants.textColor,
@@ -390,7 +390,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                     height: DimenConstants.marginMMedium,
                   ),
                   Text(
-                    "👤 ${StringConstants.leadTripName}${trip.userHostName ?? ""}",
+                    "💀 ${StringConstants.leadTripName}${trip.userHostName ?? ""}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                         color: ColorConstants.textColor,

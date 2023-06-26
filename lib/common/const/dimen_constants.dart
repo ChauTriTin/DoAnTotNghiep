@@ -3,6 +3,7 @@ class DimenConstants {
   static const double marginPaddingSmall = 7.5;
   static const double marginPaddingMedium = 15.0;
   static const double marginMMedium = 10.0;
+  static const double marginPaddingMLarge = 20.0;
   static const double marginPaddingLarge = 30.0;
   static const double marginPaddingExtraLarge = 40.0;
   static const double marginPadding98 = 98;
@@ -46,7 +47,7 @@ class DimenConstants {
   static const double iconSizeSmall = 24;
   static const double loginIconSize = 50;
   static const double iconSizePadding = 6;
-  static const double avatarProfile = 100;
+  static const double avatarProfile = 150;
   static const double avatarProfile2 = 100;
   static const double circleShape = 40;
   static const double dividerHeight = 0.5;
@@ -54,4 +55,5 @@ class DimenConstants {
 
   // Icon Back Login Page
   static const double circleBackBg = 130;
+  static const double cardCorner = 20;
 }

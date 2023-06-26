@@ -22,6 +22,7 @@ import '../../../../model/place.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 import '../../setting/setting_screen.dart';
+import '../../user/user_preview/page_user_preview_screen.dart';
 
 class DetailRouterScreen extends StatefulWidget {
   const DetailRouterScreen({Key? key}) : super(key: key);
@@ -215,61 +216,68 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   }
 
   Widget _leader() {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 24, right: 24),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 12),
-                      child: Text(
-                        "Leader: ${_controller.userLeaderData.value.name}",
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+    return InkWell(
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 24, right: 24),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        color: Colors.yellow,
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 54, right: 24),
-                child: RatingBar.builder(
-                  ignoreGestures: true,
-                  initialRating: 3,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemSize: 20,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.red,
+                      Container(
+                        margin: const EdgeInsets.only(left: 12),
+                        child: Text(
+                          "Leader: ${_controller.userLeaderData.value.name}",
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
                   ),
-                  onRatingUpdate: (rating) {},
                 ),
-              ),
-            ],
+                Container(
+                  margin: const EdgeInsets.only(left: 54, right: 24),
+                  child: RatingBar.builder(
+                    ignoreGestures: true,
+                    initialRating: 3,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 20,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.red,
+                    ),
+                    onRatingUpdate: (rating) {},
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Container(
-            margin: const EdgeInsets.only(right: 24),
-            child: Center(
-                child: Image.network(
-              _controller.getLeaderAvatar(),
-              height: 50,
-              width: 50,
-            ))),
-      ],
+          Container(
+              margin: const EdgeInsets.only(right: 24),
+              child: Center(
+                  child: Image.network(
+                _controller.getLeaderAvatar(),
+                height: 50,
+                width: 50,
+              ))),
+        ],
+      ),
+      onTap: () {
+        Get.to(() => const PageUserPreviewScreen(), arguments: [
+          { Constants.user: _controller.userLeaderData.value.uid ?? "" }
+        ]);
+      },
     );
   }
 
@@ -767,6 +775,16 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     _slideShowImage(context),
                     _infoRouter(),
                     _listButtonEvent(),
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          left: DimenConstants.marginPaddingMedium),
+                      child: Text(
+                        "*** Yêu cầu: ${_controller.detailTrip.value.require}",
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     _divider(12),
                     _leader(),
                     _divider(0),

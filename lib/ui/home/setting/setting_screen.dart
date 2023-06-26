@@ -2,25 +2,15 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/authentication/landing_page/page_authentication_screen.dart';
 import 'package:appdiphuot/ui/home/setting/setting_controller.dart';
-import 'package:appdiphuot/ui/home/user/page_user_controller.dart';
-import 'package:appdiphuot/ui/home/user/place_detail/page_detail_trip_screen.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
-import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
-import 'package:provider/provider.dart';
 
-import '../../../common/extension/build_context_extension.dart';
-import '../../../model/place.dart';
-import '../../../model/trip.dart';
 import '../../../util/theme_util.dart';
 import '../../../view/profile_bar_widget.dart';
 import '../../user_singleton_controller.dart';
-import '../home/detail/page_detail_router_screen.dart';
 
 class PageSettingScreen extends StatefulWidget {
   const PageSettingScreen({
@@ -89,6 +79,8 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
     return Container(
         width: double.infinity,
         color: ColorConstants.colorWhite,
+        margin: const EdgeInsets.symmetric(
+            horizontal: DimenConstants.marginPaddingMedium),
         child: ListView(physics: const BouncingScrollPhysics(), children: [
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
@@ -105,54 +97,52 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           const SizedBox(
             height: DimenConstants.marginPaddingTiny,
           ),
+
+          // Mail
           Text(
             UserSingletonController.instance.getEmail(),
             style: UIUtils.getStyleTextSmall300(),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
-            height: DimenConstants.marginPaddingLarge,
-          ),
-          getText(ColorConstants.colorProfile, StringConstants.editProfile,
-              _controller.navigateToEditProfile),
-          const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
+
+          // Setting
           Padding(
             padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             child: Text(
               StringConstants.generalSetting,
-              style: UIUtils.getStyleText(),
+              style: UIUtils.getStyleTextLarge500(),
             ),
           ),
           getDarkMode(),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+          getDivider(),
           getText(
               ColorConstants.colorLanguage, StringConstants.language, () {}),
           const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
+            height: DimenConstants.marginPaddingSmall,
           ),
+          getDivider(),
           getText(ColorConstants.colorAbout, StringConstants.about, () {}),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+
+          getDivider(),
           getText(ColorConstants.colorTermCondition,
               StringConstants.termCondition, () {}),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+
+          getDivider(),
           getText(ColorConstants.colorPolicy, StringConstants.policy, () {}),
-          const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
-          ),
+
+          getDivider(),
           getText(ColorConstants.colorRateApp, StringConstants.rate, () {}),
+
+          getDivider(),
           const SizedBox(
             height: DimenConstants.marginPaddingMedium,
           ),
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingExtraLarge),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: DimenConstants.marginPaddingExtraLarge),
               child: UIUtils.getOutlineButton(
                 StringConstants.signOut,
                 () {
@@ -164,6 +154,17 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             height: DimenConstants.marginPaddingMedium,
           ),
         ]));
+  }
+
+  Widget getDivider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+          horizontal: DimenConstants.marginPaddingMLarge),
+      child: const Divider(
+        color: ColorConstants.dividerColor,
+        thickness: DimenConstants.dividerHeight,
+      ),
+    );
   }
 
   Widget getDarkMode() {

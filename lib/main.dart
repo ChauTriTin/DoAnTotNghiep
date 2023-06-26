@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
@@ -45,6 +46,7 @@ void main() async {
   Get.put(UserSingletonController.instance);
   getLoc();
   ThemeModeNotifier.instance.getDarkModeStatus();
+  GoogleMapsDirections.init(googleAPIKey: "AIzaSyAyXE57uyeaXMaXRlaNa-txkcNH6SaWXcU");
 
   runApp(
     OverlaySupport.global(
