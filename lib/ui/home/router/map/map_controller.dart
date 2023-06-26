@@ -396,4 +396,11 @@ class MapController extends BaseController {
     debugPrint(
         "_createMaker size setListMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
+
+  bool iAmLeader() {
+    if (currentUserData.value.uid == trip.value.userIdHost) {
+      return true;
+    }
+    return false;
+  }
 }
