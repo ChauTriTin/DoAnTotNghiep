@@ -85,12 +85,26 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       "TẠO THÀNH CÔNG",
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                         color: ColorConstants.appColor,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: const Offset(3.0, 3.0),
+                            blurRadius: 3.0,
+                            color: ColorConstants.errorBorderTextInputColor
+                                .withOpacity(0.5),
+                          ),
+                          Shadow(
+                            offset: const Offset(3.0, 3.0),
+                            blurRadius: 8.0,
+                            color: ColorConstants.errorBorderTextInputColor
+                                .withOpacity(0.5),
+                          ),
+                        ],
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -203,10 +217,11 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Expanded(
+                              flex: 2,
                               child: Text(
-                                'SỐ NGƯỜI\nTHAM GIA',
+                                'SỐ NGƯỜI THAM GIA',
                                 style: TextStyle(
-                                  fontSize: 25.0,
+                                  fontSize: 23.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
@@ -216,16 +231,38 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                             const SizedBox(
                                 width: DimenConstants.marginPaddingMedium),
                             Expanded(
+                              flex: 2,
                               child: Text(
                                 "${_controller.trip.value.listIdMember?.length ?? 0}",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 80.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red,
+                                  fontStyle: FontStyle.italic,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      offset: const Offset(10.0, 10.0),
+                                      blurRadius: 3.0,
+                                      color: ColorConstants.colorPink
+                                          .withOpacity(0.3),
+                                    ),
+                                    Shadow(
+                                      offset: const Offset(10.0, 10.0),
+                                      blurRadius: 8.0,
+                                      color: ColorConstants.colorPink
+                                          .withOpacity(0.3),
+                                    ),
+                                  ],
                                 ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                            const SizedBox(
+                                width: DimenConstants.marginPaddingMedium),
+                            Expanded(
+                                flex: 1,
+                                child: Image.asset(
+                                    "assets/images/ic_launcher.png")),
                           ],
                         ),
                       ),
