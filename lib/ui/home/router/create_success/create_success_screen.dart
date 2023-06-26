@@ -25,6 +25,7 @@ class CreateSuccessScreen extends StatefulWidget {
   });
 
   final String id;
+
   // final DateTime dateTimeEnd;
   // final Place placeStart;
   // final Place placeEnd;
@@ -67,14 +68,6 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
       body: Stack(
         children: [
           Lottie.asset('assets/files/wave.json'),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Lottie.asset(
-              'assets/files/wave_1.json',
-              fit: BoxFit.fitWidth,
-              width: Get.width,
-            ),
-          ),
           Obx(() {
             var isDoneCountdown = _controller.isDoneCountdown.value;
             return Padding(
@@ -84,12 +77,26 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       "TẠO THÀNH CÔNG",
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                         color: ColorConstants.appColor,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: const Offset(3.0, 3.0),
+                            blurRadius: 3.0,
+                            color: ColorConstants.errorBorderTextInputColor
+                                .withOpacity(0.5),
+                          ),
+                          Shadow(
+                            offset: const Offset(3.0, 3.0),
+                            blurRadius: 8.0,
+                            color: ColorConstants.errorBorderTextInputColor
+                                .withOpacity(0.5),
+                          ),
+                        ],
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -175,12 +182,99 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                        height: (DimenConstants.marginPaddingMedium) * 5),
+                    InkWell(
+                      onTap: () {},
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: Get.width,
+                        height: Get.height / 7,
+                        decoration: BoxDecoration(
+                          color: isDoneCountdown
+                              ? Colors.white
+                              : ColorConstants.colorLanguage.withOpacity(0.5),
+                          border: Border.all(
+                            color: isDoneCountdown
+                                ? Colors.white
+                                : ColorConstants.appColor.withOpacity(0.5),
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(DimenConstants.radiusRound),
+                          ),
+                        ),
+                        // padding: const EdgeInsets.all(
+                        //     DimenConstants.marginPaddingMedium),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Expanded(
+                              flex: 2,
+                              child: Text(
+                                'SỐ NGƯỜI THAM GIA',
+                                style: TextStyle(
+                                  fontSize: 23.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            const SizedBox(
+                                width: DimenConstants.marginPaddingMedium),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                "${_controller.trip.value.listIdMember?.length ?? 0}",
+                                style: TextStyle(
+                                  fontSize: 80.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                  fontStyle: FontStyle.italic,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      offset: const Offset(10.0, 10.0),
+                                      blurRadius: 3.0,
+                                      color: ColorConstants.colorPink
+                                          .withOpacity(0.3),
+                                    ),
+                                    Shadow(
+                                      offset: const Offset(10.0, 10.0),
+                                      blurRadius: 8.0,
+                                      color: ColorConstants.colorPink
+                                          .withOpacity(0.3),
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            const SizedBox(
+                                width: DimenConstants.marginPaddingMedium),
+                            Lottie.asset(
+                              'assets/files/people.json',
+                              fit: BoxFit.fitWidth,
+                              width: 105,
+                              // height: Get.height / 2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: DimenConstants.marginPaddingLarge),
                   ],
                 ),
               ),
             );
           }),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Lottie.asset(
+              'assets/files/wave_1.json',
+              fit: BoxFit.fitWidth,
+              width: Get.width,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
               DimenConstants.marginPaddingMedium,
