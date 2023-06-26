@@ -68,14 +68,6 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
       body: Stack(
         children: [
           Lottie.asset('assets/files/wave.json'),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Lottie.asset(
-              'assets/files/wave_1.json',
-              fit: BoxFit.fitWidth,
-              width: Get.width,
-            ),
-          ),
           Obx(() {
             var isDoneCountdown = _controller.isDoneCountdown.value;
             return Padding(
@@ -197,7 +189,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                       child: Container(
                         alignment: Alignment.center,
                         width: Get.width,
-                        height: Get.height / 10,
+                        height: Get.height / 7,
                         decoration: BoxDecoration(
                           color: isDoneCountdown
                               ? Colors.white
@@ -259,14 +251,11 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                             ),
                             const SizedBox(
                                 width: DimenConstants.marginPaddingMedium),
-                            Expanded(
-                              flex: 2,
-                              child: Lottie.asset(
-                                'assets/files/people.json',
-                                fit: BoxFit.fitWidth,
-                                width: Get.width,
-                                // height: Get.height,
-                              ),
+                            Lottie.asset(
+                              'assets/files/people.json',
+                              fit: BoxFit.fitWidth,
+                              width: 105,
+                              // height: Get.height / 2,
                             ),
                           ],
                         ),
@@ -278,6 +267,14 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               ),
             );
           }),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Lottie.asset(
+              'assets/files/wave_1.json',
+              fit: BoxFit.fitWidth,
+              width: Get.width,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
               DimenConstants.marginPaddingMedium,
