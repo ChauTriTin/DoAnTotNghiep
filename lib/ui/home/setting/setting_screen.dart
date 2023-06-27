@@ -3,6 +3,7 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/setting/setting_controller.dart';
+import 'package:appdiphuot/ui/home/setting/setting_ui_util.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
@@ -121,35 +122,39 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           ),
           getDarkMode(),
           getDivider(),
-          getText(
-              ColorConstants.colorLanguage, StringConstants.language, () {}),
+
+          // Language
+          _buildLanguageItem(),
           const SizedBox(
             height: DimenConstants.marginPaddingSmall,
           ),
           getDivider(),
-          getText(ColorConstants.colorAbout, StringConstants.about, () {
-            _showDialogMsg(StringConstants.about, StringConstants.aboutDetail);
+          buildItemSetting(ColorConstants.colorAbout, StringConstants.about,
+              () {
+            showDialogMsg(
+                StringConstants.about, StringConstants.aboutDetail, context);
           }),
 
           // Term & condition
           getDivider(),
-          getText(
+          buildItemSetting(
               ColorConstants.colorTermCondition, StringConstants.termCondition,
               () {
-            _showDialogMsg(StringConstants.termCondition,
-                StringConstants.termConditionDetail);
+            showDialogMsg(StringConstants.termCondition,
+                StringConstants.termConditionDetail, context);
           }),
 
           // Policy
           getDivider(),
-          getText(ColorConstants.colorPolicy, StringConstants.policy, () {
-            _showDialogMsg(
-                StringConstants.policy, StringConstants.policyDetail);
+          buildItemSetting(ColorConstants.colorPolicy, StringConstants.policy,
+              () {
+            showDialogMsg(
+                StringConstants.policy, StringConstants.policyDetail, context);
           }),
 
           // Rating
           getDivider(),
-          getText(ColorConstants.colorRateApp, StringConstants.rate,
+          buildItemSetting(ColorConstants.colorRateApp, StringConstants.rate,
               _showRatingApp),
 
           getDivider(),
@@ -180,17 +185,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
         ]));
   }
 
-  void _showRatingApp() async {
-    const String packageName = 'com.booking'; // Replace with your app's package name on the Play Store
-    const String url = 'market://details?id=$packageName';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      Dog.d('_showRatingApp Could not launch $url');
-    }
-  }
-
-  void _showDialogMsg(String title, String body) {
+  void _showDialogSelectLanguage() {
     showMaterialModalBottomSheet(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
@@ -198,10 +193,15 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           ),
         ),
         context: context,
-        builder: (context) => _buildBodyDialog(title, body));
+        builder: (context) => _buildListItemDialog(
+            context, _controller.languages, StringConstants.selectLanguage));
   }
 
-  Widget _buildBodyDialog(String title, String body) {
+  Widget _buildListItemDialog(
+    BuildContext context,
+    List<String> items,
+    String title,
+  ) {
     return Container(
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -218,17 +218,100 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             UIUtils.headerDialog(title),
             const SizedBox(height: DimenConstants.marginPaddingMedium),
             Expanded(
-                child: SingleChildScrollView(
-              child: Text(
-                body,
-                style: UIUtils.getStyleText(),
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var item = items[index];
+                  return buildStringItem(item);
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return getDivider();
+                },
               ),
-            )),
+            ),
             const SizedBox(height: DimenConstants.marginPaddingLarge),
           ],
         ),
       ),
     );
+  }
+
+  Widget buildStringItem(String item) {
+    return InkWell(
+        onTap: () {
+          _controller.updateLanguage(item);
+        },
+        child: Padding(
+          padding: const EdgeInsetsDirectional.symmetric(
+              vertical: DimenConstants.marginPaddingMedium),
+          child: Text(
+            item,
+            textAlign: TextAlign.center,
+            style: UIUtils.getStyleText500(),
+          ),
+        ));
+  }
+
+  Widget _buildLanguageItem() {
+    return InkWell(
+      onTap: _showDialogSelectLanguage,
+      child: Row(
+        children: [
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Container(
+            width: DimenConstants.circleShape,
+            height: DimenConstants.circleShape,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: ColorConstants.colorLanguage,
+            ),
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Expanded(
+              child: Text(
+            StringConstants.language,
+            style: UIUtils.getStyleTextSmall400(),
+          )),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Text(
+            _controller.selectedLanguage.value,
+            style: const TextStyle(
+                color: ColorConstants.colorTermCondition,
+                fontSize: DimenConstants.textSmall1,
+                fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingSmall,
+          ),
+          const Icon(
+            Icons.keyboard_arrow_right,
+            color: ColorConstants.iconColor,
+            size: DimenConstants.iconSizeSmall,
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRatingApp() async {
+    const String packageName =
+        'com.booking'; // Replace with your app's package name on the Play Store
+    const String url = 'market://details?id=$packageName';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Dog.d('_showRatingApp Could not launch $url');
+    }
   }
 
   Widget getDivider() {
@@ -275,50 +358,6 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
                 _controller.updateDarkModeStatus(value);
                 ThemeModeNotifier.instance.toggleTheme(value);
               }),
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget getText(
-    Color? color,
-    String msg,
-    GestureTapCallback? onItemPress,
-  ) {
-    return InkWell(
-      onTap: onItemPress,
-      child: Row(
-        children: [
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-          Container(
-            width: DimenConstants.circleShape,
-            height: DimenConstants.circleShape,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color ?? ColorConstants.appColor,
-            ),
-          ),
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-          Expanded(
-              child: Text(
-            msg,
-            style: UIUtils.getStyleTextSmall400(),
-          )),
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-          const Icon(
-            Icons.keyboard_arrow_right,
-            color: ColorConstants.iconColor,
-            size: DimenConstants.iconSizeSmall,
-          ),
           const SizedBox(
             width: DimenConstants.marginPaddingMedium,
           ),

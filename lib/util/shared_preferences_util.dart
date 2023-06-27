@@ -10,6 +10,7 @@ class SharedPreferencesUtil {
   static const IS_DARK_MODE_ON = "IS_DARK_MODE_ON";
   static const USER_IFO = "USER_IFO";
   static const KEY_FCM_TOKEN = "KEY_FCM_TOKEN";
+  static const LANGUAGE = "LANGUAGE";
   static const KEY_LIST_NOTI = "KEY_LIST_NOTI";
 
   static Future<void> setString(String key, String value) async {

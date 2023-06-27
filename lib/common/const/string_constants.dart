@@ -160,4 +160,9 @@ class StringConstants {
   static const String tripTop = "Chuyến đi hàng đầu";
   static const String placeTop = "Địa điểm hàng đầu";
   static const String tripDetail = "Chi tiết chuyến đi";
+
+  // Language
+  static const String selectLanguage = "Chọn ngôn ngữ";
+  static const String english = "Tiếng Anh";
+  static const String vietnamese = "Tiếng Việt";
 }
