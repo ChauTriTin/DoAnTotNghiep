@@ -12,6 +12,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../util/theme_util.dart';
 import '../../../view/profile_bar_widget.dart';
 import '../../user_singleton_controller.dart';
@@ -199,9 +200,11 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
 
   Widget _buildListItemDialog(
     BuildContext context,
-    List<String> items,
+    Map<String, String> items,
     String title,
   ) {
+    var languageCodes = items.keys.toList();
+    var languages = items.values.toList();
     return Container(
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -222,8 +225,9 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
                 physics: const BouncingScrollPhysics(),
                 itemCount: items.length,
                 itemBuilder: (BuildContext context, int index) {
-                  var item = items[index];
-                  return buildStringItem(item);
+                  var languageCode = languageCodes[index];
+                  var language = languages[index];
+                  return buildStringItem(languageCode, language);
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return getDivider();
@@ -237,16 +241,17 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
     );
   }
 
-  Widget buildStringItem(String item) {
+  Widget buildStringItem(String langCode, String language) {
     return InkWell(
         onTap: () {
-          _controller.updateLanguage(item);
+          Get.back();
+          _controller.updateLanguage(langCode, language);
         },
         child: Padding(
           padding: const EdgeInsetsDirectional.symmetric(
               vertical: DimenConstants.marginPaddingMedium),
           child: Text(
-            item,
+            language,
             textAlign: TextAlign.center,
             style: UIUtils.getStyleText500(),
           ),
@@ -274,7 +279,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           ),
           Expanded(
               child: Text(
-            StringConstants.language,
+            S.current.language,
             style: UIUtils.getStyleTextSmall400(),
           )),
           const SizedBox(

@@ -7,6 +7,7 @@ import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/theme_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
@@ -15,6 +16,7 @@ import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+import 'generated/l10n.dart';
 import 'model/push_notification.dart';
 import 'ui/splash/page_splash_screen.dart';
 
@@ -48,9 +50,17 @@ void main() async {
   ThemeModeNotifier.instance.getDarkModeStatus();
   GoogleMapsDirections.init(googleAPIKey: "AIzaSyAyXE57uyeaXMaXRlaNa-txkcNH6SaWXcU");
 
+  loadLanguage();
+
   runApp(
     OverlaySupport.global(
       child: GetMaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         enableLog: true,
         debugShowCheckedModeBanner: true,
         defaultTransition: Transition.cupertino,
@@ -64,6 +74,13 @@ void main() async {
       ),
     ),
   );
+
+}
+
+Future<void> loadLanguage() async {
+  var langCode = await SharedPreferencesUtil.getString(SharedPreferencesUtil.LANGUAGE) ??
+      "vn";
+  await S.load(Locale.fromSubtags(languageCode: langCode));
 }
 
 class MyApp extends StatelessWidget {

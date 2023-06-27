@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../util/shared_preferences_util.dart';
 import '../../authentication/landing_page/page_authentication_screen.dart';
 import '../user/edit/edit_profile_page.dart';
@@ -13,15 +17,20 @@ class SettingController extends BaseController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var selectedLanguage = "".obs;
-  var languages = [StringConstants.vietnamese, StringConstants.english].obs;
+  var languages = {
+    "vn": StringConstants.vietnamese,
+    "en": StringConstants.english}
+  .obs;
 
   void clearOnDispose() {
     Get.delete<SettingController>();
   }
 
-  void updateLanguage(String item) {
-    selectedLanguage.value = item;
-    SharedPreferencesUtil.setString(SharedPreferencesUtil.LANGUAGE, item);
+  void updateLanguage(String languageCode, String language) {
+    selectedLanguage.value = language;
+    Dog.d("updateLanguage: $languageCode");
+    S.load(Locale.fromSubtags(languageCode: languageCode));
+    SharedPreferencesUtil.setString(SharedPreferencesUtil.LANGUAGE, languageCode);
   }
 
   void getData() {
