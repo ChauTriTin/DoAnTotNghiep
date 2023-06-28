@@ -93,7 +93,7 @@ class Trip {
         //   rates!.add(Rate.fromJson(v));
         // });
 
-        debugPrint(">>>rate json['rates'] ${json['rates']}");
+        // debugPrint(">>>rate json['rates'] ${json['rates']}");
         // rates = <String, Rate>{};
         // json['rates'].forEach((v) {
         //   debugPrint(">>>rate v $v");
@@ -105,19 +105,22 @@ class Trip {
         // var map = jsonDecode(json['rates']);
         // debugPrint(">>>rate map ${jsonEncode(map)}");
 
-        var j = json['rates'];
-        debugPrint(">>>rate j: $j");
+        // var j = json['rates'];
+        // debugPrint(">>>rate ~ j: $j");
 
-        var j2 = jsonEncode(j);
-        debugPrint(">>>rate j2: $j2");
+        // var j2 = jsonEncode(j);
+        // debugPrint(">>>rate ~ j2: $j2");
 
         // String jsonString = _convertToJsonStringQuotes(raw: json['rates']);
         // debugPrint(">>>rate Test 1: $jsonString");
 
-        final Map<String, dynamic> result = jsonDecode(j2);
-        debugPrint('>>>rate Test 2: $result');
+        final Map<String, dynamic> result = json['rates'];
+        // final Map<String, dynamic> result = jsonDecode(j2);
+        // debugPrint('>>>rate ~ Test 2: $result');
 
+        rates ??= <String, dynamic>{};
         rates?.addAll(result);
+        // debugPrint('>>>rate ~ rates: $rates');
       }
     } catch (e) {
       debugPrint(">>>rate e $e");
@@ -201,24 +204,24 @@ class Trip {
       comments.hashCode ^
       rates.hashCode;
 
-  String _convertToJsonStringQuotes({required String raw}) {
-    /// remove space
-    String jsonString = raw.replaceAll(" ", "");
-
-    /// add quotes to json string
-    jsonString = jsonString.replaceAll('{', '{"');
-    jsonString = jsonString.replaceAll(':', '": "');
-    jsonString = jsonString.replaceAll(',', '", "');
-    jsonString = jsonString.replaceAll('}', '"}');
-
-    /// remove quotes on object json string
-    jsonString = jsonString.replaceAll('"{"', '{"');
-    jsonString = jsonString.replaceAll('"}"', '"}');
-
-    /// remove quotes on array json string
-    jsonString = jsonString.replaceAll('"[{', '[{');
-    jsonString = jsonString.replaceAll('}]"', '}]');
-
-    return jsonString;
-  }
+// String _convertToJsonStringQuotes({required String raw}) {
+//   /// remove space
+//   String jsonString = raw.replaceAll(" ", "");
+//
+//   /// add quotes to json string
+//   jsonString = jsonString.replaceAll('{', '{"');
+//   jsonString = jsonString.replaceAll(':', '": "');
+//   jsonString = jsonString.replaceAll(',', '", "');
+//   jsonString = jsonString.replaceAll('}', '"}');
+//
+//   /// remove quotes on object json string
+//   jsonString = jsonString.replaceAll('"{"', '{"');
+//   jsonString = jsonString.replaceAll('"}"', '"}');
+//
+//   /// remove quotes on array json string
+//   jsonString = jsonString.replaceAll('"[{', '[{');
+//   jsonString = jsonString.replaceAll('}]"', '}]');
+//
+//   return jsonString;
+// }
 }

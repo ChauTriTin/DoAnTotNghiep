@@ -42,8 +42,10 @@ class FormController extends BaseController {
         }
 
         var trip = Trip.fromJson((map).data()!);
+        debugPrint(">>>rate trip: ${trip.toJson()}");
+        debugPrint(">>>rate trip rates: ${trip.rates.toString()}");
         this.trip.value = trip;
-        debugPrint(">>>rate getRouter success: ${trip.toJson()}");
+        debugPrint(">>>rate getRouter success: ${this.trip.value.toJson()}");
 
         //set default value for rate list place stop
         this.trip.value.listPlace?.forEach((element) {
@@ -121,16 +123,25 @@ class FormController extends BaseController {
         debugPrint(">>>rate tripId == null || tripId.isEmpty return");
         return;
       }
-      debugPrint(">>>rate trip ${trip.toJson()}");
+      debugPrint(">>>rate trip ${trip.value.toJson()}");
+      // debugPrint(">>>rate currentUserData.value.uid ${currentUserData.value.uid}");
 
       var index = -1;
-      var length = trip.value.rates?.length ?? 0;
+      var mapRate = trip.value.rates ?? {};
+      var length = mapRate.length;
+      debugPrint(">>>rate mapRate $mapRate");
+      var mapRateList = mapRate.values.toList();
+
       for (int i = 0; i < length; i++) {
-        var r = trip.value.rates?[i];
-        if (r?.idUser == currentUserData.value.uid) {
+        var r = Rate.fromJson(mapRateList[i]);
+        debugPrint(">>>rate r ${r.toString()}");
+        debugPrint(
+            ">>>rate i $i -> ${r.idUser} - ${currentUserData.value.uid}");
+        if (r.idUser == currentUserData.value.uid) {
           index = i;
         }
       }
+      debugPrint(">>>rate index $index");
 
       Map<String, dynamic> map = {};
       var rates = trip.value.rates;
@@ -140,7 +151,6 @@ class FormController extends BaseController {
       map.addEntries({"${rate.idUser}": rate.toJson()}.entries);
 
       debugPrint(">>>rate map $map");
-      debugPrint(">>>rate index $index");
       if (index == -1) {
         FirebaseHelper.collectionReferenceRouter
             .doc(tripId)
