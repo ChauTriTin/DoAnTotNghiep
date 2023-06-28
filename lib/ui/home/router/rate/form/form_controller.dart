@@ -126,22 +126,21 @@ class FormController extends BaseController {
       debugPrint(">>>rate trip ${trip.value.toJson()}");
       // debugPrint(">>>rate currentUserData.value.uid ${currentUserData.value.uid}");
 
-      var index = -1;
-      var mapRate = trip.value.rates ?? {};
-      var length = mapRate.length;
-      debugPrint(">>>rate mapRate $mapRate");
-      var mapRateList = mapRate.values.toList();
-
-      for (int i = 0; i < length; i++) {
-        var r = Rate.fromJson(mapRateList[i]);
-        debugPrint(">>>rate r ${r.toString()}");
-        debugPrint(
-            ">>>rate i $i -> ${r.idUser} - ${currentUserData.value.uid}");
-        if (r.idUser == currentUserData.value.uid) {
-          index = i;
-        }
-      }
-      debugPrint(">>>rate index $index");
+      // var index = -1;
+      // var mapRate = trip.value.rates ?? {};
+      // var length = mapRate.length;
+      // debugPrint(">>>rate mapRate $mapRate");
+      // var mapRateList = mapRate.values.toList();
+      // for (int i = 0; i < length; i++) {
+      //   var r = Rate.fromJson(mapRateList[i]);
+      //   debugPrint(">>>rate r ${r.toString()}");
+      //   debugPrint(
+      //       ">>>rate i $i -> ${r.idUser} - ${currentUserData.value.uid}");
+      //   if (r.idUser == currentUserData.value.uid) {
+      //     index = i;
+      //   }
+      // }
+      // debugPrint(">>>rate index $index");
 
       Map<String, dynamic> map = {};
       var rates = trip.value.rates;
@@ -151,17 +150,9 @@ class FormController extends BaseController {
       map.addEntries({"${rate.idUser}": rate.toJson()}.entries);
 
       debugPrint(">>>rate map $map");
-      if (index == -1) {
-        FirebaseHelper.collectionReferenceRouter
-            .doc(tripId)
-            .update({"rates": map});
-      } else {
-        //TODO
-        // trip.value.rates?[index] = rate;
-        // FirebaseHelper.collectionReferenceRouter.doc(tripId).update({
-        //   "rates": trip.value.rates,
-        // });
-      }
+      FirebaseHelper.collectionReferenceRouter
+          .doc(tripId)
+          .update({"rates": map});
       debugPrint(">>>rate success");
     } catch (e) {
       debugPrint(">>>rate err $e");
