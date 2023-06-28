@@ -21,8 +21,10 @@ import '../../../../model/comment.dart';
 import '../../../../model/place.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
+import '../../router/create_success/create_success_screen.dart';
 import '../../setting/setting_screen.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
+import '../page_home_controller.dart';
 
 class DetailRouterScreen extends StatefulWidget {
   const DetailRouterScreen({Key? key}) : super(key: key);
@@ -33,6 +35,7 @@ class DetailRouterScreen extends StatefulWidget {
 
 class _DetailRouterScreenState extends State<DetailRouterScreen> {
   final DetailRouterController _controller = Get.put(DetailRouterController());
+  final PageHomeController _controllerHome = Get.find();
   final _commentController = TextEditingController();
   final _codeController = TextEditingController();
 
@@ -45,7 +48,6 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     super.initState();
     var data = Get.arguments[0][Constants.detailTrip];
     try {
-      // tripData = Trip.fromJson(jsonDecode(data ?? ""));
       _controller.getDetailTrip(Trip.fromJson(jsonDecode(data)).id);
     } catch (e) {
       log("Get trip data ex: $e");
@@ -62,6 +64,60 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     _commentController.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: ColorConstants.appColor,
+      ),
+      backgroundColor: ColorConstants.appColorBkg,
+      body: Obx(() {
+        return Container(
+          color: ColorConstants.colorWhite,
+          child: Column(
+            children: [
+              ProfileBarWidget(
+                  name: UserSingletonController.instance.userData.value.name ??
+                      "",
+                  state: "⬤ Online",
+                  linkAvatar: UserSingletonController.instance.userData.value
+                      .getAvatar()),
+              Expanded(
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    _slideShowImage(context),
+                    _infoRouter(),
+                    _listButtonEvent(),
+                    const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          left: DimenConstants.marginPaddingMedium),
+                      child: Text(
+                        "*** Yêu cầu: ${_controller.detailTrip.value.require}",
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    _divider(12),
+                    _leader(),
+                    _divider(0),
+                    if (_controller.detailTrip.value.isComplete == false)
+                      ...widgetsShowBeforeCompleted(),
+                    if (_controller.detailTrip.value.isComplete == true)
+                      ...widgetsShowAfterCompleted()
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
   }
 
   List<Widget> listImage() {
@@ -127,7 +183,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          if (!isJoined)
+          if (!isJoined && _controller.detailTrip.value.isComplete == false)
             InkWell(
               onTap: () => {
                 _controller.detailTrip.value.isPublic == true
@@ -161,6 +217,17 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                           style: TextStyle(fontSize: 12, color: Colors.black))),
                 ],
               ),
+            ),
+          if (isJoined && _controller.detailTrip.value.isComplete == false)
+            InkWell(
+              onTap: () => {
+                Get.to(CreateSuccessScreen(
+                    id: _controller.detailTrip.value.id ?? ""))
+              },
+              child: SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: Image.asset("assets/images/ic_launcher.png")),
             ),
           Column(children: [
             Container(
@@ -275,7 +342,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       ),
       onTap: () {
         Get.to(() => const PageUserPreviewScreen(), arguments: [
-          { Constants.user: _controller.userLeaderData.value.uid ?? "" }
+          {Constants.user: _controller.userLeaderData.value.uid ?? ""}
         ]);
       },
     );
@@ -305,33 +372,54 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   }
 
   Widget getItemRow(int i) {
+    var list = _controllerHome.listTrips
+        .where((p0) => p0.isComplete == false)
+        .toList();
+    var trip = list[i];
+    if (trip.id == _controller.detailTrip.value.id) {
+      return const SizedBox();
+    }
     return InkWell(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Container(
-            color: Colors.white10,
-            width: MediaQuery.of(context).size.height * 1 / 7.5,
-            height: MediaQuery.of(context).size.height * 1 / 7.5,
-            margin: const EdgeInsets.only(right: 10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: SizedBox.fromSize(
-                  size: const Size.fromRadius(48),
-                  child: Image.network(StringConstants.linkImg,
-                      fit: BoxFit.cover)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            child: const Text("Du lich"),
-          )
-        ]),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                color: Colors.white10,
+                width: MediaQuery.of(context).size.height * 1 / 7.5,
+                height: MediaQuery.of(context).size.height * 1 / 7.5,
+                margin: const EdgeInsets.only(right: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(48),
+                    child: CachedMemoryImage(
+                      fit: BoxFit.cover,
+                      uniqueKey: trip.listImg?.first ??
+                          DateTime.now().millisecondsSinceEpoch.toString(),
+                      base64: trip.listImg?.first ??
+                          DateTime.now().millisecondsSinceEpoch.toString(),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.height * 1 / 7.5,
+                margin: const EdgeInsets.only(top: 8),
+                child: Text(
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    trip.title ?? ""),
+              )
+            ]),
         onTap: () {
-          Get.to(const DetailRouterScreen());
-          setState(
-            () {
-              // widgets.add(getRow(widgets.length + 1));
-            },
-          );
+          // Get.to(() => const DetailRouterScreen(), arguments: [
+          //   {Constants.detailTrip: jsonEncode(trip)},
+          // ]);
+
+          _controller.getDetailTrip(trip.id);
+          _controller.getUserInfo(trip.userIdHost ?? "");
+          _controller.getCommentRoute(trip.id);
         });
   }
 
@@ -344,13 +432,16 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   ];
 
   Widget _otherRouter() {
+    var list = _controllerHome.listTrips
+        .where((p0) => p0.isComplete == false)
+        .toList();
     return SizedBox(
       height: MediaQuery.of(context).size.height * 1 / 5.5,
       child: ListView.separated(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.only(left: 20, right: 20),
         scrollDirection: Axis.horizontal,
-        itemCount: dataList.length,
+        itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return getItemRow(index);
         },
@@ -631,7 +722,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
         children: [
           CircleAvatar(
             radius: 18,
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.white,
             backgroundImage: NetworkImage(
                 UserSingletonController.instance.userData.value.getAvatar()),
           ),
@@ -748,67 +839,137 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        toolbarHeight: 0,
-        backgroundColor: ColorConstants.appColor,
-      ),
-      backgroundColor: ColorConstants.appColorBkg,
-      body: Obx(() {
-        return Container(
-          color: ColorConstants.appColorBkg,
-          child: Column(
-            children: [
-              ProfileBarWidget(
-                  name: UserSingletonController.instance.userData.value.name ??
-                      "",
-                  state: "⬤ Online",
-                  linkAvatar: UserSingletonController.instance.userData.value
-                      .getAvatar()),
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    _slideShowImage(context),
-                    _infoRouter(),
-                    _listButtonEvent(),
-                    const SizedBox(height: DimenConstants.marginPaddingMedium),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: DimenConstants.marginPaddingMedium),
-                      child: Text(
-                        "*** Yêu cầu: ${_controller.detailTrip.value.require}",
-                        style: const TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    _divider(12),
-                    _leader(),
-                    _divider(0),
-                    _seeMore(),
-                    const SizedBox(height: DimenConstants.marginPaddingLarge),
-                    Container(
-                        margin: const EdgeInsets.only(right: 24, left: 24),
-                        child: const Text(
-                          "Chuyến đi khác",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                    const SizedBox(height: DimenConstants.marginPaddingMedium),
-                    _otherRouter()
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-    );
+  List<Widget> widgetsShowBeforeCompleted() {
+    var list = <Widget>[];
+    list.add(_seeMore());
+    list.add(const SizedBox(height: DimenConstants.marginPaddingLarge));
+    list.add(Container(
+        margin: const EdgeInsets.only(right: 24, left: 24),
+        child: const Text(
+          "Chuyến đi khác",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        )));
+    list.add(const SizedBox(height: DimenConstants.marginPaddingMedium));
+    list.add(_otherRouter());
+    return list;
   }
 
-  void _navigateToSettingScreen() {
-    Get.to(const PageSettingScreen());
+  List<Widget> widgetsShowAfterCompleted() {
+    var list = <Widget>[];
+    list.add(Container(
+      margin: const EdgeInsets.only(
+          left: DimenConstants.marginPaddingExtraLarge,
+          right: DimenConstants.marginPaddingExtraLarge,
+          bottom: DimenConstants.marginPaddingMedium,
+          top: DimenConstants.marginPaddingMedium),
+      child: ElevatedButton(
+          onPressed: () {},
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: const BorderSide(color: Colors.red)))),
+          child: const Text("Tạo lại chuyến đi")),
+    ));
+    list.add(rateTrip());
+    return list;
+  }
+
+  Widget rateTrip() {
+    return Obx(() => Container(
+          margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Danh giá",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    child: const Text("Trưởng đoàn",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                  ),
+                  RatingBar.builder(
+                    initialRating:
+                        _controller.detailTrip.value.rate?.rateLeader ?? 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 25.0,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.red,
+                    ),
+                    ignoreGestures: true,
+                    onRatingUpdate: (double value) {},
+                  )
+                ],
+              ),
+              ...listPlaceRate(),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    child: const Text("Đánh giá của chuyến đi",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                  ),
+                  RatingBar.builder(
+                    initialRating:
+                        _controller.detailTrip.value.rate?.rateTrip ?? 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 25.0,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.red,
+                    ),
+                    ignoreGestures: true,
+                    onRatingUpdate: (double value) {},
+                  )
+                ],
+              )
+            ],
+          ),
+        ));
+  }
+
+  List<Widget> listPlaceRate() {
+    var list = <Widget>[];
+    _controller.detailTrip.value.listPlace?.forEach((element) {
+      list.add(const SizedBox(height: 12));
+      list.add(Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: Text(element.name ?? "",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          ),
+          RatingBar.builder(
+            initialRating: _controller.detailTrip.value.rate?.rateTrip ?? 1,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            itemSize: 25.0,
+            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) => const Icon(
+              Icons.star,
+              color: Colors.red,
+            ),
+            ignoreGestures: true,
+            onRatingUpdate: (double value) {},
+          )
+        ],
+      ));
+    });
+    return list;
   }
 }
