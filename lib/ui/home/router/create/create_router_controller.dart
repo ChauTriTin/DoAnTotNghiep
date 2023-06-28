@@ -261,14 +261,7 @@ class CreateRouterController extends BaseController {
     trip.require = sRequire;
     trip.isPublic = isPublic.value;
     trip.isComplete = false;
-
-    var rate = Rate();
-    rate.rateLeader = 0.0;
-    rate.rateTrip = 0.0;
-    rate.ratePlaceStart = 0.0;
-    rate.ratePlaceEnd = 0.0;
-    rate.rateListPlaceStop = List.empty();
-    trip.rate = rate;
+    // trip.rates = List.empty();
 
     debugPrint(">>>trip ${trip.toJson()}");
 
