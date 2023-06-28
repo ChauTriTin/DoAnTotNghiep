@@ -5,7 +5,6 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/ui/home/home/detail/page_detail_router_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
@@ -19,6 +18,7 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
 import '../../../view/profile_bar_widget.dart';
+import 'detail/page_detail_router_screen.dart';
 
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({

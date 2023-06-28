@@ -892,21 +892,22 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16)),
                   ),
-                  RatingBar.builder(
-                    initialRating:
-                        _controller.detailTrip.value.rate?.rateLeader ?? 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 25.0,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.red,
-                    ),
-                    ignoreGestures: true,
-                    onRatingUpdate: (double value) {},
-                  )
+                  //TODO fix model rates
+                  // RatingBar.builder(
+                  //   initialRating:
+                  //       _controller.detailTrip.value.rate?.rateLeader ?? 1,
+                  //   direction: Axis.horizontal,
+                  //   allowHalfRating: true,
+                  //   itemCount: 5,
+                  //   itemSize: 25.0,
+                  //   itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  //   itemBuilder: (context, _) => const Icon(
+                  //     Icons.star,
+                  //     color: Colors.red,
+                  //   ),
+                  //   ignoreGestures: true,
+                  //   onRatingUpdate: (double value) {},
+                  // )
                 ],
               ),
               ...listPlaceRate(),
@@ -919,21 +920,22 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16)),
                   ),
-                  RatingBar.builder(
-                    initialRating:
-                        _controller.detailTrip.value.rate?.rateTrip ?? 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 25.0,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.red,
-                    ),
-                    ignoreGestures: true,
-                    onRatingUpdate: (double value) {},
-                  )
+                  //TODO fix model rates
+                  // RatingBar.builder(
+                  //   initialRating:
+                  //       _controller.detailTrip.value.rate?.rateTrip ?? 1,
+                  //   direction: Axis.horizontal,
+                  //   allowHalfRating: true,
+                  //   itemCount: 5,
+                  //   itemSize: 25.0,
+                  //   itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  //   itemBuilder: (context, _) => const Icon(
+                  //     Icons.star,
+                  //     color: Colors.red,
+                  //   ),
+                  //   ignoreGestures: true,
+                  //   onRatingUpdate: (double value) {},
+                  // )
                 ],
               )
             ],
@@ -953,20 +955,22 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           ),
-          RatingBar.builder(
-            initialRating: _controller.detailTrip.value.rate?.rateTrip ?? 1,
-            direction: Axis.horizontal,
-            allowHalfRating: true,
-            itemCount: 5,
-            itemSize: 25.0,
-            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) => const Icon(
-              Icons.star,
-              color: Colors.red,
-            ),
-            ignoreGestures: true,
-            onRatingUpdate: (double value) {},
-          )
+
+          //TODO fix model rates
+          // RatingBar.builder(
+          //   initialRating: _controller.detailTrip.value.rate?.rateTrip ?? 1,
+          //   direction: Axis.horizontal,
+          //   allowHalfRating: true,
+          //   itemCount: 5,
+          //   itemSize: 25.0,
+          //   itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+          //   itemBuilder: (context, _) => const Icon(
+          //     Icons.star,
+          //     color: Colors.red,
+          //   ),
+          //   ignoreGestures: true,
+          //   onRatingUpdate: (double value) {},
+          // )
         ],
       ));
     });
