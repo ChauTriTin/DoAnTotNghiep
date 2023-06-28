@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:appdiphuot/model/comment.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/rate.dart';
+import 'package:flutter/material.dart';
 
 import '../common/const/string_constants.dart';
 import '../util/log_dog_utils.dart';
@@ -19,7 +22,6 @@ class Trip {
   String? title;
   String? des;
   List<String>? listImg;
-  Rate? rate;
   Place? placeStart;
   Place? placeEnd;
   List<Place>? listPlace;
@@ -30,6 +32,9 @@ class Trip {
   bool? isComplete;
   List<Comment>? comments;
 
+  // List<Rate>? rates;
+  Map<String, dynamic>? rates;
+
   Trip({
     this.id,
     this.userIdHost,
@@ -38,7 +43,6 @@ class Trip {
     this.title,
     this.des,
     this.listImg,
-    this.rate,
     this.placeStart,
     this.placeEnd,
     this.listPlace,
@@ -48,6 +52,7 @@ class Trip {
     this.isPublic,
     this.isComplete,
     this.comments,
+    this.rates,
   });
 
   String getFirstImageUrl() {
@@ -62,7 +67,6 @@ class Trip {
     title = json['title'];
     des = json['des'];
     listImg = json['listImg'].cast<String>();
-    rate = json['rate'] != null ? Rate.fromJson(json['rate']) : null;
     placeStart =
         json['placeStart'] != null ? Place.fromJson(json['placeStart']) : null;
 
@@ -82,6 +86,43 @@ class Trip {
       });
     }
 
+    try {
+      if (json['rates'] != null) {
+        // rates = <Rate>[];
+        // json['rates'].forEach((v) {
+        //   rates!.add(Rate.fromJson(v));
+        // });
+
+        debugPrint(">>>rate json['rates'] ${json['rates']}");
+        // rates = <String, Rate>{};
+        // json['rates'].forEach((v) {
+        //   debugPrint(">>>rate v $v");
+        // var r = Rate.fromJson(v);
+        // debugPrint(">>>trip r ${r.toJson()}");
+        // rates?.addEntries({"${r.idUser}": r}.entries);
+        // });
+
+        // var map = jsonDecode(json['rates']);
+        // debugPrint(">>>rate map ${jsonEncode(map)}");
+
+        var j = json['rates'];
+        debugPrint(">>>rate j: $j");
+
+        var j2 = jsonEncode(j);
+        debugPrint(">>>rate j2: $j2");
+
+        // String jsonString = _convertToJsonStringQuotes(raw: json['rates']);
+        // debugPrint(">>>rate Test 1: $jsonString");
+
+        final Map<String, dynamic> result = jsonDecode(j2);
+        debugPrint('>>>rate Test 2: $result');
+
+        rates?.addAll(result);
+      }
+    } catch (e) {
+      debugPrint(">>>rate e $e");
+    }
+
     timeStart = json['timeStart'];
     timeEnd = json['timeEnd'];
     require = json['require'];
@@ -98,9 +139,6 @@ class Trip {
     data['title'] = title;
     data['des'] = des;
     data['listImg'] = listImg;
-    if (rate != null) {
-      data['rate'] = rate!.toJson();
-    }
     if (placeStart != null) {
       data['placeStart'] = placeStart!.toJson();
     }
@@ -116,6 +154,7 @@ class Trip {
     data['isPublic'] = isPublic;
     data['isComplete'] = isComplete;
     data['comments'] = comments;
+    data['rates'] = rates;
     return data;
   }
 
@@ -131,7 +170,6 @@ class Trip {
           title == other.title &&
           des == other.des &&
           listImg == other.listImg &&
-          rate == other.rate &&
           placeStart == other.placeStart &&
           placeEnd == other.placeEnd &&
           listPlace == other.listPlace &&
@@ -140,7 +178,8 @@ class Trip {
           require == other.require &&
           isPublic == other.isPublic &&
           isComplete == other.isComplete &&
-          comments == other.comments;
+          comments == other.comments &&
+          rates == other.rates;
 
   @override
   int get hashCode =>
@@ -151,7 +190,6 @@ class Trip {
       title.hashCode ^
       des.hashCode ^
       listImg.hashCode ^
-      rate.hashCode ^
       placeStart.hashCode ^
       placeEnd.hashCode ^
       listPlace.hashCode ^
@@ -160,5 +198,27 @@ class Trip {
       require.hashCode ^
       isPublic.hashCode ^
       isComplete.hashCode ^
-      comments.hashCode;
+      comments.hashCode ^
+      rates.hashCode;
+
+  String _convertToJsonStringQuotes({required String raw}) {
+    /// remove space
+    String jsonString = raw.replaceAll(" ", "");
+
+    /// add quotes to json string
+    jsonString = jsonString.replaceAll('{', '{"');
+    jsonString = jsonString.replaceAll(':', '": "');
+    jsonString = jsonString.replaceAll(',', '", "');
+    jsonString = jsonString.replaceAll('}', '"}');
+
+    /// remove quotes on object json string
+    jsonString = jsonString.replaceAll('"{"', '{"');
+    jsonString = jsonString.replaceAll('"}"', '"}');
+
+    /// remove quotes on array json string
+    jsonString = jsonString.replaceAll('"[{', '[{');
+    jsonString = jsonString.replaceAll('}]"', '}]');
+
+    return jsonString;
+  }
 }

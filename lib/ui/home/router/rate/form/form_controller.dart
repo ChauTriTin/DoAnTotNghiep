@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/rate.dart';
@@ -25,17 +27,23 @@ class FormController extends BaseController {
 
   Future<void> getRouter(String id) async {
     try {
+      debugPrint(">>>rate getRouter id $id");
       FirebaseHelper.collectionReferenceRouter
           .doc(id)
           .snapshots()
           .listen((value) {
         DocumentSnapshot<Map<String, dynamic>>? map =
             value as DocumentSnapshot<Map<String, dynamic>>?;
-        if (map == null || map.data() == null) return;
+        debugPrint(">>>rate map id ${map?.id}");
+        debugPrint(">>>rate map data ${map?.data()}");
+        if (map == null || map.data() == null) {
+          debugPrint(">>>rate map == null || map.data() == null return");
+          return;
+        }
 
         var trip = Trip.fromJson((map).data()!);
         this.trip.value = trip;
-        debugPrint("getRouter success: ${trip.toString()}");
+        debugPrint(">>>rate getRouter success: ${trip.toJson()}");
 
         //set default value for rate list place stop
         this.trip.value.listPlace?.forEach((element) {
@@ -46,7 +54,7 @@ class FormController extends BaseController {
         _genListMember(this.trip.value.listIdMember ?? List.empty());
       });
     } catch (e) {
-      debugPrint("getRouter get user info fail: $e");
+      debugPrint(">>>rate getRouter get user info fail: $e");
     }
   }
 
@@ -94,6 +102,7 @@ class FormController extends BaseController {
 
   void rate(VoidCallback voidCallback) {
     Rate rate = Rate();
+    rate.idUser = currentUserData.value.uid;
     rate.rateLeader = rateLeader.value;
     rate.rateTrip = rateTrip.value;
     rate.ratePlaceStart = ratePlaceStart.value;
@@ -104,22 +113,48 @@ class FormController extends BaseController {
       listTmp.add(element);
     }
     rate.rateListPlaceStop = listTmp;
-    Dog.e(">>>rate ${rate.toJson()}");
+    debugPrint(">>>rate ${rate.toJson()}");
 
     try {
       var tripId = trip.value.id;
       if (tripId == null || tripId.isEmpty) {
+        debugPrint(">>>rate tripId == null || tripId.isEmpty return");
         return;
       }
-      trip.value.rate = rate;
-      Dog.e(">>>rate trip ${trip.toJson()}");
-      FirebaseHelper.collectionReferenceRouter.doc(tripId).update({
-        "rate": rate.toJson(),
-        "isComplete": true,
-      });
-      Dog.e(">>>rate success");
+      debugPrint(">>>rate trip ${trip.toJson()}");
+
+      var index = -1;
+      var length = trip.value.rates?.length ?? 0;
+      for (int i = 0; i < length; i++) {
+        var r = trip.value.rates?[i];
+        if (r?.idUser == currentUserData.value.uid) {
+          index = i;
+        }
+      }
+
+      Map<String, dynamic> map = {};
+      var rates = trip.value.rates;
+      if (rates != null) {
+        map.addAll(rates);
+      }
+      map.addEntries({"${rate.idUser}": rate.toJson()}.entries);
+
+      debugPrint(">>>rate map $map");
+      debugPrint(">>>rate index $index");
+      if (index == -1) {
+        FirebaseHelper.collectionReferenceRouter
+            .doc(tripId)
+            .update({"rates": map});
+      } else {
+        //TODO
+        // trip.value.rates?[index] = rate;
+        // FirebaseHelper.collectionReferenceRouter.doc(tripId).update({
+        //   "rates": trip.value.rates,
+        // });
+      }
+      debugPrint(">>>rate success");
     } catch (e) {
-      Dog.e(">>>rate err $e");
+      debugPrint(">>>rate err $e");
     }
     voidCallback.call();
   }

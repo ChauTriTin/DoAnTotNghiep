@@ -1,4 +1,5 @@
 class Rate {
+  String? idUser;
   double? rateLeader;
   double? rateTrip;
   double? ratePlaceStart;
@@ -6,6 +7,7 @@ class Rate {
   List<double>? rateListPlaceStop;
 
   Rate({
+    this.idUser,
     this.rateLeader,
     this.rateTrip,
     this.ratePlaceStart,
@@ -14,6 +16,7 @@ class Rate {
   });
 
   Rate.fromJson(Map<String, dynamic> json) {
+    idUser = json['idUser'];
     rateLeader = json['rateLeader'];
     rateTrip = json['rateTrip'];
     ratePlaceStart = json['ratePlaceStart'];
@@ -23,6 +26,7 @@ class Rate {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['idUser'] = idUser;
     data['rateLeader'] = rateLeader;
     data['rateTrip'] = rateTrip;
     data['ratePlaceStart'] = ratePlaceStart;
