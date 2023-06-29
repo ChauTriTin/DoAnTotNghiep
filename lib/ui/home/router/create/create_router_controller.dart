@@ -42,8 +42,12 @@ class CreateRouterController extends BaseController {
     Get.delete<CreateRouterController>();
   }
 
-  void initDefault(String title) {
+  void initDefault(
+    String title,
+    String description,
+  ) {
     tecTitle.text = title;
+    tecDescription.text = description;
   }
 
   void setPlaceStart(Place place) {

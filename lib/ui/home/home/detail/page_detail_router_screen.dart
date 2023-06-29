@@ -867,6 +867,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           onPressed: () {
             Get.to(const CreateRouterScreen(
               dfTitle: "Your title",
+              dfDescription: "Your description",
             ));
           },
           style: ButtonStyle(

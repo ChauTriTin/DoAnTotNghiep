@@ -411,6 +411,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         onPressed: () {
           Get.to(const CreateRouterScreen(
             dfTitle: "",
+            dfDescription: "",
           ));
         },
         child: const Icon(Icons.add),
