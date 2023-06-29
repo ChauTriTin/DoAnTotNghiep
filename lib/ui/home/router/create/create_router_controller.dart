@@ -42,6 +42,45 @@ class CreateRouterController extends BaseController {
     Get.delete<CreateRouterController>();
   }
 
+  void initDefault(
+    String title,
+    String description,
+    Place? placeStart,
+    Place? placeEnd,
+    List<Place> listPlaceStop,
+    DateTime? dateTimeStart,
+    DateTime? dateTimeEnd,
+    String require,
+    bool isPublic,
+  ) {
+    debugPrint(">>>initDefault $title");
+    debugPrint(">>>initDefault $description");
+    debugPrint(">>>initDefault ${placeStart?.toJson()}");
+    debugPrint(">>>initDefault ${placeEnd?.toJson()}");
+    debugPrint(">>>initDefault ${listPlaceStop.toString()}");
+    debugPrint(">>>initDefault $dateTimeStart");
+    debugPrint(">>>initDefault $dateTimeEnd");
+    debugPrint(">>>initDefault $require");
+    debugPrint(">>>isPublic $isPublic");
+    tecTitle.text = title;
+    tecDescription.text = description;
+    if (placeStart != null) {
+      setPlaceStart(placeStart);
+    }
+    if (placeEnd != null) {
+      setPlaceEnd(placeEnd);
+    }
+    this.listPlaceStop.addAll(listPlaceStop);
+    if (dateTimeStart != null) {
+      setDateTimeStart(dateTimeStart);
+    }
+    if (dateTimeEnd != null) {
+      setDateTimeEnd(dateTimeEnd);
+    }
+    tecRequire.text = require;
+    this.isPublic.value = isPublic;
+  }
+
   void setPlaceStart(Place place) {
     placeStart.value = place;
   }

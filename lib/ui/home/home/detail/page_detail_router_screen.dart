@@ -21,6 +21,7 @@ import '../../../../model/comment.dart';
 import '../../../../model/place.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
+import '../../router/create/create_router_screen.dart';
 import '../../router/create_success/create_success_screen.dart';
 import '../../setting/setting_screen.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
@@ -863,7 +864,42 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           bottom: DimenConstants.marginPaddingMedium,
           top: DimenConstants.marginPaddingMedium),
       child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            //TODO nguyen map correct values
+            Get.to(CreateRouterScreen(
+              dfTitle: "Your title",
+              dfDescription: "Your description",
+              dfPlaceStart: Place(
+                lat: defaultLat,
+                long: defaultLong,
+                name: "Cong 7Sub Samsung",
+              ),
+              dfPlaceEnd: Place(
+                lat: defaultLat,
+                long: defaultLong,
+                name: "Ao moi Ca Mau",
+              ),
+              dfListPlaceStop: [
+                Place(
+                  lat: defaultLat,
+                  long: defaultLong,
+                  name: "Suoi Tien 1",
+                ),
+                Place(
+                  lat: defaultLat,
+                  long: defaultLong,
+                  name: "Suoi Tien 2",
+                ),
+              ],
+              dfDateTimeStart: DateTime.now().add(const Duration(days: 7)),
+              //thoi gian bat dau chuyen di
+              dfDateTimeEnd: DateTime.now().add(const Duration(days: 3)),
+              //thoi gian cuoi cung de dang ky tham gia chuyen di
+              //warning: chu y rang thoi gian bat dau chuyen di phai sau thoi gian ket thuc ngay dang ky
+              dfRequire: "Day la yeu cau cua chuyen di",
+              dfIsPublic: false,
+            ));
+          },
           style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(

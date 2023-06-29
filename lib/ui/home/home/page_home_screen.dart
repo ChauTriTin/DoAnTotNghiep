@@ -409,7 +409,17 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         elevation: DimenConstants.elevationMedium,
         backgroundColor: ColorConstants.appColor,
         onPressed: () {
-          Get.to(const CreateRouterScreen());
+          Get.to(const CreateRouterScreen(
+            dfTitle: "",
+            dfDescription: "",
+            dfPlaceStart: null,
+            dfPlaceEnd: null,
+            dfListPlaceStop: [],
+            dfDateTimeStart: null,
+            dfDateTimeEnd: null,
+            dfRequire: "",
+            dfIsPublic: true,
+          ));
         },
         child: const Icon(Icons.add),
       ),

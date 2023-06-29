@@ -23,7 +23,26 @@ import 'create_router_controller.dart';
 class CreateRouterScreen extends StatefulWidget {
   const CreateRouterScreen({
     super.key,
+    required this.dfTitle,
+    required this.dfDescription,
+    required this.dfPlaceStart,
+    required this.dfPlaceEnd,
+    required this.dfListPlaceStop,
+    required this.dfDateTimeStart,
+    required this.dfDateTimeEnd,
+    required this.dfRequire,
+    required this.dfIsPublic,
   });
+
+  final String dfTitle;
+  final String dfDescription;
+  final Place? dfPlaceStart;
+  final Place? dfPlaceEnd;
+  final List<Place> dfListPlaceStop;
+  final DateTime? dfDateTimeStart;
+  final DateTime? dfDateTimeEnd;
+  final String dfRequire;
+  final bool dfIsPublic;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -36,6 +55,19 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void initState() {
     super.initState();
     _setupListen();
+
+    //setup default value
+    _controller.initDefault(
+      widget.dfTitle,
+      widget.dfDescription,
+      widget.dfPlaceStart,
+      widget.dfPlaceEnd,
+      widget.dfListPlaceStop,
+      widget.dfDateTimeStart,
+      widget.dfDateTimeEnd,
+      widget.dfRequire,
+      widget.dfIsPublic,
+    );
   }
 
   void _setupListen() {
