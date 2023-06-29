@@ -28,6 +28,8 @@ class CreateRouterScreen extends StatefulWidget {
     required this.dfPlaceStart,
     required this.dfPlaceEnd,
     required this.dfListPlaceStop,
+    required this.dfDateTimeStart,
+    required this.dfDateTimeEnd,
   });
 
   final String dfTitle;
@@ -35,6 +37,8 @@ class CreateRouterScreen extends StatefulWidget {
   final Place? dfPlaceStart;
   final Place? dfPlaceEnd;
   final List<Place> dfListPlaceStop;
+  final DateTime? dfDateTimeStart;
+  final DateTime? dfDateTimeEnd;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -55,6 +59,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       widget.dfPlaceStart,
       widget.dfPlaceEnd,
       widget.dfListPlaceStop,
+      widget.dfDateTimeStart,
+      widget.dfDateTimeEnd,
     );
   }
 

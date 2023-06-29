@@ -48,12 +48,16 @@ class CreateRouterController extends BaseController {
     Place? placeStart,
     Place? placeEnd,
     List<Place> listPlaceStop,
+    DateTime? dateTimeStart,
+    DateTime? dateTimeEnd,
   ) {
     debugPrint(">>>initDefault $title");
     debugPrint(">>>initDefault $description");
     debugPrint(">>>initDefault ${placeStart?.toJson()}");
     debugPrint(">>>initDefault ${placeEnd?.toJson()}");
     debugPrint(">>>initDefault ${listPlaceStop.toString()}");
+    debugPrint(">>>initDefault $dateTimeStart");
+    debugPrint(">>>initDefault $dateTimeEnd");
     tecTitle.text = title;
     tecDescription.text = description;
     if (placeStart != null) {
@@ -63,6 +67,12 @@ class CreateRouterController extends BaseController {
       setPlaceEnd(placeEnd);
     }
     this.listPlaceStop.addAll(listPlaceStop);
+    if (dateTimeStart != null) {
+      setDateTimeStart(dateTimeStart);
+    }
+    if (dateTimeEnd != null) {
+      setDateTimeEnd(dateTimeEnd);
+    }
   }
 
   void setPlaceStart(Place place) {

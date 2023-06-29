@@ -890,6 +890,11 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                   name: "Suoi Tien 2",
                 ),
               ],
+              dfDateTimeStart: DateTime.now().add(const Duration(days: 7)),
+              //thoi gian bat dau chuyen di
+              dfDateTimeEnd: DateTime.now().add(const Duration(
+                  days: 3)), //thoi gian cuoi cung de dang ky tham gia chuyen di
+              //warning: chu y rang thoi gian bat dau chuyen di phai sau thoi gian ket thuc ngay dang ky
             ));
           },
           style: ButtonStyle(
