@@ -865,6 +865,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           top: DimenConstants.marginPaddingMedium),
       child: ElevatedButton(
           onPressed: () {
+            //TODO nguyen map correct values
             Get.to(CreateRouterScreen(
               dfTitle: "Your title",
               dfDescription: "Your description",
@@ -892,9 +893,10 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
               ],
               dfDateTimeStart: DateTime.now().add(const Duration(days: 7)),
               //thoi gian bat dau chuyen di
-              dfDateTimeEnd: DateTime.now().add(const Duration(
-                  days: 3)), //thoi gian cuoi cung de dang ky tham gia chuyen di
+              dfDateTimeEnd: DateTime.now().add(const Duration(days: 3)),
+              //thoi gian cuoi cung de dang ky tham gia chuyen di
               //warning: chu y rang thoi gian bat dau chuyen di phai sau thoi gian ket thuc ngay dang ky
+              dfRequire: "Day la yeu cau cua chuyen di",
             ));
           },
           style: ButtonStyle(

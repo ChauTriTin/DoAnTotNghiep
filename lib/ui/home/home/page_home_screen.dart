@@ -417,6 +417,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
             dfListPlaceStop: [],
             dfDateTimeStart: null,
             dfDateTimeEnd: null,
+            dfRequire: "",
           ));
         },
         child: const Icon(Icons.add),

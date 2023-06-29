@@ -50,6 +50,7 @@ class CreateRouterController extends BaseController {
     List<Place> listPlaceStop,
     DateTime? dateTimeStart,
     DateTime? dateTimeEnd,
+    String require,
   ) {
     debugPrint(">>>initDefault $title");
     debugPrint(">>>initDefault $description");
@@ -58,6 +59,7 @@ class CreateRouterController extends BaseController {
     debugPrint(">>>initDefault ${listPlaceStop.toString()}");
     debugPrint(">>>initDefault $dateTimeStart");
     debugPrint(">>>initDefault $dateTimeEnd");
+    debugPrint(">>>initDefault $require");
     tecTitle.text = title;
     tecDescription.text = description;
     if (placeStart != null) {
@@ -73,6 +75,7 @@ class CreateRouterController extends BaseController {
     if (dateTimeEnd != null) {
       setDateTimeEnd(dateTimeEnd);
     }
+    tecRequire.text = require;
   }
 
   void setPlaceStart(Place place) {
