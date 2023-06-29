@@ -31,6 +31,7 @@ class CreateRouterScreen extends StatefulWidget {
     required this.dfDateTimeStart,
     required this.dfDateTimeEnd,
     required this.dfRequire,
+    required this.dfIsPublic,
   });
 
   final String dfTitle;
@@ -41,6 +42,7 @@ class CreateRouterScreen extends StatefulWidget {
   final DateTime? dfDateTimeStart;
   final DateTime? dfDateTimeEnd;
   final String dfRequire;
+  final bool dfIsPublic;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -64,6 +66,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       widget.dfDateTimeStart,
       widget.dfDateTimeEnd,
       widget.dfRequire,
+      widget.dfIsPublic,
     );
   }
 

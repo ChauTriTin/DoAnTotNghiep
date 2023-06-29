@@ -897,6 +897,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
               //thoi gian cuoi cung de dang ky tham gia chuyen di
               //warning: chu y rang thoi gian bat dau chuyen di phai sau thoi gian ket thuc ngay dang ky
               dfRequire: "Day la yeu cau cua chuyen di",
+              dfIsPublic: false,
             ));
           },
           style: ButtonStyle(
