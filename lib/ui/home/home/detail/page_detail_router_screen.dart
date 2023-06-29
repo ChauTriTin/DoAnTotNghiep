@@ -21,6 +21,7 @@ import '../../../../model/comment.dart';
 import '../../../../model/place.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
+import '../../router/create/create_router_screen.dart';
 import '../../router/create_success/create_success_screen.dart';
 import '../../setting/setting_screen.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
@@ -863,7 +864,11 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           bottom: DimenConstants.marginPaddingMedium,
           top: DimenConstants.marginPaddingMedium),
       child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(const CreateRouterScreen(
+              dfTitle: "Your title",
+            ));
+          },
           style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(

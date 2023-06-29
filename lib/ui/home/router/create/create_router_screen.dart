@@ -23,7 +23,10 @@ import 'create_router_controller.dart';
 class CreateRouterScreen extends StatefulWidget {
   const CreateRouterScreen({
     super.key,
+    required this.dfTitle,
   });
+
+  final String dfTitle;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -36,6 +39,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void initState() {
     super.initState();
     _setupListen();
+
+    //setup default value
+    _controller.initDefault(widget.dfTitle);
   }
 
   void _setupListen() {
