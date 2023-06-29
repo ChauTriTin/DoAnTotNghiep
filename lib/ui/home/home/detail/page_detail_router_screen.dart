@@ -878,6 +878,18 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                 long: defaultLong,
                 name: "Ao moi Ca Mau",
               ),
+              dfListPlaceStop: [
+                Place(
+                  lat: defaultLat,
+                  long: defaultLong,
+                  name: "Suoi Tien 1",
+                ),
+                Place(
+                  lat: defaultLat,
+                  long: defaultLong,
+                  name: "Suoi Tien 2",
+                ),
+              ],
             ));
           },
           style: ButtonStyle(

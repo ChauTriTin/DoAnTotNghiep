@@ -47,11 +47,13 @@ class CreateRouterController extends BaseController {
     String description,
     Place? placeStart,
     Place? placeEnd,
+    List<Place> listPlaceStop,
   ) {
     debugPrint(">>>initDefault $title");
     debugPrint(">>>initDefault $description");
     debugPrint(">>>initDefault ${placeStart?.toJson()}");
     debugPrint(">>>initDefault ${placeEnd?.toJson()}");
+    debugPrint(">>>initDefault ${listPlaceStop.toString()}");
     tecTitle.text = title;
     tecDescription.text = description;
     if (placeStart != null) {
@@ -60,6 +62,7 @@ class CreateRouterController extends BaseController {
     if (placeEnd != null) {
       setPlaceEnd(placeEnd);
     }
+    this.listPlaceStop.addAll(listPlaceStop);
   }
 
   void setPlaceStart(Place place) {

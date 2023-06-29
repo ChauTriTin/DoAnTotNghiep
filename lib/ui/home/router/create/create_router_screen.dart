@@ -27,12 +27,14 @@ class CreateRouterScreen extends StatefulWidget {
     required this.dfDescription,
     required this.dfPlaceStart,
     required this.dfPlaceEnd,
+    required this.dfListPlaceStop,
   });
 
   final String dfTitle;
   final String dfDescription;
   final Place? dfPlaceStart;
   final Place? dfPlaceEnd;
+  final List<Place> dfListPlaceStop;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -52,6 +54,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       widget.dfDescription,
       widget.dfPlaceStart,
       widget.dfPlaceEnd,
+      widget.dfListPlaceStop,
     );
   }
 
