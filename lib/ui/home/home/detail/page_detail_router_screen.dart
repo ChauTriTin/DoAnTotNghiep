@@ -857,6 +857,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
 
   List<Widget> widgetsShowAfterCompleted() {
     var list = <Widget>[];
+    var trip = _controller.detailTrip.value;
     list.add(Container(
       margin: const EdgeInsets.only(
           left: DimenConstants.marginPaddingExtraLarge,
@@ -867,37 +868,28 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           onPressed: () {
             //TODO nguyen map correct values
             Get.to(CreateRouterScreen(
-              dfTitle: "Your title",
-              dfDescription: "Your description",
+              dfTitle: trip.title ?? "",
+              dfDescription: trip.des ?? "",
               dfPlaceStart: Place(
-                lat: defaultLat,
-                long: defaultLong,
-                name: "Cong 7Sub Samsung",
+                lat: trip.placeStart?.lat ?? defaultLat,
+                long: trip.placeStart?.long ?? defaultLong,
+                name: trip.placeStart?.name ?? "",
               ),
               dfPlaceEnd: Place(
-                lat: defaultLat,
-                long: defaultLong,
-                name: "Ao moi Ca Mau",
+                lat: trip.placeEnd?.lat ?? defaultLat,
+                long: trip.placeEnd?.long ?? defaultLong,
+                name: trip.placeEnd?.name ?? "",
               ),
               dfListPlaceStop: [
-                Place(
-                  lat: defaultLat,
-                  long: defaultLong,
-                  name: "Suoi Tien 1",
-                ),
-                Place(
-                  lat: defaultLat,
-                  long: defaultLong,
-                  name: "Suoi Tien 2",
-                ),
+                ...trip.listPlace ?? <Place>[]
               ],
               dfDateTimeStart: DateTime.now().add(const Duration(days: 7)),
               //thoi gian bat dau chuyen di
               dfDateTimeEnd: DateTime.now().add(const Duration(days: 3)),
               //thoi gian cuoi cung de dang ky tham gia chuyen di
               //warning: chu y rang thoi gian bat dau chuyen di phai sau thoi gian ket thuc ngay dang ky
-              dfRequire: "Day la yeu cau cua chuyen di",
-              dfIsPublic: false,
+              dfRequire: trip.require ?? "",
+              dfIsPublic: trip.isPublic ?? true,
             ));
           },
           style: ButtonStyle(

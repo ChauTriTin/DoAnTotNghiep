@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 
+import '../../../../util/log_dog_utils.dart';
+import '../join/joine_manager_screen.dart';
 import 'create_success_controller.dart';
 
 class CreateSuccessScreen extends StatefulWidget {
@@ -185,7 +187,10 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                     const SizedBox(
                         height: (DimenConstants.marginPaddingMedium) * 5),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(JoinedManagerScreen(
+                            id: _controller.trip.value.id ?? ""));
+                      },
                       child: Container(
                         alignment: Alignment.center,
                         width: Get.width,
@@ -267,12 +272,15 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               ),
             );
           }),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Lottie.asset(
-              'assets/files/wave_1.json',
-              fit: BoxFit.fitWidth,
-              width: Get.width,
+          IgnorePointer(
+            ignoring: true,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Lottie.asset(
+                'assets/files/wave_1.json',
+                fit: BoxFit.fitWidth,
+                width: Get.width,
+              ),
             ),
           ),
           Padding(
