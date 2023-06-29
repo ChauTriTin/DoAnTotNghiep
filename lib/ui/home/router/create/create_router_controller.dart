@@ -45,9 +45,21 @@ class CreateRouterController extends BaseController {
   void initDefault(
     String title,
     String description,
+    Place? placeStart,
+    Place? placeEnd,
   ) {
+    debugPrint(">>>initDefault $title");
+    debugPrint(">>>initDefault $description");
+    debugPrint(">>>initDefault ${placeStart?.toJson()}");
+    debugPrint(">>>initDefault ${placeEnd?.toJson()}");
     tecTitle.text = title;
     tecDescription.text = description;
+    if (placeStart != null) {
+      setPlaceStart(placeStart);
+    }
+    if (placeEnd != null) {
+      setPlaceEnd(placeEnd);
+    }
   }
 
   void setPlaceStart(Place place) {

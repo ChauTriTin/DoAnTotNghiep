@@ -25,10 +25,14 @@ class CreateRouterScreen extends StatefulWidget {
     super.key,
     required this.dfTitle,
     required this.dfDescription,
+    required this.dfPlaceStart,
+    required this.dfPlaceEnd,
   });
 
   final String dfTitle;
   final String dfDescription;
+  final Place? dfPlaceStart;
+  final Place? dfPlaceEnd;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -46,6 +50,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     _controller.initDefault(
       widget.dfTitle,
       widget.dfDescription,
+      widget.dfPlaceStart,
+      widget.dfPlaceEnd,
     );
   }
 

@@ -865,9 +865,19 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           top: DimenConstants.marginPaddingMedium),
       child: ElevatedButton(
           onPressed: () {
-            Get.to(const CreateRouterScreen(
+            Get.to(CreateRouterScreen(
               dfTitle: "Your title",
               dfDescription: "Your description",
+              dfPlaceStart: Place(
+                lat: defaultLat,
+                long: defaultLong,
+                name: "Cong 7Sub Samsung",
+              ),
+              dfPlaceEnd: Place(
+                lat: defaultLat,
+                long: defaultLong,
+                name: "Ao moi Ca Mau",
+              ),
             ));
           },
           style: ButtonStyle(
