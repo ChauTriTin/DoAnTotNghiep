@@ -9,6 +9,7 @@ import '../../../model/trip.dart';
 class PageHomeController extends BaseController {
   var idItemDetail = "";
   var buttonChoose = 0.obs;
+  var buttonChipTypeSelected = StringConstants.tripOpen.obs;
   var listTrips = <Trip>[].obs;
   var listTripWithState = <Trip>[].obs;
   var listTripWithSearch = <Trip>[].obs;
@@ -60,6 +61,7 @@ class PageHomeController extends BaseController {
   }
 
   void setTypeTrip(String type) {
+    buttonChipTypeSelected.value = type;
     var list = <Trip>[];
 
     switch (type) {

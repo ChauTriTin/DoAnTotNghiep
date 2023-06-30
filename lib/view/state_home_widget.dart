@@ -17,21 +17,21 @@ class StateHomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(right: 12),
-      width: MediaQuery.of(context).size.width * 0.28,
+      // width: MediaQuery.of(context).size.width * 0.28,
       child: OutlinedButton.icon(
         style: OutlinedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
           ),
-          backgroundColor: isChoose ? Colors.redAccent : Colors.white10,
+          backgroundColor: isChoose ? Colors.redAccent : Colors.white,
           //<-- SEE HERE
-          side: const BorderSide(width: 2, color: Colors.black),
+          side: BorderSide(width: 0.5, color: isChoose ? Colors.white : Colors.redAccent),
         ),
         onPressed: onPress,
         icon: icon,
         label: Text(
           text,
-          style: const TextStyle(color: Colors.black, fontSize: 10),
+          style: TextStyle(color: isChoose ? Colors.white : Colors.black, fontSize: 12),
         ),
       ),
     );

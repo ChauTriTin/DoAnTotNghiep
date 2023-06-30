@@ -131,9 +131,9 @@ class StringConstants {
 
 
   //Home screen
-  static const String tripOpen = "Chuyến đi đang mở";
+  static const String tripOpen = "Đang mở";
   static const String tripPost = "Bài đăng";
-  static const String tripTop = "Chuyến đi hàng đầu";
-  static const String placeTop = "Địa điểm hàng đầu";
+  static const String tripTop = "Top chuyến đi";
+  static const String placeTop = "Top địa điểm";
   static const String tripDetail = "Chi tiết chuyến đi";
 }
