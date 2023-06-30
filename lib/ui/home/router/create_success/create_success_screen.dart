@@ -20,6 +20,8 @@ class CreateSuccessScreen extends StatefulWidget {
   const CreateSuccessScreen({
     super.key,
     required this.id,
+    required this.isOpenFromDetailPage,
+
     // required this.dateTimeEnd,
     // required this.placeStart,
     // required this.placeEnd,
@@ -27,6 +29,7 @@ class CreateSuccessScreen extends StatefulWidget {
   });
 
   final String id;
+  final bool isOpenFromDetailPage;
 
   // final DateTime dateTimeEnd;
   // final Place placeStart;
@@ -65,6 +68,15 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String title = "";
+    String des = "";
+    if (widget.isOpenFromDetailPage) {
+      title = "CHI TIẾT CHUYẾN ĐI";
+      des = "Mã chuyến đi";
+    } else {
+      title = "TẠO THÀNH CÔNG";
+      des = "Chuyến đi của bạn đã được tạo với mã";
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -80,7 +92,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "TẠO THÀNH CÔNG",
+                      title,
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -103,9 +115,9 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: DimenConstants.marginPaddingSmall),
-                    const Text(
-                      "Chuyến đi của bạn đã được tạo với mã",
-                      style: TextStyle(
+                    Text(
+                      des,
+                      style: const TextStyle(
                         fontSize: DimenConstants.txtMedium,
                         color: Colors.black,
                       ),
@@ -210,59 +222,61 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                         ),
                         // padding: const EdgeInsets.all(
                         //     DimenConstants.marginPaddingMedium),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Expanded(
-                              flex: 2,
-                              child: Text(
-                                'SỐ NGƯỜI THAM GIA',
-                                style: TextStyle(
-                                  fontSize: 23.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                        child: Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Expanded(
+                                flex: 2,
+                                child: Text(
+                                  'SỐ NGƯỜI THAM GIA',
+                                  style: TextStyle(
+                                    fontSize: 23.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.right,
                                 ),
-                                textAlign: TextAlign.right,
                               ),
-                            ),
-                            const SizedBox(
-                                width: DimenConstants.marginPaddingMedium),
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                "${_controller.trip.value.listIdMember?.length ?? 0}",
-                                style: TextStyle(
-                                  fontSize: 80.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red,
-                                  fontStyle: FontStyle.italic,
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                      offset: const Offset(10.0, 10.0),
-                                      blurRadius: 3.0,
-                                      color: ColorConstants.colorPink
-                                          .withOpacity(0.3),
-                                    ),
-                                    Shadow(
-                                      offset: const Offset(10.0, 10.0),
-                                      blurRadius: 8.0,
-                                      color: ColorConstants.colorPink
-                                          .withOpacity(0.3),
-                                    ),
-                                  ],
+                              const SizedBox(
+                                  width: DimenConstants.marginPaddingMedium),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "${_controller.trip.value.listIdMember?.length ?? 0}",
+                                  style: TextStyle(
+                                    fontSize: 80.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                    fontStyle: FontStyle.italic,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: const Offset(10.0, 10.0),
+                                        blurRadius: 3.0,
+                                        color: ColorConstants.colorPink
+                                            .withOpacity(0.3),
+                                      ),
+                                      Shadow(
+                                        offset: const Offset(10.0, 10.0),
+                                        blurRadius: 8.0,
+                                        color: ColorConstants.colorPink
+                                            .withOpacity(0.3),
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                            ),
-                            const SizedBox(
-                                width: DimenConstants.marginPaddingMedium),
-                            Lottie.asset(
-                              'assets/files/people.json',
-                              fit: BoxFit.fitWidth,
-                              width: 105,
-                              // height: Get.height / 2,
-                            ),
-                          ],
+                              const SizedBox(
+                                  width: DimenConstants.marginPaddingMedium),
+                              Lottie.asset(
+                                'assets/files/people.json',
+                                fit: BoxFit.fitWidth,
+                                width: 105,
+                                // height: Get.height / 2,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

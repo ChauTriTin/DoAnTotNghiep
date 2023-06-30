@@ -222,8 +222,11 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           if (isJoined && _controller.detailTrip.value.isComplete == false)
             InkWell(
               onTap: () => {
-                Get.to(CreateSuccessScreen(
-                    id: _controller.detailTrip.value.id ?? ""))
+                Get.to(
+                  CreateSuccessScreen(
+                      id: _controller.detailTrip.value.id ?? "",
+                      isOpenFromDetailPage: true),
+                )
               },
               child: SizedBox(
                   width: 60,

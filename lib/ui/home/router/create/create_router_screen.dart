@@ -87,13 +87,13 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       if (value == true) {
         Get.back();
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
-        Get.to(CreateSuccessScreen(
-          id: _controller.id,
-          // dateTimeEnd: _controller.dateTimeEnd.value,
-          // placeStart: _controller.placeStart.value,
-          // placeEnd: _controller.placeEnd.value,
-          // listPlaceStop: _controller.listPlaceStop,
-        ));
+        Get.to(
+            CreateSuccessScreen(id: _controller.id, isOpenFromDetailPage: false
+                // dateTimeEnd: _controller.dateTimeEnd.value,
+                // placeStart: _controller.placeStart.value,
+                // placeEnd: _controller.placeEnd.value,
+                // listPlaceStop: _controller.listPlaceStop,
+                ));
       }
     });
   }
