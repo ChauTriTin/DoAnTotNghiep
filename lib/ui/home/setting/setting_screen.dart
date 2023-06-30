@@ -279,7 +279,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           ),
           Expanded(
               child: Text(
-            S.current.language,
+            StringConstants.language,
             style: UIUtils.getStyleTextSmall400(),
           )),
           const SizedBox(
