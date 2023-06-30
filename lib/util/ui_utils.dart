@@ -184,6 +184,16 @@ class UIUtils {
     );
   }
 
+  static Widget headerDialog(String title) {
+    return Center(
+      child: Text(
+        title,
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
+      ),
+    );
+  }
+
   static Widget getTextSpanCountDouble(String title, double count) {
     return Padding(
       padding:

@@ -3,11 +3,16 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/setting/setting_controller.dart';
+import 'package:appdiphuot/ui/home/setting/setting_ui_util.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../util/theme_util.dart';
 import '../../../view/profile_bar_widget.dart';
 import '../../user_singleton_controller.dart';
@@ -69,13 +74,13 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
                 state: StringConstants.status,
                 linkAvatar: UserSingletonController.instance.getAvatar(),
               ),
-              Expanded(child: buildBody())
+              Expanded(child: buildBody(context))
             ],
           );
         }));
   }
 
-  Widget buildBody() {
+  Widget buildBody(BuildContext context) {
     return Container(
         width: double.infinity,
         color: ColorConstants.colorWhite,
@@ -118,23 +123,40 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           ),
           getDarkMode(),
           getDivider(),
-          getText(
-              ColorConstants.colorLanguage, StringConstants.language, () {}),
+
+          // Language
+          _buildLanguageItem(),
           const SizedBox(
             height: DimenConstants.marginPaddingSmall,
           ),
           getDivider(),
-          getText(ColorConstants.colorAbout, StringConstants.about, () {}),
+          buildItemSetting(ColorConstants.colorAbout, StringConstants.about,
+              () {
+            showDialogMsg(
+                StringConstants.about, StringConstants.aboutDetail, context);
+          }),
 
+          // Term & condition
           getDivider(),
-          getText(ColorConstants.colorTermCondition,
-              StringConstants.termCondition, () {}),
+          buildItemSetting(
+              ColorConstants.colorTermCondition, StringConstants.termCondition,
+              () {
+            showDialogMsg(StringConstants.termCondition,
+                StringConstants.termConditionDetail, context);
+          }),
 
+          // Policy
           getDivider(),
-          getText(ColorConstants.colorPolicy, StringConstants.policy, () {}),
+          buildItemSetting(ColorConstants.colorPolicy, StringConstants.policy,
+              () {
+            showDialogMsg(
+                StringConstants.policy, StringConstants.policyDetail, context);
+          }),
 
+          // Rating
           getDivider(),
-          getText(ColorConstants.colorRateApp, StringConstants.rate, () {}),
+          buildItemSetting(ColorConstants.colorRateApp, StringConstants.rate,
+              _showRatingApp),
 
           getDivider(),
           const SizedBox(
@@ -146,7 +168,15 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
               child: UIUtils.getOutlineButton(
                 StringConstants.signOut,
                 () {
-                  _controller.signOut();
+                  UIUtils.showAlertDialog(
+                    context,
+                    StringConstants.warning,
+                    StringConstants.signOutWarning,
+                    StringConstants.cancel,
+                    null,
+                    StringConstants.signOut,
+                    _controller.signOut,
+                  );
                 },
               )),
 
@@ -154,6 +184,139 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             height: DimenConstants.marginPaddingMedium,
           ),
         ]));
+  }
+
+  void _showDialogSelectLanguage() {
+    showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
+          ),
+        ),
+        context: context,
+        builder: (context) => _buildListItemDialog(
+            context, _controller.languages, StringConstants.selectLanguage));
+  }
+
+  Widget _buildListItemDialog(
+    BuildContext context,
+    Map<String, String> items,
+    String title,
+  ) {
+    var languageCodes = items.keys.toList();
+    var languages = items.values.toList();
+    return Container(
+      padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: DimenConstants.marginPaddingMedium,
+          right: DimenConstants.marginPaddingMedium,
+          top: DimenConstants.marginPaddingMedium),
+      child: Container(
+        height: MediaQuery.of(context).size.height / 2,
+        width: double.infinity,
+        padding: const EdgeInsets.all(0),
+        child: Column(
+          children: [
+            const SizedBox(height: DimenConstants.marginPaddingMedium),
+            UIUtils.headerDialog(title),
+            const SizedBox(height: DimenConstants.marginPaddingMedium),
+            Expanded(
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var languageCode = languageCodes[index];
+                  var language = languages[index];
+                  return buildStringItem(languageCode, language);
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return getDivider();
+                },
+              ),
+            ),
+            const SizedBox(height: DimenConstants.marginPaddingLarge),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildStringItem(String langCode, String language) {
+    return InkWell(
+        onTap: () {
+          Get.back();
+          _controller.updateLanguage(langCode, language);
+        },
+        child: Padding(
+          padding: const EdgeInsetsDirectional.symmetric(
+              vertical: DimenConstants.marginPaddingMedium),
+          child: Text(
+            language,
+            textAlign: TextAlign.center,
+            style: UIUtils.getStyleText500(),
+          ),
+        ));
+  }
+
+  Widget _buildLanguageItem() {
+    return InkWell(
+      onTap: _showDialogSelectLanguage,
+      child: Row(
+        children: [
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Container(
+            width: DimenConstants.circleShape,
+            height: DimenConstants.circleShape,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: ColorConstants.colorLanguage,
+            ),
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Expanded(
+              child: Text(
+            S.current.language,
+            style: UIUtils.getStyleTextSmall400(),
+          )),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Text(
+            _controller.selectedLanguage.value,
+            style: const TextStyle(
+                color: ColorConstants.colorTermCondition,
+                fontSize: DimenConstants.textSmall1,
+                fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingSmall,
+          ),
+          const Icon(
+            Icons.keyboard_arrow_right,
+            color: ColorConstants.iconColor,
+            size: DimenConstants.iconSizeSmall,
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRatingApp() async {
+    const String packageName =
+        'com.booking'; // Replace with your app's package name on the Play Store
+    const String url = 'market://details?id=$packageName';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Dog.d('_showRatingApp Could not launch $url');
+    }
   }
 
   Widget getDivider() {
@@ -200,50 +363,6 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
                 _controller.updateDarkModeStatus(value);
                 ThemeModeNotifier.instance.toggleTheme(value);
               }),
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget getText(
-    Color? color,
-    String msg,
-    GestureTapCallback? onItemPress,
-  ) {
-    return InkWell(
-      onTap: onItemPress,
-      child: Row(
-        children: [
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-          Container(
-            width: DimenConstants.circleShape,
-            height: DimenConstants.circleShape,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color ?? ColorConstants.appColor,
-            ),
-          ),
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-          Expanded(
-              child: Text(
-            msg,
-            style: UIUtils.getStyleTextSmall400(),
-          )),
-          const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          ),
-          const Icon(
-            Icons.keyboard_arrow_right,
-            color: ColorConstants.iconColor,
-            size: DimenConstants.iconSizeSmall,
-          ),
           const SizedBox(
             width: DimenConstants.marginPaddingMedium,
           ),
