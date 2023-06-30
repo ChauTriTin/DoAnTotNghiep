@@ -65,8 +65,9 @@ class SettingController extends BaseController {
   }
 
   Future<void> getSelectedLanguage() async {
-    selectedLanguage.value =
+    var key =
         await SharedPreferencesUtil.getString(SharedPreferencesUtil.LANGUAGE) ??
             StringConstants.vietnamese;
+    selectedLanguage.value = languages[key] ?? StringConstants.vietnamese;
   }
 }
