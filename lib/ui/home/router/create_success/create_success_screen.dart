@@ -8,6 +8,8 @@ import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:slide_countdown/slide_countdown.dart';
@@ -124,14 +126,28 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: DimenConstants.marginPaddingMedium),
-                    Text(
-                      widget.id,
-                      style: const TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                        color: ColorConstants.appColor,
+                    InkWell(
+                      onTap: _copyRouterId,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: widget.id,
+                              style: const TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: ColorConstants.appColor,
+                              ),
+                            ),
+                            const WidgetSpan(
+                              child: SizedBox(width: 8,),
+                            ),
+                            const WidgetSpan(
+                              child: Icon(Icons.copy, size: 24),
+                            ),
+                          ],
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: DimenConstants.marginPaddingLarge),
                     InkWell(
@@ -338,5 +354,17 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
       return;
     }
     go();
+  }
+
+  Future<void> _copyRouterId() async {
+    await Clipboard.setData(ClipboardData(text: widget.id));
+    Fluttertoast.showToast(
+        msg: "Copied",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: ColorConstants.appColor,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
   }
 }

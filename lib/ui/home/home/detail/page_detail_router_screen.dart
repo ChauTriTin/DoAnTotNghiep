@@ -10,8 +10,10 @@ import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:comment_tree/widgets/comment_tree_widget.dart';
 import 'package:comment_tree/widgets/tree_theme_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -93,6 +95,8 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                   children: [
                     _slideShowImage(context),
                     _infoRouter(),
+                    _idRouter(),
+                    const SizedBox(height: 8,),
                     _listButtonEvent(),
                     const SizedBox(height: DimenConstants.marginPaddingMedium),
                     Container(
@@ -883,9 +887,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                 long: trip.placeEnd?.long ?? defaultLong,
                 name: trip.placeEnd?.name ?? "",
               ),
-              dfListPlaceStop: [
-                ...trip.listPlace ?? <Place>[]
-              ],
+              dfListPlaceStop: [...trip.listPlace ?? <Place>[]],
               dfDateTimeStart: DateTime.now().add(const Duration(days: 7)),
               //thoi gian bat dau chuyen di
               dfDateTimeEnd: DateTime.now().add(const Duration(days: 3)),
@@ -1006,5 +1008,52 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
       ));
     });
     return list;
+  }
+
+  Widget _idRouter() {
+    return Column(
+      children: [
+        InkWell(
+          onTap: _copyRouterId,
+          child: RichText(
+            text: TextSpan(
+              text: "Mã chuyến đi:  ",
+              style: const TextStyle(
+                fontSize: 14.0,
+                color: ColorConstants.textColor,
+              ),
+              children: [
+                TextSpan(
+                  text: _controller.detailTrip.value.id ?? "",
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                    color: ColorConstants.appColor,
+                  ),
+                ),
+                const WidgetSpan(
+                  child: SizedBox(
+                    width: 8,
+                  ),
+                ),
+                const WidgetSpan(
+                  child: Icon(Icons.copy, size: 18),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Future<void> _copyRouterId() async {
+    await Clipboard.setData(ClipboardData(text: _controller.detailTrip.value.id ?? ""));
+    Fluttertoast.showToast(
+        msg: "Copied",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: ColorConstants.appColor,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }
