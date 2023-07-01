@@ -244,7 +244,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             onTap: () {
               Dog.d("showMember: ${_controller.detailTrip.value.id}");
               if (_controller.detailTrip.value.id == null) return;
-              Get.to(JoinedManagerScreen(id: _controller.detailTrip.value.id!));
+              Get.to(JoinedManagerScreen(tripdata: _controller.detailTrip.value));
             },
             child: Column(children: [
               Container(
