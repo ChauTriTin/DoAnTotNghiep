@@ -38,8 +38,6 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     StringConstants.placeTop,
   ];
 
-  String? selectedValue;
-
   @override
   void initState() {
     super.initState();
@@ -177,7 +175,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     text: StringConstants.tripOpen,
                     onPress: () {
                       setState(() {
-                        selectedValue = StringConstants.tripOpen;
+                        _controller.selectedValue = StringConstants.tripOpen;
                         _controller.setTypeTrip(StringConstants.tripOpen);
                       });
                     },
@@ -194,7 +192,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     text: StringConstants.tripPost,
                     onPress: () {
                       setState(() {
-                        selectedValue = StringConstants.tripPost;
+                        _controller.selectedValue = StringConstants.tripPost;
                         _controller.setTypeTrip(StringConstants.tripPost);
                       });
                     },
@@ -211,7 +209,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     text: StringConstants.tripTop,
                     onPress: () {
                       setState(() {
-                        selectedValue = StringConstants.tripTop;
+                        _controller.selectedValue = StringConstants.tripTop;
                         _controller.setTypeTrip(StringConstants.tripTop);
                       });
                     },
@@ -228,7 +226,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     text: StringConstants.placeTop,
                     onPress: () {
                       setState(() {
-                        selectedValue = StringConstants.placeTop;
+                        _controller.selectedValue = StringConstants.placeTop;
                         _controller.setTypeTrip(StringConstants.placeTop);
                       });
                     },

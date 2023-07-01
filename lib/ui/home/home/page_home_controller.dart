@@ -1,4 +1,6 @@
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/db/firebase_helper.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,7 @@ class PageHomeController extends BaseController {
   var listTrips = <Trip>[].obs;
   var listTripWithState = <Trip>[].obs;
   var listTripWithSearch = <Trip>[].obs;
+  String? selectedValue;
 
   var db = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref().child("files/uid");
@@ -23,32 +26,33 @@ class PageHomeController extends BaseController {
 
   Future<void> getAllRouter() async {
     setAppLoading(true, "Loading", TypeApp.loadingData);
-    var routerSnapshot = db.collection("router").snapshots();
-    routerSnapshot.listen((event) {
-      try {
-        for (var docSnapshot in event.docs) {
-          var trip = Trip.fromJson(docSnapshot.data().cast<String, dynamic>());
-          if (listTrips.firstWhereOrNull(
-                  (element) => element.id == docSnapshot.id) ==
-              null) {
-            listTrips
-                .add(Trip.fromJson(docSnapshot.data().cast<String, dynamic>()));
-          } else {
-            if (listTrips.firstWhereOrNull(
-                    (element) => element.id == docSnapshot.id) ==
-                trip) {
-              var index =
-                  listTrips.indexWhere((element) => element.id == trip.id);
-              listTrips[index] = trip;
-            }
-          }
+    var routerSnapshot = FirebaseHelper.collectionReferenceRouter.snapshots();
+    var routerSnapshotsMap =
+    routerSnapshot.map((querySnapshot) => querySnapshot.docs);
 
-          print('listTrips ${listTrips.length}');
+    routerSnapshotsMap.listen((routerSnapshots) {
+      try {
+        listTrips.clear();
+        for (var docSnapshot in routerSnapshots) {
+          DocumentSnapshot<Map<String, dynamic>>? tripMap =
+          docSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (tripMap == null || tripMap.data() == null) return;
+
+          var trip = Trip.fromJson((tripMap).data()!);
+          listTrips.add(trip);
         }
+
+        print('listTrips ${listTrips.length}');
+
         listTripWithState.value = listTrips;
-        listTripWithSearch.value =
-            listTrips.where((p0) => p0.isComplete == false).toList();
+        listTripWithSearch.value = listTrips.where((p0) => p0.isComplete == false).toList();
         setAppLoading(false, "Loading", TypeApp.loadingData);
+
+        Dog.d("selectedValue: $selectedValue");
+        if (selectedValue?.isNotEmpty == true) {
+          setTypeTrip(selectedValue!);
+        }
       } catch (ex) {
         print('listTrips error ${ex}');
         setAppLoading(false, "Loading", TypeApp.loadingData);
