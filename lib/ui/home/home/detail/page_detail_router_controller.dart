@@ -78,28 +78,32 @@ class DetailRouterController extends BaseController {
   }
 
   Future<void> getDetailTrip(String? id) async {
-    if (id == null) return;
-    FirebaseHelper.collectionReferenceRouter
-        .doc(id)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        try {
-          detailTrip.value =
-              Trip.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+    try {
+      FirebaseHelper.collectionReferenceRouter
+          .doc(id)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? tripMap =
+        value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (tripMap == null || tripMap.data() == null) return;
 
-          if (detailTrip.value.listIdMember?.contains(userData.value.uid) ==
-              true) {
-            isWidgetJoinedVisible.value = true;
-          } else {
-            isWidgetJoinedVisible.value = false;
-          }
-        } catch (ex) {
-          Dog.e("getDetailTrip: $ex");
+        var trip = Trip.fromJson((tripMap).data()!);
+        detailTrip.value =trip;
+
+        if (detailTrip.value.listIdMember?.contains(userData.value.uid) ==
+            true) {
+          isWidgetJoinedVisible.value = true;
+        } else {
+          isWidgetJoinedVisible.value = false;
         }
-      }
-    });
+
+        log("getTripDetail success: ${trip.toString()}");
+      });
+    } catch (e) {
+      log("getTripDetail get user info fail: $e");
+    }
   }
+
 
   Future<void> getCommentRoute(String? id) async {
     try {
