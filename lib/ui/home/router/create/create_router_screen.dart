@@ -61,6 +61,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     //setup default value
     if (widget.dfEditRouterWithTripId == null ||
         widget.dfEditRouterWithTripId?.isEmpty == true) {
+      _controller.setEditRouterMode(false);
       //create router with some default values
       _controller.initDefault(
         widget.dfTitle,
@@ -75,6 +76,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       );
     } else {
       //edit router
+      _controller.setEditRouterMode(true);
       _controller.editRouter(widget.dfEditRouterWithTripId);
     }
   }
@@ -587,7 +589,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               _controller.createRouter();
             },
             label: Text(
-              "Tạo chuyến đi".toUpperCase(),
+              _controller.getTextMode(),
               style: const TextStyle(
                   color: Color(0xff4a4a4a),
                   fontWeight: FontWeight.bold,
