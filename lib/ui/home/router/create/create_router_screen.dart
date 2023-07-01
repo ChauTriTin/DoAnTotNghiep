@@ -32,6 +32,7 @@ class CreateRouterScreen extends StatefulWidget {
     required this.dfDateTimeEnd,
     required this.dfRequire,
     required this.dfIsPublic,
+    required this.dfEditRouterWithTripId,
   });
 
   final String dfTitle;
@@ -43,6 +44,7 @@ class CreateRouterScreen extends StatefulWidget {
   final DateTime? dfDateTimeEnd;
   final String dfRequire;
   final bool dfIsPublic;
+  final String? dfEditRouterWithTripId;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -57,17 +59,23 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     _setupListen();
 
     //setup default value
-    _controller.initDefault(
-      widget.dfTitle,
-      widget.dfDescription,
-      widget.dfPlaceStart,
-      widget.dfPlaceEnd,
-      widget.dfListPlaceStop,
-      widget.dfDateTimeStart,
-      widget.dfDateTimeEnd,
-      widget.dfRequire,
-      widget.dfIsPublic,
-    );
+    if (widget.dfEditRouterWithTripId == null ||
+        widget.dfEditRouterWithTripId?.isEmpty == true) {
+      //create router with some default values
+      _controller.initDefault(
+        widget.dfTitle,
+        widget.dfDescription,
+        widget.dfPlaceStart,
+        widget.dfPlaceEnd,
+        widget.dfListPlaceStop,
+        widget.dfDateTimeStart,
+        widget.dfDateTimeEnd,
+        widget.dfRequire,
+        widget.dfIsPublic,
+      );
+    } else {
+      //edit router
+    }
   }
 
   void _setupListen() {
