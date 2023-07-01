@@ -48,7 +48,8 @@ void main() async {
   Get.put(UserSingletonController.instance);
   getLoc();
   ThemeModeNotifier.instance.getDarkModeStatus();
-  GoogleMapsDirections.init(googleAPIKey: "AIzaSyAyXE57uyeaXMaXRlaNa-txkcNH6SaWXcU");
+  GoogleMapsDirections.init(
+      googleAPIKey: "AIzaSyAyXE57uyeaXMaXRlaNa-txkcNH6SaWXcU");
 
   loadLanguage();
 
@@ -74,12 +75,12 @@ void main() async {
       ),
     ),
   );
-
 }
 
 Future<void> loadLanguage() async {
-  var langCode = await SharedPreferencesUtil.getString(SharedPreferencesUtil.LANGUAGE) ??
-      "vn";
+  var langCode =
+      await SharedPreferencesUtil.getString(SharedPreferencesUtil.LANGUAGE) ??
+          "vi";
   await S.load(Locale.fromSubtags(languageCode: langCode));
 }
 

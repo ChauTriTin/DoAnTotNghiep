@@ -360,14 +360,20 @@ class CreateRouterController extends BaseController {
         var trip = Trip.fromJson((map).data()!);
         this.trip.value = trip;
         debugPrint("editRouter getRouter success: ${trip.toString()}");
+        debugPrint("editRouter s timeStart ${this.trip.value.timeStart}");
+        debugPrint("editRouter s timeEnd ${this.trip.value.timeEnd}");
+        var timeStart = TimeUtils.stringToDateTime(this.trip.value.timeStart);
+        var timeEnd = TimeUtils.stringToDateTime(this.trip.value.timeEnd);
+        debugPrint("editRouter timeStart $timeStart");
+        debugPrint("editRouter timeEnd $timeEnd");
         initDefault(
           this.trip.value.title ?? "",
           this.trip.value.des ?? "",
           this.trip.value.placeStart,
           this.trip.value.placeEnd,
           this.trip.value.listPlace ?? List.empty(),
-          TimeUtils.stringToDateTime(this.trip.value.timeStart),
-          TimeUtils.stringToDateTime(this.trip.value.timeEnd),
+          timeStart,
+          timeEnd,
           this.trip.value.require ?? "",
           this.trip.value.isPublic ?? true,
         );
