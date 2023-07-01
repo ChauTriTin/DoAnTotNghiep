@@ -5,7 +5,6 @@ import 'package:appdiphuot/common/const/convert_utils.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
-import 'package:appdiphuot/model/rate.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/time_utils.dart';
@@ -17,7 +16,7 @@ import '../../../user_singleton_controller.dart';
 
 class CreateRouterController extends BaseController {
   var userData = UserSingletonController.instance.userData;
-  final id = DateTime.now().millisecondsSinceEpoch.toString();
+  var id = DateTime.now().millisecondsSinceEpoch.toString().obs;
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
   final tecRequire = TextEditingController();
@@ -34,8 +33,9 @@ class CreateRouterController extends BaseController {
   var dateTimeStart = DateTime.now().add(const Duration(days: 7)).obs;
   var dateTimeEnd = DateTime.now().add(const Duration(days: 6)).obs;
   var isPublic = true.obs;
-
   var isCreateRouteSuccess = false.obs;
+
+  var isEditRouterMode = false.obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -53,6 +53,7 @@ class CreateRouterController extends BaseController {
     String require,
     bool isPublic,
   ) {
+    isEditRouterMode.value = false;
     debugPrint(">>>initDefault $title");
     debugPrint(">>>initDefault $description");
     debugPrint(">>>initDefault ${placeStart?.toJson()}");
@@ -79,6 +80,16 @@ class CreateRouterController extends BaseController {
     }
     tecRequire.text = require;
     this.isPublic.value = isPublic;
+  }
+
+  void editRouter(String? tripId) {
+    debugPrint("editRouter tripId $tripId");
+    isEditRouterMode.value = true;
+    if (tripId == null || tripId.isEmpty) {
+      debugPrint("editRouter return");
+      return;
+    }
+    id.value = tripId;
   }
 
   void setPlaceStart(Place place) {
@@ -256,7 +267,7 @@ class CreateRouterController extends BaseController {
       return;
     }
     var trip = Trip();
-    trip.id = id;
+    trip.id = id.value;
     trip.userIdHost = userData.value.uid;
     trip.userHostName = userData.value.name;
     trip.listIdMember = <String>[];
@@ -323,5 +334,13 @@ class CreateRouterController extends BaseController {
 
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
+  }
+
+  String getTextMode() {
+    if (isEditRouterMode.value) {
+      return "Sửa chuyến đi";
+    } else {
+      return "Tạo chuyến đi";
+    }
   }
 }

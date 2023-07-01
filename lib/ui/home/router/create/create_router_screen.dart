@@ -75,6 +75,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       );
     } else {
       //edit router
+      _controller.editRouter(widget.dfEditRouterWithTripId);
     }
   }
 
@@ -96,12 +97,14 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Get.back();
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
         Get.to(
-            CreateSuccessScreen(id: _controller.id, isOpenFromDetailPage: false
-                // dateTimeEnd: _controller.dateTimeEnd.value,
-                // placeStart: _controller.placeStart.value,
-                // placeEnd: _controller.placeEnd.value,
-                // listPlaceStop: _controller.listPlaceStop,
-                ));
+          CreateSuccessScreen(
+              id: _controller.id.value, isOpenFromDetailPage: false
+              // dateTimeEnd: _controller.dateTimeEnd.value,
+              // placeStart: _controller.placeStart.value,
+              // placeEnd: _controller.placeEnd.value,
+              // listPlaceStop: _controller.listPlaceStop,
+              ),
+        );
       }
     });
   }
@@ -175,16 +178,16 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   borderRadius: BorderRadius.circular(32.0),
                 ),
               ),
-              child: const Text(
-                'Tạo chuyến đi',
-                style: TextStyle(
+              child: Text(
+                _controller.getTextMode(),
+                style: const TextStyle(
                   fontSize: DimenConstants.txtMedium,
                 ),
               ),
             ),
             Expanded(
               child: Text(
-                'Mã: ${_controller.id}',
+                'Mã: ${_controller.id.value}',
                 style: const TextStyle(
                   fontSize: DimenConstants.txtMedium,
                   color: ColorConstants.appColor,
