@@ -79,6 +79,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
             dfDateTimeEnd: null,
             dfRequire: "",
             dfIsPublic: true,
+            dfEditRouterWithTripId: null,
           ));
         },
         child: const Icon(Icons.add),

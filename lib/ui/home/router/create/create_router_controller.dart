@@ -5,10 +5,10 @@ import 'package:appdiphuot/common/const/convert_utils.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
-import 'package:appdiphuot/model/rate.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/time_utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
@@ -17,7 +17,7 @@ import '../../../user_singleton_controller.dart';
 
 class CreateRouterController extends BaseController {
   var userData = UserSingletonController.instance.userData;
-  final id = DateTime.now().millisecondsSinceEpoch.toString();
+  var id = DateTime.now().millisecondsSinceEpoch.toString().obs;
   final tecTitle = TextEditingController();
   final tecDescription = TextEditingController();
   final tecRequire = TextEditingController();
@@ -34,8 +34,10 @@ class CreateRouterController extends BaseController {
   var dateTimeStart = DateTime.now().add(const Duration(days: 7)).obs;
   var dateTimeEnd = DateTime.now().add(const Duration(days: 6)).obs;
   var isPublic = true.obs;
-
   var isCreateRouteSuccess = false.obs;
+
+  var isEditRouterMode = false.obs;
+  var trip = Trip().obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -53,6 +55,7 @@ class CreateRouterController extends BaseController {
     String require,
     bool isPublic,
   ) {
+    isEditRouterMode.value = false;
     debugPrint(">>>initDefault $title");
     debugPrint(">>>initDefault $description");
     debugPrint(">>>initDefault ${placeStart?.toJson()}");
@@ -79,6 +82,17 @@ class CreateRouterController extends BaseController {
     }
     tecRequire.text = require;
     this.isPublic.value = isPublic;
+  }
+
+  void editRouter(String? tripId) {
+    debugPrint("editRouter tripId $tripId");
+    isEditRouterMode.value = true;
+    if (tripId == null || tripId.isEmpty) {
+      debugPrint("editRouter return");
+      return;
+    }
+    id.value = tripId;
+    _getRouter(tripId);
   }
 
   void setPlaceStart(Place place) {
@@ -256,7 +270,7 @@ class CreateRouterController extends BaseController {
       return;
     }
     var trip = Trip();
-    trip.id = id;
+    trip.id = id.value;
     trip.userIdHost = userData.value.uid;
     trip.userHostName = userData.value.name;
     trip.listIdMember = <String>[];
@@ -323,5 +337,49 @@ class CreateRouterController extends BaseController {
 
       setAppLoading(false, "Loading", TypeApp.createRouter);
     });
+  }
+
+  String getTextMode() {
+    if (isEditRouterMode.value) {
+      return "Sửa chuyến đi";
+    } else {
+      return "Tạo chuyến đi";
+    }
+  }
+
+  Future<void> _getRouter(String id) async {
+    try {
+      FirebaseHelper.collectionReferenceRouter
+          .doc(id)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? map =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (map == null || map.data() == null) return;
+
+        var trip = Trip.fromJson((map).data()!);
+        this.trip.value = trip;
+        debugPrint("editRouter getRouter success: ${trip.toString()}");
+        debugPrint("editRouter s timeStart ${this.trip.value.timeStart}");
+        debugPrint("editRouter s timeEnd ${this.trip.value.timeEnd}");
+        var timeStart = TimeUtils.stringToDateTime(this.trip.value.timeStart);
+        var timeEnd = TimeUtils.stringToDateTime(this.trip.value.timeEnd);
+        debugPrint("editRouter timeStart $timeStart");
+        debugPrint("editRouter timeEnd $timeEnd");
+        initDefault(
+          this.trip.value.title ?? "",
+          this.trip.value.des ?? "",
+          this.trip.value.placeStart,
+          this.trip.value.placeEnd,
+          this.trip.value.listPlace ?? List.empty(),
+          timeStart,
+          timeEnd,
+          this.trip.value.require ?? "",
+          this.trip.value.isPublic ?? true,
+        );
+      });
+    } catch (e) {
+      debugPrint("editRouter getRouter get user info fail: $e");
+    }
   }
 }

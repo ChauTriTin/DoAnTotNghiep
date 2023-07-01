@@ -97,7 +97,9 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     _slideShowImage(context),
                     _infoRouter(),
                     _idRouter(),
-                    const SizedBox(height: 8,),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     _listButtonEvent(),
                     const SizedBox(height: DimenConstants.marginPaddingMedium),
                     Container(
@@ -242,8 +244,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             onTap: () {
               Dog.d("showMember: ${_controller.detailTrip.value.id}");
               if (_controller.detailTrip.value.id == null) return;
-              Get.to(
-                  JoinedManagerScreen(id: _controller.detailTrip.value.id!));
+              Get.to(JoinedManagerScreen(id: _controller.detailTrip.value.id!));
             },
             child: Column(children: [
               Container(
@@ -904,6 +905,8 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
               //warning: chu y rang thoi gian bat dau chuyen di phai sau thoi gian ket thuc ngay dang ky
               dfRequire: trip.require ?? "",
               dfIsPublic: trip.isPublic ?? true,
+              dfEditRouterWithTripId:
+                  null, //case clone the router, always pass null
             ));
           },
           style: ButtonStyle(
@@ -1056,7 +1059,8 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   }
 
   Future<void> _copyRouterId() async {
-    await Clipboard.setData(ClipboardData(text: _controller.detailTrip.value.id ?? ""));
+    await Clipboard.setData(
+        ClipboardData(text: _controller.detailTrip.value.id ?? ""));
     Fluttertoast.showToast(
         msg: "Copied",
         toastLength: Toast.LENGTH_SHORT,
