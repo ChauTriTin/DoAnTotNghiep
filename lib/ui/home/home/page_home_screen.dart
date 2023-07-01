@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
@@ -9,7 +8,6 @@ import 'package:appdiphuot/ui/home/home/detail/page_detail_router_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
-import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:appdiphuot/view/state_home_widget.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,6 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
-import '../../../view/profile_bar_widget.dart';
 
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
@@ -65,27 +62,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
             color: ColorConstants.colorWhite,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildBanner(),
-                _buildSearchBox(),
-                // _buildRouteTypeDropDown(),
-                // _buildRouteStatusChipButton(),
-                Expanded(
-                  child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    itemCount: _controller.listTripWithSearch.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return getRow(index);
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(
-                        width: DimenConstants.marginPaddingMedium,
-                      );
-                    },
-                  ),
-                ),
-              ],
+              children: [_buildBanner(), _buildSearchBox(), _buildListRouter()],
             ));
       }),
       floatingActionButton: FloatingActionButton(
@@ -113,7 +90,9 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.orangeAccent),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.orangeAccent),
         child: Row(
           children: [
             Expanded(
@@ -121,7 +100,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                      padding: const EdgeInsets.only(left: 24, top: 12, bottom: 8),
+                      padding:
+                          const EdgeInsets.only(left: 24, top: 12, bottom: 8),
                       child: const Text(
                         "Sự kiện đi để nhận",
                         style: TextStyle(fontSize: 12, color: Colors.white),
@@ -136,7 +116,11 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 ],
               ),
             ),
-            SizedBox(width: 90, height: 90, child: Lottie.network("https://assets7.lottiefiles.com/packages/lf20_vuubgscl.json")),
+            SizedBox(
+                width: 90,
+                height: 90,
+                child: Lottie.network(
+                    "https://assets7.lottiefiles.com/packages/lf20_vuubgscl.json")),
           ],
         ),
       ),
@@ -181,8 +165,14 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Wrap(spacing: 8.0, children: [
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.tripOpen,
-                    icon: Icon(Icons.alarm, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.tripOpen ? Colors.white : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value ==
+                        StringConstants.tripOpen,
+                    icon: Icon(Icons.alarm,
+                        size: 18,
+                        color: _controller.buttonChipTypeSelected.value ==
+                                StringConstants.tripOpen
+                            ? Colors.white
+                            : Colors.red),
                     text: StringConstants.tripOpen,
                     onPress: () {
                       setState(() {
@@ -192,8 +182,14 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     },
                   ),
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.tripPost,
-                    icon: Icon(Icons.alarm_on_rounded, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.tripPost ? Colors.white : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value ==
+                        StringConstants.tripPost,
+                    icon: Icon(Icons.alarm_on_rounded,
+                        size: 18,
+                        color: _controller.buttonChipTypeSelected.value ==
+                                StringConstants.tripPost
+                            ? Colors.white
+                            : Colors.red),
                     text: StringConstants.tripPost,
                     onPress: () {
                       setState(() {
@@ -203,8 +199,14 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     },
                   ),
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.tripTop,
-                    icon: Icon(Icons.vertical_align_top, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.tripTop ? Colors.white : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value ==
+                        StringConstants.tripTop,
+                    icon: Icon(Icons.vertical_align_top,
+                        size: 18,
+                        color: _controller.buttonChipTypeSelected.value ==
+                                StringConstants.tripTop
+                            ? Colors.white
+                            : Colors.red),
                     text: StringConstants.tripTop,
                     onPress: () {
                       setState(() {
@@ -214,8 +216,14 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     },
                   ),
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.placeTop,
-                    icon: Icon(Icons.location_city, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.placeTop ? Colors.white : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value ==
+                        StringConstants.placeTop,
+                    icon: Icon(Icons.location_city,
+                        size: 18,
+                        color: _controller.buttonChipTypeSelected.value ==
+                                StringConstants.placeTop
+                            ? Colors.white
+                            : Colors.red),
                     text: StringConstants.placeTop,
                     onPress: () {
                       setState(() {
@@ -240,7 +248,11 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 child: Wrap(spacing: 8.0, children: [
                   StateHomeWidget(
                     isChoose: _controller.buttonChoose.value == 0,
-                    icon: Icon(Icons.done_all, size: 18, color: _controller.buttonChoose.value == 0 ? Colors.white : Colors.red),
+                    icon: Icon(Icons.done_all,
+                        size: 18,
+                        color: _controller.buttonChoose.value == 0
+                            ? Colors.white
+                            : Colors.red),
                     text: "Tất cả",
                     onPress: () {
                       setState(() {
@@ -251,7 +263,11 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   ),
                   StateHomeWidget(
                     isChoose: _controller.buttonChoose.value == 1,
-                    icon: Icon(Icons.public, size: 18, color: _controller.buttonChoose.value == 1 ? Colors.white : Colors.red),
+                    icon: Icon(Icons.public,
+                        size: 18,
+                        color: _controller.buttonChoose.value == 1
+                            ? Colors.white
+                            : Colors.red),
                     text: "Công khai",
                     onPress: () {
                       setState(() {
@@ -262,7 +278,11 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   ),
                   StateHomeWidget(
                     isChoose: _controller.buttonChoose.value == 2,
-                    icon: Icon(Icons.lock, size: 18, color: _controller.buttonChoose.value == 2 ? Colors.white : Colors.red),
+                    icon: Icon(Icons.lock,
+                        size: 18,
+                        color: _controller.buttonChoose.value == 2
+                            ? Colors.white
+                            : Colors.red),
                     text: "Cá nhân",
                     onPress: () {
                       setState(() {
@@ -276,44 +296,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
               const SizedBox(height: 16),
             ],
           );
-        })
-    ));
-  }
-
-  Widget _buildRouteTypeDropDown() {
-    return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16),
-      child: DropdownButtonFormField(
-        decoration: const InputDecoration(border: InputBorder.none),
-        borderRadius: BorderRadius.circular(20.0),
-        hint: Text(
-          itemsDropdown.first,
-          style: const TextStyle(
-              color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-        items: itemsDropdown
-            .map((String item) => DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ))
-            .toList(),
-        value: selectedValue,
-        onChanged: (String? value) {
-          setState(() {
-            selectedValue = value;
-            _controller.setTypeTrip(value!);
-          });
-        },
-      ),
-    );
+        })));
   }
 
   Widget _buildSearchBox() {
@@ -344,7 +327,9 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
           ),
           const SizedBox(width: 8),
           ElevatedButton(
-            onPressed: () {_openFilterBottomSheet(context);},
+            onPressed: () {
+              _openFilterBottomSheet(context);
+            },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: ColorConstants.appColor,
@@ -371,10 +356,30 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     );
   }
 
-  Widget getRow(int i) {
+  Widget _buildListRouter() {
+    return Expanded(
+      child: ListView.separated(
+        physics: const BouncingScrollPhysics(),
+        itemCount: _controller.listTripWithSearch.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _getRow(index);
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            height: 12,
+            thickness: 12,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _getRow(int i) {
     var imageTrip = "";
     var title = "";
+    var leader = "";
     var startPlace = "";
+    var endPlace = "";
     var timeStart = "";
     var numberJoin = "";
     var id = "";
@@ -383,116 +388,137 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     if (listTrips.isNotEmpty) {
       imageTrip = listTrips[i].listImg?[0] ?? "";
       title = listTrips[i].title ?? "";
+      leader = listTrips[i].userHostName ?? "";
       id = listTrips[0].id ?? "";
       startPlace = listTrips[i].placeStart?.name ?? "";
+      endPlace = listTrips[i].placeEnd?.name ?? "";
       timeStart = listTrips[i].timeStart ?? "";
       numberJoin = listTrips[i].listIdMember?.length.toString() ?? "1";
     }
     return InkWell(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(10.0),
-                ),
-                child: CachedMemoryImage(
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.height * 1 / 7.5,
-                  height: MediaQuery.of(context).size.height * 1 / 7.5,
-                  uniqueKey: imageTrip,
-                  base64: imageTrip,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.2,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(10.0),
+                    bottom: Radius.circular(10.0),
+                  ),
+                  child: CachedMemoryImage(
+                    fit: BoxFit.cover,
+                    width: MediaQuery.of(context).size.height * 1 / 0.75,
+                    height: MediaQuery.of(context).size.height * 1 / 0.75,
+                    uniqueKey: imageTrip,
+                    base64: imageTrip,
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
                       title,
-                      style: const TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on, color: Colors.yellow),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            overflow: TextOverflow.ellipsis,
-                            startPlace,
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.timer, color: Colors.yellow),
-                            const SizedBox(width: 8),
-                            Text(timeStart),
-                          ],
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Icon(Icons.people, color: Colors.yellow),
-                              const SizedBox(width: 8),
-                              Text(numberJoin),
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                  ),
+                  const Icon(Icons.people, color: Colors.redAccent),
+                  const SizedBox(width: 8),
+                  Text(numberJoin),
+                  const SizedBox(width: 4),
+                ],
               ),
-            ],
-          ),
+            ),
+            Row(
+              children: [
+                const SizedBox(width: 16),
+                Image.asset(
+                  "assets/images/icon_leader.png",
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    leader,
+                    style: const TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.timer, color: Colors.redAccent),
+                          const SizedBox(width: 8),
+                          Text(timeStart),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on, color: Colors.redAccent),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          startPlace,
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.my_location_rounded,
+                          color: Colors.redAccent),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          endPlace,
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ],
         ),
-
-        // Container(
-        //   margin: const EdgeInsets.only(
-        //       top: DimenConstants.marginPaddingMedium,
-        //       bottom: DimenConstants.marginPaddingSmall),
-        //   child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        //     Container(
-        //       decoration: const BoxDecoration(
-        //           color: Colors.white10,
-        //           borderRadius: BorderRadius.all(Radius.circular(10.0))),
-        //       width: MediaQuery.of(context).size.height * 1 / 7.5,
-        //       height: MediaQuery.of(context).size.height * 1 / 7.5,
-        //       margin: const EdgeInsets.only(right: 10),
-        //       child: ClipRRect(
-        //         borderRadius: BorderRadius.circular(10),
-        //         child: SizedBox.fromSize(
-        //             size: const Size.fromRadius(48),
-        //             child: CachedMemoryImage(
-        //                 fit: BoxFit.cover,
-        //                 width: MediaQuery.of(context).size.height * 1 / 7.5,
-        //                 height: MediaQuery.of(context).size.height * 1 / 7.5,
-        //                 uniqueKey: imageTrip,
-        //                 base64: imageTrip)),
-        //       ),
-        //     ),
-        //     Container(
-        //       margin: const EdgeInsets.only(top: 8),
-        //       child: Text(title),
-        //     )
-        //   ]),
-        // ),
         onTap: () {
           Get.to(() => const DetailRouterScreen(), arguments: [
             {Constants.detailTrip: jsonEncode(trip)},
@@ -522,8 +548,10 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     String searchText = _searchController.text.toLowerCase();
     setState(() {
       Dog.d("_performSearch: $searchText");
-      _controller.listTripWithSearch.value = _controller.listTripWithState.where((item) {
-        return item.title!.toLowerCase().contains(searchText) || item.id!.contains(searchText);
+      _controller.listTripWithSearch.value =
+          _controller.listTripWithState.where((item) {
+        return item.title!.toLowerCase().contains(searchText) ||
+            item.id!.contains(searchText);
       }).toList();
     });
   }
