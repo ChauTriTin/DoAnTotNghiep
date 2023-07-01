@@ -217,7 +217,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                     InkWell(
                       onTap: () {
                         Get.to(JoinedManagerScreen(
-                            id: _controller.trip.value.id ?? ""));
+                            tripdata: _controller.trip.value));
                       },
                       child: Container(
                         alignment: Alignment.center,

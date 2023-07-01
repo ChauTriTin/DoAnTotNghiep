@@ -165,4 +165,5 @@ class StringConstants {
   static const String selectLanguage = "Chọn ngôn ngữ";
   static const String english = "Tiếng Anh";
   static const String vietnamese = "Tiếng Việt";
+  static const String nomember = "Chưa có thành viên nào";
 }

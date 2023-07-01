@@ -6,6 +6,7 @@ class DimenConstants {
   static const double marginPaddingMLarge = 20.0;
   static const double marginPaddingLarge = 30.0;
   static const double marginPaddingExtraLarge = 40.0;
+  static const double marginPaddingXXL = 60.0;
   static const double marginPadding98 = 98;
   static const double splashIconSize = 150;
 

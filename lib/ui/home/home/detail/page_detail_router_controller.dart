@@ -115,7 +115,7 @@ class DetailRouterController extends BaseController {
   Future<void> joinedRouter(String? code) async {
     try {
       var id = userData.value.uid;
-      Dog.e("joinedRouter id :$id");
+      Dog.d("joinedRouter id :$id");
       var listMember = detailTrip.value.listIdMember;
       if (detailTrip.value.id != code || code == null) {
         Dog.e("detailRoute error: wrong code");
@@ -138,7 +138,7 @@ class DetailRouterController extends BaseController {
   }
 
   String getLeaderAvatar() {
-    Dog.e("getLeaderAvatar: ${userLeaderData.value.avatar}");
+    Dog.d("getLeaderAvatar: ${userLeaderData.value.avatar}");
     String avatarUrl = userLeaderData.value.avatar ?? "";
     if (avatarUrl.isEmpty) {
       return StringConstants.avatarImgDefault;
