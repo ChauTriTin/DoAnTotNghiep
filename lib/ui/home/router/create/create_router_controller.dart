@@ -44,6 +44,10 @@ class CreateRouterController extends BaseController {
     Get.delete<CreateRouterController>();
   }
 
+  void setEditRouterMode(bool value) {
+    isEditRouterMode.value = value;
+  }
+
   void initDefault(
     String title,
     String description,
@@ -55,7 +59,6 @@ class CreateRouterController extends BaseController {
     String require,
     bool isPublic,
   ) {
-    isEditRouterMode.value = false;
     debugPrint(">>>initDefault $title");
     debugPrint(">>>initDefault $description");
     debugPrint(">>>initDefault ${placeStart?.toJson()}");
@@ -86,7 +89,6 @@ class CreateRouterController extends BaseController {
 
   void editRouter(String? tripId) {
     debugPrint("editRouter tripId $tripId");
-    isEditRouterMode.value = true;
     if (tripId == null || tripId.isEmpty) {
       debugPrint("editRouter return");
       return;
