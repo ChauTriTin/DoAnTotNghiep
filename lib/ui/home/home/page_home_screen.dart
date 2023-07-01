@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
@@ -9,10 +8,8 @@ import 'package:appdiphuot/ui/home/home/detail/page_detail_router_screen.dart';
 import 'package:appdiphuot/ui/home/home/page_home_controller.dart';
 import 'package:appdiphuot/ui/home/router/create/create_router_screen.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
-import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:appdiphuot/view/state_home_widget.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -20,7 +17,6 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
-import '../../../view/profile_bar_widget.dart';
 
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
@@ -446,7 +442,9 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
             Row(
               children: [
                 const SizedBox(width: 16),
-                Image.asset("assets/images/icon_leader.png",),
+                Image.asset(
+                  "assets/images/icon_leader.png",
+                ),
                 const SizedBox(width: 3),
                 Expanded(
                   child: Text(
@@ -499,7 +497,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.my_location_rounded, color: Colors.redAccent),
+                      const Icon(Icons.my_location_rounded,
+                          color: Colors.redAccent),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
