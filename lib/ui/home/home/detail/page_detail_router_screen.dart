@@ -4,6 +4,7 @@ import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/home/home/detail/page_detail_router_controller.dart';
+import 'package:appdiphuot/ui/home/router/join/joine_manager_screen.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
@@ -237,31 +238,39 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                   height: 60,
                   child: Image.asset("assets/images/ic_launcher.png")),
             ),
-          Column(children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.redAccent,
-              ),
-              child: Center(
-                child: Text(
-                  _controller.detailTrip.value.listIdMember?.length
-                          .toString() ??
-                      "1",
-                  style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+          InkWell(
+            onTap: () {
+              Dog.d("showMember: ${_controller.detailTrip.value.id}");
+              if (_controller.detailTrip.value.id == null) return;
+              Get.to(
+                  JoinedManagerScreen(id: _controller.detailTrip.value.id!));
+            },
+            child: Column(children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.redAccent,
+                ),
+                child: Center(
+                  child: Text(
+                    _controller.detailTrip.value.listIdMember?.length
+                            .toString() ??
+                        "1",
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
-            Container(
-                margin: const EdgeInsets.only(top: 6),
-                child: const Text("Số người tham gia",
-                    style: TextStyle(fontSize: 12, color: Colors.black)))
-          ]),
+              Container(
+                  margin: const EdgeInsets.only(top: 6),
+                  child: const Text("Số người tham gia",
+                      style: TextStyle(fontSize: 12, color: Colors.black)))
+            ]),
+          ),
           InkWell(
             onTap: () => {_showCommentDialog()},
             child: Column(
