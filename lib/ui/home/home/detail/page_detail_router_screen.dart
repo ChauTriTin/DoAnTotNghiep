@@ -19,6 +19,7 @@ import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
 import '../../../../model/comment.dart';
 import '../../../../model/place.dart';
+import '../../../../model/rate.dart';
 import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 import '../../router/create/create_router_screen.dart';
@@ -36,7 +37,6 @@ class DetailRouterScreen extends StatefulWidget {
 
 class _DetailRouterScreenState extends State<DetailRouterScreen> {
   final DetailRouterController _controller = Get.put(DetailRouterController());
-  final PageHomeController _controllerHome = Get.find();
   final _commentController = TextEditingController();
   final _codeController = TextEditingController();
 
@@ -53,7 +53,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     } catch (e) {
       log("Get trip data ex: $e");
     }
-
+    _controller.getAllRouter();
     _controller.getUserInfo(Trip.fromJson(jsonDecode(data)).userIdHost ?? "");
     _controller.getCommentRoute(Trip.fromJson(jsonDecode(data)).id);
   }
@@ -373,9 +373,8 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   }
 
   Widget getItemRow(int i) {
-    var list = _controllerHome.listTrips
-        .where((p0) => p0.isComplete == false)
-        .toList();
+    var list =
+        _controller.listTrips.where((p0) => p0.isComplete == false).toList();
     var trip = list[i];
     if (trip.id == _controller.detailTrip.value.id) {
       return const SizedBox();
@@ -433,26 +432,26 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
   ];
 
   Widget _otherRouter() {
-    var list = _controllerHome.listTrips
-        .where((p0) => p0.isComplete == false)
-        .toList();
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 1 / 5.5,
-      child: ListView.separated(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        scrollDirection: Axis.horizontal,
-        itemCount: list.length,
-        itemBuilder: (BuildContext context, int index) {
-          return getItemRow(index);
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox(
-            width: DimenConstants.marginPaddingMedium,
-          );
-        },
-      ),
-    );
+    return Obx(() => SizedBox(
+          height: MediaQuery.of(context).size.height * 1 / 5.5,
+          child: ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            scrollDirection: Axis.horizontal,
+            itemCount: _controller.listTrips
+                .where((p0) => p0.isComplete == false)
+                .toList()
+                .length,
+            itemBuilder: (BuildContext context, int index) {
+              return getItemRow(index);
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(
+                width: DimenConstants.marginPaddingMedium,
+              );
+            },
+          ),
+        ));
   }
 
   Widget _headerDialog(String title) {
@@ -880,9 +879,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                 long: trip.placeEnd?.long ?? defaultLong,
                 name: trip.placeEnd?.name ?? "",
               ),
-              dfListPlaceStop: [
-                ...trip.listPlace ?? <Place>[]
-              ],
+              dfListPlaceStop: [...trip.listPlace ?? <Place>[]],
               dfDateTimeStart: DateTime.now().add(const Duration(days: 7)),
               //thoi gian bat dau chuyen di
               dfDateTimeEnd: DateTime.now().add(const Duration(days: 3)),
@@ -903,13 +900,37 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     return list;
   }
 
+  List<Rate> convertMapToRateList(Map<String, dynamic>? map) {
+    if (map == null) return <Rate>[];
+    final parsed = map.values.cast<Map<String, dynamic>>();
+    return parsed.map<Rate>((json) => Rate.fromJson(json)).toList();
+  }
+
   Widget rateTrip() {
+    var ratesMap = convertMapToRateList(_controller.detailTrip.value.rates);
+    var totalRate = _controller.detailTrip.value.rates?.length ?? 0;
+    var rateLeader = 0.0;
+    var rateStart = 0.0;
+    var rateEnd = 0.0;
+    var rateTrip = 0.0;
+    for (var element in ratesMap) {
+      rateLeader += element.rateLeader ?? 0;
+      rateStart += element.ratePlaceStart ?? 0;
+      rateEnd += element.ratePlaceEnd ?? 0;
+      rateTrip += element.rateTrip ?? 0;
+    }
+
+    rateLeader = rateLeader / totalRate;
+    rateStart = rateStart / totalRate;
+    rateEnd = rateEnd / totalRate;
+    rateTrip = rateTrip / totalRate;
+
     return Obx(() => Container(
           margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Danh giá",
+              const Text("Đánh giá",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               const SizedBox(height: 12),
               Row(
@@ -921,21 +942,20 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                             fontWeight: FontWeight.bold, fontSize: 16)),
                   ),
                   //TODO fix model rates
-                  // RatingBar.builder(
-                  //   initialRating:
-                  //       _controller.detailTrip.value.rate?.rateLeader ?? 1,
-                  //   direction: Axis.horizontal,
-                  //   allowHalfRating: true,
-                  //   itemCount: 5,
-                  //   itemSize: 25.0,
-                  //   itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  //   itemBuilder: (context, _) => const Icon(
-                  //     Icons.star,
-                  //     color: Colors.red,
-                  //   ),
-                  //   ignoreGestures: true,
-                  //   onRatingUpdate: (double value) {},
-                  // )
+                  RatingBar.builder(
+                    initialRating: rateLeader,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 25.0,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.red,
+                    ),
+                    ignoreGestures: true,
+                    onRatingUpdate: (double value) {},
+                  )
                 ],
               ),
               ...listPlaceRate(),
@@ -949,21 +969,20 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                             fontWeight: FontWeight.bold, fontSize: 16)),
                   ),
                   //TODO fix model rates
-                  // RatingBar.builder(
-                  //   initialRating:
-                  //       _controller.detailTrip.value.rate?.rateTrip ?? 1,
-                  //   direction: Axis.horizontal,
-                  //   allowHalfRating: true,
-                  //   itemCount: 5,
-                  //   itemSize: 25.0,
-                  //   itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  //   itemBuilder: (context, _) => const Icon(
-                  //     Icons.star,
-                  //     color: Colors.red,
-                  //   ),
-                  //   ignoreGestures: true,
-                  //   onRatingUpdate: (double value) {},
-                  // )
+                  RatingBar.builder(
+                    initialRating: rateTrip,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 25.0,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.red,
+                    ),
+                    ignoreGestures: true,
+                    onRatingUpdate: (double value) {},
+                  )
                 ],
               )
             ],
