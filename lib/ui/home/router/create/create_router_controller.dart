@@ -8,6 +8,7 @@ import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/time_utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
@@ -36,6 +37,7 @@ class CreateRouterController extends BaseController {
   var isCreateRouteSuccess = false.obs;
 
   var isEditRouterMode = false.obs;
+  var trip = Trip().obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -90,6 +92,7 @@ class CreateRouterController extends BaseController {
       return;
     }
     id.value = tripId;
+    _getRouter(tripId);
   }
 
   void setPlaceStart(Place place) {
@@ -341,6 +344,25 @@ class CreateRouterController extends BaseController {
       return "Sửa chuyến đi";
     } else {
       return "Tạo chuyến đi";
+    }
+  }
+
+  Future<void> _getRouter(String id) async {
+    try {
+      FirebaseHelper.collectionReferenceRouter
+          .doc(id)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? map =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (map == null || map.data() == null) return;
+
+        var trip = Trip.fromJson((map).data()!);
+        this.trip.value = trip;
+        debugPrint("editRouter getRouter success: ${trip.toString()}");
+      });
+    } catch (e) {
+      debugPrint("editRouter getRouter get user info fail: $e");
     }
   }
 }
