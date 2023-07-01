@@ -1,5 +1,5 @@
-import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class TimeUtils {
@@ -17,9 +17,11 @@ class TimeUtils {
 
     try {
       DateFormat format = DateFormat('dd/MM/yyyy HH:mm');
+      debugPrint("editRouter dateTimeString $dateTimeString");
       DateTime dateTime = format.parse(dateTimeString);
       return dateTime;
     } catch (e) {
+      debugPrint("editRouter $e");
       return null;
     }
   }

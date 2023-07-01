@@ -15,6 +15,7 @@ import 'package:lottie/lottie.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 
 import '../../../../util/log_dog_utils.dart';
+import '../create/create_router_screen.dart';
 import '../join/joine_manager_screen.dart';
 import 'create_success_controller.dart';
 
@@ -140,7 +141,9 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                               ),
                             ),
                             const WidgetSpan(
-                              child: SizedBox(width: 8,),
+                              child: SizedBox(
+                                width: 8,
+                              ),
                             ),
                             const WidgetSpan(
                               child: Icon(Icons.copy, size: 24),
@@ -330,6 +333,37 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               child: const Icon(Icons.clear),
             ),
           ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                DimenConstants.marginPaddingMedium,
+                DimenConstants.marginPaddingLarge,
+                DimenConstants.marginPaddingMedium,
+                DimenConstants.marginPaddingMedium,
+              ),
+              child: FloatingActionButton(
+                mini: true,
+                elevation: DimenConstants.elevationMedium,
+                backgroundColor: ColorConstants.appColor,
+                onPressed: () {
+                  Get.to(CreateRouterScreen(
+                    dfTitle: "",
+                    dfDescription: "",
+                    dfPlaceStart: null,
+                    dfPlaceEnd: null,
+                    dfListPlaceStop: [],
+                    dfDateTimeStart: null,
+                    dfDateTimeEnd: null,
+                    dfRequire: "",
+                    dfIsPublic: true,
+                    dfEditRouterWithTripId: _controller.trip.value.id,
+                  ));
+                },
+                child: const Icon(Icons.edit),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -364,7 +398,6 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
         gravity: ToastGravity.BOTTOM,
         backgroundColor: ColorConstants.appColor,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 }

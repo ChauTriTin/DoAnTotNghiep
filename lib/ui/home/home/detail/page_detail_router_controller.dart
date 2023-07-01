@@ -5,6 +5,7 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/comment.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/const/string_constants.dart';
@@ -15,6 +16,9 @@ import '../../../user_singleton_controller.dart';
 class DetailRouterController extends BaseController {
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
+  var db = FirebaseFirestore.instance;
+
+  var listTrips = <Trip>[].obs;
 
   var userLeaderData = UserData().obs;
 
@@ -25,6 +29,34 @@ class DetailRouterController extends BaseController {
   var commentData = <Comment>[].obs;
 
   var isWidgetJoinedVisible = true.obs;
+
+  Future<void> getAllRouter() async {
+    var routerSnapshot = db.collection("router").snapshots();
+    routerSnapshot.listen((event) {
+      try {
+        for (var docSnapshot in event.docs) {
+          var trip = Trip.fromJson(docSnapshot.data().cast<String, dynamic>());
+          if (listTrips.firstWhereOrNull(
+                  (element) => element.id == docSnapshot.id) ==
+              null) {
+            listTrips
+                .add(Trip.fromJson(docSnapshot.data().cast<String, dynamic>()));
+          } else {
+            if (listTrips.firstWhereOrNull(
+                    (element) => element.id == docSnapshot.id) ==
+                trip) {
+              var index =
+                  listTrips.indexWhere((element) => element.id == trip.id);
+              listTrips[index] = trip;
+            }
+          }
+          Dog.d('getAllRouter listTrips ${listTrips.length}');
+        }
+      } catch (ex) {
+        Dog.e('getAllRouter error ${ex}');
+      }
+    });
+  }
 
   Future<void> getUserInfo(String uid) async {
     try {
@@ -105,7 +137,7 @@ class DetailRouterController extends BaseController {
       FirebaseHelper.collectionReferenceRouter
           .doc(id)
           .update({"comments": commentsData})
-          .then((value) => Dog.d("addCommentRoute success"))
+          .then((value) => postFCM(text, "comment"))
           .catchError((error) => Dog.e("addCommentRoute error: $error"));
     } catch (e) {
       log("addCommentRoute: $e");
@@ -127,6 +159,8 @@ class DetailRouterController extends BaseController {
               .update({"listIdMember": listMember})
               .then((value) => {
                     isWidgetJoinedVisible.value = true,
+                    postFCM("Số lượng member hiện tại:  ${listMember?.length}",
+                        "join"),
                     Dog.d("joinedRouter success")
                   })
               .catchError((error) => {Dog.e("joinedRouter error: $error")});
@@ -134,6 +168,38 @@ class DetailRouterController extends BaseController {
       }
     } catch (e) {
       Dog.e("joinedRouter: $e");
+    }
+  }
+
+  Future<void> postFCM(String body, String type) async {
+    FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
+      apiKey:
+          "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL",
+      enableLog: true,
+      enableServerRespondLog: true,
+    );
+    try {
+      var listFcmToken = <String>[];
+      listFcmToken.add(userLeaderData.value.fcmToken ?? "");
+
+      var title = "";
+      if (type.contains("comment")) {
+        title = "Có bình luận mới";
+      } else {
+        title = "Có người tham gia chuyến đi";
+      }
+
+      Map<String, dynamic> result =
+          await flutterFCMWrapper.sendMessageByTokenID(
+        userRegistrationTokens: listFcmToken,
+        title: title,
+        body: body,
+        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      );
+      Dog.e("FCM sendTopicMessage result ${result}");
+    } catch (e) {
+      Dog.e("FCM sendTopicMessage $e");
     }
   }
 

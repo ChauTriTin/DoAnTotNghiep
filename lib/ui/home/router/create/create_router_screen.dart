@@ -32,6 +32,7 @@ class CreateRouterScreen extends StatefulWidget {
     required this.dfDateTimeEnd,
     required this.dfRequire,
     required this.dfIsPublic,
+    required this.dfEditRouterWithTripId,
   });
 
   final String dfTitle;
@@ -43,6 +44,7 @@ class CreateRouterScreen extends StatefulWidget {
   final DateTime? dfDateTimeEnd;
   final String dfRequire;
   final bool dfIsPublic;
+  final String? dfEditRouterWithTripId;
 
   @override
   State<CreateRouterScreen> createState() => _CreateRouterScreenState();
@@ -57,17 +59,26 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     _setupListen();
 
     //setup default value
-    _controller.initDefault(
-      widget.dfTitle,
-      widget.dfDescription,
-      widget.dfPlaceStart,
-      widget.dfPlaceEnd,
-      widget.dfListPlaceStop,
-      widget.dfDateTimeStart,
-      widget.dfDateTimeEnd,
-      widget.dfRequire,
-      widget.dfIsPublic,
-    );
+    if (widget.dfEditRouterWithTripId == null ||
+        widget.dfEditRouterWithTripId?.isEmpty == true) {
+      _controller.setEditRouterMode(false);
+      //create router with some default values
+      _controller.initDefault(
+        widget.dfTitle,
+        widget.dfDescription,
+        widget.dfPlaceStart,
+        widget.dfPlaceEnd,
+        widget.dfListPlaceStop,
+        widget.dfDateTimeStart,
+        widget.dfDateTimeEnd,
+        widget.dfRequire,
+        widget.dfIsPublic,
+      );
+    } else {
+      //edit router
+      _controller.setEditRouterMode(true);
+      _controller.editRouter(widget.dfEditRouterWithTripId);
+    }
   }
 
   void _setupListen() {
@@ -88,12 +99,14 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Get.back();
         showSnackBarFull(StringConstants.warning, "Tạo thành công");
         Get.to(
-            CreateSuccessScreen(id: _controller.id, isOpenFromDetailPage: false
-                // dateTimeEnd: _controller.dateTimeEnd.value,
-                // placeStart: _controller.placeStart.value,
-                // placeEnd: _controller.placeEnd.value,
-                // listPlaceStop: _controller.listPlaceStop,
-                ));
+          CreateSuccessScreen(
+              id: _controller.id.value, isOpenFromDetailPage: false
+              // dateTimeEnd: _controller.dateTimeEnd.value,
+              // placeStart: _controller.placeStart.value,
+              // placeEnd: _controller.placeEnd.value,
+              // listPlaceStop: _controller.listPlaceStop,
+              ),
+        );
       }
     });
   }
@@ -167,16 +180,16 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   borderRadius: BorderRadius.circular(32.0),
                 ),
               ),
-              child: const Text(
-                'Tạo chuyến đi',
-                style: TextStyle(
+              child: Text(
+                _controller.getTextMode(),
+                style: const TextStyle(
                   fontSize: DimenConstants.txtMedium,
                 ),
               ),
             ),
             Expanded(
               child: Text(
-                'Mã: ${_controller.id}',
+                'Mã: ${_controller.id.value}',
                 style: const TextStyle(
                   fontSize: DimenConstants.txtMedium,
                   color: ColorConstants.appColor,
@@ -576,7 +589,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               _controller.createRouter();
             },
             label: Text(
-              "Tạo chuyến đi".toUpperCase(),
+              _controller.getTextMode(),
               style: const TextStyle(
                   color: Color(0xff4a4a4a),
                   fontWeight: FontWeight.bold,
