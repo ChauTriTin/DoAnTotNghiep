@@ -480,7 +480,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Icon(Icons.people, color: Colors.redAccent),
+                  const Icon(Icons.people, color: Colors.grey),
                   const SizedBox(width: 8),
                   Text(numberJoin),
                   const SizedBox(width: 4),
@@ -492,6 +492,9 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 const SizedBox(width: 16),
                 Image.asset(
                   "assets/images/icon_leader.png",
+                  width: 24,
+                  height: 24,
+                  color: Colors.grey,
                 ),
                 const SizedBox(width: 3),
                 Expanded(
@@ -517,7 +520,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.timer, color: Colors.redAccent),
+                          const Icon(Icons.timer, color: Colors.grey),
                           const SizedBox(width: 8),
                           Text(timeStart),
                         ],
@@ -527,7 +530,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.location_on, color: Colors.redAccent),
+                      const Icon(Icons.location_on, color: Colors.grey),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -545,8 +548,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.my_location_rounded,
-                          color: Colors.redAccent),
+                      const Icon(Icons.my_location_rounded, color: Colors.grey),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
