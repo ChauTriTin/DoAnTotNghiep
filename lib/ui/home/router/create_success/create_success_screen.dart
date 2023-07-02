@@ -15,6 +15,7 @@ import 'package:lottie/lottie.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 
 import '../../../../util/log_dog_utils.dart';
+import '../../../../util/ui_utils.dart';
 import '../create/create_router_screen.dart';
 import '../join/joine_manager_screen.dart';
 import 'create_success_controller.dart';
@@ -59,6 +60,12 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
     eventBusOnBackPress = eventBus.on<OnBackPress>().listen((event) {
       if (event.className == mapScreen) {
         Get.back();
+      }
+
+    });
+    _controller.isTripDeleted.listen((isDeleted) {
+      if (isDeleted) {
+        UIUtils.showWarningDialog(context);
       }
     });
   }

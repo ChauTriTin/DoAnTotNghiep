@@ -49,6 +49,12 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
     });
     _controller.appError.listen((err) {
     });
+
+    _controller.isTripDeleted.listen((isDeleted) {
+      if (isDeleted) {
+        UIUtils.showWarningDialog(context);
+      }
+    });
   }
 
 

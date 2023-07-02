@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 class CreateSuccessController extends BaseController {
   var isDoneCountdown = false.obs;
   var trip = Trip().obs;
+  var isTripDeleted = false.obs;
 
   void clearOnDispose() {
     Get.delete<CreateSuccessController>();
@@ -24,6 +25,11 @@ class CreateSuccessController extends BaseController {
           .doc(id)
           .snapshots()
           .listen((value) {
+        if (!value.exists) {
+          print('getDetailTrip trip does not exist.');
+          isTripDeleted.value = true;
+        }
+
         DocumentSnapshot<Map<String, dynamic>>? map =
             value as DocumentSnapshot<Map<String, dynamic>>?;
         if (map == null || map.data() == null) return;
@@ -36,6 +42,7 @@ class CreateSuccessController extends BaseController {
         var pStart = this.trip.value.placeStart;
         var pEnd = this.trip.value.placeEnd;
         var list = this.trip.value.listPlace;
+        isTripDeleted.value = false;
         // if (pStart != null && pEnd != null && list != null) {
         //   _initRouter(pStart, pEnd, list);
         // }
@@ -44,6 +51,7 @@ class CreateSuccessController extends BaseController {
         // _genListMember(this.trip.value.listIdMember ?? List.empty());
       });
     } catch (e) {
+      isTripDeleted.value = true;
       debugPrint("getRouter get user info fail: $e");
     }
   }
