@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -38,9 +39,30 @@ class _PageDetailChatScreenState
     var tripData = Get.arguments[0][Constants.detailChat];
     Dog.d("initState: tripData: ${tripData.toString()}");
     _controller.tripData.value = Trip.fromJson(jsonDecode(tripData ?? ""));
-
+    _setupListen();
     _controller.getData();
     super.initState();
+  }
+
+  void _setupListen() {
+    _controller.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
+    _controller.appError.listen((err) {
+      showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
+        //do sth
+      });
+    });
+
+    _controller.isTripDeleted.listen((isDeleted) {
+      if(isDeleted){
+        _showWarningDialog();
+      }
+    });
   }
 
   @override
@@ -119,13 +141,16 @@ class _PageDetailChatScreenState
     );
   }
 
+  void _showWarningDialog() {
+    UIUtils.showAlertDialog(context, StringConstants.warning,
+        StringConstants.removeWarning, StringConstants.ok, () {
+          Get.back();
+        }, null, null);
+  }
+
   void _handleSendPressed(PartialText message) {
     if (!_controller.isCurrentUserJoinedTrip()) {
-      UIUtils.showAlertDialog(context, StringConstants.warning,
-          StringConstants.removeWarning, StringConstants.ok, () {
-        Get.back();
-      }, null, null);
-
+      _showWarningDialog();
       return;
     }
 

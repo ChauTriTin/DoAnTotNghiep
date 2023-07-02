@@ -18,6 +18,7 @@ class DetailRouterController extends BaseController {
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
   final routerCollection = FirebaseHelper.collectionReferenceRouter;
+  final chatCollection = FirebaseHelper.collectionReferenceChat;
   var db = FirebaseFirestore.instance;
 
   var listTrips = <Trip>[].obs;
@@ -237,8 +238,9 @@ class DetailRouterController extends BaseController {
   Future<void> deleteRouter() async {
     try {
       setAppLoading(true, "Loading", TypeApp.loadingData);
-      var router = routerCollection.doc(detailTrip.value.id);
-      await router.delete();
+      var tripID = detailTrip.value.id;
+      await routerCollection.doc(tripID).delete();
+      await chatCollection.doc(tripID).delete();
 
       setAppLoading(false, "Loading", TypeApp.loadingData);
       Get.back();
