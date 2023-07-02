@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:appdiphuot/base/base_stateful_state.dart';
@@ -20,6 +21,8 @@ import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import '../../chat/detail/page_detail_chat_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -317,8 +320,9 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              Get.back(); //close this screen
-              eventBus.fire(OnBackPress(mapScreen));
+              Get.to(() => const PageDetailChatScreen(), arguments: [
+                {Constants.detailChat: jsonEncode(_controller.trip.value)},
+              ]);
             },
             child: const Icon(Icons.sms),
           ),
