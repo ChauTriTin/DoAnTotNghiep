@@ -15,6 +15,7 @@ class MemberController extends BaseController {
   final _users = FirebaseHelper.collectionReferenceUser;
   var members = <UserData>[].obs;
   var tripData = Trip().obs;
+  var isTripCompleted = false.obs;
 
   void clearOnDispose() {
     Get.delete<MemberController>();
@@ -91,6 +92,8 @@ class MemberController extends BaseController {
 
         var trip = Trip.fromJson((tripMap).data()!);
         tripData.value = trip;
+
+        isTripCompleted.value = trip.isComplete ?? false;
         log("getTripDetail success: ${trip.toString()}");
         getAllMember();
       });

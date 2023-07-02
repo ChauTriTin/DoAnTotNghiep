@@ -254,7 +254,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
         ),
       );
     } else {
-      if (currentUid == _controller.tripData.value.userIdHost) {
+      if (currentUid == _controller.tripData.value.userIdHost && !_controller.isTripCompleted.value) {
         return InkWell(
           onTap: () {
             _showDeleteDialog(user);
