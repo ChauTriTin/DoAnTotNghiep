@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/comment.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
@@ -185,13 +186,20 @@ class DetailRouterController extends BaseController {
 
   Future<void> postFCM(String body, String type) async {
     FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
-      apiKey:
-          "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL",
+      apiKey: Constants.apiKey,
       enableLog: true,
       enableServerRespondLog: true,
     );
     try {
       var listFcmToken = <String>[];
+      // if (kDebugMode) {
+      //   //lg v60
+      //   listFcmToken.add(
+      //       "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh");
+      //   //samsung a50
+      //   listFcmToken.add(
+      //       "e8hPdUzASaqjB7dU0TbT7R:APA91bHQImI50Fzhr8P1NoRcYMQMpfOhX8yGn4ZWXwLDQJgWbVgb7FYjz8DjdfAEvfN0o5_EQa0bw5lBFerkeAW0ScCfEmfGya9quF5kre27EdNzgznxFrJLzkbWAqGMkg7eSjXt0KMF");
+      // }
       Dog.d("fcmToken leader: ${userLeaderData.value.fcmToken}");
       listFcmToken.add(userLeaderData.value.fcmToken ?? "");
 
@@ -210,9 +218,9 @@ class DetailRouterController extends BaseController {
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );
-      Dog.e("FCM sendTopicMessage result ${result}");
+      Dog.e("FCM sendTopicMessage fcmToken result $result");
     } catch (e) {
-      Dog.e("FCM sendTopicMessage $e");
+      Dog.e("FCM sendTopicMessage fcmToken $e");
     }
   }
 
