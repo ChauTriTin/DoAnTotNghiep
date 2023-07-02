@@ -428,7 +428,7 @@ class UIUtils {
     String message,
     String? cancelTitle,
     VoidCallback? cancelAction,
-    String okTitle,
+    String? okTitle,
     VoidCallback? okAction,
   ) {
     showCupertinoDialog(
@@ -460,20 +460,21 @@ class UIUtils {
                 ),
               ),
             ),
-          CupertinoDialogAction(
-            child: Text(
-              okTitle,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Color(0xffFF0000),
+          if (okTitle != null)
+            CupertinoDialogAction(
+              child: Text(
+                okTitle,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xffFF0000),
+                ),
               ),
+              onPressed: () {
+                Get.back();
+                okAction?.call();
+              },
             ),
-            onPressed: () {
-              Get.back();
-              okAction?.call();
-            },
-          ),
         ],
       ),
     );

@@ -12,6 +12,7 @@ import '../model/user.dart';
 class UserSingletonController extends GetxController {
 
   static UserSingletonController? _instance;
+  var isShowHomeBanner = true.obs;
 
   static UserSingletonController get instance {
     _instance ??= UserSingletonController._();
@@ -21,6 +22,24 @@ class UserSingletonController extends GetxController {
   UserSingletonController._();
 
   final userData = UserData().obs;
+
+
+  Future<void> getBannerHome() async {
+    isShowHomeBanner.value = await SharedPreferencesUtil.getBool(
+        SharedPreferencesUtil.IS_SHOW_TOP_BANNER) ??
+        true;
+  }
+
+  void getData(){
+    getUserInfo();
+    getBannerHome();
+  }
+
+  void hideBanner(bool value) {
+    SharedPreferencesUtil.setBool(
+        SharedPreferencesUtil.IS_SHOW_TOP_BANNER, value);
+    isShowHomeBanner.value = value;
+  }
 
   Future<void> getUserInfo() async {
 

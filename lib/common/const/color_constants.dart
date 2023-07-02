@@ -31,6 +31,7 @@ class ColorConstants {
   static const Color dividerGreyColor =  Color(0xA6C7C7C7);
 
   static const Color colorProfile =  Color(0xFF04CB5B);
+  static const Color colorBanner =  Color(0xFF04CB5B);
   static const Color colorMode =  Color(0xFF3B3B3B);
   static const Color colorLanguage =  Color(0xFFFFC037);
   static const Color colorAbout =  Color(0xFFDFDFDF);

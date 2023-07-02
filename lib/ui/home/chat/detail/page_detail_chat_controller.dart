@@ -19,6 +19,10 @@ class PageDetailChatController extends BaseController {
   var userChat = const User(id: "").obs;
   var messages = <Message>[].obs;
 
+  bool isCurrentUserJoinedTrip() {
+    return tripData.value.listIdMember?.contains(userChat.value.id) ?? false;
+  }
+
   Future<void> getData() async {
     var currentUid = await SharedPreferencesUtil.getUIDLogin() ?? "";
     _getUserData(currentUid);
@@ -56,6 +60,7 @@ class PageDetailChatController extends BaseController {
 
   Future<void> _fetchMessages(String? tripId) async {
     if (tripId == null) return;
+    Dog.d("_fetchMessages: tripID: ${tripId.toString()}");
 
     var chatStream =
         _chat.doc(tripId).collection(FirebaseHelper.messages).snapshots();
@@ -63,10 +68,10 @@ class PageDetailChatController extends BaseController {
     var chatSnapshots = chatStream.map((querySnapshot) => querySnapshot.docs);
 
     chatSnapshots.listen((chatSnapshots) {
+      log("_fetchMessages: Update message");
       var tempMessages = <Message>[];
 
       for (var chatSnapshot in chatSnapshots) {
-        log("_fetchMessages: $chatSnapshot");
 
         DocumentSnapshot<Map<String, dynamic>>? message = chatSnapshot;
 
@@ -87,6 +92,7 @@ class PageDetailChatController extends BaseController {
 
   Future<void> _addMessageToFireStore(Message message) async {
     try {
+      Dog.d("_addMessageToFireStore: ${tripData.value.id}");
       await _chat
           .doc(tripData.value.id)
           .collection(FirebaseHelper.messages)

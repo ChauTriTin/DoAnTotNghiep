@@ -67,14 +67,23 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
         ),
         backgroundColor: ColorConstants.colorWhite,
         body: Obx(() {
-          return Column(
+          return Stack(
             children: [
-              ProfileBarWidget(
-                name: UserSingletonController.instance.getName(),
-                state: StringConstants.status,
-                linkAvatar: UserSingletonController.instance.getAvatar(),
+              buildBody(context),
+              Padding(
+                padding: const EdgeInsets.all(
+                  DimenConstants.marginPaddingMedium,
+                ),
+                child: FloatingActionButton(
+                  mini: true,
+                  elevation: DimenConstants.elevationMedium,
+                  backgroundColor: ColorConstants.appColor,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Icon(Icons.clear),
+                ),
               ),
-              Expanded(child: buildBody(context))
             ],
           );
         }));
@@ -88,7 +97,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             horizontal: DimenConstants.marginPaddingMedium),
         child: ListView(physics: const BouncingScrollPhysics(), children: [
           const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
+            height: DimenConstants.marginPaddingXXL,
           ),
           _buildAvatar(),
           const SizedBox(
@@ -122,6 +131,8 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             ),
           ),
           getDarkMode(),
+          getDivider(),
+          getBannerView(),
           getDivider(),
 
           // Language
@@ -361,6 +372,47 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
               value: _controller.isDarkMode.value,
               onChanged: (value) {
                 _controller.updateDarkModeStatus(value);
+                ThemeModeNotifier.instance.toggleTheme(value);
+              }),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getBannerView() {
+    return InkWell(
+      onTap: () {},
+      child: Row(
+        children: [
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Container(
+            width: DimenConstants.circleShape,
+            height: DimenConstants.circleShape,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: ColorConstants.colorBanner,
+            ),
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Expanded(
+              child: Text(
+                StringConstants.bannerHome,
+                style: UIUtils.getStyleTextSmall400(),
+              )),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Switch(
+              value: UserSingletonController.instance.isShowHomeBanner.value,
+              onChanged: (value) {
+                UserSingletonController.instance.hideBanner(value);
                 ThemeModeNotifier.instance.toggleTheme(value);
               }),
           const SizedBox(
