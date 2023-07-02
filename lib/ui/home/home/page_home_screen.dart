@@ -96,9 +96,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         child: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.orangeAccent),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.orangeAccent),
               child: Row(
                 children: [
                   Expanded(
@@ -106,12 +104,10 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                            padding: const EdgeInsets.only(
-                                left: 24, top: 12, bottom: 8),
+                            padding: const EdgeInsets.only(left: 24, top: 12, bottom: 8),
                             child: const Text(
                               "Sự kiện đi để nhận",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
+                              style: TextStyle(fontSize: 12, color: Colors.white),
                             )),
                         Container(
                           padding: const EdgeInsets.only(left: 24, bottom: 12),
@@ -123,11 +119,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                      width: 90,
-                      height: 90,
-                      child: Lottie.network(
-                          "https://assets7.lottiefiles.com/packages/lf20_vuubgscl.json")),
+                  SizedBox(width: 90, height: 90, child: Lottie.network("https://assets7.lottiefiles.com/packages/lf20_vuubgscl.json")),
                 ],
               ),
             ),
@@ -198,14 +190,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Wrap(spacing: 8.0, children: [
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value ==
-                        StringConstants.tripOpen,
-                    icon: Icon(Icons.alarm,
-                        size: 18,
-                        color: _controller.buttonChipTypeSelected.value ==
-                                StringConstants.tripOpen
-                            ? Colors.white
-                            : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.tripOpen,
+                    icon: Icon(Icons.alarm, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.tripOpen ? Colors.white : Colors.red),
                     text: StringConstants.tripOpen,
                     onPress: () {
                       setState(() {
@@ -215,14 +201,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     },
                   ),
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value ==
-                        StringConstants.tripPost,
-                    icon: Icon(Icons.alarm_on_rounded,
-                        size: 18,
-                        color: _controller.buttonChipTypeSelected.value ==
-                                StringConstants.tripPost
-                            ? Colors.white
-                            : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.tripPost,
+                    icon: Icon(Icons.alarm_on_rounded, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.tripPost ? Colors.white : Colors.red),
                     text: StringConstants.tripPost,
                     onPress: () {
                       setState(() {
@@ -232,14 +212,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     },
                   ),
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value ==
-                        StringConstants.tripTop,
-                    icon: Icon(Icons.vertical_align_top,
-                        size: 18,
-                        color: _controller.buttonChipTypeSelected.value ==
-                                StringConstants.tripTop
-                            ? Colors.white
-                            : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.tripTop,
+                    icon: Icon(Icons.vertical_align_top, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.tripTop ? Colors.white : Colors.red),
                     text: StringConstants.tripTop,
                     onPress: () {
                       setState(() {
@@ -249,14 +223,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                     },
                   ),
                   StateHomeWidget(
-                    isChoose: _controller.buttonChipTypeSelected.value ==
-                        StringConstants.placeTop,
-                    icon: Icon(Icons.location_city,
-                        size: 18,
-                        color: _controller.buttonChipTypeSelected.value ==
-                                StringConstants.placeTop
-                            ? Colors.white
-                            : Colors.red),
+                    isChoose: _controller.buttonChipTypeSelected.value == StringConstants.placeTop,
+                    icon: Icon(Icons.location_city, size: 18, color: _controller.buttonChipTypeSelected.value == StringConstants.placeTop ? Colors.white : Colors.red),
                     text: StringConstants.placeTop,
                     onPress: () {
                       setState(() {
@@ -281,11 +249,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 child: Wrap(spacing: 8.0, children: [
                   StateHomeWidget(
                     isChoose: _controller.buttonChoose.value == 0,
-                    icon: Icon(Icons.done_all,
-                        size: 18,
-                        color: _controller.buttonChoose.value == 0
-                            ? Colors.white
-                            : Colors.red),
+                    icon: Icon(Icons.done_all, size: 18, color: _controller.buttonChoose.value == 0 ? Colors.white : Colors.red),
                     text: "Tất cả",
                     onPress: () {
                       setState(() {
@@ -296,11 +260,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   ),
                   StateHomeWidget(
                     isChoose: _controller.buttonChoose.value == 1,
-                    icon: Icon(Icons.public,
-                        size: 18,
-                        color: _controller.buttonChoose.value == 1
-                            ? Colors.white
-                            : Colors.red),
+                    icon: Icon(Icons.public, size: 18, color: _controller.buttonChoose.value == 1 ? Colors.white : Colors.red),
                     text: "Công khai",
                     onPress: () {
                       setState(() {
@@ -311,11 +271,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   ),
                   StateHomeWidget(
                     isChoose: _controller.buttonChoose.value == 2,
-                    icon: Icon(Icons.lock,
-                        size: 18,
-                        color: _controller.buttonChoose.value == 2
-                            ? Colors.white
-                            : Colors.red),
+                    icon: Icon(Icons.lock, size: 18, color: _controller.buttonChoose.value == 2 ? Colors.white : Colors.red),
                     text: "Cá nhân",
                     onPress: () {
                       setState(() {
@@ -449,15 +405,13 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 13),
               child: Row(
                 children: [
-                  Icon(trip.isPublic == true ? Icons.public: Icons.lock, color: Colors.grey),
+                  Icon(trip.isPublic == true ? Icons.public : Icons.lock, color: Colors.grey),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
                       trip.title ?? "",
-                      style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
+                      maxLines: 1,
                     ),
                   ),
                   const Icon(Icons.people, color: Colors.grey),
@@ -543,7 +497,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       const SizedBox(width: 4),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -578,10 +532,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     String searchText = _searchController.text.toLowerCase();
     setState(() {
       Dog.d("_performSearch: $searchText");
-      _controller.listTripWithSearch.value =
-          _controller.listTripWithState.where((item) {
-        return item.title!.toLowerCase().contains(searchText) ||
-            item.id!.contains(searchText);
+      _controller.listTripWithSearch.value = _controller.listTripWithState.where((item) {
+        return item.title!.toLowerCase().contains(searchText) || item.id!.contains(searchText);
       }).toList();
     });
   }
