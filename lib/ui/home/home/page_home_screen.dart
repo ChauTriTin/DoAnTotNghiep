@@ -409,7 +409,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
           physics: const BouncingScrollPhysics(),
           itemCount: _controller.listTripWithSearch.length,
           itemBuilder: (BuildContext context, int index) {
-            return _getRow(index);
+            return _getRow(_controller.listTripWithSearch[index], index);
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Divider(
@@ -422,27 +422,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
     }
   }
 
-  Widget _getRow(int i) {
-    var imageTrip = "";
-    var title = "";
-    var leader = "";
-    var startPlace = "";
-    var endPlace = "";
-    var timeStart = "";
-    var numberJoin = "";
-    var id = "";
-    Trip? trip = _controller.listTripWithSearch[i];
-    List<Trip> listTrips = _controller.listTripWithSearch;
-    if (listTrips.isNotEmpty) {
-      imageTrip = listTrips[i].listImg?[0] ?? "";
-      title = listTrips[i].title ?? "";
-      leader = listTrips[i].userHostName ?? "";
-      id = listTrips[0].id ?? "";
-      startPlace = listTrips[i].placeStart?.name ?? "";
-      endPlace = listTrips[i].placeEnd?.name ?? "";
-      timeStart = listTrips[i].timeStart ?? "";
-      numberJoin = listTrips[i].listIdMember?.length.toString() ?? "1";
-    }
+  Widget _getRow(Trip trip, int index) {
     return InkWell(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -459,21 +439,21 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   ),
                   child: CachedMemoryImage(
                     fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.height * 1 / 0.75,
-                    height: MediaQuery.of(context).size.height * 1 / 0.75,
-                    uniqueKey: imageTrip,
-                    base64: imageTrip,
+                    uniqueKey: trip.listImg?[0] ?? "",
+                    base64: trip.listImg?[0] ?? "",
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 13),
               child: Row(
                 children: [
+                  Icon(trip.isPublic == true ? Icons.public: Icons.lock, color: Colors.grey),
+                  const SizedBox(width: 4),
                   Expanded(
                     child: Text(
-                      title,
+                      trip.title ?? "",
                       style: const TextStyle(
                           fontSize: 18.0,
                           color: Colors.black,
@@ -482,7 +462,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   ),
                   const Icon(Icons.people, color: Colors.grey),
                   const SizedBox(width: 8),
-                  Text(numberJoin),
+                  Text(trip.listIdMember?.length.toString() ?? "1"),
                   const SizedBox(width: 4),
                 ],
               ),
@@ -500,7 +480,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                 Expanded(
                   child: Text(
                     overflow: TextOverflow.ellipsis,
-                    leader,
+                    trip.userHostName ?? "",
                     style: const TextStyle(
                       fontSize: 14.0,
                       color: Colors.black,
@@ -522,7 +502,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                         children: [
                           const Icon(Icons.timer, color: Colors.grey),
                           const SizedBox(width: 8),
-                          Text(timeStart),
+                          Text(trip.timeStart ?? ""),
                         ],
                       ),
                     ],
@@ -535,7 +515,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       Expanded(
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          startPlace,
+                          trip.placeStart?.name ?? "",
                           style: const TextStyle(
                             fontSize: 14.0,
                             color: Colors.black,
@@ -553,7 +533,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       Expanded(
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          endPlace,
+                          trip.placeEnd?.name ?? "",
                           style: const TextStyle(
                             fontSize: 14.0,
                             color: Colors.black,
