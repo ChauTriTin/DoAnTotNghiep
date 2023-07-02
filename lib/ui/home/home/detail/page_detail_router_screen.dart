@@ -92,104 +92,107 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        backgroundColor: ColorConstants.appColor,
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: _selectOption,
-            itemBuilder: (BuildContext context) {
-              return [
-                if(_controller.isUserHost())
-                  const PopupMenuItem<String>(
-                    value: 'edit',
-                    child: Text("Chỉnh sửa chuyến đi"),
-                  ),
-                if(_controller.isUserHost())
-                  const PopupMenuItem<String>(
-                    value: 'delete',
-                    child: Text('Xóa chuyến đi'),
-                  ),
-                if(!_controller.isUserHost() && _controller.isJoinedCurrentTrip())
-                  const PopupMenuItem<String>(
-                    value: 'outTrip',
-                    child: Text('Rời khỏi chuyến đi'),
-                  )
-              ];
-            },
-          ),
-        ],
-        // title: Text(_controller.tripData?.title ?? ""),
-        title: const Text(
-          StringConstants.tripDetail,
-          style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
-        ),
-      ),
-      backgroundColor: ColorConstants.colorWhite,
-      body: Obx(() {
-        return ListView(
-          physics: const BouncingScrollPhysics(),
-          children: [
-            _slideShowImage(context),
-            const SizedBox(height: DimenConstants.marginPaddingMedium),
-            _infoRouter(),
-            _copyIdRouter(),
-            _listButtonEvent(),
-            const SizedBox(height: DimenConstants.marginPaddingMedium),
-            Container(
-              padding: const EdgeInsets.only(
-                  left: DimenConstants.marginPaddingMedium),
-              child: Text(
-                "*** Yêu cầu: ${_controller.detailTrip.value.require}",
-                style: const TextStyle(
-                    color: Colors.red, fontWeight: FontWeight.bold),
+    return Obx(() => Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
               ),
+              onPressed: () {
+                Get.back();
+              },
             ),
-            _divider(12),
-            _leader(),
-            _divider(0),
-            _seeMore(),
-
-            // Other router
-            const Divider(
-              height: 8,
-              thickness: 8,
+            backgroundColor: ColorConstants.appColor,
+            actions: [
+              Visibility(
+                  visible: !_controller.isTripCompleted.value,
+                  child: PopupMenuButton<String>(
+                    onSelected: _selectOption,
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        if (_controller.isUserHost())
+                          const PopupMenuItem<String>(
+                            value: 'edit',
+                            child: Text("Chỉnh sửa chuyến đi"),
+                          ),
+                        if (_controller.isUserHost())
+                          const PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Text('Xóa chuyến đi'),
+                          ),
+                        if (!_controller.isUserHost() &&
+                            _controller.isJoinedCurrentTrip())
+                          const PopupMenuItem<String>(
+                            value: 'outTrip',
+                            child: Text('Rời khỏi chuyến đi'),
+                          )
+                      ];
+                    },
+                  )),
+            ],
+            // title: Text(_controller.tripData?.title ?? ""),
+            title: const Text(
+              StringConstants.tripDetail,
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white),
             ),
-            const SizedBox(
-              height: 12,
-            ),
-
-            Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: DimenConstants.marginPaddingMedium),
-              child: Text(
-                "Chuyến đi khác",
-                style: UIUtils.getStyleText500Medium1(),
+          ),
+          backgroundColor: ColorConstants.colorWhite,
+          body: ListView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              _slideShowImage(context),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              _infoRouter(),
+              _copyIdRouter(),
+              _listButtonEvent(),
+              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              Container(
+                padding: const EdgeInsets.only(
+                    left: DimenConstants.marginPaddingMedium),
+                child: Text(
+                  "*** Yêu cầu: ${_controller.detailTrip.value.require}",
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: DimenConstants.marginPaddingMedium),
-              child: getOtherList(_controller.listTrips),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
-        );
-      }),
-    );
+              _divider(12),
+              _leader(),
+              _divider(0),
+              _seeMore(),
+
+              // Other router
+              const Divider(
+                height: 8,
+                thickness: 8,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: DimenConstants.marginPaddingMedium),
+                child: Text(
+                  "Chuyến đi khác",
+                  style: UIUtils.getStyleText500Medium1(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: DimenConstants.marginPaddingMedium),
+                child: getOtherList(_controller.listTrips),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        ));
   }
 
   void _selectOption(String option) {

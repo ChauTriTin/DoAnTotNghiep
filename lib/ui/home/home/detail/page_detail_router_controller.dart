@@ -31,7 +31,7 @@ class DetailRouterController extends BaseController {
   var commentData = <Comment>[].obs;
 
   var isWidgetJoinedVisible = true.obs;
-
+  var isTripCompleted = false.obs;
 
   bool isUserHost() {
     return detailTrip.value.userIdHost == userData.value.uid;
@@ -90,16 +90,14 @@ class DetailRouterController extends BaseController {
 
   Future<void> getDetailTrip(String? id) async {
     try {
-      routerCollection
-          .doc(id)
-          .snapshots()
-          .listen((value) {
+      routerCollection.doc(id).snapshots().listen((value) {
         DocumentSnapshot<Map<String, dynamic>>? tripMap =
-        value as DocumentSnapshot<Map<String, dynamic>>?;
+            value as DocumentSnapshot<Map<String, dynamic>>?;
         if (tripMap == null || tripMap.data() == null) return;
 
         var trip = Trip.fromJson((tripMap).data()!);
-        detailTrip.value =trip;
+        detailTrip.value = trip;
+        isTripCompleted.value = trip.isComplete ?? false;
 
         if (detailTrip.value.listIdMember?.contains(userData.value.uid) ==
             true) {
@@ -114,7 +112,6 @@ class DetailRouterController extends BaseController {
       log("getTripDetail get user info fail: $e");
     }
   }
-
 
   Future<void> getCommentRoute(String? id) async {
     try {
@@ -259,12 +256,12 @@ class DetailRouterController extends BaseController {
       listIdMember?.remove(userData.value.uid);
       // Get the reference to the document you want to update
       DocumentReference documentRef =
-      FirebaseHelper.collectionReferenceRouter.doc(detailTrip.value.id);
-
+          FirebaseHelper.collectionReferenceRouter.doc(detailTrip.value.id);
 
       // Dog.d("removeMember listIdMemberJson: $listIdMemberJson - ${tripData.value.id}");
       // Update the specific field
-      documentRef.update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
+      documentRef
+          .update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
         Dog.d("outTrip success");
         setAppLoading(false, "Loading", TypeApp.loadingData);
       }).catchError((error) {
@@ -276,5 +273,4 @@ class DetailRouterController extends BaseController {
       Dog.e("outTrip error: $e");
     }
   }
-
 }
