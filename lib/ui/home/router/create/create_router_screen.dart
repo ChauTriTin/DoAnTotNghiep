@@ -18,6 +18,7 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../user_singleton_controller.dart';
 import '../../setting/setting_screen.dart';
+import '../create_success/enum_router.dart';
 import 'create_router_controller.dart';
 
 class CreateRouterScreen extends StatefulWidget {
@@ -97,10 +98,19 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     ever(_controller.isCreateRouteSuccess, (value) {
       if (value == true) {
         Get.back();
-        showSnackBarFull(StringConstants.warning, "Tạo thành công");
+
+        RouterState state;
+        if(widget.dfEditRouterWithTripId != null) {
+          state = RouterState.editSuccess;
+          showSnackBarFull(StringConstants.warning, "Chỉnh sửa chuyến đi thành công");
+        } else {
+          state = RouterState.createSuccess;
+          showSnackBarFull(StringConstants.warning, "Tạo chuyến đi thành công");
+        }
+
         Get.to(
           CreateSuccessScreen(
-              id: _controller.id.value, isOpenFromDetailPage: false
+              id: _controller.id.value, state: state
               // dateTimeEnd: _controller.dateTimeEnd.value,
               // placeStart: _controller.placeStart.value,
               // placeEnd: _controller.placeEnd.value,

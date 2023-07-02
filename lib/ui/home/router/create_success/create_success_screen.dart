@@ -18,12 +18,13 @@ import '../../../../util/log_dog_utils.dart';
 import '../create/create_router_screen.dart';
 import '../join/joine_manager_screen.dart';
 import 'create_success_controller.dart';
+import 'enum_router.dart';
 
 class CreateSuccessScreen extends StatefulWidget {
   const CreateSuccessScreen({
     super.key,
     required this.id,
-    required this.isOpenFromDetailPage,
+    required this.state,
 
     // required this.dateTimeEnd,
     // required this.placeStart,
@@ -32,7 +33,7 @@ class CreateSuccessScreen extends StatefulWidget {
   });
 
   final String id;
-  final bool isOpenFromDetailPage;
+  final RouterState state;
 
   // final DateTime dateTimeEnd;
   // final Place placeStart;
@@ -73,12 +74,15 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
   Widget build(BuildContext context) {
     String title = "";
     String des = "";
-    if (widget.isOpenFromDetailPage) {
+    if (widget.state == RouterState.detail) {
       title = "CHI TIẾT CHUYẾN ĐI";
       des = "Mã chuyến đi";
-    } else {
+    } else if (widget.state == RouterState.createSuccess) {
       title = "TẠO THÀNH CÔNG";
       des = "Chuyến đi của bạn đã được tạo với mã";
+    } else if (widget.state == RouterState.editSuccess) {
+      title = "CHỈNH SỬA THÀNH CÔNG";
+      des = "Chuyến đi của bạn đã được chỉnh sửa với mã";
     }
     return Scaffold(
       backgroundColor: Colors.white,
