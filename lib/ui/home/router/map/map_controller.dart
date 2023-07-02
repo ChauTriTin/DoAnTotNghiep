@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
+import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/place.dart';
@@ -288,8 +289,7 @@ class MapController extends BaseController {
     String body,
   ) async {
     FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
-      apiKey:
-          "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL",
+      apiKey: Constants.apiKey,
       enableLog: true,
       enableServerRespondLog: true,
     );
@@ -318,9 +318,9 @@ class MapController extends BaseController {
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );
-      debugPrint("FCM sendTopicMessage result $result");
+      debugPrint("FCM sendTopicMessage fcmToken result $result");
     } catch (e) {
-      debugPrint("FCM sendTopicMessage $e");
+      debugPrint("FCM sendTopicMessage fcmToken $e");
     }
   }
 
