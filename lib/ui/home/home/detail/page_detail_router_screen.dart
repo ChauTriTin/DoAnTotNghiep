@@ -18,7 +18,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
+import '../../../../base/base_stateful_state.dart';
 import '../../../../common/const/color_constants.dart';
 import '../../../../common/const/dimen_constants.dart';
 import '../../../../model/comment.dart';
@@ -39,7 +41,7 @@ class DetailRouterScreen extends StatefulWidget {
   State<DetailRouterScreen> createState() => _DetailRouterScreenState();
 }
 
-class _DetailRouterScreenState extends State<DetailRouterScreen> {
+class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   final DetailRouterController _controller = Get.put(DetailRouterController());
   final _commentController = TextEditingController();
   final _codeController = TextEditingController();
@@ -57,9 +59,25 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     } catch (e) {
       log("Get trip data ex: $e");
     }
+    _setupListen();
     _controller.getAllRouter();
     _controller.getUserInfo(Trip.fromJson(jsonDecode(data)).userIdHost ?? "");
     _controller.getCommentRoute(Trip.fromJson(jsonDecode(data)).id);
+  }
+
+  void _setupListen() {
+    _controller.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
+    _controller.appError.listen((err) {
+      showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
+        //do sth
+      });
+    });
   }
 
   @override
@@ -86,32 +104,30 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
           },
         ),
         backgroundColor: ColorConstants.appColor,
-
+        actions: [
+          if (true)
+            PopupMenuButton<String>(
+              onSelected: _selectOption,
+              itemBuilder: (BuildContext context) {
+                return [
+                  const PopupMenuItem<String>(
+                    value: 'edit',
+                    child: Text("Chỉnh sửa chuyến đi"),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'delete',
+                    child: Text('Xóa chuyến đi'),
+                  ),
+                ];
+              },
+            ),
+        ],
         // title: Text(_controller.tripData?.title ?? ""),
-        title: Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _controller.detailTrip.value.title ?? "",
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Text(
-                _controller.detailTrip.value.des ?? "",
-                style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white),
-              ),
-            ],
-          );
-        }),
+        title: const Text(
+          StringConstants.tripDetail,
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
+        ),
       ),
       backgroundColor: ColorConstants.colorWhite,
       body: Obx(() {
@@ -160,12 +176,47 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                   horizontal: DimenConstants.marginPaddingMedium),
               child: getOtherList(_controller.listTrips),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         );
       }),
     );
   }
+
+  void _selectOption(String option) {
+    Dog.d("_selectOption: $option");
+    if (option == 'edit') {
+      Get.to(CreateRouterScreen(
+        dfTitle: "",
+        dfDescription: "",
+        dfPlaceStart: null,
+        dfPlaceEnd: null,
+        dfListPlaceStop: [],
+        dfDateTimeStart: null,
+        dfDateTimeEnd: null,
+        dfRequire: "",
+        dfIsPublic: true,
+        dfEditRouterWithTripId: _controller.detailTrip.value.id,
+      ));
+    } else if (option == 'delete') {
+      showDeleteConfirmDialog();
+    }
+  }
+
+  void showDeleteConfirmDialog() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.deleteWarning,
+      StringConstants.cancel,
+      null,
+      StringConstants.delete,
+      _controller.deleteRouter,
+    );
+  }
+
 
   List<Widget> listImage() {
     var list = <Widget>[];
@@ -195,7 +246,8 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
 
   Widget _infoRouter() {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingMedium),
+        margin: const EdgeInsets.symmetric(
+            horizontal: DimenConstants.marginPaddingMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

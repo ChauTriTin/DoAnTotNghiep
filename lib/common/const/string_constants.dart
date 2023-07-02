@@ -73,6 +73,7 @@ class StringConstants {
       "App chưa hỗ trợ đăng nhập bằng facebook";
   static const String signOut = "Đăng xuất";
   static const String delete = "Xóa";
+  static const String deleteWarning = "Bạn có chắc muốn xóa chuyến đi này không?";
   static const String signOutWarning = "Bạn có chắc chắn muốn đăng xuất không?";
   static const String removeWarning = "Bạn chưa tham gia chuyến đi hoặc đã bị remove khỏi đoạn hội thoại, vui lòng kiểm tra lại";
 

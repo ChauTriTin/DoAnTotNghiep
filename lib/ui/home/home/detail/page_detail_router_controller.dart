@@ -11,11 +11,13 @@ import 'package:get/get.dart';
 import '../../../../common/const/string_constants.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
+import '../../../../util/ui_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
+  final routerCollection = FirebaseHelper.collectionReferenceRouter;
   var db = FirebaseFirestore.instance;
 
   var listTrips = <Trip>[].obs;
@@ -84,7 +86,7 @@ class DetailRouterController extends BaseController {
 
   Future<void> getDetailTrip(String? id) async {
     try {
-      FirebaseHelper.collectionReferenceRouter
+      routerCollection
           .doc(id)
           .snapshots()
           .listen((value) {
@@ -113,7 +115,7 @@ class DetailRouterController extends BaseController {
   Future<void> getCommentRoute(String? id) async {
     try {
       if (id == null) return;
-      var data = FirebaseHelper.collectionReferenceRouter.doc(id).snapshots();
+      var data = routerCollection.doc(id).snapshots();
 
       Dog.d("getCommentRoute id: $id");
 
@@ -143,7 +145,7 @@ class DetailRouterController extends BaseController {
       List<Map<String, dynamic>> commentsData =
           listComment.map((comment) => comment.toJson()).toList();
 
-      FirebaseHelper.collectionReferenceRouter
+      routerCollection
           .doc(id)
           .update({"comments": commentsData})
           .then((value) => postFCM(text, "comment"))
@@ -163,7 +165,7 @@ class DetailRouterController extends BaseController {
       } else {
         if (listMember?.contains(id) == false || listMember != null) {
           listMember?.add(id!);
-          FirebaseHelper.collectionReferenceRouter
+          routerCollection
               .doc(detailTrip.value.id)
               .update({"listIdMember": listMember})
               .then((value) => {
@@ -228,6 +230,20 @@ class DetailRouterController extends BaseController {
       return "";
     } else {
       return name;
+    }
+  }
+
+  Future<void> deleteRouter() async {
+    try {
+      setAppLoading(true, "Loading", TypeApp.loadingData);
+      var router = routerCollection.doc(detailTrip.value.id);
+      await router.delete();
+
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      Get.back();
+    } catch (e) {
+      Dog.e("Delete router error: $e");
+      setAppLoading(false, "Loading", TypeApp.loadingData);
     }
   }
 }
