@@ -18,6 +18,7 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
 import '../../../util/ui_utils.dart';
+import '../../user_singleton_controller.dart';
 
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
@@ -89,7 +90,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
 
   Widget _buildBanner() {
     return Visibility(
-      visible: _controller.isShowHomeBanner.value,
+      visible: UserSingletonController.instance.isShowHomeBanner.value,
       child: Container(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
         child: Stack(
@@ -134,7 +135,9 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
               top: 4,
               right: 4,
               child: InkWell(
-                onTap: _controller.hideBanner,
+                onTap: () {
+                  UserSingletonController.instance.hideBanner(false);
+                },
                 child: Container(
                   width: 22,
                   height: 22,

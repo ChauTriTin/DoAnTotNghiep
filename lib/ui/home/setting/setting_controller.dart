@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
+import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';

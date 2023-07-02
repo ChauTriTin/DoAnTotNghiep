@@ -120,6 +120,7 @@ class StringConstants {
   // Setting
   static const String editProfile = "Thay đổi thông tin";
   static const String mode = "Mode";
+  static const String bannerHome = "Show banner home";
   static const String generalSetting = "Cài đặt";
   static const String language = "Ngôn ngữ";
   static const String about = "Thông tin";

@@ -20,22 +20,13 @@ class PageHomeController extends BaseController {
 
   var db = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref().child("files/uid");
-  var isShowHomeBanner = true.obs;
 
   void clearOnDispose() {
     Get.delete<PageHomeController>();
   }
 
   Future<void> getData() async {
-    isShowHomeBanner.value = await SharedPreferencesUtil.getBool(
-            SharedPreferencesUtil.IS_SHOW_TOP_BANNER) ??
-        true;
-  }
 
-  void hideBanner() {
-    SharedPreferencesUtil.setBool(
-        SharedPreferencesUtil.IS_SHOW_TOP_BANNER, false);
-    isShowHomeBanner.value = false;
   }
 
   Future<void> getAllRouter() async {

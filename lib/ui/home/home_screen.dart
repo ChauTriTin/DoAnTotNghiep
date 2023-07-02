@@ -100,7 +100,7 @@ class HomePageState extends State<HomePage> {
     _navigationController = CircularBottomNavigationController(selectedPos);
     _setupListen();
     _listenBus();
-    UserSingletonController.instance.getUserInfo();
+    UserSingletonController.instance.getData();
 
     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     //   debugPrint('FCM listen onMessageOpenedApp ${message.data}');

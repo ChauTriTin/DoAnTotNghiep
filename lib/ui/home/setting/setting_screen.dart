@@ -132,6 +132,8 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
           ),
           getDarkMode(),
           getDivider(),
+          getBannerView(),
+          getDivider(),
 
           // Language
           _buildLanguageItem(),
@@ -370,6 +372,47 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
               value: _controller.isDarkMode.value,
               onChanged: (value) {
                 _controller.updateDarkModeStatus(value);
+                ThemeModeNotifier.instance.toggleTheme(value);
+              }),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getBannerView() {
+    return InkWell(
+      onTap: () {},
+      child: Row(
+        children: [
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Container(
+            width: DimenConstants.circleShape,
+            height: DimenConstants.circleShape,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: ColorConstants.colorBanner,
+            ),
+          ),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Expanded(
+              child: Text(
+                StringConstants.bannerHome,
+                style: UIUtils.getStyleTextSmall400(),
+              )),
+          const SizedBox(
+            width: DimenConstants.marginPaddingMedium,
+          ),
+          Switch(
+              value: UserSingletonController.instance.isShowHomeBanner.value,
+              onChanged: (value) {
+                UserSingletonController.instance.hideBanner(value);
                 ThemeModeNotifier.instance.toggleTheme(value);
               }),
           const SizedBox(
