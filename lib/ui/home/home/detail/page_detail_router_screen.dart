@@ -82,7 +82,21 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         //do sth
       });
     });
+
+    _controller.isTripDeleted.listen((isDeleted) {
+      if(isDeleted){
+        _showWarningDialog();
+      }
+    });
   }
+
+  void _showWarningDialog() {
+    UIUtils.showAlertDialog(context, StringConstants.warning,
+        StringConstants.deleteTripError, StringConstants.ok, () {
+          Get.back();
+        }, null, null);
+  }
+
 
   @override
   void dispose() {

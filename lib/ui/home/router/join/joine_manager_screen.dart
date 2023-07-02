@@ -49,8 +49,20 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
     });
     _controller.appError.listen((err) {
     });
+
+    _controller.isTripDeleted.listen((isDeleted) {
+      if (isDeleted) {
+        _showWarningDialog();
+      }
+    });
   }
 
+  void _showWarningDialog() {
+    UIUtils.showAlertDialog(context, StringConstants.warning,
+        StringConstants.deleteTripError, StringConstants.ok, () {
+          Get.back();
+        }, null, null);
+  }
 
 
   @override
@@ -164,7 +176,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
   }
 
   Widget getListMembers() {
-    if (_controller.members.isEmpty) {
+    if (_controller.members.value.isEmpty) {
       return Container(
         margin: const EdgeInsets.symmetric(
             horizontal: DimenConstants.marginPaddingMedium,

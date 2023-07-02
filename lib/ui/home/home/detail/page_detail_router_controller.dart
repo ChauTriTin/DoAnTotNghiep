@@ -19,6 +19,7 @@ class DetailRouterController extends BaseController {
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
   final routerCollection = FirebaseHelper.collectionReferenceRouter;
+  final chatCollection = FirebaseHelper.collectionReferenceChat;
   var db = FirebaseFirestore.instance;
 
   var listTrips = <Trip>[].obs;
@@ -33,6 +34,7 @@ class DetailRouterController extends BaseController {
 
   var isWidgetJoinedVisible = true.obs;
   var isTripCompleted = false.obs;
+  var isTripDeleted = false.obs;
 
   bool isUserHost() {
     return detailTrip.value.userIdHost == userData.value.uid;
@@ -92,6 +94,11 @@ class DetailRouterController extends BaseController {
   Future<void> getDetailTrip(String? id) async {
     try {
       routerCollection.doc(id).snapshots().listen((value) {
+        if (!value.exists) {
+          print('getDetailTrip trip does not exist.');
+          isTripDeleted.value = true;
+        }
+
         DocumentSnapshot<Map<String, dynamic>>? tripMap =
             value as DocumentSnapshot<Map<String, dynamic>>?;
         if (tripMap == null || tripMap.data() == null) return;
@@ -107,9 +114,11 @@ class DetailRouterController extends BaseController {
           isWidgetJoinedVisible.value = false;
         }
 
+        isTripDeleted.value = false;
         log("getTripDetail success: ${trip.toString()}");
       });
     } catch (e) {
+      isTripDeleted.value = true;
       log("getTripDetail get user info fail: $e");
     }
   }
@@ -246,8 +255,9 @@ class DetailRouterController extends BaseController {
   Future<void> deleteRouter() async {
     try {
       setAppLoading(true, "Loading", TypeApp.loadingData);
-      var router = routerCollection.doc(detailTrip.value.id);
-      await router.delete();
+      var tripID = detailTrip.value.id;
+      await routerCollection.doc(tripID).delete();
+      await chatCollection.doc(tripID).delete();
 
       setAppLoading(false, "Loading", TypeApp.loadingData);
       Get.back();

@@ -18,6 +18,7 @@ class PageDetailChatController extends BaseController {
   var tripData = Trip().obs;
   var userChat = const User(id: "").obs;
   var messages = <Message>[].obs;
+  var isTripDeleted = false.obs;
 
   bool isCurrentUserJoinedTrip() {
     return tripData.value.listIdMember?.contains(userChat.value.id) ?? false;
@@ -36,15 +37,21 @@ class PageDetailChatController extends BaseController {
           .doc(tripData.value.id)
           .snapshots()
           .listen((value) {
+        if (!value.exists) {
+          print('getDetailTrip trip does not exist.');
+          isTripDeleted.value = true;
+        }
         DocumentSnapshot<Map<String, dynamic>>? tripMap =
             value as DocumentSnapshot<Map<String, dynamic>>?;
         if (tripMap == null || tripMap.data() == null) return;
 
         var trip = Trip.fromJson((tripMap).data()!);
         tripData.value = trip;
+        isTripDeleted.value = false;
         log("getTripDetail success: ${trip.toString()}");
       });
     } catch (e) {
+      isTripDeleted.value = true;
       log("getTripDetail get user info fail: $e");
     }
   }

@@ -16,6 +16,7 @@ class MemberController extends BaseController {
   var members = <UserData>[].obs;
   var tripData = Trip().obs;
   var isTripCompleted = false.obs;
+  var isTripDeleted = false.obs;
 
   void clearOnDispose() {
     Get.delete<MemberController>();
@@ -86,6 +87,12 @@ class MemberController extends BaseController {
           .doc(tripData.value.id)
           .snapshots()
           .listen((value) {
+        if (!value.exists) {
+          print('getDetailTrip trip does not exist.');
+          isTripDeleted.value = true;
+        }
+
+
         DocumentSnapshot<Map<String, dynamic>>? tripMap =
         value as DocumentSnapshot<Map<String, dynamic>>?;
         if (tripMap == null || tripMap.data() == null) return;
@@ -96,8 +103,10 @@ class MemberController extends BaseController {
         isTripCompleted.value = trip.isComplete ?? false;
         log("getTripDetail success: ${trip.toString()}");
         getAllMember();
+        isTripDeleted.value = false;
       });
     } catch (e) {
+      isTripDeleted.value = true;
       log("getTripDetail get user info fail: $e");
     }
   }
