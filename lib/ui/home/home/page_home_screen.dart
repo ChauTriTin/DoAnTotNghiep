@@ -409,10 +409,10 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
-                      trip.title ?? "",
-                      style: const TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
-                      maxLines: 1,
-                    ),
+                        trip.title ?? "",
+                        style: const TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
                   ),
                   const Icon(Icons.people, color: Colors.grey),
                   const SizedBox(width: 8),
