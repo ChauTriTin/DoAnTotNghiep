@@ -37,6 +37,10 @@ class DetailRouterController extends BaseController {
     return detailTrip.value.userIdHost == userData.value.uid;
   }
 
+  bool isJoinedCurrentTrip() {
+    return detailTrip.value.listIdMember?.contains(userData.value.uid) ?? false;
+  }
+
   Future<void> getAllRouter() async {
     var routerSnapshot = db.collection("router").snapshots();
     routerSnapshot.listen((event) {
@@ -246,4 +250,31 @@ class DetailRouterController extends BaseController {
       setAppLoading(false, "Loading", TypeApp.loadingData);
     }
   }
+
+  Future<void> outTrip() async {
+    try {
+      setAppLoading(true, "Loading", TypeApp.loadingData);
+      var listIdMember = detailTrip.value.listIdMember;
+      Dog.d("outTrip currentIdMember: ${listIdMember.toString()}");
+      listIdMember?.remove(userData.value.uid);
+      // Get the reference to the document you want to update
+      DocumentReference documentRef =
+      FirebaseHelper.collectionReferenceRouter.doc(detailTrip.value.id);
+
+
+      // Dog.d("removeMember listIdMemberJson: $listIdMemberJson - ${tripData.value.id}");
+      // Update the specific field
+      documentRef.update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
+        Dog.d("outTrip success");
+        setAppLoading(false, "Loading", TypeApp.loadingData);
+      }).catchError((error) {
+        setAppLoading(false, "Loading", TypeApp.loadingData);
+        Dog.e("outTrip error: $error");
+      });
+    } catch (e) {
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      Dog.e("outTrip error: $e");
+    }
+  }
+
 }

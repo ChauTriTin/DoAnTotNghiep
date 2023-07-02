@@ -30,6 +30,7 @@ import '../../../user_singleton_controller.dart';
 import '../../../../view/profile_bar_widget.dart';
 import '../../router/create/create_router_screen.dart';
 import '../../router/create_success/create_success_screen.dart';
+import '../../router/create_success/enum_router.dart';
 import '../../setting/setting_screen.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
 import '../page_home_controller.dart';
@@ -105,22 +106,28 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         ),
         backgroundColor: ColorConstants.appColor,
         actions: [
-          if (true)
-            PopupMenuButton<String>(
-              onSelected: _selectOption,
-              itemBuilder: (BuildContext context) {
-                return [
+          PopupMenuButton<String>(
+            onSelected: _selectOption,
+            itemBuilder: (BuildContext context) {
+              return [
+                if(_controller.isUserHost())
                   const PopupMenuItem<String>(
                     value: 'edit',
                     child: Text("Chỉnh sửa chuyến đi"),
                   ),
+                if(_controller.isUserHost())
                   const PopupMenuItem<String>(
                     value: 'delete',
                     child: Text('Xóa chuyến đi'),
                   ),
-                ];
-              },
-            ),
+                if(!_controller.isUserHost() && _controller.isJoinedCurrentTrip())
+                  const PopupMenuItem<String>(
+                    value: 'outTrip',
+                    child: Text('Rời khỏi chuyến đi'),
+                  )
+              ];
+            },
+          ),
         ],
         // title: Text(_controller.tripData?.title ?? ""),
         title: const Text(
@@ -202,6 +209,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
       ));
     } else if (option == 'delete') {
       showDeleteConfirmDialog();
+    } else if (option == 'outTrip') {
+      showOutTripConfirmDialog();
     }
   }
 
@@ -217,6 +226,17 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     );
   }
 
+  void showOutTripConfirmDialog() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.outWarning,
+      StringConstants.cancel,
+      null,
+      StringConstants.outTrip,
+      _controller.outTrip,
+    );
+  }
 
   List<Widget> listImage() {
     var list = <Widget>[];
@@ -331,7 +351,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                 Get.to(
                   CreateSuccessScreen(
                       id: _controller.detailTrip.value.id ?? "",
-                      isOpenFromDetailPage: true),
+                      state: RouterState.detail),
                 )
               },
               child: SizedBox(
