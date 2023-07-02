@@ -30,6 +30,11 @@ class DetailRouterController extends BaseController {
 
   var isWidgetJoinedVisible = true.obs;
 
+
+  bool isUserHost() {
+    return detailTrip.value.userIdHost == userData.value.uid;
+  }
+
   Future<void> getAllRouter() async {
     var routerSnapshot = db.collection("router").snapshots();
     routerSnapshot.listen((event) {

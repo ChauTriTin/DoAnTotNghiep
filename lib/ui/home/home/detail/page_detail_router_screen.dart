@@ -16,6 +16,7 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../common/const/color_constants.dart';
@@ -75,54 +76,92 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        toolbarHeight: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
         backgroundColor: ColorConstants.appColor,
-      ),
-      backgroundColor: ColorConstants.appColorBkg,
-      body: Obx(() {
-        return Container(
-          color: ColorConstants.colorWhite,
-          child: Column(
+
+        // title: Text(_controller.tripData?.title ?? ""),
+        title: Obx(() {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ProfileBarWidget(
-                  name: UserSingletonController.instance.userData.value.name ??
-                      "",
-                  state: "⬤ Online",
-                  linkAvatar: UserSingletonController.instance.userData.value
-                      .getAvatar()),
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    _slideShowImage(context),
-                    _infoRouter(),
-                    _idRouter(),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    _listButtonEvent(),
-                    const SizedBox(height: DimenConstants.marginPaddingMedium),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: DimenConstants.marginPaddingMedium),
-                      child: Text(
-                        "*** Yêu cầu: ${_controller.detailTrip.value.require}",
-                        style: const TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    _divider(12),
-                    _leader(),
-                    _divider(0),
-                    if (_controller.detailTrip.value.isComplete == false)
-                      ...widgetsShowBeforeCompleted(),
-                    if (_controller.detailTrip.value.isComplete == true)
-                      ...widgetsShowAfterCompleted()
-                  ],
-                ),
+              Text(
+                _controller.detailTrip.value.title ?? "",
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                _controller.detailTrip.value.des ?? "",
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white),
               ),
             ],
-          ),
+          );
+        }),
+      ),
+      backgroundColor: ColorConstants.colorWhite,
+      body: Obx(() {
+        return ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            _slideShowImage(context),
+            const SizedBox(height: DimenConstants.marginPaddingMedium),
+            _infoRouter(),
+            _copyIdRouter(),
+            _listButtonEvent(),
+            const SizedBox(height: DimenConstants.marginPaddingMedium),
+            Container(
+              padding: const EdgeInsets.only(
+                  left: DimenConstants.marginPaddingMedium),
+              child: Text(
+                "*** Yêu cầu: ${_controller.detailTrip.value.require}",
+                style: const TextStyle(
+                    color: Colors.red, fontWeight: FontWeight.bold),
+              ),
+            ),
+            _divider(12),
+            _leader(),
+            _divider(0),
+            _seeMore(),
+
+            // Other router
+            const Divider(
+              height: 8,
+              thickness: 8,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: DimenConstants.marginPaddingMedium),
+              child: Text(
+                "Chuyến đi khác",
+                style: UIUtils.getStyleText500Medium1(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: DimenConstants.marginPaddingMedium),
+              child: getOtherList(_controller.listTrips),
+            ),
+            const SizedBox(height: 20,),
+          ],
         );
       }),
     );
@@ -130,7 +169,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
 
   List<Widget> listImage() {
     var list = <Widget>[];
-    var images = _controller.detailTrip.value?.listImg;
+    var images = _controller.detailTrip.value.listImg;
     images?.forEach((element) {
       list.add(CachedMemoryImage(
           fit: BoxFit.cover, uniqueKey: element, base64: element));
@@ -156,30 +195,38 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
 
   Widget _infoRouter() {
     return Container(
-        margin: const EdgeInsets.all(24),
+        margin: const EdgeInsets.symmetric(horizontal: DimenConstants.marginPaddingMedium),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 12),
+                Icon(
+                  _controller.detailTrip.value.isPublic == true
+                      ? Icons.public
+                      : Icons.lock,
+                  color: Colors.blue,
+                  size: 18,
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                Expanded(
                   child: Text(
                     _controller.detailTrip.value.title ?? "",
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Icon(
-                  _controller.detailTrip.value.isPublic == true
-                      ? Icons.public
-                      : Icons.lock,
-                  color: Colors.blue,
-                )
               ],
             ),
-            Container(
-                margin: const EdgeInsets.only(top: 12),
-                child: Text(_controller.detailTrip.value.des ?? ""))
+            const SizedBox(height: 12),
+            Text(
+              _controller.detailTrip.value.des ?? "",
+              textAlign: TextAlign.start,
+            ),
           ],
         ));
   }
@@ -244,7 +291,8 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             onTap: () {
               Dog.d("showMember: ${_controller.detailTrip.value.id}");
               if (_controller.detailTrip.value.id == null) return;
-              Get.to(JoinedManagerScreen(tripdata: _controller.detailTrip.value));
+              Get.to(
+                  JoinedManagerScreen(tripdata: _controller.detailTrip.value));
             },
             child: Column(children: [
               Container(
@@ -389,10 +437,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     );
   }
 
-  Widget getItemRow(int i) {
-    var list =
-        _controller.listTrips.where((p0) => p0.isComplete == false).toList();
-    var trip = list[i];
+  Widget getItemRow(Trip trip) {
     if (trip.id == _controller.detailTrip.value.id) {
       return const SizedBox();
     }
@@ -448,27 +493,39 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     'Item 5',
   ];
 
-  Widget _otherRouter() {
-    return Obx(() => SizedBox(
-          height: MediaQuery.of(context).size.height * 1 / 5.5,
-          child: ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            scrollDirection: Axis.horizontal,
-            itemCount: _controller.listTrips
-                .where((p0) => p0.isComplete == false)
-                .toList()
-                .length,
-            itemBuilder: (BuildContext context, int index) {
-              return getItemRow(index);
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(
-                width: DimenConstants.marginPaddingMedium,
-              );
-            },
-          ),
-        ));
+  Widget getOtherList(RxList<Trip> trips) {
+    if (_controller.listTrips.isEmpty) {
+      return Container(
+        margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        child: Column(
+          children: [
+            Lottie.asset('assets/files/no_data.json'),
+            Text(
+              StringConstants.noTrip,
+              style: UIUtils.getStyleText(),
+            )
+          ],
+        ),
+      );
+    } else {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 1 / 5.5,
+        child: ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          itemCount: trips.length,
+          itemBuilder: (BuildContext context, int index) {
+            var trip = trips[index];
+            return getItemRow(trip);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const SizedBox(
+              width: DimenConstants.marginPaddingMedium,
+            );
+          },
+        ),
+      );
+    }
   }
 
   Widget _headerDialog(String title) {
@@ -846,6 +903,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
                     horizontal: DimenConstants.marginPaddingExtraLarge),
                 child: UIUtils.getOutlineButton1(StringConstants.confirm, () {
                   _controller.joinedRouter(_codeController.text);
+                  Get.back();
                 }, Colors.red, DimenConstants.marginPaddingMedium, Colors.white,
                     Colors.red),
               ),
@@ -854,21 +912,6 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
         ),
       ),
     );
-  }
-
-  List<Widget> widgetsShowBeforeCompleted() {
-    var list = <Widget>[];
-    list.add(_seeMore());
-    list.add(const SizedBox(height: DimenConstants.marginPaddingLarge));
-    list.add(Container(
-        margin: const EdgeInsets.only(right: 24, left: 24),
-        child: const Text(
-          "Chuyến đi khác",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        )));
-    list.add(const SizedBox(height: DimenConstants.marginPaddingMedium));
-    list.add(_otherRouter());
-    return list;
   }
 
   List<Widget> widgetsShowAfterCompleted() {
@@ -1043,39 +1086,41 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     return list;
   }
 
-  Widget _idRouter() {
-    return Column(
-      children: [
-        InkWell(
-          onTap: _copyRouterId,
-          child: RichText(
-            text: TextSpan(
-              text: "Mã chuyến đi:  ",
-              style: const TextStyle(
-                fontSize: 14.0,
-                color: ColorConstants.textColor,
-              ),
-              children: [
-                TextSpan(
-                  text: _controller.detailTrip.value.id ?? "",
-                  style: const TextStyle(
-                    fontSize: 14.0,
-                    color: ColorConstants.appColor,
-                  ),
-                ),
-                const WidgetSpan(
-                  child: SizedBox(
-                    width: 8,
-                  ),
-                ),
-                const WidgetSpan(
-                  child: Icon(Icons.copy, size: 18),
-                ),
-              ],
+  Widget _copyIdRouter() {
+    if (!_controller.isUserHost()) {
+      return Container();
+    }
+    return Padding(
+      padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+      child: InkWell(
+        onTap: _copyRouterId,
+        child: RichText(
+          text: TextSpan(
+            text: "Mã chuyến đi:  ",
+            style: const TextStyle(
+              fontSize: 14.0,
+              color: ColorConstants.textColor,
             ),
+            children: [
+              TextSpan(
+                text: _controller.detailTrip.value.id ?? "",
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  color: ColorConstants.appColor,
+                ),
+              ),
+              const WidgetSpan(
+                child: SizedBox(
+                  width: 8,
+                ),
+              ),
+              const WidgetSpan(
+                child: Icon(Icons.copy, size: 18),
+              ),
+            ],
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 
