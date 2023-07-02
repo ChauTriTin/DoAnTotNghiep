@@ -121,8 +121,21 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 0,
+        title: Text(
+          _controller.getTextMode(),
+          style: const TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
+        ),
         backgroundColor: ColorConstants.appColor,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
       backgroundColor: ColorConstants.appColorBkg,
       body: FocusDetector(
@@ -130,15 +143,6 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           color: ColorConstants.appColorBkg,
           child: Column(
             children: [
-              Obx(() {
-                return ProfileBarWidget(
-                  name: UserSingletonController.instance.getName(),
-                  state: StringConstants.status,
-                  linkAvatar: UserSingletonController.instance.getAvatar(),
-                  onAvatarPress: _navigateToSettingScreen,
-                );
-              }),
-              const SizedBox(height: DimenConstants.marginPaddingTiny),
               Expanded(child: Obx(() {
                 return _buildBodyView();
               })),
@@ -167,42 +171,28 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         0,
       ),
       children: [
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                //do nothing
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: ColorConstants.appColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32.0),
+        const SizedBox(height: 12,),
+        InkWell(
+          onTap: _controller.copyRouterId,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                  'Mã: ${_controller.id.value}',
+                  style: const TextStyle(
+                    fontSize: DimenConstants.txtMedium,
+                    color: ColorConstants.appColor,
+                  ),
+                  textAlign: TextAlign.end,
                 ),
+
+              const SizedBox(width: DimenConstants.marginPaddingSmall),
+              const Icon(
+                Icons.content_copy,
+                color: ColorConstants.appColor,
               ),
-              child: Text(
-                _controller.getTextMode(),
-                style: const TextStyle(
-                  fontSize: DimenConstants.txtMedium,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                'Mã: ${_controller.id.value}',
-                style: const TextStyle(
-                  fontSize: DimenConstants.txtMedium,
-                  color: ColorConstants.appColor,
-                ),
-                textAlign: TextAlign.end,
-              ),
-            ),
-            const SizedBox(width: DimenConstants.marginPaddingSmall),
-            const Icon(
-              Icons.content_copy,
-              color: ColorConstants.appColor,
-            ),
-          ],
+            ],
+          ),
         ),
         const Divider(),
         //tieu de chuyen di

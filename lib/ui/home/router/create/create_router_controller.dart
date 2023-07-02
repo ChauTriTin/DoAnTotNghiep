@@ -10,9 +10,13 @@ import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
+import '../../../../common/const/color_constants.dart';
 import '../../../user_singleton_controller.dart';
 
 class CreateRouterController extends BaseController {
@@ -42,6 +46,17 @@ class CreateRouterController extends BaseController {
   void clearOnDispose() {
     controllerImagePicker.dispose();
     Get.delete<CreateRouterController>();
+  }
+
+  Future<void> copyRouterId() async {
+    await Clipboard.setData(ClipboardData(text: id.value ?? ""));
+    Fluttertoast.showToast(
+        msg: "Copied",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: ColorConstants.appColor,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   void setEditRouterMode(bool value) {
