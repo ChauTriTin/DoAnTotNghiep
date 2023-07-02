@@ -15,14 +15,34 @@ import '../../../../util/shared_preferences_util.dart';
 class PageDetailChatController extends BaseController {
   final CollectionReference _chat = FirebaseHelper.collectionReferenceChat;
 
-  Trip? tripData;
+  var tripData = Trip().obs;
   var userChat = const User(id: "").obs;
   var messages = <Message>[].obs;
 
   Future<void> getData() async {
     var currentUid = await SharedPreferencesUtil.getUIDLogin() ?? "";
     _getUserData(currentUid);
-    _fetchMessages(tripData?.id);
+    _fetchMessages(tripData.value.id);
+    getDetailTrip();
+  }
+
+  Future<void> getDetailTrip() async {
+    try {
+      FirebaseHelper.collectionReferenceRouter
+          .doc(tripData.value.id)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? tripMap =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (tripMap == null || tripMap.data() == null) return;
+
+        var trip = Trip.fromJson((tripMap).data()!);
+        tripData.value = trip;
+        log("getTripDetail success: ${trip.toString()}");
+      });
+    } catch (e) {
+      log("getTripDetail get user info fail: $e");
+    }
   }
 
   Future<void> _getUserData(String uid) async {
@@ -37,9 +57,8 @@ class PageDetailChatController extends BaseController {
   Future<void> _fetchMessages(String? tripId) async {
     if (tripId == null) return;
 
-    var chatStream = _chat.doc(tripId)
-        .collection(FirebaseHelper.messages)
-        .snapshots();
+    var chatStream =
+        _chat.doc(tripId).collection(FirebaseHelper.messages).snapshots();
 
     var chatSnapshots = chatStream.map((querySnapshot) => querySnapshot.docs);
 
@@ -68,7 +87,8 @@ class PageDetailChatController extends BaseController {
 
   Future<void> _addMessageToFireStore(Message message) async {
     try {
-      await _chat.doc(tripData?.id)
+      await _chat
+          .doc(tripData.value.id)
           .collection(FirebaseHelper.messages)
           .doc(message.createdAt.toString())
           .set(message.toJson());
