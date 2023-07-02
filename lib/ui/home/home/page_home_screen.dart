@@ -17,6 +17,7 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
+import '../../../util/ui_utils.dart';
 
 class PageHomeScreen extends StatefulWidget {
   const PageHomeScreen({
@@ -386,21 +387,36 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   }
 
   Widget _buildListRouter() {
-    return Expanded(
-      child: ListView.separated(
-        physics: const BouncingScrollPhysics(),
-        itemCount: _controller.listTripWithSearch.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _getRow(index);
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(
-            height: 12,
-            thickness: 12,
-          );
-        },
-      ),
-    );
+    if (_controller.listTripWithSearch.isEmpty) {
+      return Container(
+        margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        child: Column(
+          children: [
+            Lottie.asset('assets/files/no_data.json'),
+            Text(
+              StringConstants.noTripHome,
+              style: UIUtils.getStyleText(),
+            )
+          ],
+        ),
+      );
+    } else {
+      return Expanded(
+        child: ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          itemCount: _controller.listTripWithSearch.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _getRow(index);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              height: 12,
+              thickness: 12,
+            );
+          },
+        ),
+      );
+    }
   }
 
   Widget _getRow(int i) {

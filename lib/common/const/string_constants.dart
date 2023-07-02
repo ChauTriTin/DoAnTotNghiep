@@ -88,6 +88,8 @@ class StringConstants {
   static const String endDay = "Ngày về: ";
   static const String totalTravelDay = "Tổng ngày đi: ";
   static const String noTrip = "Bạn chưa có chuyến đi nào";
+  static const String noTripHome = "Chưa có chuyến đi nào được tạo";
+  static const String noMessage = "Bạn chưa tham gia group chat nào";
   static const String gotoDetailRouter = "Xem chi tiết chuyến đi";
 
   static const String avatarImgDefault =

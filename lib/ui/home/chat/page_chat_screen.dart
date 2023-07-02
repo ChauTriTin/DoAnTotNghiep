@@ -10,6 +10,7 @@ import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
@@ -52,18 +53,33 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
     return Scaffold(
       backgroundColor: ColorConstants.colorWhite,
       body: Obx(() {
-        return ListView.separated(
-          // padding: const EdgeInsets.only(),
-          physics: const BouncingScrollPhysics(),
-          itemCount: _controller.trips.length,
-          separatorBuilder: (BuildContext context, int index) {
-            // return const SizedBox(height: DimenConstants.marginPaddingSmall);
-            return const Divider(height: DimenConstants.marginPaddingSmall);
-          },
-          itemBuilder: (BuildContext context, int index) {
-            return _getRowConversation(index, _controller.trips[index]);
-          },
-        );
+        if (_controller.trips.isEmpty) {
+          return Container(
+            margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            child: Column(
+              children: [
+                Lottie.asset('assets/files/no_data.json'),
+                Text(
+                  StringConstants.noMessage,
+                  style: UIUtils.getStyleText(),
+                )
+              ],
+            ),
+          );
+        } else {
+          return ListView.separated(
+            // padding: const EdgeInsets.only(),
+            physics: const BouncingScrollPhysics(),
+            itemCount: _controller.trips.length,
+            separatorBuilder: (BuildContext context, int index) {
+              // return const SizedBox(height: DimenConstants.marginPaddingSmall);
+              return const Divider(height: DimenConstants.marginPaddingSmall);
+            },
+            itemBuilder: (BuildContext context, int index) {
+              return _getRowConversation(index, _controller.trips[index]);
+            },
+          );
+        }
       }),
     );
   }
@@ -71,7 +87,9 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
   Widget _getRowConversation(int index, Trip trip) {
     return InkWell(
         child: Padding(
-          padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium, right: DimenConstants.marginPaddingMedium),
+          padding: const EdgeInsets.only(
+              left: DimenConstants.marginPaddingMedium,
+              right: DimenConstants.marginPaddingMedium),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,7 +113,8 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
               Expanded(
                 flex: 8,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 16, left: 4, right: 4),
+                  padding: const EdgeInsets.only(
+                      top: 16, bottom: 16, left: 4, right: 4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -106,7 +125,8 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
                       const SizedBox(height: 4),
                       Text(
                         trip.des ?? "",
-                        style: const TextStyle(fontSize: 12, color: Colors.black54),
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.black54),
                       )
                     ],
                   ),
