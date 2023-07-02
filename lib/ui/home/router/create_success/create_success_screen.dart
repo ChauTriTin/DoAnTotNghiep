@@ -65,9 +65,16 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
     });
     _controller.isTripDeleted.listen((isDeleted) {
       if (isDeleted) {
-        UIUtils.showWarningDialog(context);
+        _showWarningDialog();
       }
     });
+  }
+
+  void _showWarningDialog() {
+    UIUtils.showAlertDialog(context, StringConstants.warning,
+        StringConstants.deleteTripError, StringConstants.ok, () {
+          Get.back();
+        }, null, null);
   }
 
   @override

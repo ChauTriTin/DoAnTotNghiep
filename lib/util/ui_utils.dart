@@ -355,13 +355,6 @@ class UIUtils {
         fontWeight: FontWeight.w500);
   }
 
-  static void showWarningDialog(BuildContext context) {
-    UIUtils.showAlertDialog(context, StringConstants.warning,
-        StringConstants.deleteTripError, StringConstants.ok, () {
-          Get.back();
-        }, null, null);
-  }
-
   static TextStyle getStyleText500Medium1() {
     return const TextStyle(
         color: ColorConstants.titleColor,
