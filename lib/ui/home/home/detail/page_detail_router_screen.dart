@@ -762,6 +762,7 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
             onTap: () {
               _controller.addCommentRoute(
                   _controller.detailTrip.value.id, _commentController.text);
+              _commentController.clear();
             },
             child: const Icon(
               Icons.send,
