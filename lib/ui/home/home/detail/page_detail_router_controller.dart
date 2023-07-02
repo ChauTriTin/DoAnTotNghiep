@@ -33,6 +33,7 @@ class DetailRouterController extends BaseController {
 
   var isWidgetJoinedVisible = true.obs;
   var isTripCompleted = false.obs;
+  var isTripDeleted = false.obs;
 
   bool isUserHost() {
     return detailTrip.value.userIdHost == userData.value.uid;
@@ -92,6 +93,11 @@ class DetailRouterController extends BaseController {
   Future<void> getDetailTrip(String? id) async {
     try {
       routerCollection.doc(id).snapshots().listen((value) {
+        if (!value.exists) {
+          print('getDetailTrip trip does not exist.');
+          isTripDeleted.value = true;
+        }
+
         DocumentSnapshot<Map<String, dynamic>>? tripMap =
             value as DocumentSnapshot<Map<String, dynamic>>?;
         if (tripMap == null || tripMap.data() == null) return;
@@ -107,9 +113,11 @@ class DetailRouterController extends BaseController {
           isWidgetJoinedVisible.value = false;
         }
 
+        isTripDeleted.value = false;
         log("getTripDetail success: ${trip.toString()}");
       });
     } catch (e) {
+      isTripDeleted.value = true;
       log("getTripDetail get user info fail: $e");
     }
   }

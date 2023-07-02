@@ -79,6 +79,12 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         //do sth
       });
     });
+
+    _controller.isTripDeleted.listen((isDeleted) {
+      if(isDeleted){
+        _showWarningDialog();
+      }
+    });
   }
 
   @override
@@ -1209,5 +1215,12 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         backgroundColor: ColorConstants.appColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  void _showWarningDialog() {
+    UIUtils.showAlertDialog(context, StringConstants.warning,
+        StringConstants.deleteTripError, StringConstants.ok, () {
+          Get.back();
+        }, null, null);
   }
 }
