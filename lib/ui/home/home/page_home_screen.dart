@@ -42,6 +42,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   void initState() {
     super.initState();
     _setupListen();
+    _controller.getData();
     _controller.getAllRouter();
   }
 
@@ -86,40 +87,69 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   }
 
   Widget _buildBanner() {
-    return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+    return Visibility(
+      visible: _controller.isShowHomeBanner.value,
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: Colors.orangeAccent),
-        child: Row(
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+        child: Stack(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.orangeAccent),
+              child: Row(
                 children: [
-                  Container(
-                      padding:
-                          const EdgeInsets.only(left: 24, top: 12, bottom: 8),
-                      child: const Text(
-                        "Sự kiện đi để nhận",
-                        style: TextStyle(fontSize: 12, color: Colors.white),
-                      )),
-                  Container(
-                    padding: const EdgeInsets.only(left: 24, bottom: 12),
-                    child: const Text(
-                      "Hãy tham gia sự kiên này cùng với bạn \nbè để nhận nhiều ưu đãi nhé",
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: const EdgeInsets.only(
+                                left: 24, top: 12, bottom: 8),
+                            child: const Text(
+                              "Sự kiện đi để nhận",
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            )),
+                        Container(
+                          padding: const EdgeInsets.only(left: 24, bottom: 12),
+                          child: const Text(
+                            "Hãy tham gia sự kiên này cùng với bạn \nbè để nhận nhiều ưu đãi nhé",
+                            style: TextStyle(fontSize: 12, color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  SizedBox(
+                      width: 90,
+                      height: 90,
+                      child: Lottie.network(
+                          "https://assets7.lottiefiles.com/packages/lf20_vuubgscl.json")),
                 ],
               ),
             ),
-            SizedBox(
-                width: 90,
-                height: 90,
-                child: Lottie.network(
-                    "https://assets7.lottiefiles.com/packages/lf20_vuubgscl.json")),
+            Positioned(
+              top: 4,
+              right: 4,
+              child: InkWell(
+                onTap: _controller.hideBanner,
+                child: Container(
+                  width: 22,
+                  height: 22,
+                  decoration: const BoxDecoration(
+                    color: ColorConstants.gray70, // Màu nền đỏ
+                    shape: BoxShape.circle,
+                  ),
+                  // Khoảng cách nội dung trong container
+                  child: const Icon(
+                    size: 12,
+                    Icons.close,
+                    color: Colors.white, // Màu biểu tượng (icon) trắng
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

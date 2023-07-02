@@ -1,6 +1,7 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
+import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -19,23 +20,36 @@ class PageHomeController extends BaseController {
 
   var db = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref().child("files/uid");
+  var isShowHomeBanner = true.obs;
 
   void clearOnDispose() {
     Get.delete<PageHomeController>();
+  }
+
+  Future<void> getData() async {
+    isShowHomeBanner.value = await SharedPreferencesUtil.getBool(
+            SharedPreferencesUtil.IS_SHOW_TOP_BANNER) ??
+        true;
+  }
+
+  void hideBanner() {
+    SharedPreferencesUtil.setBool(
+        SharedPreferencesUtil.IS_SHOW_TOP_BANNER, false);
+    isShowHomeBanner.value = false;
   }
 
   Future<void> getAllRouter() async {
     setAppLoading(true, "Loading", TypeApp.loadingData);
     var routerSnapshot = FirebaseHelper.collectionReferenceRouter.snapshots();
     var routerSnapshotsMap =
-    routerSnapshot.map((querySnapshot) => querySnapshot.docs);
+        routerSnapshot.map((querySnapshot) => querySnapshot.docs);
 
     routerSnapshotsMap.listen((routerSnapshots) {
       try {
         listTrips.clear();
         for (var docSnapshot in routerSnapshots) {
           DocumentSnapshot<Map<String, dynamic>>? tripMap =
-          docSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+              docSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
 
           if (tripMap == null || tripMap.data() == null) return;
 
@@ -46,7 +60,8 @@ class PageHomeController extends BaseController {
         print('listTrips ${listTrips.length}');
 
         listTripWithState.value = listTrips;
-        listTripWithSearch.value = listTrips.where((p0) => p0.isComplete == false).toList();
+        listTripWithSearch.value =
+            listTrips.where((p0) => p0.isComplete == false).toList();
         setAppLoading(false, "Loading", TypeApp.loadingData);
 
         Dog.d("selectedValue: $selectedValue");

@@ -42,6 +42,7 @@ class ColorConstants {
   static Color screenBg = const Color(0xFFEEEEEE);
   static Color cardBg = const Color(0xFFFFFFFF);
   static Color cardShadow = const Color(0xFF7A7A7A);
+  static const Color gray70 = const Color(0x99333333);
   static const Color titleColor = const Color(0xFF020202);
   static const Color colorTitleTrip = const Color(0xFF0630A1);
 

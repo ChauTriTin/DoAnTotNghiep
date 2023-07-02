@@ -22,10 +22,11 @@ class ProfileBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+      padding: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
       color: ColorConstants.appColor,
       child: Row(
         children: [
+          const SizedBox(width: 12,),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,15 +34,16 @@ class ProfileBarWidget extends StatelessWidget {
                 Text(
                   name,
                   style: const TextStyle(
-                    fontSize: DimenConstants.txtLarge,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
                 ),
+                const SizedBox(height: 4,),
                 Text(
                   state,
                   style: const TextStyle(
-                    fontSize: DimenConstants.txtMedium,
+                    fontSize: 14,
                     color: Colors.green,
                   ),
                 ),
@@ -49,11 +51,11 @@ class ProfileBarWidget extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 70,
-            height: 70,
+            width: 50,
+            height: 50,
             child: AvatarGlow(
               glowColor: Colors.white,
-              endRadius: 60,
+              endRadius: 40,
               duration: const Duration(milliseconds: 2000),
               repeat: true,
               showTwoGlows: true,
@@ -63,8 +65,8 @@ class ProfileBarWidget extends StatelessWidget {
                   if (onAvatarPress != null) onAvatarPress!();
                 },
                 child: SizedBox(
-                  width: 50,
-                  height: 50,
+                  width: 40,
+                  height: 40,
                   child: ClipOval(
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
@@ -80,6 +82,8 @@ class ProfileBarWidget extends StatelessWidget {
               ),
             ),
           ),
+
+          const SizedBox(width: 8,),
         ],
       ),
     );

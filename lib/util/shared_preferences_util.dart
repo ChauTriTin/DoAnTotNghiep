@@ -12,6 +12,7 @@ class SharedPreferencesUtil {
   static const KEY_FCM_TOKEN = "KEY_FCM_TOKEN";
   static const LANGUAGE = "LANGUAGE";
   static const KEY_LIST_NOTI = "KEY_LIST_NOTI";
+  static const IS_SHOW_TOP_BANNER = "IS_SHOW_TOP_BANNER";
 
   static Future<void> setString(String key, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
