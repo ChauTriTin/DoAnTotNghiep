@@ -13,8 +13,10 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import '../../../../common/const/constants.dart';
+import '../../../../common/const/string_constants.dart';
 import '../../../../model/trip.dart';
 import '../../../../util/log_dog_utils.dart';
+import '../../../../util/ui_utils.dart';
 import '../../router/join/joine_manager_screen.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
 
@@ -84,14 +86,18 @@ class _PageDetailChatScreenState
             children: [
               Text(
                 _controller.tripData.value.title ?? "",
-                style: const TextStyle(fontSize: 18,
+                style: const TextStyle(
+                    fontSize: 18,
                     fontWeight: FontWeight.w500,
                     color: Colors.white),
               ),
-              const SizedBox(height: 4,),
+              const SizedBox(
+                height: 4,
+              ),
               Text(
                 _controller.tripData.value.des ?? "",
-                style: const TextStyle(fontSize: 14,
+                style: const TextStyle(
+                    fontSize: 14,
                     fontWeight: FontWeight.w300,
                     color: Colors.white),
               ),
@@ -102,7 +108,7 @@ class _PageDetailChatScreenState
       backgroundColor: ColorConstants.appColorBkg,
       body: Obx(() {
         return Chat(
-          messages: _controller.messages,
+          messages: _controller.messages.value,
           onSendPressed: _handleSendPressed,
           onAvatarTap: _handleTabAvatar,
           showUserAvatars: true,
@@ -114,11 +120,18 @@ class _PageDetailChatScreenState
   }
 
   void _handleSendPressed(PartialText message) {
+    if (!_controller.isCurrentUserJoinedTrip()) {
+      UIUtils.showAlertDialog(context, StringConstants.warning,
+          StringConstants.removeWarning, StringConstants.ok, () {
+        Get.back();
+      }, null, null);
+
+      return;
+    }
+
     final textMessage = types.TextMessage(
       author: _controller.userChat.value,
-      createdAt: DateTime
-          .now()
-          .millisecondsSinceEpoch,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
       id: const Uuid().v4(),
       text: message.text,
     );

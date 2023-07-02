@@ -4,6 +4,7 @@ class StringConstants {
   static const String warning = "Thông báo";
   static const String errorMsg = "Có lỗi xảy ra, vui lòng thử lại sau.";
   static const String cancel = "Hủy";
+  static const String ok = "OK";
   static const String confirm = "Xác nhận";
   static const String signin = "Đăng nhập";
   static const String register = "Tạo tài khoản";
@@ -73,6 +74,7 @@ class StringConstants {
   static const String signOut = "Đăng xuất";
   static const String delete = "Xóa";
   static const String signOutWarning = "Bạn có chắc chắn muốn đăng xuất không?";
+  static const String removeWarning = "Bạn chưa tham gia chuyến đi hoặc đã bị remove khỏi đoạn hội thoại, vui lòng kiểm tra lại";
 
   static const String tripParticipated = "Chuyến đi đã tham gia";
   static const String statistic = "Thống kê";
