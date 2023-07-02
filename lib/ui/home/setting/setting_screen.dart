@@ -67,14 +67,23 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
         ),
         backgroundColor: ColorConstants.colorWhite,
         body: Obx(() {
-          return Column(
+          return Stack(
             children: [
-              ProfileBarWidget(
-                name: UserSingletonController.instance.getName(),
-                state: StringConstants.status,
-                linkAvatar: UserSingletonController.instance.getAvatar(),
+              buildBody(context),
+              Padding(
+                padding: const EdgeInsets.all(
+                  DimenConstants.marginPaddingMedium,
+                ),
+                child: FloatingActionButton(
+                  mini: true,
+                  elevation: DimenConstants.elevationMedium,
+                  backgroundColor: ColorConstants.appColor,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Icon(Icons.clear),
+                ),
               ),
-              Expanded(child: buildBody(context))
             ],
           );
         }));
@@ -88,7 +97,7 @@ class _PageSettingScreen extends BaseStatefulState<PageSettingScreen> {
             horizontal: DimenConstants.marginPaddingMedium),
         child: ListView(physics: const BouncingScrollPhysics(), children: [
           const SizedBox(
-            height: DimenConstants.marginPaddingMedium,
+            height: DimenConstants.marginPaddingXXL,
           ),
           _buildAvatar(),
           const SizedBox(
