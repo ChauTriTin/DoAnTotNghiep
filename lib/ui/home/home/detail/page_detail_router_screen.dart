@@ -59,6 +59,9 @@ class _DetailRouterScreenState extends State<DetailRouterScreen> {
     _controller.getAllRouter();
     _controller.getUserInfo(Trip.fromJson(jsonDecode(data)).userIdHost ?? "");
     _controller.getCommentRoute(Trip.fromJson(jsonDecode(data)).id);
+
+    Dog.d(
+        "fcmToken detail: ${UserSingletonController.instance.userData.value.fcmToken}");
   }
 
   @override

@@ -184,6 +184,7 @@ class DetailRouterController extends BaseController {
     );
     try {
       var listFcmToken = <String>[];
+      Dog.d("fcmToken leader: ${userLeaderData.value.fcmToken}");
       listFcmToken.add(userLeaderData.value.fcmToken ?? "");
 
       var title = "";
