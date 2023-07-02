@@ -1,3 +1,5 @@
+import 'package:appdiphuot/common/const/constants.dart';
+import 'package:appdiphuot/ui/home/user/user_preview/page_user_preview_screen.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -202,7 +204,10 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
     var user = _controller.members[index];
     return Padding(
       padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-      child: Center(
+      child: InkWell(
+        onTap: (){
+          _openMemberProfile(user);
+        },
         child: Row(
           children: [
             Container(
@@ -223,6 +228,12 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
         ),
       ),
     );
+  }
+
+  void _openMemberProfile(UserData user) {
+    Get.to(() => const PageUserPreviewScreen(), arguments: [
+      { Constants.user: user.uid}
+    ]);
   }
 
   Widget getIconUser(UserData user) {
@@ -273,7 +284,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
     UIUtils.showAlertDialog(
       context,
       StringConstants.warning,
-      "Bạn có chắc muốn remove ${user.name ?? ""} Không?",
+      "Bạn có chắc muốn remove '${user.name ?? ""}' Không?",
       StringConstants.cancel,
       null,
       StringConstants.delete,
