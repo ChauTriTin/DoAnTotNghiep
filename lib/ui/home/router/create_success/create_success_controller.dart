@@ -1,6 +1,8 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/trip.dart';
+import 'package:appdiphuot/ui/user_singleton_controller.dart';
+import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ class CreateSuccessController extends BaseController {
   var isDoneCountdown = false.obs;
   var trip = Trip().obs;
   var isTripDeleted = false.obs;
+  var shouldShowEditButton = false.obs;
 
   void clearOnDispose() {
     Get.delete<CreateSuccessController>();
@@ -17,6 +20,13 @@ class CreateSuccessController extends BaseController {
 
   void setDoneCountdown(bool value) {
     isDoneCountdown.value = value;
+  }
+
+  bool checkShowEditBtn() {
+    String uid = UserSingletonController.instance.getUid();
+    Dog.d("shouldShowEditButton: ${trip.value.toString()}, uid: $uid");
+    return trip.value.userIdHost == uid
+        && (trip.value.isComplete == null || trip.value.isComplete == false);
   }
 
   Future<void> getRouter(String id) async {
@@ -43,6 +53,9 @@ class CreateSuccessController extends BaseController {
         var pEnd = this.trip.value.placeEnd;
         var list = this.trip.value.listPlace;
         isTripDeleted.value = false;
+
+        shouldShowEditButton.value = checkShowEditBtn();
+        Dog.d("shouldShowEditButton: ${shouldShowEditButton.value}");
         // if (pStart != null && pEnd != null && list != null) {
         //   _initRouter(pStart, pEnd, list);
         // }

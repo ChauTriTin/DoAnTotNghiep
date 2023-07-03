@@ -351,37 +351,42 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               child: const Icon(Icons.clear),
             ),
           ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                DimenConstants.marginPaddingMedium,
-                DimenConstants.marginPaddingLarge,
-                DimenConstants.marginPaddingMedium,
-                DimenConstants.marginPaddingMedium,
+          Obx(() {
+            return Visibility(
+              visible: _controller.shouldShowEditButton.value,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingLarge,
+                    DimenConstants.marginPaddingMedium,
+                    DimenConstants.marginPaddingMedium,
+                  ),
+                  child: FloatingActionButton(
+                    mini: true,
+                    elevation: DimenConstants.elevationMedium,
+                    backgroundColor: ColorConstants.appColor,
+                    onPressed: () {
+                      Get.to(CreateRouterScreen(
+                        dfTitle: "",
+                        dfDescription: "",
+                        dfPlaceStart: null,
+                        dfPlaceEnd: null,
+                        dfListPlaceStop: [],
+                        dfDateTimeStart: null,
+                        dfDateTimeEnd: null,
+                        dfRequire: "",
+                        dfIsPublic: true,
+                        dfEditRouterWithTripId: _controller.trip.value.id,
+                      ));
+                    },
+                    child: const Icon(Icons.edit),
+                  ),
+                ),
               ),
-              child: FloatingActionButton(
-                mini: true,
-                elevation: DimenConstants.elevationMedium,
-                backgroundColor: ColorConstants.appColor,
-                onPressed: () {
-                  Get.to(CreateRouterScreen(
-                    dfTitle: "",
-                    dfDescription: "",
-                    dfPlaceStart: null,
-                    dfPlaceEnd: null,
-                    dfListPlaceStop: [],
-                    dfDateTimeStart: null,
-                    dfDateTimeEnd: null,
-                    dfRequire: "",
-                    dfIsPublic: true,
-                    dfEditRouterWithTripId: _controller.trip.value.id,
-                  ));
-                },
-                child: const Icon(Icons.edit),
-              ),
-            ),
-          ),
+            );
+          })
         ],
       ),
     );
