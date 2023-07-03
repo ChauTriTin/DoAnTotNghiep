@@ -119,7 +119,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           ),
         );
       }
-      _createMaker(false);
+      _createMaker();
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
@@ -176,7 +176,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     return completer.future;
   }
 
-  void _createMaker(bool isUpdateLatLong) {
+  void _createMaker() {
     Future<Marker> createMarkerPlaceStart() async {
       ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context, size: const Size.square(55.0));
@@ -261,7 +261,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
 
       var listMember = _controller.listMember;
-      // debugPrint(">>>createMarkerMember listMember length ${listMember.length}, isUpdateLatLong $isUpdateLatLong");
+      debugPrint(
+          ">>>createMarkerMember listMember length ${listMember.length}");
       for (int i = 0; i < listMember.length; i++) {
         var member = listMember[i];
         debugPrint(
@@ -280,22 +281,25 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       }
     }
 
-    if (isUpdateLatLong) {
-      createMarkerMember();
-    } else {
-      var listMarketPlaceStart = createMarkerPlaceStart();
-      listMarketPlaceStart.then((value) {
-        _controller.setMarkerGoogleMap(value);
-      });
+    //update maker start
+    var listMarketPlaceStart = createMarkerPlaceStart();
+    listMarketPlaceStart.then((value) {
+      _controller.setMarkerGoogleMap(value);
+    });
 
-      var listMarketPlaceEnd = createMarkerPlaceEnd();
-      listMarketPlaceEnd.then((value) {
-        _controller.setMarkerGoogleMap(value);
-      });
-      createMarkerPlaceStop();
-      createMarkerMember();
-    }
-    debugPrint(">>>>_createMaker success isUpdateLatLong $isUpdateLatLong");
+    //update maker end
+    var listMarketPlaceEnd = createMarkerPlaceEnd();
+    listMarketPlaceEnd.then((value) {
+      _controller.setMarkerGoogleMap(value);
+    });
+
+    //update maker stop
+    createMarkerPlaceStop();
+
+    //update maker member
+    createMarkerMember();
+
+    debugPrint(">>>>_createMaker success");
   }
 
   Widget _buildHelperView() {
@@ -438,8 +442,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         return Container();
       }
 
-      debugPrint(">>>_buildPeopleView update position marker");
-      _createMaker(true);
+      // debugPrint(">>>_buildPeopleView update position marker");
+      // _createMaker(true);
 
       return Container(
         // padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
