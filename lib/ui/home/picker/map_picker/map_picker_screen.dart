@@ -53,7 +53,32 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
         Place p = Place();
         p.lat = result.geometry?.location.lat ?? defaultLat;
         p.long = result.geometry?.location.lng ?? defaultLong;
-        p.name = result.formattedAddress ?? "";
+
+        // p.name = result.formattedAddress ?? "";
+        // debugPrint("onPlacePicked formattedAddress ${result.formattedAddress}");
+
+        // debugPrint("onPlacePicked name ${result.name}");
+        // debugPrint("onPlacePicked adrAddress ${result.adrAddress}");
+        // debugPrint("onPlacePicked addressComponents length ${result.addressComponents?.length}");
+        // debugPrint("onPlacePicked addressComponents ${result.addressComponents?.firstOrNull?.longName}");
+        var address = "";
+        result.addressComponents?.forEach((element) {
+          var name = element.longName;
+          debugPrint("onPlacePicked name $name");
+          if (name.contains("+")) {
+            //do nothing
+          } else {
+            address += "${element.longName}, ";
+          }
+        });
+        address = address.trim();
+        if (address.isNotEmpty) {
+          address = address.substring(0, address.length - 1);
+        }
+        debugPrint("onPlacePicked address $address");
+        p.name = address;
+        // debugPrint("onPlacePicked vicinity ${result.vicinity}");
+
         widget.callback.call(p);
         Get.back();
       },
