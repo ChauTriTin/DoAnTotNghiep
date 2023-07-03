@@ -390,7 +390,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                     height: DimenConstants.marginMMedium,
                   ),
                   Text(
-                    "💀 ${StringConstants.leadTripName}${trip.userHostName ?? ""}",
+                    "👤 ${StringConstants.leadTripName}${trip.userHostName ?? ""}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                         color: ColorConstants.textColor,
