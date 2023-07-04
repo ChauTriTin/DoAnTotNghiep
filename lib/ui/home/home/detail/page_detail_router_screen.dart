@@ -64,6 +64,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     _controller.getAllRouter();
     _controller.getUserInfo(Trip.fromJson(jsonDecode(data)).userIdHost ?? "");
     _controller.getCommentRoute(Trip.fromJson(jsonDecode(data)).id);
+
+    Dog.d(
+        "fcmToken detail: ${UserSingletonController.instance.userData.value.fcmToken}");
   }
 
   void _setupListen() {
@@ -904,6 +907,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             onTap: () {
               _controller.addCommentRoute(
                   _controller.detailTrip.value.id, _commentController.text);
+              _commentController.clear();
             },
             child: const Icon(
               Icons.send,
@@ -1060,10 +1064,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   Widget rateTrip() {
     var ratesMap = convertMapToRateList(_controller.detailTrip.value.rates);
     var totalRate = _controller.detailTrip.value.rates?.length ?? 0;
-    var rateLeader = 0.0;
-    var rateStart = 0.0;
-    var rateEnd = 0.0;
-    var rateTrip = 0.0;
+    double rateLeader = 0;
+    double rateStart = 0;
+    double rateEnd = 0;
+    double rateTrip = 0;
     for (var element in ratesMap) {
       rateLeader += element.rateLeader ?? 0;
       rateStart += element.ratePlaceStart ?? 0;
@@ -1071,10 +1075,16 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
       rateTrip += element.rateTrip ?? 0;
     }
 
-    rateLeader = rateLeader / totalRate;
-    rateStart = rateStart / totalRate;
-    rateEnd = rateEnd / totalRate;
-    rateTrip = rateTrip / totalRate;
+    Dog.d("rateMaps ${ratesMap.length}");
+    Dog.d("rateLeader $rateLeader -- $totalRate");
+    Dog.d("rate ${rateLeader / ratesMap.length}");
+
+    if (totalRate != 0) {
+      rateLeader = rateLeader / totalRate;
+      rateStart = rateStart / totalRate;
+      rateEnd = rateEnd / totalRate;
+      rateTrip = rateTrip / totalRate;
+    }
 
     return Obx(() => Container(
           margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
@@ -1086,26 +1096,94 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    child: const Text("Trưởng đoàn",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      child: const Text("Trưởng đoàn",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                    ),
                   ),
                   //TODO fix model rates
-                  RatingBar.builder(
-                    initialRating: rateLeader,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 25.0,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.red,
+                  Expanded(
+                    flex: 1,
+                    child: RatingBar.builder(
+                      initialRating: rateLeader,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 25.0,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.red,
+                      ),
+                      ignoreGestures: true,
+                      onRatingUpdate: (double value) {},
                     ),
-                    ignoreGestures: true,
-                    onRatingUpdate: (double value) {},
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      child: const Text("Điểm bắt đầu",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                    ),
+                  ),
+                  //TODO fix model rates
+                  Expanded(
+                    flex: 1,
+                    child: RatingBar.builder(
+                      initialRating: rateStart,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 25.0,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.red,
+                      ),
+                      ignoreGestures: true,
+                      onRatingUpdate: (double value) {},
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      child: const Text("Điểm kết thúc",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                    ),
+                  ),
+                  //TODO fix model rates
+                  Expanded(
+                    flex: 1,
+                    child: RatingBar.builder(
+                      initialRating: rateEnd,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 25.0,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.red,
+                      ),
+                      ignoreGestures: true,
+                      onRatingUpdate: (double value) {},
+                    ),
                   )
                 ],
               ),
@@ -1113,26 +1191,32 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    child: const Text("Đánh giá của chuyến đi",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      child: const Text("Đánh giá của chuyến đi",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                    ),
                   ),
                   //TODO fix model rates
-                  RatingBar.builder(
-                    initialRating: rateTrip,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 25.0,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.red,
+                  Expanded(
+                    flex: 1,
+                    child: RatingBar.builder(
+                      initialRating: rateTrip,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 25.0,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.red,
+                      ),
+                      ignoreGestures: true,
+                      onRatingUpdate: (double value) {},
                     ),
-                    ignoreGestures: true,
-                    onRatingUpdate: (double value) {},
                   )
                 ],
               )
@@ -1143,35 +1227,80 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
 
   List<Widget> listPlaceRate() {
     var list = <Widget>[];
-    _controller.detailTrip.value.listPlace?.forEach((element) {
-      list.add(const SizedBox(height: 12));
-      list.add(Row(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 8),
-            child: Text(element.name ?? "",
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          ),
+    var ratesMap = convertMapToRateList(_controller.detailTrip.value.rates);
+    var listPlaceRate = <double>[];
 
-          //TODO fix model rates
-          // RatingBar.builder(
-          //   initialRating: _controller.detailTrip.value.rate?.rateTrip ?? 1,
-          //   direction: Axis.horizontal,
-          //   allowHalfRating: true,
-          //   itemCount: 5,
-          //   itemSize: 25.0,
-          //   itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-          //   itemBuilder: (context, _) => const Icon(
-          //     Icons.star,
-          //     color: Colors.red,
-          //   ),
-          //   ignoreGestures: true,
-          //   onRatingUpdate: (double value) {},
-          // )
-        ],
-      ));
-    });
+    var totalRate = _controller.detailTrip.value.rates?.length ?? 0;
+
+    for (var element in ratesMap) {
+      element.rateListPlaceStop?.forEach((item) {
+        int index = element.rateListPlaceStop?.indexOf(item) ?? -1;
+        if (index != -1) {
+          if (listPlaceRate.isEmpty) {
+            listPlaceRate[index] = item;
+          } else {
+            var currentRate = listPlaceRate[index];
+            listPlaceRate[index] = currentRate + item;
+          }
+        }
+      });
+    }
+
+    if (listPlaceRate.isEmpty) {
+      _controller.detailTrip.value.listPlace?.forEach((element) {
+        listPlaceRate.add(0);
+      });
+    }
+
+    for (var element in _controller.detailTrip.value.listPlace ?? <Place>[]) {
+      var listPlace = _controller.detailTrip.value.listPlace;
+      int index = -1;
+
+      if (listPlace != null && listPlace.isNotEmpty) {
+        index = listPlace.indexOf(element);
+      }
+      double rate = 0;
+      if (totalRate != 0) {
+        rate = listPlaceRate[index] / totalRate;
+      }
+
+      Dog.d("index: $index , listPlaceRate: ${listPlaceRate.length}");
+
+      if (index != -1) {
+        list.add(const SizedBox(height: 12));
+        list.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: Text(element.name ?? "",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: RatingBar.builder(
+                initialRating: rate,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemSize: 25.0,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.red,
+                ),
+                ignoreGestures: true,
+                onRatingUpdate: (double value) {},
+              ),
+            )
+          ],
+        ));
+      }
+    }
     return list;
   }
 
