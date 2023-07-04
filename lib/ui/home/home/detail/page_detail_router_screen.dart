@@ -84,7 +84,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     });
 
     _controller.isTripDeleted.listen((isDeleted) {
-      if(isDeleted){
+      if (isDeleted) {
         _showWarningDialog();
       }
     });
@@ -93,10 +93,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   void _showWarningDialog() {
     UIUtils.showAlertDialog(context, StringConstants.warning,
         StringConstants.deleteTripError, StringConstants.ok, () {
-          Get.back();
-        }, null, null);
+      Get.back();
+    }, null, null);
   }
-
 
   @override
   void dispose() {
@@ -180,33 +179,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               _divider(12),
               _leader(),
               _divider(0),
-              _seeMore(),
-
-              // Other router
-              const Divider(
-                height: 8,
-                thickness: 8,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-
-              Padding(
-                padding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: DimenConstants.marginPaddingMedium),
-                child: Text(
-                  "Chuyến đi khác",
-                  style: UIUtils.getStyleText500Medium1(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: DimenConstants.marginPaddingMedium),
-                child: getOtherList(_controller.listTrips),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              if (_controller.detailTrip.value.isComplete == false)
+                ...widgetsShowBeforeCompleted(),
+              if (_controller.detailTrip.value.isComplete == true)
+                ...widgetsShowAfterCompleted()
             ],
           ),
         ));
@@ -1005,6 +981,21 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         ),
       ),
     );
+  }
+
+  List<Widget> widgetsShowBeforeCompleted() {
+    var list = <Widget>[];
+    list.add(_seeMore());
+    list.add(const SizedBox(height: DimenConstants.marginPaddingLarge));
+    list.add(Container(
+        margin: const EdgeInsets.only(right: 24, left: 24),
+        child: const Text(
+          "Chuyến đi khác",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        )));
+    list.add(const SizedBox(height: DimenConstants.marginPaddingMedium));
+    list.add(getOtherList(_controller.listTrips));
+    return list;
   }
 
   List<Widget> widgetsShowAfterCompleted() {
