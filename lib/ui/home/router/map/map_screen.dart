@@ -244,7 +244,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         var request = await http.get(Uri.parse(avt));
         var bytes = request.bodyBytes;
         LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
-        var b = await getBytesFromCanvas(150, 150, bytes.buffer.asUint8List());
+        var b = await getBytesFromCanvas(90, 90, bytes.buffer.asUint8List());
         if (b == null) {
           return Marker(
             // markerId: MarkerId(lastMapPositionPoints.toString()),
