@@ -368,10 +368,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
             return _getRow(_controller.listTripWithSearch[index], index);
           },
           separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              height: 12,
-              thickness: 12,
-            );
+            return const SizedBox(height: 0);
           },
         ),
       );
@@ -379,25 +376,32 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   }
 
   Widget _getRow(Trip trip, int index) {
-    return InkWell(
+    return Card(
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: () {
+          Get.to(() => const DetailRouterScreen(), arguments: [
+            {Constants.detailTrip: jsonEncode(trip)},
+          ]);
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.2,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(10.0),
-                    bottom: Radius.circular(10.0),
-                  ),
-                  child: CachedMemoryImage(
-                    fit: BoxFit.cover,
-                    uniqueKey: trip.listImg?[0] ?? "",
-                    base64: trip.listImg?[0] ?? "",
-                  ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12.0),
+                ),
+                child: CachedMemoryImage(
+                  fit: BoxFit.cover,
+                  uniqueKey: trip.listImg?[0] ?? "",
+                  base64: trip.listImg?[0] ?? "",
                 ),
               ),
             ),
@@ -410,7 +414,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   Expanded(
                     child: Text(
                         trip.title ?? "",
-                        style: const TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 18.0, color: ColorConstants.colorTitleTrip, fontWeight: FontWeight.bold),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis),
                   ),
@@ -503,11 +507,8 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
             ),
           ],
         ),
-        onTap: () {
-          Get.to(() => const DetailRouterScreen(), arguments: [
-            {Constants.detailTrip: jsonEncode(trip)},
-          ]);
-        });
+      ),
+    );
   }
 
   void _setupListen() {
