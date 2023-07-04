@@ -1091,7 +1091,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     flex: 1,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
-                      child: Text(_controller.getNameLeader() ?? "Trường đoan",
+                      child: Text("Leader: ${_controller.getNameLeader()}",
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
@@ -1123,7 +1123,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       child: Text(
-                          _controller.detailTrip.value.placeStart?.name ??
+                          "Bắt đầu: ${_controller.detailTrip.value.placeStart?.name}" ??
                               "Điểm bắt đầu",
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
@@ -1157,7 +1157,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       child: Text(
-                          _controller.detailTrip.value.placeEnd?.name ??
+                          "Kết thúc: ${_controller.detailTrip.value.placeEnd?.name}" ??
                               "Điểm kết thúc",
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
