@@ -53,6 +53,9 @@ void main() async {
 
   loadLanguage();
 
+  // Does not update google fon't from the internet
+  // GoogleFonts.config.allowRuntimeFetching = false;
+
   runApp(
     OverlaySupport.global(
       child: GetMaterialApp(

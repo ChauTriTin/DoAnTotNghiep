@@ -46,6 +46,7 @@ class ColorConstants {
   static const Color gray70 = const Color(0x99333333);
   static const Color titleColor = const Color(0xFF020202);
   static const Color colorTitleTrip = const Color(0xFF0630A1);
+  static const Color appColor1 = const Color(0xDDE75E5E);
 
   static getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())

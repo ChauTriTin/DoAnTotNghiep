@@ -72,6 +72,8 @@ dependencies:
   intl: any
   fluttertoast: ^8.2.2
 
+#  google_fonts: ^2.3.3
+#    path: "goo gle_fonts/"
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -107,5 +109,6 @@ flutter:
   assets:
     - assets/files/
     - assets/images/
+    - google_fonts/
 flutter_intl:
   enabled: true
