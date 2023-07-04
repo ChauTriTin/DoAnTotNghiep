@@ -61,7 +61,6 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
       if (event.className == mapScreen) {
         Get.back();
       }
-
     });
     _controller.isTripDeleted.listen((isDeleted) {
       if (isDeleted) {
@@ -73,8 +72,8 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
   void _showWarningDialog() {
     UIUtils.showAlertDialog(context, StringConstants.warning,
         StringConstants.deleteTripError, StringConstants.ok, () {
-          Get.back();
-        }, null, null);
+      Get.back();
+    }, null, null);
   }
 
   @override
@@ -217,7 +216,7 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                               child: SlideCountdownSeparated(
                                 showZeroValue: true,
                                 duration: _controller
-                                    .getDateTimeEnd()
+                                    .getDateTimeStart()
                                     .difference(DateTime.now()),
                                 // separatorType: SeparatorType.title,
                                 // slideDirection: SlideDirection.up,

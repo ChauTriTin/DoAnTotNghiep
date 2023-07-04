@@ -56,15 +56,28 @@ class CreateSuccessController extends BaseController {
     }
   }
 
-  DateTime getDateTimeEnd() {
+  // DateTime getDateTimeEnd() {
+  //   try {
+  //     var dateTimeEnd = trip.value.timeEnd ?? "";
+  //     debugPrint("getDateTimeEnd dateTimeEnd $dateTimeEnd");
+  //     DateTime tempDate = DateFormat("dd/MM/yyyy HH:mm").parse(dateTimeEnd);
+  //     debugPrint("getDateTimeEnd tempDate $tempDate");
+  //     return tempDate;
+  //   } catch (e) {
+  //     debugPrint("getDateTimeEnd error: $e");
+  //     return DateTime.now().add(const Duration(days: 7));
+  //   }
+  // }
+
+  DateTime getDateTimeStart() {
     try {
-      var dateTimeEnd = trip.value.timeEnd ?? "";
-      debugPrint("getDateTimeEnd dateTimeEnd $dateTimeEnd");
-      DateTime tempDate = DateFormat("dd/MM/yyyy HH:mm").parse(dateTimeEnd);
-      debugPrint("getDateTimeEnd tempDate $tempDate");
+      var dateTimeStart = trip.value.timeStart ?? "";
+      debugPrint("dateTimeStart dateTimeStart $dateTimeStart");
+      DateTime tempDate = DateFormat("dd/MM/yyyy HH:mm").parse(dateTimeStart);
+      debugPrint("getDateTimeStart tempDate $tempDate");
       return tempDate;
     } catch (e) {
-      debugPrint("getDateTimeEnd error: $e");
+      debugPrint("dateTimeStart error: $e");
       return DateTime.now().add(const Duration(days: 7));
     }
   }
