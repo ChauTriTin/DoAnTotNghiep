@@ -376,8 +376,15 @@ class MapController extends BaseController {
     debugPrint("setMarkerGoogleMap ${marker.mapsId}");
     if (isContainMarker(marker)) {
       // debugPrint("isContainMarker -> do nothing, ${marker.mapsId}");
+      if (marker.mapsId.value == idMarkerStart ||
+          marker.mapsId.value == idMarkerEnd ||
+          marker.mapsId.value.startsWith("idMarkerStop")) {
+        debugPrint("isContainMarker -> do nothing because idMarker***");
+      } else {
+        debugPrint("isContainMarker -> need update because !idMarker***");
+      }
     } else {
-      // debugPrint("!isContainMarker -> ${marker.mapsId}");
+      debugPrint("!isContainMarker -> ${marker.mapsId}");
       listMarkerGoogleMap.add(marker);
       listMarkerGoogleMap.refresh();
     }
