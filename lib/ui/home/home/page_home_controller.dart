@@ -72,16 +72,26 @@ class PageHomeController extends BaseController {
 
   void setTypeTrip(String type) {
     buttonChipTypeSelected.value = type;
-    var list = <Trip>[];
+    filterTrip();
+  }
 
-    switch (type) {
+  void setButtonChoose(int number) {
+    buttonChoose.value = number;
+    filterTrip();
+  }
+
+  void filterTrip() {
+    var filteredTrip = <Trip>[];
+
+    var filteredListTripType = <Trip>[];
+    switch (buttonChipTypeSelected.value) {
       case StringConstants.tripOpen:
         var temp = listTrips.where((p0) => p0.isComplete == false);
-        list.addAll(temp);
+        filteredListTripType.addAll(temp);
         break;
       case StringConstants.tripPost:
         var temp = listTrips.where((p0) => p0.isComplete == true);
-        list.addAll(temp);
+        filteredListTripType.addAll(temp);
         break;
       case StringConstants.tripTop:
         listTrips.sort((a, b) {
@@ -90,35 +100,26 @@ class PageHomeController extends BaseController {
 
           return bLength.compareTo(aLength);
         });
-        list = listTrips;
+        filteredListTripType = listTrips;
         break;
       case StringConstants.placeTop:
-        // list = listTrips.where((i) => i.isPublic == false).toList();
+      // list = listTrips.where((i) => i.isPublic == false).toList();
         break;
     }
-
-    listTripWithState.value = list;
-    listTripWithSearch.value = list;
-  }
-
-  void setButtonChoose(int number) {
-    buttonChoose.value = number;
-
-    var list = <Trip>[];
 
     switch (buttonChoose.value) {
       case 0:
-        list.addAll(listTrips);
+        filteredTrip.addAll(filteredListTripType);
         break;
       case 1:
-        list = listTrips.where((i) => i.isPublic == true).toList();
+        filteredTrip = filteredListTripType.where((i) => i.isPublic == true).toList();
         break;
       case 2:
-        list = listTrips.where((i) => i.isPublic == false).toList();
+        filteredTrip = filteredListTripType.where((i) => i.isPublic == false).toList();
         break;
     }
 
-    listTripWithState.value = list;
-    listTripWithSearch.value = list;
+    listTripWithState.value = filteredTrip;
+    listTripWithSearch.value = filteredTrip;
   }
 }
