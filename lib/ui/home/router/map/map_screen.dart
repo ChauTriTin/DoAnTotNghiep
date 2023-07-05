@@ -39,6 +39,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
+  final double zoomLevel = kDebugMode ? 20.0 : 14.0;
 
   @override
   void initState() {
@@ -124,8 +125,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
-          zoom: 14.0,
+          zoom: zoomLevel,
         ),
+        // zoomControlsEnabled: true,
+        // zoomGesturesEnabled: true,
         markers: _controller.listMarkerGoogleMap.toSet(),
         polylines: Set.of(_controller.polylines),
         myLocationEnabled: false,
@@ -141,8 +144,9 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   void _imMoving(UserData user) {
     if (user.lat != null && user.long != null) {
-      mapController?.animateCamera(
-          CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), 14));
+      // TODO revert
+      // mapController?.animateCamera(
+      //     CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
     }
   }
 
@@ -393,7 +397,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           var long = userData.long;
           if (lat != null && long != null) {
             mapController?.animateCamera(
-                CameraUpdate.newLatLngZoom(LatLng(lat, long), 14));
+                CameraUpdate.newLatLngZoom(LatLng(lat, long), zoomLevel));
           }
         },
         child: SizedBox(

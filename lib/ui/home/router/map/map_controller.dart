@@ -148,6 +148,7 @@ class MapController extends BaseController {
     }
 
     debugPrint("_genListMember success listMember length ${listMember.length}");
+    // listMember.sort((a, b) => (a.name ?? "").compareTo(b.name ?? ""));
     listMember.refresh();
   }
 
@@ -377,28 +378,25 @@ class MapController extends BaseController {
   }
 
   void setMarkerGoogleMap(Marker marker) {
-    debugPrint("setMarkerGoogleMap ${marker.mapsId}");
+    // debugPrint("setMarkerGoogleMap ${marker.mapsId}");
     if (isContainMarker(marker)) {
       // debugPrint("isContainMarker -> do nothing, ${marker.mapsId}");
       if (marker.mapsId.value == idMarkerStart ||
           marker.mapsId.value == idMarkerEnd ||
           marker.mapsId.value.startsWith("idMarkerStop")) {
-        debugPrint("isContainMarker -> do nothing because idMarker***");
+        // debugPrint("isContainMarker -> do nothing because idMarker***");
       } else {
-        // debugPrint("isContainMarker -> need update because !idMarker*** ${marker.markerId}~${marker.position}");
+        debugPrint(
+            "isContainMarker -> need update because !idMarker*** ${marker.markerId}~${marker.position}");
 
         final oldMarkerIndex = listMarkerGoogleMap
             .indexWhere((mk) => mk.markerId == marker.markerId);
-        debugPrint(
-            "isContainMarker oldMarkerIndex $oldMarkerIndex -> ${marker.markerId}~${marker.position}");
-        // listMarkerGoogleMap[oldMarkerIndex] = marker;
+        listMarkerGoogleMap.removeAt(oldMarkerIndex);
         // listMarkerGoogleMap.refresh();
       }
-    } else {
-      debugPrint("!isContainMarker -> ${marker.mapsId}");
-      listMarkerGoogleMap.add(marker);
-      listMarkerGoogleMap.refresh();
     }
+    listMarkerGoogleMap.add(marker);
+    listMarkerGoogleMap.refresh();
     // debugPrint("_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
 
