@@ -120,6 +120,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         );
       }
       _createMaker();
+      _imMoving(listMember);
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
@@ -127,7 +128,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         ),
         markers: _controller.listMarkerGoogleMap.toSet(),
         polylines: Set.of(_controller.polylines),
-        myLocationEnabled: true,
+        myLocationEnabled: false,
         compassEnabled: true,
         onMapCreated: (controllerParam) {
           setState(() {
@@ -136,6 +137,20 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         },
       );
     });
+  }
+
+  void _imMoving(List<UserData> listMember) {
+    for (var element in listMember) {
+      if (element.uid == _controller.currentUserData.value.uid) {
+        debugPrint(
+            "_imMoving ${element.name} -> ${element.lat}x${element.long}");
+        if (element.lat != null && element.long != null) {
+          mapController?.animateCamera(CameraUpdate.newLatLngZoom(
+              LatLng(element.lat!, element.long!), 14));
+        }
+        break;
+      }
+    }
   }
 
   Future<Uint8List?> getBytesFromCanvas(
