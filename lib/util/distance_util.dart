@@ -7,27 +7,26 @@ import 'log_dog_utils.dart';
 class DistanceUtil {
   static Future<double> getTotalKm(List<Trip> trips) async {
     // try {
-    double totalKmTemp = 0;
+    double totalKm = 0;
+    Dog.d("getTotalKm trips: ${trips.length}");
+
     for (var trip in trips) {
-      if (trip.listPlace == null || trip.listPlace?.isEmpty == true) {
-        double km = await _genDistance(trip.placeStart, trip.placeEnd);
-        totalKmTemp = totalKmTemp + km;
-        Dog.d("getTotalKm km of ${trip.title}: $km");
-      } else {
-        Place? startPlace = trip.placeStart;
-        trip.listPlace?.forEach((place) async {
-          double km = await _genDistance(startPlace, place);
-          totalKmTemp = totalKmTemp + km;
+      var listPlace = <Place>[];
+      listPlace.add(trip.placeStart!);
+      listPlace.addAll(trip.listPlace ?? []);
+      listPlace.add(trip.placeEnd!);
 
-          startPlace = place;
-        });
-
-        double km = await _genDistance(startPlace, trip.placeEnd);
-        totalKmTemp = totalKmTemp + km;
+      double kmTemp = 0;
+      for (int i = 0; i < listPlace.length - 1; i++) {
+        double km = await _genDistance(listPlace[i], listPlace[i + 1]);
+        kmTemp += km;
+        Dog.d("getTotalKm ${trip.title} Km of ${listPlace[i].name} -> ${listPlace[i + 1].name}: $km");
       }
+      totalKm += kmTemp;
+      Dog.d("getTotalKm: totalKm: $totalKm -- km of ${trip.title}: $kmTemp");
     }
-    Dog.d("getTotalKm km: $totalKmTemp");
-    return totalKmTemp;
+    Dog.d("getTotalKm km: $totalKm");
+    return double.parse(totalKm.toStringAsFixed(2));
     // }catch (e){
     //   Dog.e("getTotalKm exeption: $e");
     // }

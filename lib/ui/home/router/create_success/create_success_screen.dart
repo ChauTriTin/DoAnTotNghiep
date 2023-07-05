@@ -350,37 +350,43 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
               child: const Icon(Icons.clear),
             ),
           ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                DimenConstants.marginPaddingMedium,
-                DimenConstants.marginPaddingLarge,
-                DimenConstants.marginPaddingMedium,
-                DimenConstants.marginPaddingMedium,
+          Obx(() {
+            return Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  DimenConstants.marginPaddingMedium,
+                  DimenConstants.marginPaddingLarge,
+                  DimenConstants.marginPaddingMedium,
+                  DimenConstants.marginPaddingMedium,
+                ),
+                child: FloatingActionButton(
+                  mini: true,
+                  elevation: DimenConstants.elevationMedium,
+                  backgroundColor: ColorConstants.appColor,
+                  onPressed: () {
+                    if (_controller.shouldShowEditButton.value) {
+                      Get.to(CreateRouterScreen(
+                        dfTitle: "",
+                        dfDescription: "",
+                        dfPlaceStart: null,
+                        dfPlaceEnd: null,
+                        dfListPlaceStop: [],
+                        dfDateTimeStart: null,
+                        dfDateTimeEnd: null,
+                        dfRequire: "",
+                        dfIsPublic: true,
+                        dfEditRouterWithTripId: _controller.trip.value.id,
+                      ));
+                    } else {
+                      showOutTripConfirmDialog();
+                    }
+                  },
+                  child: Icon(_controller.shouldShowEditButton.value ? Icons.edit : Icons.exit_to_app_rounded),
+                ),
               ),
-              child: FloatingActionButton(
-                mini: true,
-                elevation: DimenConstants.elevationMedium,
-                backgroundColor: ColorConstants.appColor,
-                onPressed: () {
-                  Get.to(CreateRouterScreen(
-                    dfTitle: "",
-                    dfDescription: "",
-                    dfPlaceStart: null,
-                    dfPlaceEnd: null,
-                    dfListPlaceStop: [],
-                    dfDateTimeStart: null,
-                    dfDateTimeEnd: null,
-                    dfRequire: "",
-                    dfIsPublic: true,
-                    dfEditRouterWithTripId: _controller.trip.value.id,
-                  ));
-                },
-                child: const Icon(Icons.edit),
-              ),
-            ),
-          ),
+            );
+          })
         ],
       ),
     );
@@ -416,5 +422,22 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
         backgroundColor: ColorConstants.appColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  void showOutTripConfirmDialog() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.outWarning,
+      StringConstants.cancel,
+      null,
+      StringConstants.outTrip,
+      outTrip,
+    );
+  }
+
+  void outTrip() {
+    _controller.outTrip();
+    Get.back();
   }
 }

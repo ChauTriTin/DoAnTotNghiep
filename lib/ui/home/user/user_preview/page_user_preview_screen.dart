@@ -6,6 +6,7 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/user/user_preview/page_user_preview_controller.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
@@ -89,6 +90,8 @@ class _PageUserPreviewScreenState
   }
 
   Widget _buildAvatar() {
+    double rate = _controller.userData.value.getRate();
+    int rateCount = _controller.userData.value.rates?.length ?? 0;
     return Card(
       shape: UIUtils.getCardCorner(),
       margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
@@ -121,6 +124,52 @@ class _PageUserPreviewScreenState
             _controller.userData.value.name ?? "",
             style: UIUtils.getStyleTextLarge500(),
             textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: DimenConstants.marginPaddingMedium,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RatingBar.builder(
+                initialRating: rate,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemSize: 20.0,
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.orange,
+                ),
+                ignoreGestures: true,
+                onRatingUpdate: (double value) {},
+              ),
+              const SizedBox(
+                width: DimenConstants.marginPaddingTiny,
+              ),
+              Text(
+                rate.toString(),
+                style: const TextStyle(
+                    color: ColorConstants.colorGreen,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(
+                width: 6,
+              ),
+              const Text("|",
+                  style: TextStyle(color: ColorConstants.textColorDisable)),
+              const SizedBox(
+                width: 6,
+              ),
+              Text(
+                "$rateCount đánh giá",
+                style: const TextStyle(
+                    color: ColorConstants.colorGreen,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400),
+              )
+            ],
           ),
           const SizedBox(
             height: DimenConstants.marginPaddingLarge,

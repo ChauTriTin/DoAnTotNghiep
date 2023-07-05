@@ -13,10 +13,11 @@ class Trip {
   String? userIdHost;
   String? userHostName;
   List<String>? listIdMember;
+  List<String>? listIdMemberBlocked;
 
   @override
   String toString() {
-    return 'Trip{id: $id, userIdHost: $userIdHost, listIdMember: $listIdMember, title: $title, des: $des, listImg: $listImg, placeStart: $placeStart, placeEnd: $placeEnd, listPlace: $listPlace, timeStart: $timeStart, timeEnd: $timeEnd, require: $require, isPublic: $isPublic, isComplete: $isComplete}';
+    return 'Trip{id: $id, userIdHost: $userIdHost, userHostName: $userHostName, listIdMember: $listIdMember, listIdMemberBlocked: $listIdMemberBlocked, title: $title, des: $des, listImg: $listImg, placeStart: $placeStart, placeEnd: $placeEnd, listPlace: $listPlace, timeStart: $timeStart, timeEnd: $timeEnd, require: $require, isPublic: $isPublic, isComplete: $isComplete, comments: $comments, rates: $rates}';
   }
 
   String? title;
@@ -40,6 +41,7 @@ class Trip {
     this.userIdHost,
     this.userHostName,
     this.listIdMember,
+    this.listIdMemberBlocked,
     this.title,
     this.des,
     this.listImg,
@@ -64,6 +66,9 @@ class Trip {
     userIdHost = json['userIdHost'];
     userHostName = json['userHostName'];
     listIdMember = json['listIdMember'].cast<String>();
+    listIdMemberBlocked = json['listIdMemberBlocked'] != null
+        ? List<String>.from(json['listIdMemberBlocked'])
+        : null;
     title = json['title'];
     des = json['des'];
     listImg = json['listImg'].cast<String>();
@@ -139,6 +144,7 @@ class Trip {
     data['userIdHost'] = userIdHost;
     data['userHostName'] = userHostName;
     data['listIdMember'] = listIdMember;
+    data['listIdMemberBlocked'] = listIdMemberBlocked;
     data['title'] = title;
     data['des'] = des;
     data['listImg'] = listImg;
@@ -170,6 +176,7 @@ class Trip {
           userIdHost == other.userIdHost &&
           userHostName == other.userHostName &&
           listIdMember == other.listIdMember &&
+          listIdMemberBlocked == other.listIdMemberBlocked &&
           title == other.title &&
           des == other.des &&
           listImg == other.listImg &&
@@ -190,6 +197,7 @@ class Trip {
       userIdHost.hashCode ^
       userHostName.hashCode ^
       listIdMember.hashCode ^
+      listIdMemberBlocked.hashCode ^
       title.hashCode ^
       des.hashCode ^
       listImg.hashCode ^

@@ -14,6 +14,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/trip.dart';
+import '../router/join/joine_manager_screen.dart';
 
 class PageChatScreen extends StatefulWidget {
   const PageChatScreen({
@@ -73,7 +74,14 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
             itemCount: _controller.trips.length,
             separatorBuilder: (BuildContext context, int index) {
               // return const SizedBox(height: DimenConstants.marginPaddingSmall);
-              return const Divider(height: DimenConstants.marginPaddingSmall);
+              return const Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: DimenConstants.marginPaddingMedium),
+                child: Divider(
+                  height: DimenConstants.marginPaddingSmall,
+                  color: ColorConstants.dividerGreyColor,
+                ),
+              );
             },
             itemBuilder: (BuildContext context, int index) {
               return _getRowConversation(index, _controller.trips[index]);
@@ -111,27 +119,48 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
                     ),
                   )),
               Expanded(
-                flex: 8,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 16, bottom: 16, left: 4, right: 4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        trip.title ?? "",
-                        style: UIUtils.getStyleText(),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        trip.des ?? "",
-                        style: const TextStyle(
-                            fontSize: 12, color: Colors.black54),
-                      )
-                    ],
-                  ),
+                flex: 7,
+                child: Text(
+                  trip.title ?? "",
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: DimenConstants.txtMedium,
+                      fontWeight: FontWeight.w400),
                 ),
-              )
+              ),
+              Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(JoinedManagerScreen(tripdata: trip));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Icon(
+                          Icons.supervised_user_circle_rounded,
+                          size: 24,
+                          color: ColorConstants.appColor1,
+                        ),
+                        const SizedBox(
+                          width: 1,
+                        ),
+                        Text(
+                          "${trip.listIdMember?.length.toString()}",
+                        //   style: GoogleFonts.roboto(
+                        //   fontSize: 18.0,
+                        //   fontWeight: FontWeight.bold,
+                        //   // other properties...
+                        // ),
+                          // style: const TextStyle(
+                          //     color: Colors.black,
+                          //     fontFamily: 'cafe',
+                          //     fontSize: DimenConstants.txtMedium,
+                          //     fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ))
             ],
           ),
         ),

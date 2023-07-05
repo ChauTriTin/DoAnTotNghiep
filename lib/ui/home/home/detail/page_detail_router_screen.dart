@@ -123,7 +123,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             backgroundColor: ColorConstants.appColor,
             actions: [
               Visibility(
-                  visible: !_controller.isTripCompleted.value,
+                  visible: !_controller.isTripCompleted() &&
+                      _controller.isJoinedCurrentTrip(),
                   child: PopupMenuButton<String>(
                     onSelected: _selectOption,
                     itemBuilder: (BuildContext context) {
@@ -138,8 +139,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             value: 'delete',
                             child: Text('Xóa chuyến đi'),
                           ),
-                        if (!_controller.isUserHost() &&
-                            _controller.isJoinedCurrentTrip())
+                        if (!_controller.isUserHost())
                           const PopupMenuItem<String>(
                             value: 'outTrip',
                             child: Text('Rời khỏi chuyến đi'),
@@ -310,7 +310,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             InkWell(
               onTap: () => {
                 _controller.detailTrip.value.isPublic == true
-                    ? _controller.joinedRouter(_controller.detailTrip.value.id)
+                    ? _checkJoinPublicTrip()
                     : _showJoinPrivateRouterDialog()
               },
               child: Column(
@@ -932,55 +932,59 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   }
 
   void _showJoinPrivateRouterDialog() {
-    showMaterialModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(30.0),
-        ),
-      ),
-      context: context,
-      builder: (context) => SingleChildScrollView(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: DimenConstants.marginPaddingMedium),
-        controller: ModalScrollController.of(context),
-        child: SizedBox(
-          height: 220,
-          width: double.infinity,
-          child: ListView(
-            padding: const EdgeInsets.all(0),
-            children: [
-              _headerDialog(StringConstants.titleJoinPrivateDialog),
-              const SizedBox(height: DimenConstants.marginPaddingLarge),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: DimenConstants.marginPaddingExtraLarge),
-                width: double.infinity,
-                child: TextField(
-                  controller: _codeController,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      hintText: StringConstants.codeRouter),
-                ),
-              ),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: DimenConstants.marginPaddingExtraLarge),
-                child: UIUtils.getOutlineButton1(StringConstants.confirm, () {
-                  _controller.joinedRouter(_codeController.text);
-                  Get.back();
-                }, Colors.red, DimenConstants.marginPaddingMedium, Colors.white,
-                    Colors.red),
-              ),
-            ],
+    if (_controller.isUserBlocked()) {
+      showUserBlockedDialog();
+    } else {
+      showMaterialModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(30.0),
           ),
         ),
-      ),
-    );
+        context: context,
+        builder: (context) => SingleChildScrollView(
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              top: DimenConstants.marginPaddingMedium),
+          controller: ModalScrollController.of(context),
+          child: SizedBox(
+            height: 220,
+            width: double.infinity,
+            child: ListView(
+              padding: const EdgeInsets.all(0),
+              children: [
+                _headerDialog(StringConstants.titleJoinPrivateDialog),
+                const SizedBox(height: DimenConstants.marginPaddingLarge),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: DimenConstants.marginPaddingExtraLarge),
+                  width: double.infinity,
+                  child: TextField(
+                    controller: _codeController,
+                    cursorColor: Colors.white,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        hintText: StringConstants.codeRouter),
+                  ),
+                ),
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: DimenConstants.marginPaddingExtraLarge),
+                  child: UIUtils.getOutlineButton1(StringConstants.confirm, () {
+                    _controller.joinedRouter(_codeController.text);
+                    Get.back();
+                  }, Colors.red, DimenConstants.marginPaddingMedium,
+                      Colors.white, Colors.red),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   List<Widget> widgetsShowBeforeCompleted() {
@@ -1353,5 +1357,27 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         backgroundColor: ColorConstants.appColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  void _checkJoinPublicTrip() {
+    Dog.d("checkJoinPublicTrip");
+    if (_controller.isUserBlocked()) {
+      showUserBlockedDialog();
+    }
+    else {
+      _controller.joinedRouter(_controller.detailTrip.value.id);
+    }
+  }
+
+  void showUserBlockedDialog() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.blockedWarning,
+      StringConstants.ok,
+      null,
+      null,
+      null,
+    );
   }
 }

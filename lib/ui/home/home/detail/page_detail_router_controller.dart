@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import '../../../../common/const/string_constants.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
-import '../../../../util/ui_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
@@ -33,11 +32,19 @@ class DetailRouterController extends BaseController {
   var commentData = <Comment>[].obs;
 
   var isWidgetJoinedVisible = true.obs;
-  var isTripCompleted = false.obs;
   var isTripDeleted = false.obs;
 
   bool isUserHost() {
     return detailTrip.value.userIdHost == userData.value.uid;
+  }
+
+  bool isTripCompleted() {
+    return detailTrip.value.isComplete ?? false;
+  }
+
+  bool isUserBlocked() {
+    Dog.d("isUserBlocked");
+    return true;//detailTrip.value.listIdMemberBlocked?.contains(userData.value.uid) ?? false;
   }
 
   bool isJoinedCurrentTrip() {
@@ -105,7 +112,6 @@ class DetailRouterController extends BaseController {
 
         var trip = Trip.fromJson((tripMap).data()!);
         detailTrip.value = trip;
-        isTripCompleted.value = trip.isComplete ?? false;
 
         if (detailTrip.value.listIdMember?.contains(userData.value.uid) ==
             true) {
