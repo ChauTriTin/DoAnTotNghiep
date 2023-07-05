@@ -76,6 +76,7 @@ class StringConstants {
   static const String outTrip = "Rời khỏi";
   static const String deleteWarning = "Bạn có chắc muốn xóa chuyến đi này không?";
   static const String outWarning = "Bạn có chắc chắn muốn rời khỏi chuyến đi này không?";
+  static const String informOutRouter = " đã rời khỏi chuyến đi ";
   static const String signOutWarning = "Bạn có chắc chắn muốn đăng xuất không?";
   static const String blockedWarning = "Bạn đã bị trưởng đoàn chặn tham gia chuyến đi này";
   static const String removeWarning = "Chuyến đi đã bị xóa hoặc đã bị remove khỏi đoạn hội thoại, vui lòng kiểm tra lại";
