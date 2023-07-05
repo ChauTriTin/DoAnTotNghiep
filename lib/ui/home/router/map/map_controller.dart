@@ -137,10 +137,15 @@ class MapController extends BaseController {
 
           var indexContain = hasContainUserInListMember(user);
           debugPrint("getLocation indexContain $indexContain");
-          if (indexContain >= 0) {
-            listMember.removeAt(indexContain);
+          if (indexContain == -1) {
+            listMember.add(user);
+          } else {
+            if (indexContain >= 0) {
+              // listMember.removeAt(indexContain);
+              listMember[indexContain] = user;
+            }
           }
-          listMember.add(user);
+          listMember.refresh();
         });
       } catch (e) {
         debugPrint("_genListMember get user info fail: $e");
@@ -148,6 +153,7 @@ class MapController extends BaseController {
     }
 
     debugPrint("_genListMember success listMember length ${listMember.length}");
+    // listMember.sort((a, b) => (a.name ?? "").compareTo(b.name ?? ""));
     listMember.refresh();
   }
 
@@ -304,8 +310,12 @@ class MapController extends BaseController {
       for (var element in listMember) {
         var fcmToken = element.fcmToken;
         debugPrint("***fcmToken $fcmToken");
-        if (fcmToken != null && fcmToken.isNotEmpty) {
-          listFcmToken.add(fcmToken);
+        if (fcmToken == currentUserData.value.fcmToken) {
+          //ignore my token
+        } else {
+          if (fcmToken != null && fcmToken.isNotEmpty) {
+            listFcmToken.add(fcmToken);
+          }
         }
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
@@ -324,7 +334,7 @@ class MapController extends BaseController {
     }
   }
 
-  getLocation() async {
+  getLocation(Function(LatLng location) callback) async {
     Future<void> getLoc() async {
       debugPrint("getLocation~~~ ${DateTime.now().toIso8601String()}");
       LocationPermission permission = await Geolocator.requestPermission();
@@ -352,13 +362,14 @@ class MapController extends BaseController {
           "lat": lat,
           "long": long,
         });
+        callback.call(location);
         debugPrint(
             "getLocation collectionReferenceUser update currentUserId $currentUserId");
       }
     }
 
     //interval update location
-    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLoc();
     });
   }
@@ -373,21 +384,25 @@ class MapController extends BaseController {
   }
 
   void setMarkerGoogleMap(Marker marker) {
-    debugPrint("setMarkerGoogleMap ${marker.mapsId}");
+    // debugPrint("setMarkerGoogleMap ${marker.mapsId}");
     if (isContainMarker(marker)) {
       // debugPrint("isContainMarker -> do nothing, ${marker.mapsId}");
       if (marker.mapsId.value == idMarkerStart ||
           marker.mapsId.value == idMarkerEnd ||
           marker.mapsId.value.startsWith("idMarkerStop")) {
-        debugPrint("isContainMarker -> do nothing because idMarker***");
+        // debugPrint("isContainMarker -> do nothing because idMarker***");
       } else {
-        debugPrint("isContainMarker -> need update because !idMarker***");
+        debugPrint(
+            "isContainMarker -> need update because !idMarker*** ${marker.markerId}~${marker.position}");
+
+        final oldMarkerIndex = listMarkerGoogleMap
+            .indexWhere((mk) => mk.markerId == marker.markerId);
+        listMarkerGoogleMap.removeAt(oldMarkerIndex);
+        // listMarkerGoogleMap.refresh();
       }
-    } else {
-      debugPrint("!isContainMarker -> ${marker.mapsId}");
-      listMarkerGoogleMap.add(marker);
-      listMarkerGoogleMap.refresh();
     }
+    listMarkerGoogleMap.add(marker);
+    listMarkerGoogleMap.refresh();
     // debugPrint("_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
 

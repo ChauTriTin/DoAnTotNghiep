@@ -39,6 +39,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
+  final double zoomLevel = kDebugMode ? 20.0 : 14.0;
 
   @override
   void initState() {
@@ -46,7 +47,11 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
     _controller.getRouter(widget.id);
-    _controller.getLocation();
+    _controller.getLocation((location) {
+      debugPrint(">>>getLocation $location");
+      mapController
+          ?.animateCamera(CameraUpdate.newLatLngZoom(location, zoomLevel));
+    });
   }
 
   void _setupListen() {
@@ -120,15 +125,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         );
       }
       _createMaker();
+      // _imMoving(currentUserData);
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
-          zoom: 15.0,
+          zoom: zoomLevel,
         ),
+        // zoomControlsEnabled: true,
+        // zoomGesturesEnabled: true,
         markers: _controller.listMarkerGoogleMap.toSet(),
         polylines: Set.of(_controller.polylines),
-        myLocationEnabled: true,
-        compassEnabled: true,
+        myLocationEnabled: false,
+        compassEnabled: false,
         onMapCreated: (controllerParam) {
           setState(() {
             mapController = controllerParam;
@@ -137,6 +145,13 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       );
     });
   }
+
+  // void _imMoving(UserData user) {
+  //   if (user.lat != null && user.long != null) {
+  //     mapController?.animateCamera(
+  //         CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
+  //   }
+  // }
 
   Future<Uint8List?> getBytesFromCanvas(
       int width, int height, Uint8List dataBytes) async {
@@ -176,7 +191,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     return completer.future;
   }
 
+  var timeCreateMaker = 0;
+
   void _createMaker() {
+    if (timeCreateMaker != 0 &&
+        DateTime.now().millisecondsSinceEpoch - timeCreateMaker < 5000) {
+      //5s
+      debugPrint("_createMaker !updateUI -> return");
+      return;
+    }
+    timeCreateMaker = DateTime.now().millisecondsSinceEpoch;
+    debugPrint("_createMaker updateUI");
+
     Future<Marker> createMarkerPlaceStart() async {
       ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context, size: const Size.square(55.0));
@@ -374,7 +400,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           var long = userData.long;
           if (lat != null && long != null) {
             mapController?.animateCamera(
-                CameraUpdate.newLatLngZoom(LatLng(lat, long), 14));
+                CameraUpdate.newLatLngZoom(LatLng(lat, long), zoomLevel));
           }
         },
         child: SizedBox(
