@@ -144,9 +144,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
 
   void _imMoving(UserData user) {
     if (user.lat != null && user.long != null) {
-      // TODO revert
-      // mapController?.animateCamera(
-      //     CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
+      mapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
     }
   }
 
