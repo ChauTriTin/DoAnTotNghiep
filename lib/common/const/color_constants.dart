@@ -17,7 +17,7 @@ class ColorConstants {
   static Color loginBtnTextColor = Colors.white;
   static const Color textColor = const Color(0xFF000000);
   static const Color textColor1 = const Color(0xFF363636);
-  static  Color textColorDisable = Color(0xA65D5D5D);
+  static const Color textColorDisable = Color(0xA65D5D5D);
   static  Color textColorDisable1 = Color(0xA6C7C7C7);
   static const Color bgDisable = const Color(0xFFEEEEEE);
 
@@ -30,6 +30,7 @@ class ColorConstants {
   static const Color dividerColor =  Color(0xFFC4C4C4);
   static const Color dividerGreyColor =  Color(0xA6C7C7C7);
 
+  static const Color colorGreen =  Color(0xFF013D10);
   static const Color colorProfile =  Color(0xFF04CB5B);
   static const Color colorBanner =  Color(0xFF04CB5B);
   static const Color colorMode =  Color(0xFF3B3B3B);
@@ -46,6 +47,7 @@ class ColorConstants {
   static const Color gray70 = const Color(0x99333333);
   static const Color titleColor = const Color(0xFF020202);
   static const Color colorTitleTrip = const Color(0xFF0630A1);
+  static const Color appColor1 = const Color(0xDDE75E5E);
 
   static getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
