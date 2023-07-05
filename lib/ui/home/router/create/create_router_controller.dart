@@ -331,6 +331,7 @@ class CreateRouterController extends BaseController {
     trip.require = sRequire;
     trip.isPublic = isPublic.value;
     trip.isComplete = false;
+    trip.createdAt = TimeUtils.convert(DateTime.now());
     // trip.rates = List.empty();
 
     debugPrint(">>>trip ${trip.toJson()}");

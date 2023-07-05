@@ -32,6 +32,7 @@ class Trip {
   bool? isPublic;
   bool? isComplete;
   List<Comment>? comments;
+  String? createdAt;
 
   // List<Rate>? rates;
   Map<String, dynamic>? rates;
@@ -136,6 +137,7 @@ class Trip {
     require = json['require'];
     isPublic = json['isPublic'];
     isComplete = json['isComplete'];
+    createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -164,6 +166,7 @@ class Trip {
     data['isComplete'] = isComplete;
     data['comments'] = comments;
     data['rates'] = rates;
+    data['createdAt'] = createdAt;
     return data;
   }
 
@@ -189,7 +192,8 @@ class Trip {
           isPublic == other.isPublic &&
           isComplete == other.isComplete &&
           comments == other.comments &&
-          rates == other.rates;
+          rates == other.rates &&
+          createdAt == other.createdAt;
 
   @override
   int get hashCode =>
@@ -210,6 +214,7 @@ class Trip {
       isPublic.hashCode ^
       isComplete.hashCode ^
       comments.hashCode ^
+      createdAt.hashCode ^
       rates.hashCode;
 
 // String _convertToJsonStringQuotes({required String raw}) {

@@ -163,7 +163,18 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             physics: const BouncingScrollPhysics(),
             children: [
               _slideShowImage(context),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  _controller.detailTrip.value.createdAt ?? "",
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    color: ColorConstants.textColorDisable,
+                    fontSize: DimenConstants.txtSmall,
+                  ),
+                ),
+              ),
               _infoRouter(),
               _copyIdRouter(),
               _listButtonEvent(),
@@ -600,6 +611,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
       return SizedBox(
         height: MediaQuery.of(context).size.height * 1 / 5.5,
         child: ListView.separated(
+          padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           itemCount: trips.length,
