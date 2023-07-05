@@ -351,22 +351,21 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
             ),
           ),
           Obx(() {
-            return Visibility(
-              visible: _controller.shouldShowEditButton.value,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    DimenConstants.marginPaddingMedium,
-                    DimenConstants.marginPaddingLarge,
-                    DimenConstants.marginPaddingMedium,
-                    DimenConstants.marginPaddingMedium,
-                  ),
-                  child: FloatingActionButton(
-                    mini: true,
-                    elevation: DimenConstants.elevationMedium,
-                    backgroundColor: ColorConstants.appColor,
-                    onPressed: () {
+            return Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  DimenConstants.marginPaddingMedium,
+                  DimenConstants.marginPaddingLarge,
+                  DimenConstants.marginPaddingMedium,
+                  DimenConstants.marginPaddingMedium,
+                ),
+                child: FloatingActionButton(
+                  mini: true,
+                  elevation: DimenConstants.elevationMedium,
+                  backgroundColor: ColorConstants.appColor,
+                  onPressed: () {
+                    if (_controller.shouldShowEditButton.value) {
                       Get.to(CreateRouterScreen(
                         dfTitle: "",
                         dfDescription: "",
@@ -379,9 +378,11 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                         dfIsPublic: true,
                         dfEditRouterWithTripId: _controller.trip.value.id,
                       ));
-                    },
-                    child: const Icon(Icons.edit),
-                  ),
+                    } else {
+                      showOutTripConfirmDialog();
+                    }
+                  },
+                  child: Icon(_controller.shouldShowEditButton.value ? Icons.edit : Icons.exit_to_app_rounded),
                 ),
               ),
             );
@@ -421,5 +422,22 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
         backgroundColor: ColorConstants.appColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  void showOutTripConfirmDialog() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.outWarning,
+      StringConstants.cancel,
+      null,
+      StringConstants.outTrip,
+      outTrip,
+    );
+  }
+
+  void outTrip() {
+    _controller.outTrip();
+    Get.back();
   }
 }

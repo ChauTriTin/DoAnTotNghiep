@@ -94,4 +94,29 @@ class CreateSuccessController extends BaseController {
       return DateTime.now().add(const Duration(days: 7));
     }
   }
+
+  Future<void> outTrip() async {
+    try {
+      setAppLoading(true, "Loading", TypeApp.loadingData);
+      var listIdMember = trip.value.listIdMember;
+      Dog.d("outTrip currentIdMember: ${listIdMember.toString()}");
+      listIdMember?.remove(UserSingletonController.instance.getUid());
+      // Get the reference to the document you want to update
+      DocumentReference documentRef =
+      FirebaseHelper.collectionReferenceRouter.doc(trip.value.id);
+
+      // Dog.d("removeMember listIdMemberJson: $listIdMemberJson - ${tripData.value.id}");
+      // Update the specific field
+      documentRef.update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
+        Dog.d("outTrip success");
+        setAppLoading(false, "Loading", TypeApp.loadingData);
+      }).catchError((error) {
+        setAppLoading(false, "Loading", TypeApp.loadingData);
+        Dog.e("outTrip error: $error");
+      });
+    } catch (e) {
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      Dog.e("outTrip error: $e");
+    }
+  }
 }
