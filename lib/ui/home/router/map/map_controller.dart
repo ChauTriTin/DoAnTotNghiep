@@ -304,8 +304,12 @@ class MapController extends BaseController {
       for (var element in listMember) {
         var fcmToken = element.fcmToken;
         debugPrint("***fcmToken $fcmToken");
-        if (fcmToken != null && fcmToken.isNotEmpty) {
-          listFcmToken.add(fcmToken);
+        if (fcmToken == currentUserData.value.fcmToken) {
+          //ignore my token
+        } else {
+          if (fcmToken != null && fcmToken.isNotEmpty) {
+            listFcmToken.add(fcmToken);
+          }
         }
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
