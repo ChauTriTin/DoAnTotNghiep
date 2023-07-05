@@ -36,4 +36,11 @@ class TimeUtils {
       return "";
     }
   }
+
+
+  static String formatDateTimeFromMilliseconds(int milliseconds) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+    DateFormat dateFormat = DateFormat('HH:mm dd/MM/yyyy');
+    return dateFormat.format(dateTime);
+  }
 }
