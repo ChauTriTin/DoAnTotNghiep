@@ -44,7 +44,7 @@ class DetailRouterController extends BaseController {
 
   bool isUserBlocked() {
     Dog.d("isUserBlocked");
-    return true;//detailTrip.value.listIdMemberBlocked?.contains(userData.value.uid) ?? false;
+    return detailTrip.value.listIdMemberBlocked?.contains(userData.value.uid) ?? false;
   }
 
   bool isJoinedCurrentTrip() {
