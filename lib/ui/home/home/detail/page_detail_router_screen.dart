@@ -123,7 +123,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             backgroundColor: ColorConstants.appColor,
             actions: [
               Visibility(
-                  visible: !_controller.isTripCompleted.value,
+                  visible: !_controller.isTripCompleted() && _controller.isJoinedCurrentTrip(),
                   child: PopupMenuButton<String>(
                     onSelected: _selectOption,
                     itemBuilder: (BuildContext context) {
@@ -138,8 +138,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             value: 'delete',
                             child: Text('Xóa chuyến đi'),
                           ),
-                        if (!_controller.isUserHost() &&
-                            _controller.isJoinedCurrentTrip())
+                        if (!_controller.isUserHost())
                           const PopupMenuItem<String>(
                             value: 'outTrip',
                             child: Text('Rời khỏi chuyến đi'),
