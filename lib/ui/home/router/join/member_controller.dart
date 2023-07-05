@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/user.dart';
+import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,8 @@ class MemberController extends BaseController {
   var tripData = Trip().obs;
   var isTripCompleted = false.obs;
   var isTripDeleted = false.obs;
+  var currentUserID = UserSingletonController.instance.getUid();
+  var currentUserUser = UserSingletonController.instance.userData;
 
   void clearOnDispose() {
     Get.delete<MemberController>();

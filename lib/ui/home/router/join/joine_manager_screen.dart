@@ -255,7 +255,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
         width: 40,
         height: 40,
         decoration: const BoxDecoration(
-          color: Colors.red, // Màu nền đỏ
+          color: ColorConstants.appColor, // Màu nền đỏ
           shape: BoxShape.circle,
         ),
         // Khoảng cách nội dung trong container
@@ -275,7 +275,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
             width: 40,
             height: 40,
             decoration: const BoxDecoration(
-              color: Colors.red, // Màu nền đỏ
+              color: ColorConstants.appColor, // Màu nền đỏ
               shape: BoxShape.circle,
             ),
             // Khoảng cách nội dung trong container
@@ -287,6 +287,24 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
           ),
         );
       } else {
+        if (user.uid == _controller.currentUserID){
+          return
+             TextButton(
+              onPressed: _showOutTripDialog,
+              child: const Row(
+                children: [
+                  Text("Rời chuyến"
+                  ),
+                  SizedBox(width: 6,),
+                  Icon(
+                    Icons.output_rounded,
+                    color: ColorConstants.appColor,
+                    size: 18,
+                  ),
+                ],
+              )
+          );
+        }
         return Container();
       }
     }
@@ -302,6 +320,20 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
       StringConstants.delete,
       (){
         _controller.removeMember(user);
+      },
+    );
+  }
+
+  void _showOutTripDialog() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      "Bạn có chắc muốn rời khỏi chuyến đi này không?",
+      StringConstants.cancel,
+      null,
+      StringConstants.outTrip,
+      (){
+        _controller.removeMember(_controller.currentUserUser.value);
       },
     );
   }
