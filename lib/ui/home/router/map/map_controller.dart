@@ -145,6 +145,7 @@ class MapController extends BaseController {
               listMember[indexContain] = user;
             }
           }
+          listMember.refresh();
         });
       } catch (e) {
         debugPrint("_genListMember get user info fail: $e");
