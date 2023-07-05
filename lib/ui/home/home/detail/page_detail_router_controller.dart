@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import '../../../../common/const/string_constants.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
-import '../../../../util/ui_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
@@ -41,6 +40,10 @@ class DetailRouterController extends BaseController {
 
   bool isTripCompleted() {
     return detailTrip.value.isComplete ?? false;
+  }
+
+  bool isUserBlocked() {
+    return detailTrip.value.listIdMemberBlocked?.contains(userData.value.uid) ?? false;
   }
 
   bool isJoinedCurrentTrip() {

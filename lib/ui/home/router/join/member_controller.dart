@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:appdiphuot/base/base_controller.dart';
@@ -6,7 +5,6 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../../model/trip.dart';
@@ -57,20 +55,24 @@ class MemberController extends BaseController {
     }
   }
 
-  void removeMember(UserData user) {
+  void removeMember(UserData user, bool isBlock) {
     try {
       setAppLoading(true, "Loading", TypeApp.loadingData);
       var listIdMember = tripData.value.listIdMember;
-      Dog.d("removeMember currentIdMember: ${listIdMember.toString()}");
+      var listIdMemberBlocked = tripData.value.listIdMemberBlocked ?? [];
+
+      Dog.d("outTrip currentIdMember: ${listIdMember.toString()}");
+      Dog.d("outTrip listIdMemberBlocked: ${listIdMemberBlocked.toString()}");
+
       listIdMember?.remove(user.uid);
-      // Get the reference to the document you want to update
-      DocumentReference documentRef =
-      FirebaseHelper.collectionReferenceRouter.doc(tripData.value.id);
+      listIdMemberBlocked.add(user.uid ?? "");
 
-
-      // Dog.d("removeMember listIdMemberJson: $listIdMemberJson - ${tripData.value.id}");
-      // Update the specific field
-      documentRef.update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
+      FirebaseHelper.collectionReferenceRouter.doc(tripData.value.id).update(
+        {
+          FirebaseHelper.listIdMember: listIdMember,
+          if (isBlock) FirebaseHelper.listIdMemberBlocked: listIdMemberBlocked
+        },
+      ).then((value) {
         Dog.d("removeMember success");
         setAppLoading(false, "Loading", TypeApp.loadingData);
       }).catchError((error) {
@@ -95,9 +97,8 @@ class MemberController extends BaseController {
           isTripDeleted.value = true;
         }
 
-
         DocumentSnapshot<Map<String, dynamic>>? tripMap =
-        value as DocumentSnapshot<Map<String, dynamic>>?;
+            value as DocumentSnapshot<Map<String, dynamic>>?;
         if (tripMap == null || tripMap.data() == null) return;
 
         var trip = Trip.fromJson((tripMap).data()!);
@@ -113,5 +114,4 @@ class MemberController extends BaseController {
       log("getTripDetail get user info fail: $e");
     }
   }
-
 }

@@ -8,6 +8,7 @@ class FirebaseHelper {
   static String messages = "messages";
   static String rates = "rates";
   static String listIdMember = "listIdMember";
+  static String listIdMemberBlocked = "listIdMemberBlocked";
   static String isComplete = "isComplete";
   static String userIdHost = "userIdHost";
 

@@ -309,7 +309,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             InkWell(
               onTap: () => {
                 _controller.detailTrip.value.isPublic == true
-                    ? _controller.joinedRouter(_controller.detailTrip.value.id)
+                    ? checkJoinPublicTrip
                     : _showJoinPrivateRouterDialog()
               },
               child: Column(
@@ -931,6 +931,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   }
 
   void _showJoinPrivateRouterDialog() {
+    if (_controller.isUserBlocked()) {
+      showUserBlockedDialog();
+      return;
+    }
     showMaterialModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -1352,5 +1356,25 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         backgroundColor: ColorConstants.appColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  void checkJoinPublicTrip() {
+    if(_controller.isUserBlocked()){
+      showUserBlockedDialog();
+      return;
+    }
+    _controller.joinedRouter(_controller.detailTrip.value.id);
+  }
+
+  void showUserBlockedDialog() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.blockedWarning,
+      StringConstants.ok,
+      null,
+      null,
+      null,
+    );
   }
 }

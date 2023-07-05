@@ -319,7 +319,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
       null,
       StringConstants.delete,
       (){
-        _controller.removeMember(user);
+        _controller.removeMember(user, true);
       },
     );
   }
@@ -333,7 +333,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
       null,
       StringConstants.outTrip,
       (){
-        _controller.removeMember(_controller.currentUserUser.value);
+        _controller.removeMember(_controller.currentUserUser.value, false);
       },
     );
   }
