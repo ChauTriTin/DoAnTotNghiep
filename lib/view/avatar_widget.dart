@@ -1,6 +1,6 @@
 import 'package:appdiphuot/common/const/dimen_constants.dart';
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 import '../common/const/color_constants.dart';
@@ -14,6 +14,9 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double rate = UserSingletonController.instance.userData.value.getRate();
+    int rateCount =
+        UserSingletonController.instance.userData.value.rates?.length ?? 0;
     return Column(
       children: [
         Card(
@@ -53,12 +56,53 @@ class AvatarWidget extends StatelessWidget {
                     style: UIUtils.getStyleTextMedium600(),
                     textAlign: TextAlign.center,
                   ),
-
+                  const SizedBox(height: 8,),
                   // Mail
                   Text(
                     UserSingletonController.instance.getEmail(),
                     style: UIUtils.getStyleTextSmall300(),
                     textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      RatingBar.builder(
+                        initialRating: rate,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemSize: 20.0,
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.orange,
+                        ),
+                        ignoreGestures: true,
+                        onRatingUpdate: (double value) {},
+                      ),
+                      const SizedBox(
+                        width: DimenConstants.marginPaddingTiny,
+                      ),
+                      Text(
+                        rate.toString(),
+                        style: const TextStyle(
+                            color: ColorConstants.colorGreen,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 6,),
+                      const Text("|", style: TextStyle(color: ColorConstants.textColorDisable)),
+                      const SizedBox(width: 6,),
+
+                      Text(
+                        "$rateCount đánh giá",
+                        style: const TextStyle(
+                            color: ColorConstants.colorGreen,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: DimenConstants.marginPaddingLarge,
@@ -66,6 +110,8 @@ class AvatarWidget extends StatelessWidget {
                 ],
               ),
             )),
+
+        // Edit profile
         Card(
             shape: UIUtils.getCardCorner(),
             margin: const EdgeInsets.all(DimenConstants.marginPaddingSmall),
@@ -79,9 +125,7 @@ class AvatarWidget extends StatelessWidget {
                   ColorConstants.colorProfile, StringConstants.editProfile, () {
                 Get.to(const PageEditProfile());
               }),
-            ))
-        // Edit profile
-        ,
+            )),
       ],
     );
   }

@@ -5,6 +5,7 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/rate.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
+import 'package:appdiphuot/model/user_rate.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ class FormController extends BaseController {
   var trip = Trip().obs;
   var currentUserData = UserSingletonController.instance.userData;
   var listMember = <UserData>[].obs;
+  var userHost = UserData();
   var rateLeader = 0.0.obs;
   var rateTrip = 0.0.obs;
   var ratePlaceStart = 0.0.obs;
@@ -83,6 +85,9 @@ class FormController extends BaseController {
             listMember.removeAt(indexContain);
           }
           listMember.add(user);
+          if (user.uid == trip.value.userIdHost) {
+            userHost = user;
+          }
         });
       } catch (e) {
         debugPrint("_genListMember get user info fail: $e");
@@ -109,6 +114,10 @@ class FormController extends BaseController {
     rate.rateTrip = rateTrip.value;
     rate.ratePlaceStart = ratePlaceStart.value;
     rate.ratePlaceEnd = ratePlaceEnd.value;
+
+    var rateUser =
+        UserRate(trip.value.userIdHost, trip.value.id, rate.rateLeader);
+    addRateToUserCollection(rateUser, trip.value);
 
     var listTmp = <double>[];
     for (var element in rateListPlaceStop) {
@@ -158,6 +167,28 @@ class FormController extends BaseController {
       debugPrint(">>>rate err $e");
     }
     voidCallback.call();
+  }
+
+  Future<void> addRateToUserCollection(UserRate rate, Trip trip) async {
+    try {
+      List<UserRate> rates = userHost.rates ??[];
+      rates.insert(0, rate);
+
+      // Map<String, dynamic> map = {};
+      // for (UserRate element in rates) {
+      //   map.addEntries(element.idUser: element.to());
+      // }
+
+    List<Map<String, dynamic>> rateMaps =
+    rates.map((rate) => rate.toJson()).toList();
+
+      Dog.d("addRateToUserCollection: ${rate.toString()}");
+      await FirebaseHelper.collectionReferenceUser
+          .doc(trip.userIdHost)
+          .update({FirebaseHelper.rates: rateMaps});
+    } catch (e) {
+      Dog.e("_addMessageToFireStore fail: $e");
+    }
   }
 
   void setRateLeader(double value) {

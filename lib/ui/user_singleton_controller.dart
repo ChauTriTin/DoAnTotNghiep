@@ -10,7 +10,6 @@ import '../db/firebase_helper.dart';
 import '../model/user.dart';
 
 class UserSingletonController extends GetxController {
-
   static UserSingletonController? _instance;
   var isShowHomeBanner = true.obs;
 
@@ -23,14 +22,13 @@ class UserSingletonController extends GetxController {
 
   final userData = UserData().obs;
 
-
   Future<void> getBannerHome() async {
     isShowHomeBanner.value = await SharedPreferencesUtil.getBool(
-        SharedPreferencesUtil.IS_SHOW_TOP_BANNER) ??
+            SharedPreferencesUtil.IS_SHOW_TOP_BANNER) ??
         true;
   }
 
-  void getData(){
+  void getData() {
     getUserInfo();
     getBannerHome();
   }
@@ -42,7 +40,6 @@ class UserSingletonController extends GetxController {
   }
 
   Future<void> getUserInfo() async {
-
     try {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
       log("getUserInfo-uid: $uid");
@@ -103,5 +100,4 @@ class UserSingletonController extends GetxController {
   String getEmail() {
     return userData.value.email ?? "";
   }
-
 }

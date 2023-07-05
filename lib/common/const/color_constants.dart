@@ -17,7 +17,7 @@ class ColorConstants {
   static Color loginBtnTextColor = Colors.white;
   static const Color textColor = const Color(0xFF000000);
   static const Color textColor1 = const Color(0xFF363636);
-  static  Color textColorDisable = Color(0xA65D5D5D);
+  static const Color textColorDisable = Color(0xA65D5D5D);
   static  Color textColorDisable1 = Color(0xA6C7C7C7);
   static const Color bgDisable = const Color(0xFFEEEEEE);
 
@@ -30,6 +30,7 @@ class ColorConstants {
   static const Color dividerColor =  Color(0xFFC4C4C4);
   static const Color dividerGreyColor =  Color(0xA6C7C7C7);
 
+  static const Color colorGreen =  Color(0xFF013D10);
   static const Color colorProfile =  Color(0xFF04CB5B);
   static const Color colorBanner =  Color(0xFF04CB5B);
   static const Color colorMode =  Color(0xFF3B3B3B);
