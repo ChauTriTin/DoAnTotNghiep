@@ -13,6 +13,10 @@ class UserSingletonController extends GetxController {
   static UserSingletonController? _instance;
   var isShowHomeBanner = true.obs;
 
+  void clearOnDispose() {
+    Get.delete<UserSingletonController>();
+  }
+
   static UserSingletonController get instance {
     _instance ??= UserSingletonController._();
     return _instance!;

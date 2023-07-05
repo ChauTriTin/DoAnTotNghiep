@@ -18,6 +18,7 @@ import 'package:overlay_support/overlay_support.dart';
 
 import 'generated/l10n.dart';
 import 'model/push_notification.dart';
+import 'notification_controller.dart';
 import 'ui/splash/page_splash_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -44,8 +45,12 @@ void main() async {
   } on Exception catch (_) {
     debugPrint('initializeApp fail');
   }
-  Messaging.initFCM();
+
+
   Get.put(UserSingletonController.instance);
+  Get.put(NotificationController.instance);
+
+  Messaging.initFCM();
   getLoc();
   ThemeModeNotifier.instance.getDarkModeStatus();
   GoogleMapsDirections.init(
@@ -110,16 +115,26 @@ class Messaging {
     FCM.deleteRefreshToken();
   }
 
+  static Map<String, String> convertMap(Map<String, dynamic> originalMap) {
+    return originalMap.map((key, value) => MapEntry(key, value.toString()));
+  }
+
   @pragma('vm:entry-point')
   static Future<void> onNotificationReceived(RemoteMessage message) async {
     await Firebase.initializeApp();
     debugPrint('FCM main Handling a message messageId ${message.messageId}');
+    debugPrint('FCM main messageData ${message.data}');
+
+    var data = convertMap(message.data);
     PushNotification notification = PushNotification(
       title: message.notification?.title,
       body: message.notification?.body,
       dataTitle: message.data['title'],
       dataBody: message.data['body'],
+      data: data,
     );
+
+    NotificationController.instance.addNotification(notification);
     Get.dialog(
       AlertDialog(
         title: Text(notification.title ?? ""),

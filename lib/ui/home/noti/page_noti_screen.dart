@@ -8,6 +8,8 @@ import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../model/push_notification.dart';
+
 class PageNotiScreen extends StatefulWidget {
   const PageNotiScreen({
     super.key,
@@ -24,7 +26,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   void initState() {
     super.initState();
     _setupListen();
-    _controller.getListNotification();
+    _controller.getData();
   }
 
   void _setupListen() {
@@ -45,63 +47,63 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.appColorBkg,
-      body: Container(
-        padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-        child: _buildList(),
-      ),
+      backgroundColor: ColorConstants.screenBg,
+      body: _buildList()
     );
   }
 
   Widget _buildList() {
     return Obx(() {
       var list = _controller.listNotification;
-      Dog.e(">>>_buildList list $list");
+      Dog.d(">>>_buildList list ${list.value.toString()}");
       if (list.isEmpty) {
         return Center(
           child: UIUtils.getText("No data"),
         );
       } else {
         return ListView.builder(
+          padding: const EdgeInsets.only(top: 10),
           physics: const BouncingScrollPhysics(),
           itemCount: list.length,
           itemBuilder: (context, i) {
-            return Container(
-              decoration: BoxDecoration(
-                  color: ColorConstants.colorWhite,
-                  border: Border.all(
-                    color: ColorConstants.colorWhite,
-                  ),
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(DimenConstants.radiusMedium))),
-              padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-              margin: EdgeInsets.only(
-                  top: i == 0 ? 0.0 : DimenConstants.marginPaddingMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    list[i].title ?? "",
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtSmall,
-                      fontWeight: FontWeight.bold,
-                      color: ColorConstants.textColorDisable,
-                    ),
-                  ),
-                  const SizedBox(height: DimenConstants.marginPaddingMedium),
-                  Text(
-                    list[i].body ?? "",
-                    style: const TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            );
+            return getItemNotification(list[i], i);
           },
         );
       }
     });
+  }
+
+  Widget getItemNotification(PushNotification data, int i) {
+    return Card(
+      shape: UIUtils.getCardCorner(),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      color: ColorConstants.cardBg,
+      shadowColor: Colors.grey,
+      elevation: DimenConstants.cardElevation,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              data.title ?? "",
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.colorTitleTrip,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              data.body ?? "",
+              style: const TextStyle(
+                fontSize: DimenConstants.txtMedium,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      )
+    );
   }
 }
