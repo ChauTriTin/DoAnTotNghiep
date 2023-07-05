@@ -137,10 +137,14 @@ class MapController extends BaseController {
 
           var indexContain = hasContainUserInListMember(user);
           debugPrint("getLocation indexContain $indexContain");
-          if (indexContain >= 0) {
-            listMember.removeAt(indexContain);
+          if (indexContain == -1) {
+            listMember.add(user);
+          } else {
+            if (indexContain >= 0) {
+              // listMember.removeAt(indexContain);
+              listMember[indexContain] = user;
+            }
           }
-          listMember.add(user);
         });
       } catch (e) {
         debugPrint("_genListMember get user info fail: $e");
@@ -329,7 +333,7 @@ class MapController extends BaseController {
     }
   }
 
-  getLocation() async {
+  getLocation(Function(LatLng location) callback) async {
     Future<void> getLoc() async {
       debugPrint("getLocation~~~ ${DateTime.now().toIso8601String()}");
       LocationPermission permission = await Geolocator.requestPermission();
@@ -357,13 +361,14 @@ class MapController extends BaseController {
           "lat": lat,
           "long": long,
         });
+        callback.call(location);
         debugPrint(
             "getLocation collectionReferenceUser update currentUserId $currentUserId");
       }
     }
 
     //interval update location
-    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLoc();
     });
   }

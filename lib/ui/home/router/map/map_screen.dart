@@ -47,7 +47,11 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
     _controller.getRouter(widget.id);
-    _controller.getLocation();
+    _controller.getLocation((location) {
+      debugPrint(">>>getLocation $location");
+      mapController
+          ?.animateCamera(CameraUpdate.newLatLngZoom(location, zoomLevel));
+    });
   }
 
   void _setupListen() {
@@ -121,7 +125,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         );
       }
       _createMaker();
-      _imMoving(currentUserData);
+      // _imMoving(currentUserData);
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
@@ -142,12 +146,12 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     });
   }
 
-  void _imMoving(UserData user) {
-    if (user.lat != null && user.long != null) {
-      mapController?.animateCamera(
-          CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
-    }
-  }
+  // void _imMoving(UserData user) {
+  //   if (user.lat != null && user.long != null) {
+  //     mapController?.animateCamera(
+  //         CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
+  //   }
+  // }
 
   Future<Uint8List?> getBytesFromCanvas(
       int width, int height, Uint8List dataBytes) async {
