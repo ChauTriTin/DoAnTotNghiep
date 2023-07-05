@@ -41,6 +41,7 @@ class Trip {
     this.userIdHost,
     this.userHostName,
     this.listIdMember,
+    this.listIdMemberBlocked,
     this.title,
     this.des,
     this.listImg,
@@ -65,7 +66,9 @@ class Trip {
     userIdHost = json['userIdHost'];
     userHostName = json['userHostName'];
     listIdMember = json['listIdMember'].cast<String>();
-    listIdMemberBlocked = json['listIdMemberBlocked'].cast<String?>();
+    listIdMemberBlocked = json['listIdMemberBlocked'] != null
+        ? List<String>.from(json['listIdMemberBlocked'])
+        : null;
     title = json['title'];
     des = json['des'];
     listImg = json['listImg'].cast<String>();
