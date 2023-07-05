@@ -385,7 +385,14 @@ class MapController extends BaseController {
           marker.mapsId.value.startsWith("idMarkerStop")) {
         debugPrint("isContainMarker -> do nothing because idMarker***");
       } else {
-        debugPrint("isContainMarker -> need update because !idMarker***");
+        // debugPrint("isContainMarker -> need update because !idMarker*** ${marker.markerId}~${marker.position}");
+
+        final oldMarkerIndex = listMarkerGoogleMap
+            .indexWhere((mk) => mk.markerId == marker.markerId);
+        debugPrint(
+            "isContainMarker oldMarkerIndex $oldMarkerIndex -> ${marker.markerId}~${marker.position}");
+        // listMarkerGoogleMap[oldMarkerIndex] = marker;
+        // listMarkerGoogleMap.refresh();
       }
     } else {
       debugPrint("!isContainMarker -> ${marker.mapsId}");

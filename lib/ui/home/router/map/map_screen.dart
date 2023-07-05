@@ -120,16 +120,16 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         );
       }
       _createMaker();
-      _imMoving(listMember);
+      _imMoving(currentUserData);
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
-          zoom: 15.0,
+          zoom: 14.0,
         ),
         markers: _controller.listMarkerGoogleMap.toSet(),
         polylines: Set.of(_controller.polylines),
         myLocationEnabled: false,
-        compassEnabled: true,
+        compassEnabled: false,
         onMapCreated: (controllerParam) {
           setState(() {
             mapController = controllerParam;
@@ -139,17 +139,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     });
   }
 
-  void _imMoving(List<UserData> listMember) {
-    for (var element in listMember) {
-      if (element.uid == _controller.currentUserData.value.uid) {
-        debugPrint(
-            "_imMoving ${element.name} -> ${element.lat}x${element.long}");
-        if (element.lat != null && element.long != null) {
-          mapController?.animateCamera(CameraUpdate.newLatLngZoom(
-              LatLng(element.lat!, element.long!), 14));
-        }
-        break;
-      }
+  void _imMoving(UserData user) {
+    if (user.lat != null && user.long != null) {
+      mapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), 14));
     }
   }
 
