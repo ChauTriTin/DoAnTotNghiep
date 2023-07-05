@@ -184,7 +184,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     return completer.future;
   }
 
+  var timeCreateMaker = 0;
+
   void _createMaker() {
+    if (timeCreateMaker != 0 &&
+        DateTime.now().millisecondsSinceEpoch - timeCreateMaker < 5000) {
+      //5s
+      debugPrint("_createMaker !updateUI -> return");
+      return;
+    }
+    timeCreateMaker = DateTime.now().millisecondsSinceEpoch;
+    debugPrint("_createMaker updateUI");
+
     Future<Marker> createMarkerPlaceStart() async {
       ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context, size: const Size.square(55.0));
