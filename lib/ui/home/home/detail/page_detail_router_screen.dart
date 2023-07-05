@@ -84,7 +84,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     });
 
     _controller.isTripDeleted.listen((isDeleted) {
-      if(isDeleted){
+      if (isDeleted) {
         _showWarningDialog();
       }
     });
@@ -93,10 +93,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   void _showWarningDialog() {
     UIUtils.showAlertDialog(context, StringConstants.warning,
         StringConstants.deleteTripError, StringConstants.ok, () {
-          Get.back();
-        }, null, null);
+      Get.back();
+    }, null, null);
   }
-
 
   @override
   void dispose() {
@@ -180,33 +179,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               _divider(12),
               _leader(),
               _divider(0),
-              _seeMore(),
-
-              // Other router
-              const Divider(
-                height: 8,
-                thickness: 8,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-
-              Padding(
-                padding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: DimenConstants.marginPaddingMedium),
-                child: Text(
-                  "Chuyến đi khác",
-                  style: UIUtils.getStyleText500Medium1(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: DimenConstants.marginPaddingMedium),
-                child: getOtherList(_controller.listTrips),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              if (_controller.detailTrip.value.isComplete == false)
+                ...widgetsShowBeforeCompleted(),
+              if (_controller.detailTrip.value.isComplete == true)
+                ...widgetsShowAfterCompleted()
             ],
           ),
         ));
@@ -1007,6 +983,21 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     );
   }
 
+  List<Widget> widgetsShowBeforeCompleted() {
+    var list = <Widget>[];
+    list.add(_seeMore());
+    list.add(const SizedBox(height: DimenConstants.marginPaddingLarge));
+    list.add(Container(
+        margin: const EdgeInsets.only(right: 24, left: 24),
+        child: const Text(
+          "Chuyến đi khác",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        )));
+    list.add(const SizedBox(height: DimenConstants.marginPaddingMedium));
+    list.add(getOtherList(_controller.listTrips));
+    return list;
+  }
+
   List<Widget> widgetsShowAfterCompleted() {
     var list = <Widget>[];
     var trip = _controller.detailTrip.value;
@@ -1100,12 +1091,11 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     flex: 1,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
-                      child: const Text("Trưởng đoàn",
-                          style: TextStyle(
+                      child: Text("Leader: ${_controller.getNameLeader()}",
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
                   ),
-                  //TODO fix model rates
                   Expanded(
                     flex: 1,
                     child: RatingBar.builder(
@@ -1125,14 +1115,17 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   )
                 ],
               ),
+              _divider(8),
               Row(
                 children: [
                   Expanded(
                     flex: 1,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
-                      child: const Text("Điểm bắt đầu",
-                          style: TextStyle(
+                      child: Text(
+                          "Bắt đầu: ${_controller.detailTrip.value.placeStart?.name}" ??
+                              "Điểm bắt đầu",
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
                   ),
@@ -1156,14 +1149,17 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   )
                 ],
               ),
+              _divider(8),
               Row(
                 children: [
                   Expanded(
                     flex: 1,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
-                      child: const Text("Điểm kết thúc",
-                          style: TextStyle(
+                      child: Text(
+                          "Kết thúc: ${_controller.detailTrip.value.placeEnd?.name}" ??
+                              "Điểm kết thúc",
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
                   ),
@@ -1187,6 +1183,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   )
                 ],
               ),
+              _divider(8),
               ...listPlaceRate(),
               const SizedBox(height: 12),
               Row(
@@ -1232,9 +1229,14 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
 
     var totalRate = _controller.detailTrip.value.rates?.length ?? 0;
 
+    _controller.detailTrip.value.listPlace?.forEach((element) {
+      listPlaceRate.add(0);
+    });
+
     for (var element in ratesMap) {
       element.rateListPlaceStop?.forEach((item) {
         int index = element.rateListPlaceStop?.indexOf(item) ?? -1;
+        Dog.d("index: $index , listPlaceRate: ${listPlaceRate.length}");
         if (index != -1) {
           if (listPlaceRate.isEmpty) {
             listPlaceRate[index] = item;
@@ -1260,11 +1262,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         index = listPlace.indexOf(element);
       }
       double rate = 0;
-      if (totalRate != 0) {
+      if (totalRate != 0 && index != -1) {
         rate = listPlaceRate[index] / totalRate;
       }
-
-      Dog.d("index: $index , listPlaceRate: ${listPlaceRate.length}");
 
       if (index != -1) {
         list.add(const SizedBox(height: 12));
@@ -1299,6 +1299,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             )
           ],
         ));
+        list.add(_divider(8));
       }
     }
     return list;
