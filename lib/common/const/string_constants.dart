@@ -181,5 +181,5 @@ class StringConstants {
 
   static const String titleExitRouterNotification = "Có người rời khỏi chuyến đi";
   static const String titleNewCommentNotification = "Có bình luận mới";
-  static const String titleNotification = "Có người tham gia chuyến đi";
+  static const String titleJoinNotification = "Có người tham gia chuyến đi";
 }
