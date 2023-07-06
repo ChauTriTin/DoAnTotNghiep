@@ -1,5 +1,6 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
+import 'package:appdiphuot/model/loc_search.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,7 @@ class PageHomeController extends BaseController {
   var listTrips = <Trip>[].obs;
   var listTripWithState = <Trip>[].obs;
   var listTripWithSearch = <Trip>[].obs;
+  var listLocation = <LocSearch>[].obs;
   String? selectedValue;
 
   var db = FirebaseFirestore.instance;
@@ -27,6 +29,29 @@ class PageHomeController extends BaseController {
 
   Future<void> getData() async {
 
+  }
+
+  Future<void> getLocationSearch() async {
+    var locSearchSnapshot = FirebaseHelper.collectionReferenceLoc.snapshots();
+    var locSearchSnapshotMap =
+    locSearchSnapshot.map((querySnapshot) => querySnapshot.docs);
+
+    locSearchSnapshotMap.listen((event) {
+      try {
+        listLocation.clear();
+        for (var docSnapshot in event) {
+          DocumentSnapshot<Map<String, dynamic>>? locMap =
+          docSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (locMap == null || locMap.data() == null) return;
+
+          var loc = LocSearch.fromJson((locMap).data()!);
+          listLocation.add(loc);
+        }
+      }catch(ex){
+        print('listLocation error ${ex}');
+      }
+    });
   }
 
   Future<void> getAllRouter() async {
@@ -103,7 +128,7 @@ class PageHomeController extends BaseController {
         filteredListTripType = listTrips;
         break;
       case StringConstants.placeTop:
-      // list = listTrips.where((i) => i.isPublic == false).toList();
+        listLocation.sort((a, b) => b.count!.compareTo(a.count as num));
         break;
     }
 
@@ -112,10 +137,12 @@ class PageHomeController extends BaseController {
         filteredTrip.addAll(filteredListTripType);
         break;
       case 1:
-        filteredTrip = filteredListTripType.where((i) => i.isPublic == true).toList();
+        filteredTrip =
+            filteredListTripType.where((i) => i.isPublic == true).toList();
         break;
       case 2:
-        filteredTrip = filteredListTripType.where((i) => i.isPublic == false).toList();
+        filteredTrip =
+            filteredListTripType.where((i) => i.isPublic == false).toList();
         break;
     }
 
