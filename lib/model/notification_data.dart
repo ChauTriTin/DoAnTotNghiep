@@ -1,8 +1,7 @@
 class NotificationData {
   String? tripID;
   String? userID;
-  String?
-      notificationType; // 1: thoong bao trong map (hư xe, sos...), 2: tin nhan, 3: remove, 4: OUT NHÓM
+  String? notificationType; // 1: thông báo trong map (hư xe, sos...), 2: tin nhan, 3: "bình luận", 4: remove, 5: OUT NHÓM
   String? time;
 
   NotificationData(this.tripID, this.userID, this.notificationType, this.time);

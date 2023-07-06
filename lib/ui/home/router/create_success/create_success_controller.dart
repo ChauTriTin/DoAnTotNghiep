@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
@@ -11,16 +13,19 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/const/constants.dart';
+import '../../../../model/notification_data.dart';
 import '../../../../model/user.dart';
 
 class CreateSuccessController extends BaseController {
   var isDoneCountdown = false.obs;
   var trip = Trip().obs;
-  var listMember = <UserData>[].obs;
   var listFCMToken = <String>[].obs;
   var currentUserData = UserSingletonController.instance.userData;
   var isTripDeleted = false.obs;
   var shouldShowEditButton = false.obs;
+
+  final _users = FirebaseHelper.collectionReferenceUser;
+  var listMember = <UserData>[].obs;
 
   void clearOnDispose() {
     Get.delete<CreateSuccessController>();
@@ -69,7 +74,7 @@ class CreateSuccessController extends BaseController {
         // }
 
         //gen list member
-        _genListMember(this.trip.value.listIdMember ?? List.empty());
+        getAllMember();
       });
     } catch (e) {
       isTripDeleted.value = true;
@@ -77,42 +82,32 @@ class CreateSuccessController extends BaseController {
     }
   }
 
-  void _genListMember(List<String> listIdMember) {
-    listMember.clear();
+  Future<void> getAllMember() async {
+    try {
+      setAppLoading(true, "Loading", TypeApp.loadingData);
+      if (trip.value.listIdMember == null ||
+          trip.value.listIdMember?.isEmpty == true) return;
+      var tempUserList = <UserData>[];
+      for (var uid in trip.value.listIdMember!) {
+        DocumentSnapshot userSnapshot = await _users.doc(uid).get();
+        if (!userSnapshot.exists) {
+          continue;
+        }
 
-    for (int i = 0; i < listIdMember.length; i++) {
-      try {
-        String id = listIdMember[i];
-        FirebaseHelper.collectionReferenceUser
-            .doc(id)
-            .snapshots()
-            .listen((value) {
-          DocumentSnapshot<Map<String, dynamic>>? userMap =
-          value as DocumentSnapshot<Map<String, dynamic>>?;
-          if (userMap == null || userMap.data() == null) return;
+        DocumentSnapshot<Map<String, dynamic>>? userMap =
+        userSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+        if (userMap == null || userMap.data() == null) return;
 
-          var user = UserData.fromJson((userMap).data()!);
-          debugPrint("_genListMember index $i: ${user.toJson()}");
-
-          var indexContain = hasContainUserInListMember(user);
-          debugPrint("getLocation indexContain $indexContain");
-          if (indexContain >= 0) {
-            listMember.removeAt(indexContain);
-            listFCMToken.removeAt(indexContain);
-          }
-          if (user.uid != currentUserData.value.uid) {
-            listMember.add(user);
-            listFCMToken.add(user.fcmToken ?? "");
-          }
-          debugPrint("_genListMember success listMember length ${listMember.length}");
-        });
-      } catch (e) {
-        debugPrint("_genListMember get user info fail: $e");
+        var user = UserData.fromJson((userMap).data()!);
+        tempUserList.add(user);
+        log("_getUserParticipated success: ${user.toString()}");
       }
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      listMember.value = tempUserList;
+    } catch (e) {
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      log("_getUserParticipated get user info fail: $e");
     }
-
-    debugPrint("_genListMember success listMember length ${listMember.length}");
-    listMember.refresh();
   }
 
   int hasContainUserInListMember(UserData userData) {
@@ -183,12 +178,28 @@ class CreateSuccessController extends BaseController {
       enableServerRespondLog: true,
     );
     try {
-      debugPrint("fcmToken listFcmToken ${listFCMToken.length}");
+      var listFcmToken = <String>[];
+      for (var element in listMember) {
+        var fcmToken = element.fcmToken;
+        debugPrint("***fcmToken $fcmToken");
+        if (fcmToken != null && fcmToken.isNotEmpty && fcmToken != currentUserData.value.fcmToken) {
+            listFcmToken.add(fcmToken);
+        }
+      }
+      debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
+
+      NotificationData notificationData = NotificationData(
+          trip.value.id,
+          currentUserData.value.uid,
+          "5",
+          DateTime.now().millisecondsSinceEpoch.toString());
+
       Map<String, dynamic> result =
       await flutterFCMWrapper.sendMessageByTokenID(
-        userRegistrationTokens: listFCMToken,
+        userRegistrationTokens: listFcmToken,
         title: "Thông báo",
         body: body,
+        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );
