@@ -332,7 +332,7 @@ class MapController extends BaseController {
           trip.value.id,
           currentUserData.value.uid,
           "1",
-          TimeUtils.dateTimeToString1(DateTime.now())
+          DateTime.now().millisecondsSinceEpoch.toString()
       );
 
       Map<String, dynamic> result =

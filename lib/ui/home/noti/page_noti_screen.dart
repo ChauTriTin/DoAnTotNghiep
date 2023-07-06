@@ -10,12 +10,13 @@ import 'package:appdiphuot/ui/home/router/join/joine_manager_screen.dart';
 import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
-import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/push_notification.dart';
+import '../../../util/time_utils.dart';
 import '../chat/detail/page_detail_chat_screen.dart';
 import '../home/detail/page_detail_router_screen.dart';
 
@@ -64,8 +65,18 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
       var list = _controller.listNotification.value;
       Dog.d(">>>_buildList list ${list.toString()}");
       if (list.isEmpty) {
-        return Center(
-          child: UIUtils.getText("No data"),
+        return Container(
+          margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset('assets/files/no_data.json'),
+              Text(
+                "Không có thông báo nào",
+                style: UIUtils.getStyleText(),
+              )
+            ],
+          ),
         );
       } else {
         return ListView.builder(
@@ -82,6 +93,15 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
 
   Widget getItemNotification(PushNotification data, int i) {
     var notificationData = data.getNotificationData();
+    String time = "";
+    if (notificationData?.time != null &&
+        notificationData?.time?.isEmpty == false) {
+      time = TimeUtils.formatDateTimeFromMilliseconds(
+          int.parse(notificationData?.time ?? ""));
+    }
+
+    String titleTrip = data.tripDetail?.title ?? "";
+
     return InkWell(
       onTap: () {
         _onItemNotiClick(data, notificationData);
@@ -134,7 +154,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                             fontWeight: FontWeight.w500),
                         children: [
                       TextSpan(
-                        text: data.tripDetail?.title,
+                        text: titleTrip,
                         style: const TextStyle(
                             color: ColorConstants.textColor,
                             fontSize: DimenConstants.txtMedium,
@@ -151,7 +171,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  notificationData?.time ?? "",
+                  time ?? "",
                   style: const TextStyle(
                     fontSize: 14,
                     color: ColorConstants.textColorDisable,

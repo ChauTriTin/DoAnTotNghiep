@@ -273,7 +273,7 @@ class DetailRouterController extends BaseController {
           detailTrip.value.id,
           userData.value.uid,
           type,
-          TimeUtils.dateTimeToString1(DateTime.now())
+          DateTime.now().millisecondsSinceEpoch.toString()
       );
 
       Map<String, dynamic> result =

@@ -192,7 +192,7 @@ class CreateSuccessController extends BaseController {
           trip.value.id,
           currentUserData.value.uid,
           NotificationData.TYPE_EXIT_ROUTER,
-          TimeUtils.dateTimeToString1(DateTime.now())
+          DateTime.now().millisecondsSinceEpoch.toString()
       );
 
       Map<String, dynamic> result =

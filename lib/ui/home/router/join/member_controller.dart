@@ -152,7 +152,7 @@ class MemberController extends BaseController {
           tripData.value.id,
           currentUserUser.value.uid,
           NotificationData.TYPE_REMOVE,
-          TimeUtils.dateTimeToString1(DateTime.now())
+          DateTime.now().millisecondsSinceEpoch.toString()
       );
 
       Map<String, dynamic> result =
