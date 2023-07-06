@@ -43,7 +43,7 @@ class TimeUtils {
       if (dateTime == null || dateTime == DateTime(1111, 1, 11)) {
         return "";
       }
-      return formatDate(dateTime, [dd, '/', mm, '/', yyyy, hh, ":", mm, ":", ss]);
+      return formatDate(dateTime, [dd, '/', mm, '/', yyyy, " ", hh, ":", mm]);
     } catch (e) {
       return "";
     }
