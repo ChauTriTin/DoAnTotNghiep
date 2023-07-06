@@ -16,7 +16,6 @@ import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-import 'generated/l10n.dart';
 import 'model/push_notification.dart';
 import 'notification_controller.dart';
 import 'ui/splash/page_splash_screen.dart';
@@ -56,8 +55,6 @@ void main() async {
   GoogleMapsDirections.init(
       googleAPIKey: "AIzaSyAyXE57uyeaXMaXRlaNa-txkcNH6SaWXcU");
 
-  loadLanguage();
-
   // Does not update google fon't from the internet
   // GoogleFonts.config.allowRuntimeFetching = false;
 
@@ -69,7 +66,6 @@ void main() async {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: S.delegate.supportedLocales,
         enableLog: true,
         debugShowCheckedModeBanner: true,
         defaultTransition: Transition.cupertino,
@@ -83,13 +79,6 @@ void main() async {
       ),
     ),
   );
-}
-
-Future<void> loadLanguage() async {
-  var langCode =
-      await SharedPreferencesUtil.getString(SharedPreferencesUtil.LANGUAGE) ??
-          "vi";
-  await S.load(Locale.fromSubtags(languageCode: langCode));
 }
 
 class MyApp extends StatelessWidget {

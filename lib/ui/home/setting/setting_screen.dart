@@ -12,9 +12,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../generated/l10n.dart';
 import '../../../util/theme_util.dart';
-import '../../../view/profile_bar_widget.dart';
 import '../../user_singleton_controller.dart';
 
 class PageSettingScreen extends StatefulWidget {
