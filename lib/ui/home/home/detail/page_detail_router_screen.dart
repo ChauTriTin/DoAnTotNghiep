@@ -611,7 +611,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     'Item 5',
   ];
 
-  Widget getOtherList(RxList<Trip> trips) {
+  Widget getOtherList(List<Trip> trips) {
     if (_controller.listTrips.isEmpty) {
       return Container(
         margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
@@ -1041,7 +1041,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         )));
     list.add(const SizedBox(height: DimenConstants.marginPaddingMedium));
-    list.add(getOtherList(_controller.listTrips));
+    var listNotCompleted = _controller.listTrips.where((p0) => p0.isComplete == false).toList();
+    list.add(getOtherList(listNotCompleted));
     return list;
   }
 
@@ -1463,9 +1464,28 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               flex: 2,
               child: Container(
                 margin: const EdgeInsets.only(right: 8),
-                child: Text(element.name ?? "",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 16)),
+                child:RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      const TextSpan(
+                        text: "Điểm dừng chân",
+                        style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            decoration:
+                            TextDecoration.none), // Màu chữ đỏ
+                      ),
+                      TextSpan(
+                          text: ': ${element.name}}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Colors.black,
+                              decoration: TextDecoration.none)),
+                    ],
+                  ),
+                ),
               ),
             ),
             Expanded(
