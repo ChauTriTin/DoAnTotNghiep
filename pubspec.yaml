@@ -67,9 +67,9 @@ dependencies:
   comment_tree: ^0.3.0
   dropdown_button2: ^2.1.4
 
-  flutter_localizations:
-    sdk: flutter
-  intl: any
+#  flutter_localizations:
+#    sdk: flutter
+#  intl: any
   fluttertoast: ^8.2.2
   easy_debounce: ^2.0.3
 #  custom_marker: ^1.0.0

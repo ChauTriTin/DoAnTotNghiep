@@ -7,7 +7,6 @@ import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/theme_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
@@ -61,11 +60,6 @@ void main() async {
   runApp(
     OverlaySupport.global(
       child: GetMaterialApp(
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
         enableLog: true,
         debugShowCheckedModeBanner: false,
         defaultTransition: Transition.cupertino,
