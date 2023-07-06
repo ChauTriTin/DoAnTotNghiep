@@ -126,7 +126,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         );
       }
       _createMaker();
-      // _imMoving(currentUserData);
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
@@ -146,13 +145,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       );
     });
   }
-
-  // void _imMoving(UserData user) {
-  //   if (user.lat != null && user.long != null) {
-  //     mapController?.animateCamera(
-  //         CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
-  //   }
-  // }
 
   Future<Uint8List?> getBytesFromCanvas(
       int width, int height, Uint8List dataBytes) async {

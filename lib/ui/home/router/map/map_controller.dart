@@ -375,6 +375,8 @@ class MapController extends BaseController {
       }
     }
 
+    //first call
+    getLoc();
     //interval update location
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLoc();
