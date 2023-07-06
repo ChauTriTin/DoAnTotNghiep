@@ -5,10 +5,16 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/const/constants.dart';
+import '../../../../common/const/string_constants.dart';
+import '../../../../model/notification_data.dart';
 import '../../../../model/trip.dart';
 import '../../../../util/log_dog_utils.dart';
+import '../../../../util/time_utils.dart';
 
 class MemberController extends BaseController {
   final _users = FirebaseHelper.collectionReferenceUser;
@@ -74,6 +80,7 @@ class MemberController extends BaseController {
         },
       ).then((value) {
         Dog.d("removeMember success");
+        postFCMBlockUser(user);
         setAppLoading(false, "Loading", TypeApp.loadingData);
       }).catchError((error) {
         setAppLoading(false, "Loading", TypeApp.loadingData);
@@ -112,6 +119,65 @@ class MemberController extends BaseController {
     } catch (e) {
       isTripDeleted.value = true;
       log("getTripDetail get user info fail: $e");
+    }
+  }
+
+  Future<void> postFCMBlockUser(UserData userBlock) async {
+    FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
+      apiKey: Constants.apiKey,
+      enableLog: true,
+      enableServerRespondLog: true,
+    );
+    try {
+      var listFcmToken = <String>[];
+      var listCurUserBlockFcmToken = <String>[];
+
+      for (var element in members) {
+        var fcmToken = element.fcmToken;
+        if (fcmToken != null && fcmToken.isNotEmpty && fcmToken != currentUserUser.value.fcmToken) {
+          if (fcmToken == userBlock.fcmToken) {
+            listCurUserBlockFcmToken.add(fcmToken);
+          } else {
+            listFcmToken.add(fcmToken);
+          }
+        }
+      }
+      debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
+
+      var title = StringConstants.titleRemoveNotification;
+      String body = "Trưởng nhóm vừa mời ${userBlock.name} ra khỏi nhóm.";
+      String userBlockBody = "Trưởng nhóm vừa mời bạn ra khỏi nhóm.";
+
+      NotificationData notificationData = NotificationData(
+          tripData.value.id,
+          currentUserUser.value.uid,
+          NotificationData.TYPE_REMOVE,
+          TimeUtils.dateTimeToString1(DateTime.now())
+      );
+
+      Map<String, dynamic> result =
+      await flutterFCMWrapper.sendMessageByTokenID(
+        userRegistrationTokens: listFcmToken,
+        title: title,
+        body: body,
+        data: notificationData.toJson(),
+        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      );
+
+      Map<String, dynamic> result1 =
+      await flutterFCMWrapper.sendMessageByTokenID(
+        userRegistrationTokens: listCurUserBlockFcmToken,
+        title: title,
+        body: userBlockBody,
+        data: notificationData.toJson(),
+        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      );
+
+      Dog.e("FCM sendTopicMessage fcmToken result $result");
+    } catch (e) {
+      Dog.e("FCM sendTopicMessage fcmToken $e");
     }
   }
 }

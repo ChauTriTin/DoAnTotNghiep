@@ -77,7 +77,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
     var notificationData = data.getNotificationData();
     return InkWell(
       onTap: () {
-        _onItemNotiClick(data, notificationData)
+        _onItemNotiClick(data, notificationData);
       },
       child: Card(
           shape: UIUtils.getCardCorner(),
