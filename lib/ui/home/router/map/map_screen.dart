@@ -38,7 +38,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
-  final double zoomLevel = 20.0;
+  final double zoomLevel = 16.0;
 
   @override
   void initState() {
