@@ -2,6 +2,7 @@ import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/notification_data.dart';
 import 'package:appdiphuot/ui/home/noti/page_noti_controller.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
@@ -74,79 +75,90 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
 
   Widget getItemNotification(PushNotification data, int i) {
     var notificationData = data.getNotificationData();
-    return Card(
-        shape: UIUtils.getCardCorner(),
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        color: ColorConstants.cardBg,
-        shadowColor: Colors.grey,
-        elevation: DimenConstants.cardElevation,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 25, // Kích thước rộng mong muốn
-                    height: 25,
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(data.userData?.avatar ??
-                          StringConstants.avatarImgDefault),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      data.title ?? "",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: ColorConstants.colorTitleTrip,
+    return InkWell(
+      onTap: () {
+        _onItemNotiClick(data, notificationData)
+      },
+      child: Card(
+          shape: UIUtils.getCardCorner(),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          color: ColorConstants.cardBg,
+          shadowColor: Colors.grey,
+          elevation: DimenConstants.cardElevation,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 25, // Kích thước rộng mong muốn
+                      height: 25,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(data.userData?.avatar ??
+                            StringConstants.avatarImgDefault),
                       ),
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 8),
-              RichText(
-                  text: TextSpan(
-                      text: "Chuyến đi: ",
-                      style: const TextStyle(
-                          color: ColorConstants.colorTitleTrip,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                      children: [
-                    TextSpan(
-                      text: data.tripDetail?.title,
-                      style: const TextStyle(
-                          color: ColorConstants.textColor1,
-                          fontSize: DimenConstants.txtMedium,
-                          fontWeight: FontWeight.w400),
+                    const SizedBox(
+                      width: 10,
                     ),
-                  ])),
-              const SizedBox(height: 8),
-              Text(
-                data.body ?? "",
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        data.title ?? "",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: ColorConstants.colorTitleTrip,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                notificationData?.time ?? "",
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: ColorConstants.textColorDisable,
+                const SizedBox(height: 8),
+                RichText(
+                    text: TextSpan(
+                        text: "Chuyến đi: ",
+                        style: const TextStyle(
+                            color: ColorConstants.colorTitleTrip,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                        children: [
+                          TextSpan(
+                            text: data.tripDetail?.title,
+                            style: const TextStyle(
+                                color: ColorConstants.textColor1,
+                                fontSize: DimenConstants.txtMedium,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ])),
+                const SizedBox(height: 8),
+                Text(
+                  data.body ?? "",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
                 ),
-              )
-            ],
-          ),
-        ));
+                const SizedBox(height: 6),
+                Text(
+                  notificationData?.time ?? "",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.textColorDisable,
+                  ),
+                )
+              ],
+            ),
+          )),
+    );
+  }
+
+  void _onItemNotiClick(PushNotification data,
+      NotificationData? notificationData) {
+
+
   }
 }
