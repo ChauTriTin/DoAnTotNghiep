@@ -73,6 +73,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   }
 
   Widget getItemNotification(PushNotification data, int i) {
+    var notificationData = data.getNotificationData();
     return Card(
         shape: UIUtils.getCardCorner(),
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -112,6 +113,23 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                 ],
               ),
               const SizedBox(height: 8),
+              RichText(
+                  text: TextSpan(
+                      text: "Chuyến đi: ",
+                      style: const TextStyle(
+                          color: ColorConstants.colorTitleTrip,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                      children: [
+                    TextSpan(
+                      text: data.tripDetail?.title,
+                      style: const TextStyle(
+                          color: ColorConstants.textColor1,
+                          fontSize: DimenConstants.txtMedium,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ])),
+              const SizedBox(height: 8),
               Text(
                 data.body ?? "",
                 style: const TextStyle(
@@ -119,12 +137,12 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
               Text(
-                data.body ?? "",
+                notificationData?.time ?? "",
                 style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.black,
+                  color: ColorConstants.textColorDisable,
                 ),
               )
             ],

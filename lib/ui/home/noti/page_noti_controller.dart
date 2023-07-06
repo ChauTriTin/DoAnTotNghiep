@@ -34,10 +34,10 @@ class PageNotiController extends BaseController {
           .collection(FirebaseHelper.keyNotification)
           .snapshots();
 
-      var chatSnapshots =
+      var notificationSnapshot =
           notificationStream.map((querySnapshot) => querySnapshot.docs);
 
-      chatSnapshots.listen((chatSnapshots) {
+      notificationSnapshot.listen((chatSnapshots) {
         log("getNotification: Update message");
         var tempNotifications = <PushNotification>[];
 
