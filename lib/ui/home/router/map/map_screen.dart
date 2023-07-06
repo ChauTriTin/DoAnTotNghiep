@@ -405,8 +405,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           }
         },
         child: SizedBox(
-          width: 90,
-          height: 90,
+          width: 60,
+          height: 60,
           child: Stack(
             children: [
               AvatarGlow(
@@ -417,8 +417,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 showTwoGlows: true,
                 repeatPauseDuration: const Duration(milliseconds: 100),
                 child: SizedBox(
-                  width: 70,
-                  height: 70,
+                  width: 50,
+                  height: 50,
                   child: ClipOval(
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
@@ -445,18 +445,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              if (kDebugMode)
-                Container(
-                  color: Colors.red,
-                  child: Text(
-                    "${userData.lat}-${userData.long}",
-                    style: const TextStyle(
-                      fontSize: DimenConstants.txtTiny,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              // if (kDebugMode)
+              //   Container(
+              //     color: Colors.red,
+              //     child: Text(
+              //       "${userData.lat}-${userData.long}",
+              //       style: const TextStyle(
+              //         fontSize: DimenConstants.txtTiny,
+              //         color: Colors.white,
+              //       ),
+              //       textAlign: TextAlign.center,
+              //     ),
+              //   ),
             ],
           ),
         ),
