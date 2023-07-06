@@ -439,20 +439,38 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 24, right: 24),
+                      margin: const EdgeInsets.only(left: 22, right: 22),
                       child: Row(
                         children: [
                           const Icon(
-                            Icons.star,
-                            color: Colors.yellow,
+                            Icons.bluetooth_drive_outlined,
+                            color: Colors.redAccent,
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 12),
-                            child: Text(
-                              "Leader: ${_controller.userLeaderData.value.name}",
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 12),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                      text: 'Leader',
+                                      style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          decoration:
+                                          TextDecoration.none), // Màu chữ đỏ
+                                    ),
+                                    TextSpan(
+                                        text: ': ${_controller.userLeaderData.value.name}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            decoration: TextDecoration.none)),
+                                  ],
+                                ),
+                              ),
                             ),
                           )
                         ],
@@ -474,7 +492,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                                 const EdgeInsets.symmetric(horizontal: 1.0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
-                              color: Colors.red,
+                              color: Colors.yellow,
                             ),
                             onRatingUpdate: (rating) {},
                           ),
@@ -497,12 +515,12 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                 ),
               ),
               Container(
+                  width: 50,
+                  height: 50,
                   margin: const EdgeInsets.only(right: 24),
-                  child: Center(
-                      child: Image.network(
+                  child: CircleAvatar(
+                      backgroundImage: NetworkImage(
                     _controller.getLeaderAvatar(),
-                    height: 50,
-                    width: 50,
                   ))),
             ],
           ),
