@@ -47,11 +47,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
     _controller.getRouter(widget.id);
-    // _controller.getLocation((location) {
-    //   debugPrint(">>>getLocation $location");
-    //   mapController
-    //       ?.animateCamera(CameraUpdate.newLatLngZoom(location, zoomLevel));
-    // });
   }
 
   void _setupListen() {
@@ -143,8 +138,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             mapController = controllerParam;
             _controller.getLocation((location) {
               debugPrint(">>>getLocation $location");
-              mapController?.animateCamera(
-                  CameraUpdate.newLatLngZoom(location, zoomLevel));
+              _moveCamera(location);
             });
           });
         },
@@ -391,6 +385,11 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     );
   }
 
+  void _moveCamera(LatLng latLng) {
+    //TODO revert
+    mapController?.animateCamera(CameraUpdate.newLatLngZoom(latLng, zoomLevel));
+  }
+
   Widget _buildPeopleView() {
     Widget buildItem(UserData userData) {
       return InkWell(
@@ -398,8 +397,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           var lat = userData.lat;
           var long = userData.long;
           if (lat != null && long != null) {
-            mapController?.animateCamera(
-                CameraUpdate.newLatLngZoom(LatLng(lat, long), zoomLevel));
+            _moveCamera(LatLng(lat, long));
           }
         },
         child: SizedBox(
