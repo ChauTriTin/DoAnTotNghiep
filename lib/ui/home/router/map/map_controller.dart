@@ -10,6 +10,7 @@ import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -92,7 +93,7 @@ class MapController extends BaseController {
         }
 
         //gen list member
-        _genListMember(this.trip.value.listIdMember ?? List.empty());
+        _genListMember();
       });
     } catch (e) {
       debugPrint("getRouter get user info fail: $e");
@@ -120,43 +121,48 @@ class MapController extends BaseController {
     // _genDuration();
   }
 
-  void _genListMember(List<String> listIdMember) {
-    listMember.clear();
+  void _genListMember() {
+    debugPrint("_genListMember~~~~~");
+    List<String> listIdMember = trip.value.listIdMember ?? List.empty();
+    // listMember.clear();
+
+    CollectionReference collectionRef = FirebaseHelper.collectionReferenceUser;
 
     for (int i = 0; i < listIdMember.length; i++) {
       try {
         String id = listIdMember[i];
-        FirebaseHelper.collectionReferenceUser
-            .doc(id)
-            .snapshots()
-            .listen((value) {
-          DocumentSnapshot<Map<String, dynamic>>? userMap =
-              value as DocumentSnapshot<Map<String, dynamic>>?;
-          if (userMap == null || userMap.data() == null) return;
+        collectionRef.doc(id).snapshots().listen((value) {
+          EasyDebounce.debounce(id, const Duration(milliseconds: 500), () {
+            DocumentSnapshot<Map<String, dynamic>>? userMap =
+                value as DocumentSnapshot<Map<String, dynamic>>?;
+            if (userMap == null || userMap.data() == null) return;
 
-          var user = UserData.fromJson((userMap).data()!);
-          debugPrint("_genListMember index $i: ${user.toJson()}");
+            var user = UserData.fromJson((userMap).data()!);
+            debugPrint("_genListMember index $i: ${user.toJson()}");
 
-          var indexContain = hasContainUserInListMember(user);
-          debugPrint("getLocation indexContain $indexContain");
-          if (indexContain == -1) {
-            listMember.add(user);
-          } else {
-            if (indexContain >= 0) {
-              // listMember.removeAt(indexContain);
-              listMember[indexContain] = user;
+            var indexContain = hasContainUserInListMember(user);
+            // debugPrint("getLocation indexContain $indexContain");
+            if (indexContain == -1) {
+              listMember.add(user);
+            } else {
+              if (indexContain >= 0) {
+                // listMember.removeAt(indexContain);
+                listMember[indexContain] = user;
+              }
             }
-          }
-          listMember.refresh();
+            // listMember.add(user);
+            // listMember.refresh();
+            collectionRef.doc(id).snapshots().listen((_) {}).cancel();
+          });
         });
       } catch (e) {
         debugPrint("_genListMember get user info fail: $e");
       }
     }
 
-    debugPrint("_genListMember success listMember length ${listMember.length}");
+    // debugPrint("_genListMember success listMember length ${listMember.length}");
     // listMember.sort((a, b) => (a.name ?? "").compareTo(b.name ?? ""));
-    listMember.refresh();
+    // listMember.refresh();
   }
 
   int hasContainUserInListMember(UserData userData) {
@@ -375,9 +381,12 @@ class MapController extends BaseController {
         callback.call(location);
         debugPrint(
             "getLocation collectionReferenceUser update currentUserId $currentUserId");
+        _genListMember();
       }
     }
 
+    //first call
+    // getLoc();
     //interval update location
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       getLoc();
@@ -407,12 +416,15 @@ class MapController extends BaseController {
 
         final oldMarkerIndex = listMarkerGoogleMap
             .indexWhere((mk) => mk.markerId == marker.markerId);
-        listMarkerGoogleMap.removeAt(oldMarkerIndex);
-        // listMarkerGoogleMap.refresh();
+
+        // listMarkerGoogleMap.removeAt(oldMarkerIndex);
+        listMarkerGoogleMap[oldMarkerIndex] = marker;
+        listMarkerGoogleMap.refresh();
       }
+    } else {
+      listMarkerGoogleMap.add(marker);
+      listMarkerGoogleMap.refresh();
     }
-    listMarkerGoogleMap.add(marker);
-    listMarkerGoogleMap.refresh();
     // debugPrint("_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
 

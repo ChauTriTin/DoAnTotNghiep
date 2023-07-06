@@ -67,7 +67,7 @@ void main() async {
           GlobalCupertinoLocalizations.delegate,
         ],
         enableLog: true,
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: false,
         defaultTransition: Transition.cupertino,
         home: const MyApp(),
         navigatorKey: navigatorKey,

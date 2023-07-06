@@ -7,7 +7,6 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
@@ -19,10 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../chat/detail/page_detail_chat_screen.dart';
+import 'marker_icon.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -39,7 +38,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
-  final double zoomLevel = kDebugMode ? 20.0 : 14.0;
+  final double zoomLevel = 16.0;
 
   @override
   void initState() {
@@ -47,11 +46,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
     _controller.getRouter(widget.id);
-    _controller.getLocation((location) {
-      debugPrint(">>>getLocation $location");
-      mapController
-          ?.animateCamera(CameraUpdate.newLatLngZoom(location, zoomLevel));
-    });
   }
 
   void _setupListen() {
@@ -105,13 +99,14 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     return Obx(() {
       var trip = _controller.trip.value;
       var currentUserData = _controller.currentUserData.value;
-      var listMember = _controller.listMember;
+      // var listMember = _controller.listMember;
 
       if (trip.id == null ||
-          trip.id?.isEmpty == true ||
-          currentUserData.uid == null ||
-          currentUserData.uid?.isEmpty == true ||
-          listMember.isEmpty) {
+              trip.id?.isEmpty == true ||
+              currentUserData.uid == null ||
+              currentUserData.uid?.isEmpty == true
+          // || listMember.isEmpty
+          ) {
         return Container(
           width: Get.width,
           height: Get.height,
@@ -125,7 +120,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         );
       }
       _createMaker();
-      // _imMoving(currentUserData);
       return GoogleMap(
         initialCameraPosition: CameraPosition(
           target: _controller.kMapPlaceStart.value,
@@ -138,20 +132,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         myLocationEnabled: false,
         compassEnabled: false,
         onMapCreated: (controllerParam) {
+          debugPrint(">>>onMapCreated");
           setState(() {
             mapController = controllerParam;
+            _controller.getLocation((location) {
+              debugPrint(">>>getLocation $location");
+              _moveCamera(location);
+            });
           });
         },
       );
     });
   }
-
-  // void _imMoving(UserData user) {
-  //   if (user.lat != null && user.long != null) {
-  //     mapController?.animateCamera(
-  //         CameraUpdate.newLatLngZoom(LatLng(user.lat!, user.long!), zoomLevel));
-  //   }
-  // }
 
   Future<Uint8List?> getBytesFromCanvas(
       int width, int height, Uint8List dataBytes) async {
@@ -267,23 +259,36 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         String markerId,
         LatLng position,
       ) async {
-        var request = await http.get(Uri.parse(avt));
-        var bytes = request.bodyBytes;
-        LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
-        var b = await getBytesFromCanvas(90, 90, bytes.buffer.asUint8List());
-        if (b == null) {
-          return Marker(
-            // markerId: MarkerId(lastMapPositionPoints.toString()),
-            markerId: MarkerId(markerId),
-            position: lastMapPositionPoints,
-          );
-        }
         return Marker(
-          icon: BitmapDescriptor.fromBytes(b),
+          icon: await MarkerIcon.downloadResizePictureCircle(
+            avt,
+            size: 100,
+            addBorder: true,
+            borderColor: ColorConstants.appColor,
+            borderSize: 5,
+          ),
           markerId: MarkerId(markerId),
           // markerId: MarkerId(lastMapPositionPoints.toString()),
           position: position,
         );
+
+        // var request = await http.get(Uri.parse(avt));
+        // var bytes = request.bodyBytes;
+        // LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
+        // var b = await getBytesFromCanvas(90, 90, bytes.buffer.asUint8List());
+        // if (b == null) {
+        //   return Marker(
+        //     // markerId: MarkerId(lastMapPositionPoints.toString()),
+        //     markerId: MarkerId(markerId),
+        //     position: lastMapPositionPoints,
+        //   );
+        // }
+        // return Marker(
+        //   icon: BitmapDescriptor.fromBytes(b),
+        //   markerId: MarkerId(markerId),
+        //   // markerId: MarkerId(lastMapPositionPoints.toString()),
+        //   position: position,
+        // );
       }
 
       var listMember = _controller.listMember;
@@ -392,6 +397,10 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     );
   }
 
+  void _moveCamera(LatLng latLng) {
+    mapController?.animateCamera(CameraUpdate.newLatLngZoom(latLng, zoomLevel));
+  }
+
   Widget _buildPeopleView() {
     Widget buildItem(UserData userData) {
       return InkWell(
@@ -399,13 +408,12 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           var lat = userData.lat;
           var long = userData.long;
           if (lat != null && long != null) {
-            mapController?.animateCamera(
-                CameraUpdate.newLatLngZoom(LatLng(lat, long), zoomLevel));
+            _moveCamera(LatLng(lat, long));
           }
         },
         child: SizedBox(
-          width: 90,
-          height: 90,
+          width: 60,
+          height: 60,
           child: Stack(
             children: [
               AvatarGlow(
@@ -416,8 +424,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 showTwoGlows: true,
                 repeatPauseDuration: const Duration(milliseconds: 100),
                 child: SizedBox(
-                  width: 70,
-                  height: 70,
+                  width: 50,
+                  height: 50,
                   child: ClipOval(
                     child: SizedBox.fromSize(
                       size: const Size.fromRadius(48), // Image radius
@@ -444,18 +452,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              if (kDebugMode)
-                Container(
-                  color: Colors.red,
-                  child: Text(
-                    "${userData.lat}-${userData.long}",
-                    style: const TextStyle(
-                      fontSize: DimenConstants.txtTiny,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              // if (kDebugMode)
+              //   Container(
+              //     color: Colors.red,
+              //     child: Text(
+              //       "${userData.lat}-${userData.long}",
+              //       style: const TextStyle(
+              //         fontSize: DimenConstants.txtTiny,
+              //         color: Colors.white,
+              //       ),
+              //       textAlign: TextAlign.center,
+              //     ),
+              //   ),
             ],
           ),
         ),
