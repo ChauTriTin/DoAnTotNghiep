@@ -5,6 +5,7 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/ui/home/noti/page_noti_controller.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -47,15 +48,13 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.screenBg,
-      body: _buildList()
-    );
+        backgroundColor: ColorConstants.screenBg, body: _buildList());
   }
 
   Widget _buildList() {
     return Obx(() {
-      var list = _controller.listNotification;
-      Dog.d(">>>_buildList list ${list.value.toString()}");
+      var list = _controller.listNotification.value;
+      Dog.d(">>>_buildList list ${list.toString()}");
       if (list.isEmpty) {
         return Center(
           child: UIUtils.getText("No data"),
@@ -75,35 +74,61 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
 
   Widget getItemNotification(PushNotification data, int i) {
     return Card(
-      shape: UIUtils.getCardCorner(),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      color: ColorConstants.cardBg,
-      shadowColor: Colors.grey,
-      elevation: DimenConstants.cardElevation,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              data.title ?? "",
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: ColorConstants.colorTitleTrip,
+        shape: UIUtils.getCardCorner(),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        color: ColorConstants.cardBg,
+        shadowColor: Colors.grey,
+        elevation: DimenConstants.cardElevation,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 25, // Kích thước rộng mong muốn
+                    height: 25,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(data.userData?.avatar ??
+                          StringConstants.avatarImgDefault),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      data.title ?? "",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: ColorConstants.colorTitleTrip,
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              data.body ?? "",
-              style: const TextStyle(
-                fontSize: DimenConstants.txtMedium,
-                color: Colors.black,
+              const SizedBox(height: 8),
+              Text(
+                data.body ?? "",
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
               ),
-            ),
-          ],
-        ),
-      )
-    );
+              const SizedBox(height: 4),
+              Text(
+                data.body ?? "",
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

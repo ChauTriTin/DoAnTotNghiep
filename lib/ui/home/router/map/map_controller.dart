@@ -19,6 +19,7 @@ import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../model/notification_data.dart';
+import '../../../../util/time_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class MapController extends BaseController {
@@ -325,7 +326,8 @@ class MapController extends BaseController {
           trip.value.id,
           currentUserData.value.uid,
           "1",
-          DateTime.now().millisecondsSinceEpoch.toString());
+          TimeUtils.dateTimeToString1(DateTime.now())
+      );
 
       Map<String, dynamic> result =
           await flutterFCMWrapper.sendMessageByTokenID(

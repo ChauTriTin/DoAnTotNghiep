@@ -1,4 +1,6 @@
 import 'package:appdiphuot/model/notification_data.dart';
+import 'package:appdiphuot/model/trip.dart';
+import 'package:appdiphuot/model/user.dart';
 
 class PushNotification {
   String? title;
@@ -6,6 +8,10 @@ class PushNotification {
   String? dataTitle;
   String? dataBody;
   Map<String, String>? data;
+
+  // User data
+  UserData? userData;
+  Trip? tripDetail;
 
   PushNotification(
       {this.title, this.body, this.dataTitle, this.dataBody, this.data});

@@ -38,6 +38,18 @@ class TimeUtils {
   }
 
 
+  static String dateTimeToString1(DateTime? dateTime) {
+    try {
+      if (dateTime == null || dateTime == DateTime(1111, 1, 11)) {
+        return "";
+      }
+      return formatDate(dateTime, [dd, '/', mm, '/', yyyy, hh, ":", mm, ":", ss]);
+    } catch (e) {
+      return "";
+    }
+  }
+
+
   static String formatDateTimeFromMilliseconds(int milliseconds) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     DateFormat dateFormat = DateFormat('HH:mm dd/MM/yyyy');
