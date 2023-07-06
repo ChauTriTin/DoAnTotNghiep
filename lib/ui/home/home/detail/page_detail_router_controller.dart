@@ -6,17 +6,19 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/comment.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/const/string_constants.dart';
+import '../../../../model/notification_data.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
+import '../../../../util/time_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
-  final CollectionReference _users =
-      FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
   final routerCollection = FirebaseHelper.collectionReferenceRouter;
   final chatCollection = FirebaseHelper.collectionReferenceChat;
   var db = FirebaseFirestore.instance;
@@ -33,6 +35,8 @@ class DetailRouterController extends BaseController {
 
   var isWidgetJoinedVisible = true.obs;
   var isTripDeleted = false.obs;
+
+  var listMember = <UserData>[].obs;
 
   bool isUserHost() {
     return detailTrip.value.userIdHost == userData.value.uid;
@@ -122,11 +126,49 @@ class DetailRouterController extends BaseController {
 
         isTripDeleted.value = false;
         log("getTripDetail success: ${trip.toString()}");
+        getAllMember();
       });
     } catch (e) {
       isTripDeleted.value = true;
       log("getTripDetail get user info fail: $e");
     }
+  }
+
+  Future<void> getAllMember() async {
+    try {
+      setAppLoading(true, "Loading", TypeApp.loadingData);
+      if (detailTrip.value.listIdMember == null ||
+          detailTrip.value.listIdMember?.isEmpty == true) return;
+      var tempUserList = <UserData>[];
+      for (var uid in detailTrip.value.listIdMember!) {
+        DocumentSnapshot userSnapshot = await _users.doc(uid).get();
+        if (!userSnapshot.exists) {
+          continue;
+        }
+
+        DocumentSnapshot<Map<String, dynamic>>? userMap =
+        userSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+        if (userMap == null || userMap.data() == null) return;
+
+        var user = UserData.fromJson((userMap).data()!);
+        tempUserList.add(user);
+        log("_getUserParticipated success: ${user.toString()}");
+      }
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      listMember.value = tempUserList;
+    } catch (e) {
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      log("_getUserParticipated get user info fail: $e");
+    }
+  }
+
+  int hasContainUserInListMember(UserData userData) {
+    for (int i = 0; i < listMember.length; i++) {
+      if (userData.uid == listMember[i].uid) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   Future<void> getCommentRoute(String? id) async {
@@ -165,7 +207,7 @@ class DetailRouterController extends BaseController {
       routerCollection
           .doc(id)
           .update({"comments": commentsData})
-          .then((value) => postFCM(text, "comment"))
+          .then((value) => postFCM(text, NotificationData.TYPE_COMMENT))
           .catchError((error) => Dog.e("addCommentRoute error: $error"));
     } catch (e) {
       log("addCommentRoute: $e");
@@ -187,8 +229,7 @@ class DetailRouterController extends BaseController {
               .update({"listIdMember": listMember})
               .then((value) => {
                     isWidgetJoinedVisible.value = true,
-                    postFCM("Số lượng member hiện tại:  ${listMember?.length}",
-                        "join"),
+                    postFCM("${userData.value.name} vừa tham gia chuyến đi.", NotificationData.TYPE_JOIN_ROUTER),
                     Dog.d("joinedRouter success")
                   })
               .catchError((error) => {Dog.e("joinedRouter error: $error")});
@@ -207,29 +248,40 @@ class DetailRouterController extends BaseController {
     );
     try {
       var listFcmToken = <String>[];
-      // if (kDebugMode) {
-      //   //lg v60
-      //   listFcmToken.add(
-      //       "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh");
-      //   //samsung a50
-      //   listFcmToken.add(
-      //       "e8hPdUzASaqjB7dU0TbT7R:APA91bHQImI50Fzhr8P1NoRcYMQMpfOhX8yGn4ZWXwLDQJgWbVgb7FYjz8DjdfAEvfN0o5_EQa0bw5lBFerkeAW0ScCfEmfGya9quF5kre27EdNzgznxFrJLzkbWAqGMkg7eSjXt0KMF");
-      // }
-      Dog.d("fcmToken leader: ${userLeaderData.value.fcmToken}");
-      listFcmToken.add(userLeaderData.value.fcmToken ?? "");
+      for (var element in listMember) {
+        var fcmToken = element.fcmToken;
+        if (fcmToken != null && fcmToken.isNotEmpty && fcmToken != userData.value.fcmToken) {
+          listFcmToken.add(fcmToken);
+        }
+      }
+      debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
 
       var title = "";
-      if (type.contains("comment")) {
-        title = "Có bình luận mới";
-      } else {
-        title = "Có người tham gia chuyến đi";
+      switch (type) {
+        case NotificationData.TYPE_JOIN_ROUTER:
+          title = StringConstants.titleJoinNotification;
+          break;
+        case NotificationData.TYPE_COMMENT:
+          title = StringConstants.titleNewCommentNotification;
+          break;
+        case NotificationData.TYPE_EXIT_ROUTER:
+          title = StringConstants.titleExitRouterNotification;
+          break;
       }
+
+      NotificationData notificationData = NotificationData(
+          detailTrip.value.id,
+          userData.value.uid,
+          type,
+          TimeUtils.dateTimeToString1(DateTime.now())
+      );
 
       Map<String, dynamic> result =
           await flutterFCMWrapper.sendMessageByTokenID(
         userRegistrationTokens: listFcmToken,
         title: title,
         body: body,
+        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );
@@ -288,6 +340,7 @@ class DetailRouterController extends BaseController {
       documentRef
           .update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
         Dog.d("outTrip success");
+        postFCM("${userData.value.name} ${StringConstants.informOutRouter}", NotificationData.TYPE_EXIT_ROUTER);
         setAppLoading(false, "Loading", TypeApp.loadingData);
       }).catchError((error) {
         setAppLoading(false, "Loading", TypeApp.loadingData);

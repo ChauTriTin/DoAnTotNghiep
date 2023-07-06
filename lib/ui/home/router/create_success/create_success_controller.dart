@@ -15,11 +15,11 @@ import 'package:intl/intl.dart';
 import '../../../../common/const/constants.dart';
 import '../../../../model/notification_data.dart';
 import '../../../../model/user.dart';
+import '../../../../util/time_utils.dart';
 
 class CreateSuccessController extends BaseController {
   var isDoneCountdown = false.obs;
   var trip = Trip().obs;
-  var listFCMToken = <String>[].obs;
   var currentUserData = UserSingletonController.instance.userData;
   var isTripDeleted = false.obs;
   var shouldShowEditButton = false.obs;
@@ -160,7 +160,7 @@ class CreateSuccessController extends BaseController {
       documentRef.update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
         Dog.d("outTrip success");
         setAppLoading(false, "Loading", TypeApp.loadingData);
-        postFCM("${currentUserData.value.name} ${StringConstants.informOutRouter} ${trip.value.title}.");
+        postFCM("${currentUserData.value.name} ${StringConstants.informOutRouter}");
       }).catchError((error) {
         setAppLoading(false, "Loading", TypeApp.loadingData);
         Dog.e("outTrip error: $error");
@@ -191,8 +191,9 @@ class CreateSuccessController extends BaseController {
       NotificationData notificationData = NotificationData(
           trip.value.id,
           currentUserData.value.uid,
-          "5",
-          DateTime.now().millisecondsSinceEpoch.toString());
+          NotificationData.TYPE_EXIT_ROUTER,
+          TimeUtils.dateTimeToString1(DateTime.now())
+      );
 
       Map<String, dynamic> result =
       await flutterFCMWrapper.sendMessageByTokenID(

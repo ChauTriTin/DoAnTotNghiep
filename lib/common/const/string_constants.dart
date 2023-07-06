@@ -178,4 +178,8 @@ class StringConstants {
   static const String english = "Tiếng Anh";
   static const String vietnamese = "Tiếng Việt";
   static const String nomember = "Chưa có thành viên nào";
+
+  static const String titleExitRouterNotification = "Có người rời khỏi chuyến đi";
+  static const String titleNewCommentNotification = "Có bình luận mới";
+  static const String titleNotification = "Có người tham gia chuyến đi";
 }

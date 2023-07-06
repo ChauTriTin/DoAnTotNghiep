@@ -1,9 +1,7 @@
 class NotificationData {
   String? tripID;
   String? userID;
-  String?
-      notificationType; // 1: thoong bao trong map (hư xe, sos...), 2: tin nhan, 3: remove, 4: OUT NHÓM
-  //1: thoong bao trong map (hư xe, sos...), 2: tin nhan, 3: "bình luận", 4: remove, 5: OUT NHÓM
+  String? notificationType; //1: thông báo trong map (hư xe, sos...), 2: tin nhan, 3: "bình luận", 4: remove, 5: OUT NHÓM, 6: Tham gia
   String? time;
 
   NotificationData(this.tripID, this.userID, this.notificationType, this.time);
@@ -23,4 +21,12 @@ class NotificationData {
     data['time'] = time ?? "";
     return data;
   }
+
+  static const String TYPE_MAP = "1";
+  static const String TYPE_MESSAGE = "2";
+  static const String TYPE_COMMENT = "3";
+  static const String TYPE_REMOVE = "4";
+  static const String TYPE_EXIT_ROUTER = "5";
+  static const String TYPE_JOIN_ROUTER = "6";
+
 }
