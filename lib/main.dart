@@ -66,7 +66,7 @@ void main() async {
         ],
         supportedLocales: S.delegate.supportedLocales,
         enableLog: true,
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: false,
         defaultTransition: Transition.cupertino,
         home: const MyApp(),
         navigatorKey: navigatorKey,

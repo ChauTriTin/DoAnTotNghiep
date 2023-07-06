@@ -404,12 +404,15 @@ class MapController extends BaseController {
 
         final oldMarkerIndex = listMarkerGoogleMap
             .indexWhere((mk) => mk.markerId == marker.markerId);
-        listMarkerGoogleMap.removeAt(oldMarkerIndex);
-        // listMarkerGoogleMap.refresh();
+
+        // listMarkerGoogleMap.removeAt(oldMarkerIndex);
+        listMarkerGoogleMap[oldMarkerIndex] = marker;
+        listMarkerGoogleMap.refresh();
       }
+    } else {
+      listMarkerGoogleMap.add(marker);
+      listMarkerGoogleMap.refresh();
     }
-    listMarkerGoogleMap.add(marker);
-    listMarkerGoogleMap.refresh();
     // debugPrint("_createMaker size setMarkerGoogleMap listMarkerGoogleMap ${listMarkerGoogleMap.length}");
   }
 
