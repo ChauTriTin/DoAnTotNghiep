@@ -47,11 +47,11 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
     _controller.getRouter(widget.id);
-    _controller.getLocation((location) {
-      debugPrint(">>>getLocation $location");
-      mapController
-          ?.animateCamera(CameraUpdate.newLatLngZoom(location, zoomLevel));
-    });
+    // _controller.getLocation((location) {
+    //   debugPrint(">>>getLocation $location");
+    //   mapController
+    //       ?.animateCamera(CameraUpdate.newLatLngZoom(location, zoomLevel));
+    // });
   }
 
   void _setupListen() {
@@ -138,8 +138,14 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         myLocationEnabled: false,
         compassEnabled: false,
         onMapCreated: (controllerParam) {
+          debugPrint(">>>onMapCreated");
           setState(() {
             mapController = controllerParam;
+            _controller.getLocation((location) {
+              debugPrint(">>>getLocation $location");
+              mapController?.animateCamera(
+                  CameraUpdate.newLatLngZoom(location, zoomLevel));
+            });
           });
         },
       );
