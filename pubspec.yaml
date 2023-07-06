@@ -71,6 +71,7 @@ dependencies:
     sdk: flutter
   intl: any
   fluttertoast: ^8.2.2
+  easy_debounce: ^2.0.3
 
 #  google_fonts: ^2.3.3
 #    path: "goo gle_fonts/"

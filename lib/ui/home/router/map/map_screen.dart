@@ -39,7 +39,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
-  final double zoomLevel = kDebugMode ? 20.0 : 14.0;
+  final double zoomLevel = 20.0;
 
   @override
   void initState() {
@@ -105,13 +105,14 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     return Obx(() {
       var trip = _controller.trip.value;
       var currentUserData = _controller.currentUserData.value;
-      var listMember = _controller.listMember;
+      // var listMember = _controller.listMember;
 
       if (trip.id == null ||
-          trip.id?.isEmpty == true ||
-          currentUserData.uid == null ||
-          currentUserData.uid?.isEmpty == true ||
-          listMember.isEmpty) {
+              trip.id?.isEmpty == true ||
+              currentUserData.uid == null ||
+              currentUserData.uid?.isEmpty == true
+          // || listMember.isEmpty
+          ) {
         return Container(
           width: Get.width,
           height: Get.height,
