@@ -1,16 +1,23 @@
+import 'dart:convert';
+
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/notification_data.dart';
 import 'package:appdiphuot/ui/home/noti/page_noti_controller.dart';
+import 'package:appdiphuot/ui/home/router/join/joine_manager_screen.dart';
+import 'package:appdiphuot/ui/home/router/map/map_screen.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/const/constants.dart';
 import '../../../model/push_notification.dart';
+import '../chat/detail/page_detail_chat_screen.dart';
+import '../home/detail/page_detail_router_screen.dart';
 
 class PageNotiScreen extends StatefulWidget {
   const PageNotiScreen({
@@ -126,19 +133,19 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                             fontSize: 14,
                             fontWeight: FontWeight.w500),
                         children: [
-                          TextSpan(
-                            text: data.tripDetail?.title,
-                            style: const TextStyle(
-                                color: ColorConstants.textColor1,
-                                fontSize: DimenConstants.txtMedium,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ])),
+                      TextSpan(
+                        text: data.tripDetail?.title,
+                        style: const TextStyle(
+                            color: ColorConstants.textColor,
+                            fontSize: DimenConstants.txtMedium,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ])),
                 const SizedBox(height: 8),
                 Text(
                   data.body ?? "",
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     color: Colors.black,
                   ),
                 ),
@@ -156,9 +163,43 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
     );
   }
 
-  void _onItemNotiClick(PushNotification data,
-      NotificationData? notificationData) {
+  void _onItemNotiClick(
+      PushNotification data, NotificationData? notificationData) {
+    Dog.d("_onItemNotiClick: ${data.tripDetail.toString()}");
 
+    if (data.tripDetail == null) {
+      showNoTripFoundPopup();
+      return;
+    }
 
+    if (notificationData?.isTypeMap() == true) {
+      Get.to(() => MapScreen(id: data.tripDetail?.id ?? ""));
+    } else if (notificationData?.isTypeMessage() == true ||
+        notificationData?.isTypeRemove() == true) {
+      Get.to(() => const PageDetailChatScreen(), arguments: [
+        {Constants.detailChat: jsonEncode(data.tripDetail)},
+      ]);
+    } else if (notificationData?.isTypeMap() == true) {
+      Get.to(() => MapScreen(id: data.tripDetail?.id ?? ""));
+    } else if (notificationData?.isTypeComment() == true) {
+      Get.to(() => const DetailRouterScreen(), arguments: [
+        {Constants.detailTrip: jsonEncode(data.tripDetail)},
+      ]);
+    } else if (notificationData?.isTypeExitRouter() == true ||
+        notificationData?.isTypeJoinRouter() == true) {
+      Get.to(() => JoinedManagerScreen(tripdata: data.tripDetail!));
+    }
+  }
+
+  void showNoTripFoundPopup() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.tripNotFound,
+      StringConstants.ok,
+      null,
+      null,
+      null,
+    );
   }
 }

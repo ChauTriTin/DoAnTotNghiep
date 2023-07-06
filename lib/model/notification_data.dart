@@ -1,7 +1,8 @@
 class NotificationData {
   String? tripID;
   String? userID;
-  String? notificationType; //1: thông báo trong map (hư xe, sos...), 2: tin nhan, 3: "bình luận", 4: remove, 5: OUT NHÓM, 6: Tham gia
+  String?
+      notificationType; //1: thông báo trong map (hư xe, sos...), 2: tin nhan, 3: "bình luận", 4: remove, 5: OUT NHÓM, 6: Tham gia
   String? time;
 
   NotificationData(this.tripID, this.userID, this.notificationType, this.time);
@@ -29,4 +30,27 @@ class NotificationData {
   static const String TYPE_EXIT_ROUTER = "5";
   static const String TYPE_JOIN_ROUTER = "6";
 
+  bool isTypeMap() {
+    return notificationType == TYPE_MAP;
+  }
+
+  bool isTypeMessage() {
+    return notificationType == TYPE_MESSAGE;
+  }
+
+  bool isTypeComment() {
+    return notificationType == TYPE_COMMENT;
+  }
+
+  bool isTypeRemove() {
+    return notificationType == TYPE_REMOVE;
+  }
+
+  bool isTypeExitRouter() {
+    return notificationType == TYPE_EXIT_ROUTER;
+  }
+
+  bool isTypeJoinRouter() {
+    return notificationType == TYPE_JOIN_ROUTER;
+  }
 }

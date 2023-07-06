@@ -384,7 +384,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => const DetailRouterScreen(), arguments: [
+          Get.to(() => DetailRouterScreen(), arguments: [
             {Constants.detailTrip: jsonEncode(trip)},
           ]);
         },

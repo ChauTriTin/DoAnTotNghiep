@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/model/notification_data.dart';
 import 'package:appdiphuot/model/push_notification.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

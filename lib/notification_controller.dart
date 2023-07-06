@@ -3,6 +3,7 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/push_notification.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class NotificationController extends BaseController {
