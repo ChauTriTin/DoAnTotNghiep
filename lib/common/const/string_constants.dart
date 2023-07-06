@@ -76,6 +76,7 @@ class StringConstants {
   static const String outTrip = "Rời khỏi";
   static const String deleteWarning = "Bạn có chắc muốn xóa chuyến đi này không?";
   static const String outWarning = "Bạn có chắc chắn muốn rời khỏi chuyến đi này không?";
+  static const String informOutRouter = " đã rời khỏi chuyến đi ";
   static const String signOutWarning = "Bạn có chắc chắn muốn đăng xuất không?";
   static const String blockedWarning = "Bạn đã bị trưởng đoàn chặn tham gia chuyến đi này";
   static const String removeWarning = "Chuyến đi đã bị xóa hoặc đã bị remove khỏi đoạn hội thoại, vui lòng kiểm tra lại";
@@ -177,4 +178,9 @@ class StringConstants {
   static const String english = "Tiếng Anh";
   static const String vietnamese = "Tiếng Việt";
   static const String nomember = "Chưa có thành viên nào";
+
+  static const String titleExitRouterNotification = "Có người rời khỏi chuyến đi";
+  static const String titleNewCommentNotification = "Có bình luận mới";
+  static const String titleJoinNotification = "Có người tham gia chuyến đi";
+  static const String titleRemoveNotification = "Thông báo";
 }

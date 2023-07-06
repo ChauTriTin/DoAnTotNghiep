@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirebaseHelper {
   static String keyRouter = "router";
   static String keyLoc = "location";
+  static String keyNotification = "notification";
   static String keyUser = "users";
   static String keyChat = "chat";
   static String messages = "messages";
@@ -23,4 +24,7 @@ class FirebaseHelper {
 
   static final CollectionReference collectionReferenceLoc =
       FirebaseFirestore.instance.collection(keyLoc);
+
+  static final CollectionReference collectionReferenceNotification =
+  FirebaseFirestore.instance.collection(keyNotification);
 }

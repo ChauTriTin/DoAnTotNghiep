@@ -19,6 +19,8 @@ import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../model/notification_data.dart';
+import '../../../../util/time_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class MapController extends BaseController {
@@ -326,11 +328,19 @@ class MapController extends BaseController {
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
 
+      NotificationData notificationData = NotificationData(
+          trip.value.id,
+          currentUserData.value.uid,
+          "1",
+          TimeUtils.dateTimeToString1(DateTime.now())
+      );
+
       Map<String, dynamic> result =
           await flutterFCMWrapper.sendMessageByTokenID(
         userRegistrationTokens: listFcmToken,
         title: "Thông báo khẩn cấp từ ${getCurrentUserName()}",
         body: body,
+        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );

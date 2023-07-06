@@ -16,8 +16,8 @@ import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-import 'generated/l10n.dart';
 import 'model/push_notification.dart';
+import 'notification_controller.dart';
 import 'ui/splash/page_splash_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -44,14 +44,16 @@ void main() async {
   } on Exception catch (_) {
     debugPrint('initializeApp fail');
   }
-  Messaging.initFCM();
+
+
   Get.put(UserSingletonController.instance);
+  Get.put(NotificationController.instance);
+
+  Messaging.initFCM();
   getLoc();
   ThemeModeNotifier.instance.getDarkModeStatus();
   GoogleMapsDirections.init(
       googleAPIKey: "AIzaSyAyXE57uyeaXMaXRlaNa-txkcNH6SaWXcU");
-
-  loadLanguage();
 
   // Does not update google fon't from the internet
   // GoogleFonts.config.allowRuntimeFetching = false;
@@ -64,7 +66,6 @@ void main() async {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: S.delegate.supportedLocales,
         enableLog: true,
         debugShowCheckedModeBanner: false,
         defaultTransition: Transition.cupertino,
@@ -78,13 +79,6 @@ void main() async {
       ),
     ),
   );
-}
-
-Future<void> loadLanguage() async {
-  var langCode =
-      await SharedPreferencesUtil.getString(SharedPreferencesUtil.LANGUAGE) ??
-          "vi";
-  await S.load(Locale.fromSubtags(languageCode: langCode));
 }
 
 class MyApp extends StatelessWidget {
@@ -110,16 +104,26 @@ class Messaging {
     FCM.deleteRefreshToken();
   }
 
+  static Map<String, String> convertMap(Map<String, dynamic> originalMap) {
+    return originalMap.map((key, value) => MapEntry(key, value.toString()));
+  }
+
   @pragma('vm:entry-point')
   static Future<void> onNotificationReceived(RemoteMessage message) async {
     await Firebase.initializeApp();
     debugPrint('FCM main Handling a message messageId ${message.messageId}');
+    debugPrint('FCM main messageData ${message.data}');
+
+    var data = convertMap(message.data);
     PushNotification notification = PushNotification(
       title: message.notification?.title,
       body: message.notification?.body,
       dataTitle: message.data['title'],
       dataBody: message.data['body'],
+      data: data,
     );
+
+    NotificationController.instance.addNotification(notification);
     Get.dialog(
       AlertDialog(
         title: Text(notification.title ?? ""),

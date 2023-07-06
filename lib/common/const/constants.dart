@@ -26,6 +26,10 @@ class Constants {
   static const String user = "user";
   static const String detailTrip = "detailTrip";
   static const String detailChat = "detailChat";
+  static const String tripID = "tripID";
+  static const String time = "time";
+  static const String userID = "userID";
+  static const String notificationType = "notificationType";
 
   static const String apiKey =
       "AAAAe0-zsYY:APA91bG9bdzbaJkWI6q22l1fJq1xNKiFNy1-VabYMH0hJ4Z48-IXrvMC10LNxop3mj_dhAUzcRiIuO8TpKeHCxXGcfI1DhBmhxWyotBic9Y9brDcQLncazDztqL3dVXj7i7tKBEPXrNL";

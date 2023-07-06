@@ -6,6 +6,7 @@ import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/home/home/detail/page_detail_router_controller.dart';
 import 'package:appdiphuot/ui/home/router/join/joine_manager_screen.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
+import 'package:appdiphuot/util/time_utils.dart';
 import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:comment_tree/widgets/comment_tree_widget.dart';
@@ -162,7 +163,18 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             physics: const BouncingScrollPhysics(),
             children: [
               _slideShowImage(context),
-              const SizedBox(height: DimenConstants.marginPaddingMedium),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  _controller.detailTrip.value.createdAt ?? "",
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    color: ColorConstants.textColorDisable,
+                    fontSize: DimenConstants.txtSmall,
+                  ),
+                ),
+              ),
               _infoRouter(),
               _copyIdRouter(),
               _listButtonEvent(),
@@ -417,69 +429,89 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   }
 
   Widget _leader() {
-    return InkWell(
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 24, right: 24),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        color: Colors.yellow,
+    double rate = _controller.userLeaderData.value.getRate();
+    int rateCount = _controller.userLeaderData.value.rates?.length ?? 0;
+    return Obx(() => InkWell(
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 24, right: 24),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 12),
+                            child: Text(
+                              "Leader: ${_controller.userLeaderData.value.name}",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 12),
-                        child: Text(
-                          "Leader: ${_controller.userLeaderData.value.name}",
-                          style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 54, right: 24),
-                  child: RatingBar.builder(
-                    ignoreGestures: true,
-                    initialRating: 3,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 20,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.red,
                     ),
-                    onRatingUpdate: (rating) {},
-                  ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 54, right: 24),
+                      child: Row(
+                        children: [
+                          RatingBar.builder(
+                            ignoreGestures: true,
+                            initialRating: rate,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemSize: 20,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 1.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.red,
+                            ),
+                            onRatingUpdate: (rating) {},
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "$rateCount đánh giá",
+                              style: const TextStyle(
+                                  color: ColorConstants.colorGreen,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Container(
+                  margin: const EdgeInsets.only(right: 24),
+                  child: Center(
+                      child: Image.network(
+                    _controller.getLeaderAvatar(),
+                    height: 50,
+                    width: 50,
+                  ))),
+            ],
           ),
-          Container(
-              margin: const EdgeInsets.only(right: 24),
-              child: Center(
-                  child: Image.network(
-                _controller.getLeaderAvatar(),
-                height: 50,
-                width: 50,
-              ))),
-        ],
-      ),
-      onTap: () {
-        Get.to(() => const PageUserPreviewScreen(), arguments: [
-          {Constants.user: _controller.userLeaderData.value.uid ?? ""}
-        ]);
-      },
-    );
+          onTap: () {
+            Get.to(() => const PageUserPreviewScreen(), arguments: [
+              {Constants.user: _controller.userLeaderData.value.uid ?? ""}
+            ]);
+          },
+        ));
   }
 
   Widget _divider(double marginTop) {
@@ -579,6 +611,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
       return SizedBox(
         height: MediaQuery.of(context).size.height * 1 / 5.5,
         child: ListView.separated(
+          padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           itemCount: trips.length,
@@ -792,11 +825,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     const SizedBox(
                       width: 8,
                     ),
-                    const Text('Like'),
-                    const SizedBox(
-                      width: 24,
-                    ),
-                    InkWell(onTap: () {}, child: const Text('Reply')),
+                    Text(TimeUtils.formatDateTimeFromMilliseconds(data.id as int)),
                   ],
                 ),
               ),
@@ -835,18 +864,14 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             DefaultTextStyle(
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Colors.grey[700], fontWeight: FontWeight.bold),
-              child: const Padding(
-                padding: EdgeInsets.only(top: 4),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
                 child: Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
-                    Text('Like'),
-                    SizedBox(
-                      width: 24,
-                    ),
-                    Text('Reply'),
+                    Text("Thời gian: ${TimeUtils.formatDateTimeFromMilliseconds(int.parse(data.id ?? "0"))}"),
                   ],
                 ),
               ),
@@ -1063,11 +1088,28 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     double rateStart = 0;
     double rateEnd = 0;
     double rateTrip = 0;
+    int rateLeaderCount = 0;
+    int rateStartCount = 0;
+    int rateEndCount = 0;
+    int rateTripCount = 0;
+
     for (var element in ratesMap) {
-      rateLeader += element.rateLeader ?? 0;
-      rateStart += element.ratePlaceStart ?? 0;
-      rateEnd += element.ratePlaceEnd ?? 0;
-      rateTrip += element.rateTrip ?? 0;
+      if (element.rateLeader != null) {
+        rateLeader += element.rateLeader ?? 0;
+        rateLeaderCount++;
+      }
+      if (element.ratePlaceStart != null) {
+        rateStart += element.ratePlaceStart ?? 0;
+        rateStartCount++;
+      }
+      if (element.ratePlaceEnd != null) {
+        rateEnd += element.ratePlaceEnd ?? 0;
+        rateEndCount++;
+      }
+      if (element.rateTrip != null) {
+        rateTrip += element.rateTrip ?? 0;
+        rateTripCount++;
+      }
     }
 
     Dog.d("rateMaps ${ratesMap.length}");
@@ -1092,29 +1134,65 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               Row(
                 children: [
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
-                      child: Text("Leader: ${_controller.getNameLeader()}",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            const TextSpan(
+                              text: 'Leader',
+                              style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  decoration:
+                                      TextDecoration.none), // Màu chữ đỏ
+                            ),
+                            TextSpan(
+                                text: ': ${_controller.getNameLeader()}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.none)),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
-                    flex: 1,
-                    child: RatingBar.builder(
-                      initialRating: rateLeader,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 25.0,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.red,
-                      ),
-                      ignoreGestures: true,
-                      onRatingUpdate: (double value) {},
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        RatingBar.builder(
+                          initialRating: rateLeader,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 20.0,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          ignoreGestures: true,
+                          onRatingUpdate: (double value) {},
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "$rateLeaderCount đánh giá",
+                            style: const TextStyle(
+                                color: ColorConstants.colorGreen,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        )
+                      ],
                     ),
                   )
                 ],
@@ -1123,32 +1201,65 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               Row(
                 children: [
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
-                      child: Text(
-                          "Bắt đầu: ${_controller.detailTrip.value.placeStart?.name}" ??
-                              "Điểm bắt đầu",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            const TextSpan(
+                              text: 'Bắt đầu',
+                              style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  decoration:
+                                  TextDecoration.none), // Màu chữ đỏ
+                            ),
+                            TextSpan(
+                                text: ': ${_controller.detailTrip.value.placeStart?.name}}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.none)),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  //TODO fix model rates
                   Expanded(
-                    flex: 1,
-                    child: RatingBar.builder(
-                      initialRating: rateStart,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 25.0,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.red,
-                      ),
-                      ignoreGestures: true,
-                      onRatingUpdate: (double value) {},
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        RatingBar.builder(
+                          initialRating: rateStart,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 20.0,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          ignoreGestures: true,
+                          onRatingUpdate: (double value) {},
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "$rateStartCount đánh giá",
+                            style: const TextStyle(
+                                color: ColorConstants.colorGreen,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        )
+                      ],
                     ),
                   )
                 ],
@@ -1157,32 +1268,65 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               Row(
                 children: [
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
-                      child: Text(
-                          "Kết thúc: ${_controller.detailTrip.value.placeEnd?.name}" ??
-                              "Điểm kết thúc",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            const TextSpan(
+                              text: 'Kết thúc',
+                              style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  decoration:
+                                  TextDecoration.none), // Màu chữ đỏ
+                            ),
+                            TextSpan(
+                                text: ': ${_controller.detailTrip.value.placeEnd?.name}}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.none)),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  //TODO fix model rates
                   Expanded(
-                    flex: 1,
-                    child: RatingBar.builder(
-                      initialRating: rateEnd,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 25.0,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.red,
-                      ),
-                      ignoreGestures: true,
-                      onRatingUpdate: (double value) {},
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        RatingBar.builder(
+                          initialRating: rateEnd,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 20.0,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          ignoreGestures: true,
+                          onRatingUpdate: (double value) {},
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "$rateEndCount đánh giá",
+                            style: const TextStyle(
+                                color: ColorConstants.colorGreen,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        )
+                      ],
                     ),
                   )
                 ],
@@ -1193,30 +1337,46 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               Row(
                 children: [
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       child: const Text("Đánh giá của chuyến đi",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
+                              fontWeight: FontWeight.w500, fontSize: 16, color: Colors.blueAccent)),
                     ),
                   ),
-                  //TODO fix model rates
                   Expanded(
-                    flex: 1,
-                    child: RatingBar.builder(
-                      initialRating: rateTrip,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 25.0,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.red,
-                      ),
-                      ignoreGestures: true,
-                      onRatingUpdate: (double value) {},
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        RatingBar.builder(
+                          initialRating: rateTrip,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 20.0,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          ignoreGestures: true,
+                          onRatingUpdate: (double value) {},
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "$rateEndCount đánh giá",
+                            style: const TextStyle(
+                                color: ColorConstants.colorGreen,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        )
+                      ],
                     ),
                   )
                 ],
@@ -1230,11 +1390,13 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     var list = <Widget>[];
     var ratesMap = convertMapToRateList(_controller.detailTrip.value.rates);
     var listPlaceRate = <double>[];
+    var listPlaceRateCount = <int>[];
 
     var totalRate = _controller.detailTrip.value.rates?.length ?? 0;
 
     _controller.detailTrip.value.listPlace?.forEach((element) {
       listPlaceRate.add(0);
+      listPlaceRateCount.add(0);
     });
 
     for (var element in ratesMap) {
@@ -1242,6 +1404,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         int index = element.rateListPlaceStop?.indexOf(item) ?? -1;
         Dog.d("index: $index , listPlaceRate: ${listPlaceRate.length}");
         if (index != -1) {
+          var currentCount = listPlaceRateCount[index];
+          listPlaceRateCount[index] = currentCount + 1;
           if (listPlaceRate.isEmpty) {
             listPlaceRate[index] = item;
           } else {
@@ -1266,8 +1430,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         index = listPlace.indexOf(element);
       }
       double rate = 0;
+      int countRate = 0;
       if (totalRate != 0 && index != -1) {
         rate = listPlaceRate[index] / totalRate;
+        countRate = listPlaceRateCount[index];
       }
 
       if (index != -1) {
@@ -1276,29 +1442,45 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Container(
                 margin: const EdgeInsets.only(right: 8),
                 child: Text(element.name ?? "",
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16)),
+                        fontWeight: FontWeight.w500, fontSize: 16)),
               ),
             ),
             Expanded(
-              flex: 1,
-              child: RatingBar.builder(
-                initialRating: rate,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemSize: 25.0,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.red,
-                ),
-                ignoreGestures: true,
-                onRatingUpdate: (double value) {},
+              flex: 3,
+              child: Row(
+                children: [
+                  RatingBar.builder(
+                    initialRating: rate,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 20.0,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                    ),
+                    ignoreGestures: true,
+                    onRatingUpdate: (double value) {},
+                  ),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  Expanded(
+                    child: Text(
+                      "$countRate đánh giá",
+                      style: const TextStyle(
+                          color: ColorConstants.colorGreen,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  )
+                ],
               ),
             )
           ],
@@ -1363,8 +1545,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     Dog.d("checkJoinPublicTrip");
     if (_controller.isUserBlocked()) {
       showUserBlockedDialog();
-    }
-    else {
+    } else {
       _controller.joinedRouter(_controller.detailTrip.value.id);
     }
   }

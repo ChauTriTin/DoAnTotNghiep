@@ -1,18 +1,31 @@
+import 'dart:developer';
+
 import 'package:appdiphuot/base/base_controller.dart';
+import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../common/const/constants.dart';
+import '../../../../model/notification_data.dart';
+import '../../../../model/user.dart';
+import '../../../../util/time_utils.dart';
 
 class CreateSuccessController extends BaseController {
   var isDoneCountdown = false.obs;
   var trip = Trip().obs;
+  var currentUserData = UserSingletonController.instance.userData;
   var isTripDeleted = false.obs;
   var shouldShowEditButton = false.obs;
+
+  final _users = FirebaseHelper.collectionReferenceUser;
+  var listMember = <UserData>[].obs;
 
   void clearOnDispose() {
     Get.delete<CreateSuccessController>();
@@ -61,12 +74,49 @@ class CreateSuccessController extends BaseController {
         // }
 
         //gen list member
-        // _genListMember(this.trip.value.listIdMember ?? List.empty());
+        getAllMember();
       });
     } catch (e) {
       isTripDeleted.value = true;
       debugPrint("getRouter get user info fail: $e");
     }
+  }
+
+  Future<void> getAllMember() async {
+    try {
+      setAppLoading(true, "Loading", TypeApp.loadingData);
+      if (trip.value.listIdMember == null ||
+          trip.value.listIdMember?.isEmpty == true) return;
+      var tempUserList = <UserData>[];
+      for (var uid in trip.value.listIdMember!) {
+        DocumentSnapshot userSnapshot = await _users.doc(uid).get();
+        if (!userSnapshot.exists) {
+          continue;
+        }
+
+        DocumentSnapshot<Map<String, dynamic>>? userMap =
+        userSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+        if (userMap == null || userMap.data() == null) return;
+
+        var user = UserData.fromJson((userMap).data()!);
+        tempUserList.add(user);
+        log("_getUserParticipated success: ${user.toString()}");
+      }
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      listMember.value = tempUserList;
+    } catch (e) {
+      setAppLoading(false, "Loading", TypeApp.loadingData);
+      log("_getUserParticipated get user info fail: $e");
+    }
+  }
+
+  int hasContainUserInListMember(UserData userData) {
+    for (int i = 0; i < listMember.length; i++) {
+      if (userData.uid == listMember[i].uid) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   // DateTime getDateTimeEnd() {
@@ -110,6 +160,7 @@ class CreateSuccessController extends BaseController {
       documentRef.update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
         Dog.d("outTrip success");
         setAppLoading(false, "Loading", TypeApp.loadingData);
+        postFCM("${currentUserData.value.name} ${StringConstants.informOutRouter}");
       }).catchError((error) {
         setAppLoading(false, "Loading", TypeApp.loadingData);
         Dog.e("outTrip error: $error");
@@ -117,6 +168,45 @@ class CreateSuccessController extends BaseController {
     } catch (e) {
       setAppLoading(false, "Loading", TypeApp.loadingData);
       Dog.e("outTrip error: $e");
+    }
+  }
+
+  Future<void> postFCM(String body,) async {
+    FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
+      apiKey: Constants.apiKey,
+      enableLog: true,
+      enableServerRespondLog: true,
+    );
+    try {
+      var listFcmToken = <String>[];
+      for (var element in listMember) {
+        var fcmToken = element.fcmToken;
+        debugPrint("***fcmToken $fcmToken");
+        if (fcmToken != null && fcmToken.isNotEmpty && fcmToken != currentUserData.value.fcmToken) {
+            listFcmToken.add(fcmToken);
+        }
+      }
+      debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
+
+      NotificationData notificationData = NotificationData(
+          trip.value.id,
+          currentUserData.value.uid,
+          NotificationData.TYPE_EXIT_ROUTER,
+          TimeUtils.dateTimeToString1(DateTime.now())
+      );
+
+      Map<String, dynamic> result =
+      await flutterFCMWrapper.sendMessageByTokenID(
+        userRegistrationTokens: listFcmToken,
+        title: "Thông báo",
+        body: body,
+        data: notificationData.toJson(),
+        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      );
+      debugPrint("FCM sendTopicMessage fcmToken result $result");
+    } catch (e) {
+      debugPrint("FCM sendTopicMessage fcmToken $e");
     }
   }
 }
