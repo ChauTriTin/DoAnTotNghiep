@@ -7,7 +7,6 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
@@ -19,10 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../chat/detail/page_detail_chat_screen.dart';
+import 'marker_icon.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -260,23 +259,36 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         String markerId,
         LatLng position,
       ) async {
-        var request = await http.get(Uri.parse(avt));
-        var bytes = request.bodyBytes;
-        LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
-        var b = await getBytesFromCanvas(90, 90, bytes.buffer.asUint8List());
-        if (b == null) {
-          return Marker(
-            // markerId: MarkerId(lastMapPositionPoints.toString()),
-            markerId: MarkerId(markerId),
-            position: lastMapPositionPoints,
-          );
-        }
         return Marker(
-          icon: BitmapDescriptor.fromBytes(b),
+          icon: await MarkerIcon.downloadResizePictureCircle(
+            avt,
+            size: 100,
+            addBorder: true,
+            borderColor: ColorConstants.appColor,
+            borderSize: 5,
+          ),
           markerId: MarkerId(markerId),
           // markerId: MarkerId(lastMapPositionPoints.toString()),
           position: position,
         );
+
+        // var request = await http.get(Uri.parse(avt));
+        // var bytes = request.bodyBytes;
+        // LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
+        // var b = await getBytesFromCanvas(90, 90, bytes.buffer.asUint8List());
+        // if (b == null) {
+        //   return Marker(
+        //     // markerId: MarkerId(lastMapPositionPoints.toString()),
+        //     markerId: MarkerId(markerId),
+        //     position: lastMapPositionPoints,
+        //   );
+        // }
+        // return Marker(
+        //   icon: BitmapDescriptor.fromBytes(b),
+        //   markerId: MarkerId(markerId),
+        //   // markerId: MarkerId(lastMapPositionPoints.toString()),
+        //   position: position,
+        // );
       }
 
       var listMember = _controller.listMember;
@@ -386,7 +398,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   }
 
   void _moveCamera(LatLng latLng) {
-    //TODO revert
     mapController?.animateCamera(CameraUpdate.newLatLngZoom(latLng, zoomLevel));
   }
 

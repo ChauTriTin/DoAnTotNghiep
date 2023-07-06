@@ -72,6 +72,7 @@ dependencies:
   intl: any
   fluttertoast: ^8.2.2
   easy_debounce: ^2.0.3
+#  custom_marker: ^1.0.0
 
 #  google_fonts: ^2.3.3
 #    path: "goo gle_fonts/"
