@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
+import 'package:appdiphuot/util/add_noti_helper.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/theme_util.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 import 'package:overlay_support/overlay_support.dart';
 
 import 'model/push_notification.dart';
-import 'notification_controller.dart';
 import 'ui/splash/page_splash_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -46,7 +46,6 @@ void main() async {
 
 
   Get.put(UserSingletonController.instance);
-  Get.put(NotificationController.instance);
 
   Messaging.initFCM();
   getLoc();
@@ -117,7 +116,6 @@ class Messaging {
       data: data,
     );
 
-    NotificationController.instance.addNotification(notification);
     Get.dialog(
       AlertDialog(
         title: Text(notification.title ?? ""),

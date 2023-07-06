@@ -14,7 +14,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../common/const/constants.dart';
 import '../../../../model/notification_data.dart';
+import '../../../../model/push_notification.dart';
 import '../../../../model/user.dart';
+import '../../../../util/add_noti_helper.dart';
 import '../../../../util/time_utils.dart';
 
 class CreateSuccessController extends BaseController {
@@ -179,11 +181,15 @@ class CreateSuccessController extends BaseController {
     );
     try {
       var listFcmToken = <String>[];
+      var memberIdsSendNoti = <String>[];
       for (var element in listMember) {
         var fcmToken = element.fcmToken;
         debugPrint("***fcmToken $fcmToken");
         if (fcmToken != null && fcmToken.isNotEmpty && fcmToken != currentUserData.value.fcmToken) {
             listFcmToken.add(fcmToken);
+            if (element.uid != null && element.uid!.isNotEmpty) {
+              memberIdsSendNoti.add(element.uid!);
+            }
         }
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
@@ -195,10 +201,23 @@ class CreateSuccessController extends BaseController {
           DateTime.now().millisecondsSinceEpoch.toString()
       );
 
+      var title = "${currentUserData.value.name} đã rời khỏi chuyến đi '${trip.value.title}'";
+      PushNotification notification = PushNotification(
+        title: title,
+        body: body,
+        dataTitle: null,
+        dataBody: body,
+        data: notificationData.toJson(),
+      );
+
+      for (var element in memberIdsSendNoti) {
+        AddNotificationHelper.addNotification(notification, element);
+      }
+
       Map<String, dynamic> result =
       await flutterFCMWrapper.sendMessageByTokenID(
         userRegistrationTokens: listFcmToken,
-        title: "Thông báo",
+        title: title,
         body: body,
         data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),

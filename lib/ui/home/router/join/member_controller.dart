@@ -12,7 +12,9 @@ import 'package:get/get.dart';
 import '../../../../common/const/constants.dart';
 import '../../../../common/const/string_constants.dart';
 import '../../../../model/notification_data.dart';
+import '../../../../model/push_notification.dart';
 import '../../../../model/trip.dart';
+import '../../../../util/add_noti_helper.dart';
 import '../../../../util/log_dog_utils.dart';
 import '../../../../util/time_utils.dart';
 
@@ -80,7 +82,7 @@ class MemberController extends BaseController {
         },
       ).then((value) {
         Dog.d("removeMember success");
-        postFCMBlockUser(user);
+        postFCMBlockUser(user, isBlock);
         setAppLoading(false, "Loading", TypeApp.loadingData);
       }).catchError((error) {
         setAppLoading(false, "Loading", TypeApp.loadingData);
@@ -122,7 +124,7 @@ class MemberController extends BaseController {
     }
   }
 
-  Future<void> postFCMBlockUser(UserData userBlock) async {
+  Future<void> postFCMBlockUser(UserData userBlock, bool isBlock) async {
     FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
       apiKey: Constants.apiKey,
       enableLog: true,
@@ -130,46 +132,57 @@ class MemberController extends BaseController {
     );
     try {
       var listFcmToken = <String>[];
-      var listCurUserBlockFcmToken = <String>[];
-
+      var memberIdsSendNoti = <String>[];
       for (var element in members) {
         var fcmToken = element.fcmToken;
-        if (fcmToken != null && fcmToken.isNotEmpty && fcmToken != currentUserUser.value.fcmToken) {
+        if (fcmToken != null &&
+            fcmToken.isNotEmpty &&
+            fcmToken != currentUserUser.value.fcmToken) {
           if (fcmToken == userBlock.fcmToken) {
-            listCurUserBlockFcmToken.add(fcmToken);
-          } else {
             listFcmToken.add(fcmToken);
+            if (element.uid != null && element.uid!.isNotEmpty) {
+              memberIdsSendNoti.add(element.uid!);
+            }
           }
         }
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
 
-      var title = StringConstants.titleRemoveNotification;
-      String body = "Trưởng nhóm vừa mời ${userBlock.name} ra khỏi nhóm.";
-      String userBlockBody = "Trưởng nhóm vừa mời bạn ra khỏi nhóm.";
+      var title = "";
+      String body = "";
+      if (isBlock) {
+        body = "${currentUserUser.value.name} đã bị kick khỏi chuyến đi";
+        title =
+            "${currentUserUser.value.name} vừa kick ${userBlock.name} ra khỏi chuyến đi ${tripData.value.title}";
+      } else {
+        body = "${currentUserUser.value.name} đã rời khỏi chuyến đi";
+        title =
+            "${currentUserUser.value.name} đã rời khỏi chuyến đi '${tripData.value.title}'";
+      }
 
       NotificationData notificationData = NotificationData(
           tripData.value.id,
           currentUserUser.value.uid,
           NotificationData.TYPE_REMOVE,
-          DateTime.now().millisecondsSinceEpoch.toString()
+          DateTime.now().millisecondsSinceEpoch.toString());
+
+      PushNotification notification = PushNotification(
+        title: title,
+        body: body,
+        dataTitle: null,
+        dataBody: body,
+        data: notificationData.toJson(),
       );
 
+      for (var element in memberIdsSendNoti) {
+        AddNotificationHelper.addNotification(notification, element);
+      }
+
       Map<String, dynamic> result =
-      await flutterFCMWrapper.sendMessageByTokenID(
+          await flutterFCMWrapper.sendMessageByTokenID(
         userRegistrationTokens: listFcmToken,
         title: title,
         body: body,
-        data: notificationData.toJson(),
-        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
-        clickAction: "FLUTTER_NOTIFICATION_CLICK",
-      );
-
-      Map<String, dynamic> result1 =
-      await flutterFCMWrapper.sendMessageByTokenID(
-        userRegistrationTokens: listCurUserBlockFcmToken,
-        title: title,
-        body: userBlockBody,
         data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",

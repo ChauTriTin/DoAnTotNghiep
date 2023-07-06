@@ -101,6 +101,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
     }
 
     String titleTrip = data.tripDetail?.title ?? "";
+    Dog.d("titleTripOfNoti: $titleTrip");
 
     return InkWell(
       onTap: () {
@@ -145,9 +146,17 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
+                Text(
+                  "👤 ${data.userData?.name}",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 RichText(
                     text: TextSpan(
-                        text: "Chuyến đi: ",
+                        text: "📍 Chuyến đi: ",
                         style: const TextStyle(
                             color: ColorConstants.colorTitleTrip,
                             fontSize: 14,
@@ -194,8 +203,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
 
     if (notificationData?.isTypeMap() == true) {
       Get.to(() => MapScreen(id: data.tripDetail?.id ?? ""));
-    } else if (notificationData?.isTypeMessage() == true ||
-        notificationData?.isTypeRemove() == true) {
+    } else if (notificationData?.isTypeMessage() == true) {
       Get.to(() => const PageDetailChatScreen(), arguments: [
         {Constants.detailChat: jsonEncode(data.tripDetail)},
       ]);
@@ -206,7 +214,8 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
         {Constants.detailTrip: jsonEncode(data.tripDetail)},
       ]);
     } else if (notificationData?.isTypeExitRouter() == true ||
-        notificationData?.isTypeJoinRouter() == true) {
+        notificationData?.isTypeJoinRouter() == true ||
+        notificationData?.isTypeRemove() == true) {
       Get.to(() => JoinedManagerScreen(tripdata: data.tripDetail!));
     }
   }
