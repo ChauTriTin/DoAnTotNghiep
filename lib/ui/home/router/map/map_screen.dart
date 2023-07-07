@@ -214,7 +214,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           createLocalImageConfiguration(context, size: const Size.square(55.0));
       var bitmap = await BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        'assets/images/ic_marker_start.png',
+        'assets/images/ic_marker_end.png',
       );
       return Marker(
         markerId: MarkerId(_controller.idMarkerEnd),
@@ -230,7 +230,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             size: const Size.square(55.0));
         var bitmap = await BitmapDescriptor.fromAssetImage(
           imageConfiguration,
-          'assets/images/ic_marker_start.png',
+          'assets/images/ic_marker_stop.png',
         );
         return Marker(
           markerId: MarkerId(markerId),
