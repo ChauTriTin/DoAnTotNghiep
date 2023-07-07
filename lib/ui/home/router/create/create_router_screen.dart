@@ -151,7 +151,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       backgroundColor: ColorConstants.appColorBkg,
       body: FocusDetector(
         child: Container(
-          color: ColorConstants.appColorBkg,
+          color: ColorConstants.colorWhite,
           child: Column(
             children: [
               Expanded(child: Obx(() {
@@ -211,7 +211,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'Tiêu đề chuyến đi của bạn'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -237,7 +238,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             filled: true,
             contentPadding:
                 const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            fillColor: Colors.white,
+            fillColor: Colors.black12,
           ),
         ),
         const Divider(),
@@ -245,7 +246,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'Mô tả chuyến đi'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -273,7 +275,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             filled: true,
             contentPadding:
                 const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            fillColor: Colors.white,
+            fillColor: Colors.black12,
           ),
         ),
         const Divider(),
@@ -281,7 +283,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'HÌNH ẢNH'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -351,7 +354,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'Địa điểm bắt đầu'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -364,7 +368,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   width: 0.5,
                   color: Colors.black,
                 ),
-                color: Colors.white,
+                color: Colors.black12,
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
@@ -390,7 +394,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'Địa điểm kết THúc'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -403,7 +408,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   width: 0.5,
                   color: Colors.black,
                 ),
-                color: Colors.white,
+                color: Colors.black12,
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
@@ -432,7 +437,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
               child: Text(
                 'nơi dừng chân'.toUpperCase(),
                 style: const TextStyle(
-                  color: Colors.grey,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+
                   fontSize: DimenConstants.txtMedium,
                 ),
               ),
@@ -455,7 +462,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'thời gian khởi hành'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -468,7 +476,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   width: 0.5,
                   color: Colors.black,
                 ),
-                color: Colors.white,
+                color: Colors.black12,
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
@@ -488,7 +496,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'thời gian NGỪng đăng ký'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -501,7 +510,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                   width: 0.5,
                   color: Colors.black,
                 ),
-                color: Colors.white,
+                color: Colors.black12,
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
@@ -521,7 +530,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Text(
           'Yêu cầu với người tham gia'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
@@ -549,14 +559,15 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             filled: true,
             contentPadding:
                 const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            fillColor: Colors.white,
+            fillColor: Colors.black12,
           ),
         ),
         const Divider(),
         Text(
           'TRẠNG THÁI CHUYẾN ĐI'.toUpperCase(),
           style: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
             fontSize: DimenConstants.txtMedium,
           ),
         ),
