@@ -62,7 +62,7 @@ class MapController extends BaseController {
 
         //send notify rate for all user
         postFCM("Chuyến đi đã kết thúc, mời bạn đánh giá!",
-            NotificationData.TYPE_RATE);
+            NotificationData.TYPE_RATE_TRIP);
       }).catchError((error) {
         Dog.e("completeTrip error: $error");
       });
