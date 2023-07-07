@@ -492,7 +492,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                                 const EdgeInsets.symmetric(horizontal: 1.0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
-                              color: Colors.yellow,
+                              color: Colors.orange,
                             ),
                             onRatingUpdate: (rating) {},
                           ),
@@ -1193,7 +1193,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1260,7 +1260,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1327,7 +1327,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1377,7 +1377,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1481,7 +1481,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                     itemBuilder: (context, _) => const Icon(
                       Icons.star,
-                      color: Colors.yellow,
+                      color: Colors.orange,
                     ),
                     ignoreGestures: true,
                     onRatingUpdate: (double value) {},
