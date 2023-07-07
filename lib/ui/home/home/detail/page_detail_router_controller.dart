@@ -16,6 +16,7 @@ import '../../../../model/push_notification.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
 import '../../../../util/add_noti_helper.dart';
+import '../../../../util/shared_preferences_util.dart';
 import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
@@ -39,6 +40,8 @@ class DetailRouterController extends BaseController {
   var isTripDeleted = false.obs;
 
   var listMember = <UserData>[].obs;
+
+  var tripsInProgress = <Trip>[].obs;
 
   bool isUserHost() {
     return detailTrip.value.userIdHost == userData.value.uid;
@@ -379,6 +382,43 @@ class DetailRouterController extends BaseController {
     } catch (e) {
       setAppLoading(false, "Loading", TypeApp.loadingData);
       Dog.e("outTrip error: $e");
+    }
+  }
+
+  Future<void> getTripInProgress() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      log("getTripInProgress: userid $uid");
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
+          .where(FirebaseHelper.isComplete, isEqualTo: false)
+          .orderBy("id", descending: true)
+          .snapshots();
+
+      var routerSnapshots =
+      routerStream.map((querySnapshot) => querySnapshot.docs);
+
+      routerSnapshots.listen((routerSnapshots) {
+        var tempTrips = <Trip>[];
+
+        for (var routerSnapshot in routerSnapshots) {
+          log("getTripInProgress: $routerSnapshot");
+
+          DocumentSnapshot<Map<String, dynamic>>? tripMap =
+          routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (tripMap == null || tripMap.data() == null) return;
+
+          var trip = Trip.fromJson((tripMap).data()!);
+          if(trip.isComplete == false){
+            tempTrips.add(trip);
+          }
+        }
+
+        tripsInProgress.value = tempTrips;
+      });
+    } catch (e) {
+      log("getTripInProgress: $e");
     }
   }
 }

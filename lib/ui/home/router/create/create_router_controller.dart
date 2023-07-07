@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 
 import '../../../../common/const/color_constants.dart';
+import '../../../../util/shared_preferences_util.dart';
 import '../../../user_singleton_controller.dart';
 
 class CreateRouterController extends BaseController {
@@ -42,6 +43,8 @@ class CreateRouterController extends BaseController {
 
   var isEditRouterMode = false.obs;
   var trip = Trip().obs;
+
+  var tripsInProgress = <Trip>[].obs;
 
   void clearOnDispose() {
     controllerImagePicker.dispose();
@@ -398,6 +401,43 @@ class CreateRouterController extends BaseController {
       });
     } catch (e) {
       debugPrint("editRouter getRouter get user info fail: $e");
+    }
+  }
+
+  Future<void> getTripInProgress() async {
+    try {
+      String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
+      Dog.d("getTripInProgress: userid $uid");
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
+          .where(FirebaseHelper.isComplete, isEqualTo: false)
+          .orderBy("id", descending: true)
+          .snapshots();
+
+      var routerSnapshots =
+      routerStream.map((querySnapshot) => querySnapshot.docs);
+
+      routerSnapshots.listen((routerSnapshots) {
+        var tempTrips = <Trip>[];
+
+        for (var routerSnapshot in routerSnapshots) {
+          Dog.d("getTripInProgress: $routerSnapshot");
+
+          DocumentSnapshot<Map<String, dynamic>>? tripMap =
+          routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+
+          if (tripMap == null || tripMap.data() == null) return;
+
+          var trip = Trip.fromJson((tripMap).data()!);
+          if(trip.isComplete == false){
+            tempTrips.add(trip);
+          }
+        }
+
+        tripsInProgress.value = tempTrips;
+      });
+    } catch (e) {
+      Dog.e("getTripInProgress: $e");
     }
   }
 }

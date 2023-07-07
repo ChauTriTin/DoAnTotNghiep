@@ -16,6 +16,7 @@ import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
+import '../../../../util/log_dog_utils.dart';
 import '../../../user_singleton_controller.dart';
 import '../../setting/setting_screen.dart';
 import '../create_success/enum_router.dart';
@@ -58,7 +59,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   void initState() {
     super.initState();
     _setupListen();
-
+    _controller.getTripInProgress();
     //setup default value
     if (widget.dfEditRouterWithTripId == null ||
         widget.dfEditRouterWithTripId?.isEmpty == true) {
@@ -100,17 +101,17 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         Get.back();
 
         RouterState state;
-        if(widget.dfEditRouterWithTripId != null) {
+        if (widget.dfEditRouterWithTripId != null) {
           state = RouterState.editSuccess;
-          showSnackBarFull(StringConstants.warning, "Chỉnh sửa chuyến đi thành công");
+          showSnackBarFull(
+              StringConstants.warning, "Chỉnh sửa chuyến đi thành công");
         } else {
           state = RouterState.createSuccess;
           showSnackBarFull(StringConstants.warning, "Tạo chuyến đi thành công");
         }
 
         Get.to(
-          CreateSuccessScreen(
-              id: _controller.id.value, state: state
+          CreateSuccessScreen(id: _controller.id.value, state: state
               // dateTimeEnd: _controller.dateTimeEnd.value,
               // placeStart: _controller.placeStart.value,
               // placeEnd: _controller.placeEnd.value,
@@ -181,21 +182,22 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         0,
       ),
       children: [
-        const SizedBox(height: 12,),
+        const SizedBox(
+          height: 12,
+        ),
         InkWell(
           onTap: _controller.copyRouterId,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                  'Mã: ${_controller.id.value}',
-                  style: const TextStyle(
-                    fontSize: DimenConstants.txtMedium,
-                    color: ColorConstants.appColor,
-                  ),
-                  textAlign: TextAlign.end,
+                'Mã: ${_controller.id.value}',
+                style: const TextStyle(
+                  fontSize: DimenConstants.txtMedium,
+                  color: ColorConstants.appColor,
                 ),
-
+                textAlign: TextAlign.end,
+              ),
               const SizedBox(width: DimenConstants.marginPaddingSmall),
               const Icon(
                 Icons.content_copy,
@@ -585,8 +587,13 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             dismissible: false,
             backgroundColor: Colors.red.withOpacity(0.25),
             action: () {
-              FocusScope.of(context).unfocus();
-              _controller.createRouter();
+              if(isCanJoin()) {
+                FocusScope.of(context).unfocus();
+                _controller.createRouter();
+              }else{
+                showErrorDialog("Không thể tham gia",
+                    "Bạn có chuyến đi bắt đầu vào ngày này", "OK", () {});
+              }
             },
             label: Text(
               _controller.getTextMode(),
@@ -750,5 +757,24 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       },
     );
     _controller.setDateTimeEnd(dateTime);
+  }
+
+  bool isCanJoin() {
+    var listJoined = _controller.tripsInProgress.value;
+    Dog.d("tripsInProgress: ${listJoined.length}");
+    if (listJoined.isNotEmpty) {
+      var currentTrip = listJoined[0];
+      List<String> timeCurrent = currentTrip.timeStart!.split(" ");
+      List<String> timeDetail =
+          TimeUtils.convert(_controller.dateTimeStart.value).split(" ");
+      Dog.d("timeCurrent: ${timeCurrent[0]} -- timeDetail: ${timeDetail[0]}");
+      if (timeCurrent[0] == timeDetail[0]) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
   }
 }
