@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:appdiphuot/base/base_controller.dart';
@@ -109,7 +108,7 @@ class PageDetailChatController extends BaseController {
     Dog.d("_fetchMessages: tripID: ${tripId.toString()}");
 
     var chatStream =
-        _chat.doc(tripId).collection(FirebaseHelper.messages).snapshots();
+        _chat.doc(tripId).collection(FirebaseHelper.messages).orderBy("createdAt", descending: true).snapshots();
 
     var chatSnapshots = chatStream.map((querySnapshot) => querySnapshot.docs);
 
@@ -124,7 +123,7 @@ class PageDetailChatController extends BaseController {
         if (message.data() == null) return;
 
         var trip = Message.fromJson((message).data()!);
-        tempMessages.insert(0, trip);
+        tempMessages.add(trip);
       }
 
       messages.value = tempMessages;
