@@ -27,10 +27,10 @@ class PageChatController extends BaseController {
       String uid = await SharedPreferencesUtil.getUIDLogin() ?? "";
       Dog.d("getTrip: userid $uid");
 
-      var routerStream = FirebaseHelper.collectionReferenceRouter.where(
-        FirebaseHelper.listIdMember,
-        arrayContainsAny: [uid]
-      ).snapshots();
+      var routerStream = FirebaseHelper.collectionReferenceRouter
+          .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
+          .orderBy("id", descending: true)
+          .snapshots();
 
       var routerSnapshots = routerStream.map((querySnapshot) => querySnapshot.docs);
 
@@ -44,7 +44,7 @@ class PageChatController extends BaseController {
           if (tripMap == null || tripMap.data() == null) return;
 
           var trip = Trip.fromJson(tripMap.data()!);
-          tempTrips.insert(0, trip);
+          tempTrips.add(trip);
         }
 
         trips.value = tempTrips;
