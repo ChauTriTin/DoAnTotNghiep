@@ -37,22 +37,16 @@ class TimeUtils {
     }
   }
 
-
-  static String dateTimeToString1(DateTime? dateTime) {
-    try {
-      if (dateTime == null || dateTime == DateTime(1111, 1, 11)) {
-        return "";
-      }
-      return formatDate(dateTime, [dd, '/', mm, '/', yyyy, " ", hh, ":", mm]);
-    } catch (e) {
-      return "";
-    }
-  }
-
-
   static String formatDateTimeFromMilliseconds(int milliseconds) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     DateFormat dateFormat = DateFormat('HH:mm dd/MM/yyyy');
+    return dateFormat.format(dateTime);
+  }
+
+
+  static String formatDateTimeFromMilliseconds1(int milliseconds) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+    DateFormat dateFormat = DateFormat('HH:mm:ss dd/MM/yyyy');
     return dateFormat.format(dateTime);
   }
 }

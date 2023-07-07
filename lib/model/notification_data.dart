@@ -29,5 +29,34 @@ class NotificationData {
   static const String TYPE_REMOVE = "4";
   static const String TYPE_EXIT_ROUTER = "5";
   static const String TYPE_JOIN_ROUTER = "6";
+  static const String TYPE_DELETE_ROUTER = "7";
   static const String TYPE_RATE = "7";
+
+  bool isTypeMap() {
+    return notificationType == TYPE_MAP;
+  }
+
+  bool isTypeMessage() {
+    return notificationType == TYPE_MESSAGE;
+  }
+
+  bool isTypeComment() {
+    return notificationType == TYPE_COMMENT;
+  }
+
+  bool isTypeRemove() {
+    return notificationType == TYPE_REMOVE;
+  }
+
+  bool isTypeExitRouter() {
+    return notificationType == TYPE_EXIT_ROUTER;
+  }
+
+  bool isTypeJoinRouter() {
+    return notificationType == TYPE_JOIN_ROUTER;
+  }
+
+  bool isRouterDeleted() {
+    return notificationType == TYPE_DELETE_ROUTER;
+  }
 }

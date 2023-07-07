@@ -439,20 +439,38 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 24, right: 24),
+                      margin: const EdgeInsets.only(left: 22, right: 22),
                       child: Row(
                         children: [
                           const Icon(
-                            Icons.star,
-                            color: Colors.yellow,
+                            Icons.bluetooth_drive_outlined,
+                            color: Colors.redAccent,
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 12),
-                            child: Text(
-                              "Leader: ${_controller.userLeaderData.value.name}",
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 12),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                      text: 'Leader',
+                                      style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          decoration:
+                                          TextDecoration.none), // Màu chữ đỏ
+                                    ),
+                                    TextSpan(
+                                        text: ': ${_controller.userLeaderData.value.name}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            decoration: TextDecoration.none)),
+                                  ],
+                                ),
+                              ),
                             ),
                           )
                         ],
@@ -474,7 +492,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                                 const EdgeInsets.symmetric(horizontal: 1.0),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
-                              color: Colors.red,
+                              color: Colors.orange,
                             ),
                             onRatingUpdate: (rating) {},
                           ),
@@ -497,12 +515,12 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                 ),
               ),
               Container(
+                  width: 50,
+                  height: 50,
                   margin: const EdgeInsets.only(right: 24),
-                  child: Center(
-                      child: Image.network(
+                  child: CircleAvatar(
+                      backgroundImage: NetworkImage(
                     _controller.getLeaderAvatar(),
-                    height: 50,
-                    width: 50,
                   ))),
             ],
           ),
@@ -593,7 +611,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     'Item 5',
   ];
 
-  Widget getOtherList(RxList<Trip> trips) {
+  Widget getOtherList(List<Trip> trips) {
     if (_controller.listTrips.isEmpty) {
       return Container(
         margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
@@ -1023,7 +1041,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         )));
     list.add(const SizedBox(height: DimenConstants.marginPaddingMedium));
-    list.add(getOtherList(_controller.listTrips));
+    var listNotCompleted = _controller.listTrips.where((p0) => p0.isComplete == false).toList();
+    list.add(getOtherList(listNotCompleted));
     return list;
   }
 
@@ -1175,7 +1194,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1242,7 +1261,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1309,7 +1328,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1359,7 +1378,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                               const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: Colors.yellow,
+                            color: Colors.orange,
                           ),
                           ignoreGestures: true,
                           onRatingUpdate: (double value) {},
@@ -1445,9 +1464,28 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               flex: 2,
               child: Container(
                 margin: const EdgeInsets.only(right: 8),
-                child: Text(element.name ?? "",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 16)),
+                child:RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      const TextSpan(
+                        text: "Điểm dừng chân",
+                        style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            decoration:
+                            TextDecoration.none), // Màu chữ đỏ
+                      ),
+                      TextSpan(
+                          text: ': ${element.name}}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Colors.black,
+                              decoration: TextDecoration.none)),
+                    ],
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -1463,7 +1501,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                     itemBuilder: (context, _) => const Icon(
                       Icons.star,
-                      color: Colors.yellow,
+                      color: Colors.orange,
                     ),
                     ignoreGestures: true,
                     onRatingUpdate: (double value) {},

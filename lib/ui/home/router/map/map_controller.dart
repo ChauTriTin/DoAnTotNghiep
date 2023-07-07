@@ -20,6 +20,8 @@ import 'package:google_maps_directions/google_maps_directions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../model/notification_data.dart';
+import '../../../../model/push_notification.dart';
+import '../../../../util/add_noti_helper.dart';
 import '../../../../util/time_utils.dart';
 import '../../../user_singleton_controller.dart';
 
@@ -314,6 +316,7 @@ class MapController extends BaseController {
     );
     try {
       var listFcmToken = <String>[];
+      var memberIdsSendNoti = <String>[];
       // if (kDebugMode) {
       //   listFcmToken.add(
       //       "eBA8en3rQlmJS4Ee3JojTp:APA91bGel4ViClD5zq9Sbhosv-Pl4LCZ53jvITofajhzx7efsMpXs-Xi_1SVKP61LtYr2jqK1s9cCxZWdw32C8GQme0P-Ed9ga_khgTtM2UrpKGhc8WF6j3SUigUWpw86hN20fuYrgxh");
@@ -328,6 +331,9 @@ class MapController extends BaseController {
         } else {
           if (fcmToken != null && fcmToken.isNotEmpty) {
             listFcmToken.add(fcmToken);
+            if (element.uid != null && element.uid!.isNotEmpty) {
+              memberIdsSendNoti.add(element.uid!);
+            }
           }
         }
       }
@@ -337,12 +343,25 @@ class MapController extends BaseController {
           trip.value.id,
           currentUserData.value.uid,
           type,
-          TimeUtils.dateTimeToString1(DateTime.now()));
+          DateTime.now().millisecondsSinceEpoch.toString());
+
+      var title = "Thông báo khẩn cấp từ ${getCurrentUserName()}";
+      PushNotification notification = PushNotification(
+        title: title,
+        body: body,
+        dataTitle: null,
+        dataBody: body,
+        data: notificationData.toJson(),
+      );
+
+      for (var element in memberIdsSendNoti) {
+        AddNotificationHelper.addNotification(notification, element);
+      }
 
       Map<String, dynamic> result =
           await flutterFCMWrapper.sendMessageByTokenID(
         userRegistrationTokens: listFcmToken,
-        title: "Thông báo khẩn cấp từ ${getCurrentUserName()}",
+        title: title,
         body: body,
         data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),

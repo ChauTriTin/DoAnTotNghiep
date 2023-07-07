@@ -104,4 +104,8 @@ class UserSingletonController extends GetxController {
   String getEmail() {
     return userData.value.email ?? "";
   }
+
+  String getFCMToken() {
+    return userData.value.fcmToken ?? "";
+  }
 }

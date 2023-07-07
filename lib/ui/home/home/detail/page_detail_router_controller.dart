@@ -12,13 +12,16 @@ import 'package:get/get.dart';
 
 import '../../../../common/const/string_constants.dart';
 import '../../../../model/notification_data.dart';
+import '../../../../model/push_notification.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
+import '../../../../util/add_noti_helper.dart';
 import '../../../../util/time_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
-  final CollectionReference _users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
   final routerCollection = FirebaseHelper.collectionReferenceRouter;
   final chatCollection = FirebaseHelper.collectionReferenceChat;
   var db = FirebaseFirestore.instance;
@@ -48,7 +51,8 @@ class DetailRouterController extends BaseController {
 
   bool isUserBlocked() {
     Dog.d("isUserBlocked");
-    return detailTrip.value.listIdMemberBlocked?.contains(userData.value.uid) ?? false;
+    return detailTrip.value.listIdMemberBlocked?.contains(userData.value.uid) ??
+        false;
   }
 
   bool isJoinedCurrentTrip() {
@@ -147,7 +151,7 @@ class DetailRouterController extends BaseController {
         }
 
         DocumentSnapshot<Map<String, dynamic>>? userMap =
-        userSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+            userSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
         if (userMap == null || userMap.data() == null) return;
 
         var user = UserData.fromJson((userMap).data()!);
@@ -229,7 +233,8 @@ class DetailRouterController extends BaseController {
               .update({"listIdMember": listMember})
               .then((value) => {
                     isWidgetJoinedVisible.value = true,
-                    postFCM("${userData.value.name} vừa tham gia chuyến đi.", NotificationData.TYPE_JOIN_ROUTER),
+                    postFCM("${userData.value.name} vừa tham gia chuyến đi.",
+                        NotificationData.TYPE_JOIN_ROUTER),
                     Dog.d("joinedRouter success")
                   })
               .catchError((error) => {Dog.e("joinedRouter error: $error")});
@@ -248,10 +253,16 @@ class DetailRouterController extends BaseController {
     );
     try {
       var listFcmToken = <String>[];
+      var memberIdsSendNoti = <String>[];
       for (var element in listMember) {
         var fcmToken = element.fcmToken;
-        if (fcmToken != null && fcmToken.isNotEmpty && fcmToken != userData.value.fcmToken) {
+        if (fcmToken != null &&
+            fcmToken.isNotEmpty &&
+            fcmToken != userData.value.fcmToken) {
           listFcmToken.add(fcmToken);
+          if (element.uid != null && element.uid!.isNotEmpty) {
+            memberIdsSendNoti.add(element.uid!);
+          }
         }
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
@@ -259,13 +270,20 @@ class DetailRouterController extends BaseController {
       var title = "";
       switch (type) {
         case NotificationData.TYPE_JOIN_ROUTER:
-          title = StringConstants.titleJoinNotification;
+          title =
+              "${userData.value.name} đã tham gia chuyến đi '${detailTrip.value.title}'";
           break;
         case NotificationData.TYPE_COMMENT:
-          title = StringConstants.titleNewCommentNotification;
+          title =
+              "${userData.value.name} đã bình luận mới trong chuyến đi '${detailTrip.value.title}'";
           break;
         case NotificationData.TYPE_EXIT_ROUTER:
-          title = StringConstants.titleExitRouterNotification;
+          title =
+              "${userData.value.name} đã rời khỏi chuyến đi '${detailTrip.value.title}'";
+          break;
+          case NotificationData.TYPE_DELETE_ROUTER:
+          title =
+              "${detailTrip.value.title} đã bị ${userData.value.name} xóa";
           break;
       }
 
@@ -273,8 +291,19 @@ class DetailRouterController extends BaseController {
           detailTrip.value.id,
           userData.value.uid,
           type,
-          TimeUtils.dateTimeToString1(DateTime.now())
+          DateTime.now().millisecondsSinceEpoch.toString());
+
+      PushNotification notification = PushNotification(
+        title: title,
+        body: body,
+        dataTitle: null,
+        dataBody: body,
+        data: notificationData.toJson(),
       );
+
+      for (var element in memberIdsSendNoti) {
+        AddNotificationHelper.addNotification(notification, element);
+      }
 
       Map<String, dynamic> result =
           await flutterFCMWrapper.sendMessageByTokenID(
@@ -318,6 +347,7 @@ class DetailRouterController extends BaseController {
       await chatCollection.doc(tripID).delete();
 
       setAppLoading(false, "Loading", TypeApp.loadingData);
+      postFCM("${detailTrip.value.title} đã bị xóa", NotificationData.TYPE_DELETE_ROUTER);
       Get.back();
     } catch (e) {
       Dog.e("Delete router error: $e");
@@ -340,7 +370,8 @@ class DetailRouterController extends BaseController {
       documentRef
           .update({FirebaseHelper.listIdMember: listIdMember}).then((value) {
         Dog.d("outTrip success");
-        postFCM("${userData.value.name} ${StringConstants.informOutRouter}", NotificationData.TYPE_EXIT_ROUTER);
+        postFCM("${userData.value.name} ${StringConstants.informOutRouter}",
+            NotificationData.TYPE_EXIT_ROUTER);
         setAppLoading(false, "Loading", TypeApp.loadingData);
       }).catchError((error) {
         setAppLoading(false, "Loading", TypeApp.loadingData);
