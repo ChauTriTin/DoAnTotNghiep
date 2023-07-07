@@ -160,18 +160,17 @@ class MemberController extends BaseController {
             "${currentUserUser.value.name} đã rời khỏi chuyến đi '${tripData.value.title}'";
       }
 
-      NotificationData notificationData = NotificationData(
-          tripData.value.id,
-          currentUserUser.value.uid,
-          NotificationData.TYPE_REMOVE,
-          DateTime.now().millisecondsSinceEpoch.toString());
-
       PushNotification notification = PushNotification(
         title: title,
         body: body,
         dataTitle: null,
         dataBody: body,
-        data: notificationData.toJson(),
+        tripName: tripData.value.title,
+        tripID: tripData.value.id,
+        userName: currentUserUser.value.name,
+        userAvatar: currentUserUser.value.avatar,
+        notificationType: NotificationData.TYPE_REMOVE,
+        time: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
       for (var element in memberIdsSendNoti) {
@@ -183,7 +182,6 @@ class MemberController extends BaseController {
         userRegistrationTokens: listFcmToken,
         title: title,
         body: body,
-        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );

@@ -48,23 +48,8 @@ class PageNotiController extends BaseController {
           if (notification.data() == null) return;
 
           var notiData = PushNotification.fromJson((notification).data()!);
-
-          notiData.userData =
-              await getUserData(notiData.getNotificationData()?.userID);
-
-          notiData.tripDetail =
-              await getTripDetail(notiData.getNotificationData()?.tripID);
-
-          Dog.d("userdataNoti: ${notiData.userData}");
-          Dog.d("tripdataNoti: ${notiData.tripDetail}");
-
           tempNotifications.insert(0, notiData);
         }
-
-        tempNotifications.sort((a, b) => b
-            .getNotificationData()!
-            .time!
-            .compareTo(b.getNotificationData()!.time!));
         listNotification.value = tempNotifications;
       });
     } catch (e) {

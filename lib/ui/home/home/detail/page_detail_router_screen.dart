@@ -35,7 +35,9 @@ import '../../router/create_success/enum_router.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
 
 class DetailRouterScreen extends StatefulWidget {
-  const DetailRouterScreen({Key? key}) : super(key: key);
+  const DetailRouterScreen({Key? key, required this.tripId}) : super(key: key);
+
+  final String tripId;
 
   @override
   State<DetailRouterScreen> createState() => _DetailRouterScreenState();
@@ -53,18 +55,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
   @override
   void initState() {
     super.initState();
-    var data = Get.arguments[0][Constants.detailTrip];
-    try {
-      _controller.getDetailTrip(Trip.fromJson(jsonDecode(data)).id);
-    } catch (e) {
-      log("Get trip data ex: $e");
-    }
     _setupListen();
-    _controller.getAllRouter();
-    _controller.getUserInfo(Trip.fromJson(jsonDecode(data)).userIdHost ?? "");
-    _controller.getCommentRoute(Trip.fromJson(jsonDecode(data)).id);
+    var tripID = widget.tripId;
+    _controller.getData(tripID);
     _controller.getTripInProgress();
-
     Dog.d(
         "fcmToken detail: ${UserSingletonController.instance.userData.value.fcmToken}");
   }

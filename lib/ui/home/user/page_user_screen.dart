@@ -250,9 +250,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
   }
 
   void _onPressTripItem(Trip trip) {
-    Get.to(() => const DetailRouterScreen(), arguments: [
-      {Constants.detailTrip: jsonEncode(trip)},
-    ]);
+    Get.to(() => DetailRouterScreen(tripId: trip.id ?? "",));
   }
 
   Widget _buildTripInfo() {

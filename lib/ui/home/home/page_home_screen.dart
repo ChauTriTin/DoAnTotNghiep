@@ -538,9 +538,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => DetailRouterScreen(), arguments: [
-            {Constants.detailTrip: jsonEncode(trip)},
-          ]);
+          Get.to(() => DetailRouterScreen(tripId: trip.id ?? "",));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
