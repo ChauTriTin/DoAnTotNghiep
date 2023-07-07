@@ -7,6 +7,7 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/notification_data.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
@@ -214,7 +215,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
           createLocalImageConfiguration(context, size: const Size.square(55.0));
       var bitmap = await BitmapDescriptor.fromAssetImage(
         imageConfiguration,
-        'assets/images/ic_marker_start.png',
+        'assets/images/ic_marker_end.png',
       );
       return Marker(
         markerId: MarkerId(_controller.idMarkerEnd),
@@ -230,7 +231,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             size: const Size.square(55.0));
         var bitmap = await BitmapDescriptor.fromAssetImage(
           imageConfiguration,
-          'assets/images/ic_marker_start.png',
+          'assets/images/ic_marker_stop.png',
         );
         return Marker(
           markerId: MarkerId(markerId),
@@ -522,7 +523,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Xe tôi hư");
+                    _controller.postFCM("Xe tôi hư", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorConstants.appColor,
@@ -545,7 +546,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Tôi lạc đường");
+                    _controller.postFCM(
+                        "Tôi lạc đường", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
@@ -568,7 +570,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Tôi muốn dừng chân");
+                    _controller.postFCM(
+                        "Tôi muốn dừng chân", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -591,7 +594,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Tôi gặp trục trặc");
+                    _controller.postFCM(
+                        "Tôi gặp trục trặc", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.cyan,
@@ -614,7 +618,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Cần người giúp khẩn cấp");
+                    _controller.postFCM(
+                        "Cần người giúp khẩn cấp", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
@@ -666,7 +671,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Có cảnh sát");
+                    _controller.postFCM(
+                        "Có cảnh sát", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorConstants.appColor,
@@ -689,7 +695,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Đường xấu");
+                    _controller.postFCM("Đường xấu", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
@@ -712,7 +718,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Sắp có mưa");
+                    _controller.postFCM(
+                        "Sắp có mưa", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -735,7 +742,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Giữ khoảng cách");
+                    _controller.postFCM(
+                        "Giữ khoảng cách", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.cyan,
@@ -758,7 +766,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Dừng khẩn cấp");
+                    _controller.postFCM(
+                        "Dừng khẩn cấp", NotificationData.TYPE_MAP);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,

@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 
-import '../../../../util/log_dog_utils.dart';
 import '../../../../util/ui_utils.dart';
 import '../create/create_router_screen.dart';
 import '../join/joine_manager_screen.dart';
@@ -382,7 +381,9 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
                       showOutTripConfirmDialog();
                     }
                   },
-                  child: Icon(_controller.shouldShowEditButton.value ? Icons.edit : Icons.exit_to_app_rounded),
+                  child: Icon(_controller.shouldShowEditButton.value
+                      ? Icons.edit
+                      : Icons.exit_to_app_rounded),
                 ),
               ),
             );
