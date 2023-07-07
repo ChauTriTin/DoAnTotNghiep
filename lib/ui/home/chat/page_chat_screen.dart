@@ -117,7 +117,7 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
                 ),
               ),
               Expanded(
-                flex: 7,
+                flex: 1,
                 child: Text(
                   trip.title ?? "",
                   style: const TextStyle(
@@ -126,44 +126,44 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
                       fontWeight: FontWeight.w400),
                 ),
               ),
-              Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {
-                      Get.to(JoinedManagerScreen(tripdata: trip));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Icon(
-                          Icons.supervised_user_circle_rounded,
-                          size: 24,
-                          color: ColorConstants.appColor1,
-                        ),
-                        const SizedBox(
-                          width: 1,
-                        ),
-                        Text(
-                          "${trip.listIdMember?.length.toString()}",
-                          //   style: GoogleFonts.roboto(
-                          //   fontSize: 18.0,
-                          //   fontWeight: FontWeight.bold,
-                          //   // other properties...
-                          // ),
-                          // style: const TextStyle(
-                          //     color: Colors.black,
-                          //     fontFamily: 'cafe',
-                          //     fontSize: DimenConstants.txtMedium,
-                          //     fontWeight: FontWeight.w500),
-                        ),
-                      ],
+              InkWell(
+                onTap: () {
+                  Get.to(JoinedManagerScreen(tripdata: trip));
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Icon(
+                      Icons.supervised_user_circle_rounded,
+                      size: 24,
+                      color: ColorConstants.appColor1,
                     ),
-                  ))
+                    const SizedBox(
+                      width: 1,
+                    ),
+                    Text(
+                      "${trip.listIdMember?.length.toString()}",
+                      //   style: GoogleFonts.roboto(
+                      //   fontSize: 18.0,
+                      //   fontWeight: FontWeight.bold,
+                      //   // other properties...
+                      // ),
+                      // style: const TextStyle(
+                      //     color: Colors.black,
+                      //     fontFamily: 'cafe',
+                      //     fontSize: DimenConstants.txtMedium,
+                      //     fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
         onTap: () {
-          Get.to(() => PageDetailChatScreen(tripID: trip.id ?? "",));
+          Get.to(() => PageDetailChatScreen(
+                tripID: trip.id ?? "",
+              ));
         });
   }
 }
