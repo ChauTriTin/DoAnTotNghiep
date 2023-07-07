@@ -13,6 +13,7 @@ import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/push_notification.dart';
@@ -40,7 +41,13 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   }
 
   void _setupListen() {
-    _controller.appLoading.listen((appLoading) {});
+    _controller.appLoading.listen((appLoading) {
+      if (appLoading.isLoading) {
+        OverlayLoadingProgress.start(context, barrierDismissible: false);
+      } else {
+        OverlayLoadingProgress.stop();
+      }
+    });
     _controller.appError.listen((err) {
       showErrorDialog(StringConstants.errorMsg, err.messageError, "Retry", () {
         //do sth
@@ -93,20 +100,16 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   }
 
   Widget getItemNotification(PushNotification data) {
-    var notificationData = data.getNotificationData();
     String time = "";
-    if (notificationData?.time != null &&
-        notificationData?.time?.isEmpty == false) {
+    if (data.time != null &&
+        data.time?.isEmpty == false) {
       time = TimeUtils.formatDateTimeFromMilliseconds1(
-          int.parse(notificationData?.time ?? ""));
+          int.parse(data.time ?? ""));
     }
-
-    String titleTrip = data.tripDetail?.title ?? "";
-    Dog.d("titleTripOfNoti: $titleTrip");
 
     return InkWell(
       onTap: () {
-        _onItemNotiClick(data, notificationData);
+        _onItemNotiClick(data);
       },
       child: Card(
           shape: UIUtils.getCardCorner(),
@@ -135,7 +138,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                       width: 20,
                       height: 20,
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage(data.userData?.avatar ??
+                        backgroundImage: NetworkImage(data.userAvatar ??
                             StringConstants.avatarImgDefault),
                       ),
                     ),
@@ -143,7 +146,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        "${data.userData?.name}",
+                        "${data.userName}",
                         style: const TextStyle(
                           fontSize: 13,
                           color: Colors.black,
@@ -162,7 +165,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
                             fontWeight: FontWeight.w500),
                         children: [
                       TextSpan(
-                        text: titleTrip,
+                        text: data.tripName,
                         style: const TextStyle(
                             color: ColorConstants.textColor,
                             fontSize: 13,
@@ -192,34 +195,31 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
   }
 
   void _onItemNotiClick(
-      PushNotification data, NotificationData? notificationData) {
-    Dog.d("_onItemNotiClick: ${data.tripDetail.toString()}");
+      PushNotification data) {
+    Dog.d("_onItemNotiClick: ${data}");
+    var tripId = data.tripID;
 
-    if (notificationData?.isRouterDeleted() == true) return;
+    if (data.isRouterDeleted() == true) return;
 
-    if (data.tripDetail == null) {
+    if ( tripId== null|| tripId.isEmpty == true) {
       showNoTripFoundPopup();
       return;
     }
 
-    switch (notificationData?.notificationType) {
+    switch (data.notificationType) {
       case NotificationData.TYPE_MAP:
-        Get.to(() => MapScreen(id: data.tripDetail?.id ?? ""));
+        Get.to(() => MapScreen(id: tripId));
         break;
 
       case NotificationData.TYPE_MESSAGE:
-        Get.to(() => const PageDetailChatScreen(), arguments: [
-          {Constants.detailChat: jsonEncode(data.tripDetail)},
-        ]);
+        Get.to(() => PageDetailChatScreen(tripID: tripId));
         break;
 
       case NotificationData.TYPE_COMMENT:
       case NotificationData.TYPE_REMOVE:
       case NotificationData.TYPE_EXIT_ROUTER:
       case NotificationData.TYPE_JOIN_ROUTER:
-        Get.to(() => const DetailRouterScreen(), arguments: [
-          {Constants.detailTrip: jsonEncode(data.tripDetail)},
-        ]);
+        Get.to(() => DetailRouterScreen(tripId: tripId,));
         break;
     }
   }

@@ -356,9 +356,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              Get.to(() => const PageDetailChatScreen(), arguments: [
-                {Constants.detailChat: jsonEncode(_controller.trip.value)},
-              ]);
+              Get.to(() => PageDetailChatScreen(tripID: _controller.trip.value.id ?? ""));
             },
             child: const Icon(Icons.sms),
           ),

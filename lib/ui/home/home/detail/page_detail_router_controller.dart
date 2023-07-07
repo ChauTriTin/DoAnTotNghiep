@@ -48,6 +48,11 @@ class DetailRouterController extends BaseController {
     return detailTrip.value.isComplete ?? false;
   }
 
+  void getData(String tripId) {
+    getAllRouter();
+    getDetailTrip(tripId);
+  }
+
   bool isUserBlocked() {
     Dog.d("isUserBlocked");
     return detailTrip.value.listIdMemberBlocked?.contains(userData.value.uid) ??
@@ -119,6 +124,10 @@ class DetailRouterController extends BaseController {
 
         var trip = Trip.fromJson((tripMap).data()!);
         detailTrip.value = trip;
+
+
+        getUserInfo(trip.userIdHost ?? "");
+        getCommentRoute(trip.id);
 
         if (detailTrip.value.listIdMember?.contains(userData.value.uid) ==
             true) {
@@ -286,18 +295,17 @@ class DetailRouterController extends BaseController {
           break;
       }
 
-      NotificationData notificationData = NotificationData(
-          detailTrip.value.id,
-          userData.value.uid,
-          type,
-          DateTime.now().millisecondsSinceEpoch.toString());
-
       PushNotification notification = PushNotification(
         title: title,
         body: body,
         dataTitle: null,
         dataBody: body,
-        data: notificationData.toJson(),
+        tripName: detailTrip.value.title,
+        tripID: detailTrip.value.id,
+        userName: userData.value.name,
+        userAvatar: userData.value.avatar,
+        notificationType: type,
+        time: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
       for (var element in memberIdsSendNoti) {
@@ -309,7 +317,6 @@ class DetailRouterController extends BaseController {
         userRegistrationTokens: listFcmToken,
         title: title,
         body: body,
-        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );

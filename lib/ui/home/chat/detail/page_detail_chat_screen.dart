@@ -1,22 +1,17 @@
-import 'dart:convert';
-
 import 'package:appdiphuot/base/base_stateful_state.dart';
 import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/ui/home/chat/detail/page_detail_chat_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import '../../../../common/const/constants.dart';
 import '../../../../common/const/string_constants.dart';
-import '../../../../model/trip.dart';
-import '../../../../util/log_dog_utils.dart';
 import '../../../../util/ui_utils.dart';
 import '../../router/join/joine_manager_screen.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
@@ -24,7 +19,10 @@ import '../../user/user_preview/page_user_preview_screen.dart';
 class PageDetailChatScreen extends StatefulWidget {
   const PageDetailChatScreen({
     super.key,
+    required this.tripID,
   });
+
+  final String tripID;
 
   @override
   State<StatefulWidget> createState() => _PageDetailChatScreenState();
@@ -36,11 +34,8 @@ class _PageDetailChatScreenState
 
   @override
   void initState() {
-    var tripData = Get.arguments[0][Constants.detailChat];
-    Dog.d("initState: tripData: ${tripData.toString()}");
-    _controller.tripData.value = Trip.fromJson(jsonDecode(tripData ?? ""));
     _setupListen();
-    _controller.getData();
+    _controller.getData(widget.tripID);
     super.initState();
   }
 
@@ -59,7 +54,7 @@ class _PageDetailChatScreenState
     });
 
     _controller.isTripDeleted.listen((isDeleted) {
-      if(isDeleted){
+      if (isDeleted) {
         _showWarningDialog();
       }
     });
@@ -144,8 +139,8 @@ class _PageDetailChatScreenState
   void _showWarningDialog() {
     UIUtils.showAlertDialog(context, StringConstants.warning,
         StringConstants.removeWarning, StringConstants.ok, () {
-          Get.back();
-        }, null, null);
+      Get.back();
+    }, null, null);
   }
 
   void _handleSendPressed(PartialText message) {

@@ -33,11 +33,11 @@ class PageDetailChatController extends BaseController {
     return tripData.value.listIdMember?.contains(userChat.value.id) ?? false;
   }
 
-  Future<void> getData() async {
+  Future<void> getData(String tripID) async {
     var currentUid = await SharedPreferencesUtil.getUIDLogin() ?? "";
     _getUserData(currentUid);
-    _fetchMessages(tripData.value.id);
-    getDetailTrip();
+    _fetchMessages(tripID);
+    getDetailTrip(tripID);
   }
 
   Future<void> getAllMember() async {
@@ -68,10 +68,10 @@ class PageDetailChatController extends BaseController {
     }
   }
 
-  Future<void> getDetailTrip() async {
+  Future<void> getDetailTrip(String tripID) async {
     try {
       FirebaseHelper.collectionReferenceRouter
-          .doc(tripData.value.id)
+          .doc(tripID)
           .snapshots()
           .listen((value) {
         if (!value.exists) {
@@ -175,19 +175,18 @@ class PageDetailChatController extends BaseController {
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
 
-      NotificationData notificationData = NotificationData(
-          tripData.value.id,
-          currentUser.getUid(),
-          NotificationData.TYPE_MESSAGE,
-          DateTime.now().millisecondsSinceEpoch.toString());
-
       var title = "${currentUser.getName()}  đã gửi tới nhóm ${tripData.value.title}";
       PushNotification notification = PushNotification(
         title: title,
         body: body,
         dataTitle: null,
         dataBody: body,
-        data: notificationData.toJson(),
+        tripName: tripData.value.title,
+        tripID: tripData.value.id,
+        userName: currentUser.getName(),
+        userAvatar: currentUser.getAvatar(),
+        notificationType: NotificationData.TYPE_MESSAGE,
+        time: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
       for (var element in memberIdsSendNoti) {
@@ -199,7 +198,6 @@ class PageDetailChatController extends BaseController {
         userRegistrationTokens: listFcmToken,
         title: title,
         body: body,
-        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );

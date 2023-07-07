@@ -107,13 +107,11 @@ class Messaging {
     debugPrint('FCM main Handling a message messageId ${message.messageId}');
     debugPrint('FCM main messageData ${message.data}');
 
-    var data = convertMap(message.data);
     PushNotification notification = PushNotification(
       title: message.notification?.title,
       body: message.notification?.body,
       dataTitle: message.data['title'],
       dataBody: message.data['body'],
-      data: data,
     );
 
     Get.dialog(
@@ -125,20 +123,6 @@ class Messaging {
             child: const Text(StringConstants.confirm),
             onPressed: () {
               Get.back();
-              SharedPreferencesUtil.addNotification(
-                  SharedPreferencesUtil.KEY_LIST_NOTI, notification);
-
-              if (notification.getNotificationData()?.isTypeRateTrip() ==
-                  true) {
-                var tripId = notification.getNotificationData()?.tripID;
-                debugPrint(
-                    "onNotificationReceived isTypeRateTrip tripID: $tripId");
-                if (tripId == null || tripId.isEmpty) {
-                  //do nothing
-                } else {
-                  Get.to(RateScreen(id: tripId, onRateSuccess: null));
-                }
-              }
             },
           ),
         ],

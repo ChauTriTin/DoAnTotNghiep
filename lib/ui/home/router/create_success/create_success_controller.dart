@@ -194,20 +194,18 @@ class CreateSuccessController extends BaseController {
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.length}");
 
-      NotificationData notificationData = NotificationData(
-          trip.value.id,
-          currentUserData.value.uid,
-          NotificationData.TYPE_EXIT_ROUTER,
-          DateTime.now().millisecondsSinceEpoch.toString()
-      );
-
       var title = "${currentUserData.value.name} đã rời khỏi chuyến đi '${trip.value.title}'";
       PushNotification notification = PushNotification(
         title: title,
         body: body,
         dataTitle: null,
         dataBody: body,
-        data: notificationData.toJson(),
+        tripName: trip.value.title,
+        tripID: trip.value.id,
+        userName: currentUserData.value.name,
+        userAvatar: currentUserData.value.avatar,
+        notificationType: NotificationData.TYPE_EXIT_ROUTER,
+        time: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
       for (var element in memberIdsSendNoti) {
@@ -219,7 +217,6 @@ class CreateSuccessController extends BaseController {
         userRegistrationTokens: listFcmToken,
         title: title,
         body: body,
-        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );

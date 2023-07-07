@@ -163,9 +163,7 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
           ),
         ),
         onTap: () {
-          Get.to(() => const PageDetailChatScreen(), arguments: [
-            {Constants.detailChat: jsonEncode(trip)},
-          ]);
+          Get.to(() => PageDetailChatScreen(tripID: trip.id ?? "",));
         });
   }
 }
