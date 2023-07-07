@@ -63,6 +63,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     _controller.getAllRouter();
     _controller.getUserInfo(Trip.fromJson(jsonDecode(data)).userIdHost ?? "");
     _controller.getCommentRoute(Trip.fromJson(jsonDecode(data)).id);
+    _controller.getTripInProgress();
 
     Dog.d(
         "fcmToken detail: ${UserSingletonController.instance.userData.value.fcmToken}");
@@ -1040,8 +1041,13 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   margin: const EdgeInsets.symmetric(
                       horizontal: DimenConstants.marginPaddingExtraLarge),
                   child: UIUtils.getOutlineButton1(StringConstants.confirm, () {
-                    _controller.joinedRouter(_codeController.text);
-                    Get.back();
+                    if (isCanJoin()) {
+                      _controller.joinedRouter(_codeController.text);
+                      Get.back();
+                    } else {
+                      showErrorDialog("Không thể tham gia",
+                          "Bạn có chuyến đi bắt đầu vào ngày này", "OK", () {});
+                    }
                   }, Colors.red, DimenConstants.marginPaddingMedium,
                       Colors.white, Colors.red),
                 ),
@@ -1607,7 +1613,30 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     if (_controller.isUserBlocked()) {
       showUserBlockedDialog();
     } else {
-      _controller.joinedRouter(_controller.detailTrip.value.id);
+      if (isCanJoin()) {
+        _controller.joinedRouter(_controller.detailTrip.value.id);
+      } else {
+        showErrorDialog("Không thể tham gia",
+            "Bạn có chuyến đi bắt đầu vào ngày này", "OK", () {});
+      }
+    }
+  }
+
+  bool isCanJoin() {
+    var listJoined = _controller.tripsInProgress.value;
+    if (listJoined.isNotEmpty) {
+      var currentTrip = listJoined[0];
+      var detailTrip = _controller.detailTrip.value;
+      List<String> timeCurrent = currentTrip.timeStart!.split(" ");
+      List<String> timeDetail = detailTrip.timeStart!.split(" ");
+
+      if (timeCurrent[0] == timeDetail[0]) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
     }
   }
 
