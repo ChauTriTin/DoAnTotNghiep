@@ -441,19 +441,19 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       child: Row(
                         children: [
                           const Icon(
-                            Icons.bluetooth_drive_outlined,
+                            Icons.motorcycle,
                             color: Colors.redAccent,
                           ),
                           Expanded(
                             child: Container(
-                              margin: const EdgeInsets.only(left: 12),
+                              margin: const EdgeInsets.only(left: 8),
                               child: RichText(
                                 text: TextSpan(
                                   children: <TextSpan>[
                                     const TextSpan(
                                       text: 'Leader',
                                       style: TextStyle(
-                                          color: Colors.blueAccent,
+                                          color: ColorConstants.colorTitleTrip,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16,
                                           decoration:
@@ -475,7 +475,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(left: 54, right: 24),
+                      margin: const EdgeInsets.only(left: 48, right: 24),
                       child: Row(
                         children: [
                           RatingBar.builder(
@@ -1185,7 +1185,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             const TextSpan(
                               text: 'Leader',
                               style: TextStyle(
-                                  color: Colors.blueAccent,
+                                  color: ColorConstants.colorTitleTrip,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16,
                                   decoration:
@@ -1252,7 +1252,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             const TextSpan(
                               text: 'Bắt đầu',
                               style: TextStyle(
-                                  color: Colors.blueAccent,
+                                  color: ColorConstants.colorTitleTrip,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16,
                                   decoration:
@@ -1319,7 +1319,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             const TextSpan(
                               text: 'Kết thúc',
                               style: TextStyle(
-                                  color: Colors.blueAccent,
+                                  color: ColorConstants.colorTitleTrip,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16,
                                   decoration:
@@ -1384,7 +1384,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       margin: const EdgeInsets.only(right: 8),
                       child: const Text("Đánh giá của chuyến đi",
                           style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16, color: Colors.blueAccent)),
+                              fontWeight: FontWeight.w500, fontSize: 16, color: ColorConstants.colorTitleTrip)),
                     ),
                   ),
                   Expanded(
@@ -1493,7 +1493,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       const TextSpan(
                         text: "Điểm dừng chân",
                         style: TextStyle(
-                            color: Colors.blueAccent,
+                            color: ColorConstants.colorTitleTrip,
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                             decoration:
