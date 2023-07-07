@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
+import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_screen.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:appdiphuot/util/add_noti_helper.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
@@ -43,7 +44,6 @@ void main() async {
   } on Exception catch (_) {
     debugPrint('initializeApp fail');
   }
-
 
   Get.put(UserSingletonController.instance);
 
@@ -127,6 +127,18 @@ class Messaging {
               Get.back();
               SharedPreferencesUtil.addNotification(
                   SharedPreferencesUtil.KEY_LIST_NOTI, notification);
+
+              if (notification.getNotificationData()?.isTypeRateTrip() ==
+                  true) {
+                var tripId = notification.getNotificationData()?.tripID;
+                debugPrint(
+                    "onNotificationReceived isTypeRateTrip tripID: $tripId");
+                if (tripId == null || tripId.isEmpty) {
+                  //do nothing
+                } else {
+                  Get.to(RateScreen(id: tripId, onRateSuccess: null));
+                }
+              }
             },
           ),
         ],
