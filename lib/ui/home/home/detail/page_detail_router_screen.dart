@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/trip.dart';
@@ -28,13 +29,10 @@ import '../../../../model/comment.dart';
 import '../../../../model/place.dart';
 import '../../../../model/rate.dart';
 import '../../../user_singleton_controller.dart';
-import '../../../../view/profile_bar_widget.dart';
 import '../../router/create/create_router_screen.dart';
 import '../../router/create_success/create_success_screen.dart';
 import '../../router/create_success/enum_router.dart';
-import '../../setting/setting_screen.dart';
 import '../../user/user_preview/page_user_preview_screen.dart';
-import '../page_home_controller.dart';
 
 class DetailRouterScreen extends StatefulWidget {
   const DetailRouterScreen({Key? key}) : super(key: key);
@@ -765,6 +763,28 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     return list;
   }
 
+  Widget _buildListComment() {
+    if (_controller.commentData.isEmpty) {
+      return Container(
+        margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+        child: Column(
+          children: [
+            Lottie.asset('assets/files/no_data.json'),
+            Text(
+              StringConstants.noComment,
+              style: UIUtils.getStyleText(),
+            )
+          ],
+        ),
+      );
+    } else {
+      return ListView(
+        physics: const BouncingScrollPhysics(),
+        children: _renderListComment(),
+      );
+    }
+  }
+
   List<Widget> _renderListComment() {
     List<Widget> widgetList = [];
     Dog.d("_renderListComment: ${_controller.commentData.length}");
@@ -856,7 +876,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
               decoration: BoxDecoration(
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(12)),
@@ -866,6 +886,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   Text(
                     data.name ?? "No name",
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: 14,
                         fontWeight: FontWeight.w600, color: Colors.black),
                   ),
                   const SizedBox(
@@ -874,23 +895,28 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   Text(
                     data.content ?? "",
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w300, color: Colors.black),
+                      fontSize: 13,
+                        fontWeight: FontWeight.w400, color: Colors.black),
                   ),
                 ],
               ),
             ),
-            DefaultTextStyle(
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.grey[700], fontWeight: FontWeight.bold),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Text("Thời gian: ${TimeUtils.formatDateTimeFromMilliseconds(int.parse(data.id ?? "0"))}"),
-                  ],
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: DefaultTextStyle(
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontSize: 11,
+                    color: Colors.grey[500]),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(TimeUtils.formatDateTimeFromMilliseconds(int.parse(data.id ?? "0"))),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -962,10 +988,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       _headerDialog(StringConstants.titleCommentDialog),
                       const SizedBox(
                           height: DimenConstants.marginPaddingMedium),
-                      Expanded(
-                          child: ListView(
-                        children: _renderListComment(),
-                      )),
+                      Expanded(child: _buildListComment()),
                       _sendBox()
                     ],
                   ),
