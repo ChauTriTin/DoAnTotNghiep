@@ -15,7 +15,7 @@ class RateScreen extends StatefulWidget {
   });
 
   final String id;
-  final VoidCallback onRateSuccess;
+  final VoidCallback? onRateSuccess;
 
   @override
   State<RateScreen> createState() => _RateScreenState();
@@ -65,7 +65,7 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Bạn cảm thấy như thế nào\nvề chuyến đi?\nHãy đánh giá ngay nhé!!!",
                     style: TextStyle(
                       fontSize: 20.0,
@@ -80,7 +80,7 @@ class _RateScreenState extends BaseStatefulState<RateScreen> {
                         id: widget.id,
                         onRateSuccess: () {
                           Get.back(); //close this screen
-                          widget.onRateSuccess.call();
+                          widget.onRateSuccess?.call();
                         },
                       ));
                     },

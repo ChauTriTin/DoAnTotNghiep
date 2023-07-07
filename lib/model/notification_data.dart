@@ -59,4 +59,8 @@ class NotificationData {
   bool isRouterDeleted() {
     return notificationType == TYPE_DELETE_ROUTER;
   }
+
+  bool isTypeRateTrip() {
+    return notificationType == TYPE_RATE_TRIP;
+  }
 }
