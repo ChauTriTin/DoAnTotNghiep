@@ -11,7 +11,7 @@ class AddNotificationHelper {
       await notificationCollection
           .doc(userId)
           .collection(FirebaseHelper.keyNotification)
-          .doc()
+          .doc(DateTime.now().millisecondsSinceEpoch.toString())
           .set(noti.toJson());
     } catch (e) {
       Dog.e("_addMessageToFireStore fail: $e");

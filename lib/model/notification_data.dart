@@ -54,4 +54,8 @@ class NotificationData {
   bool isTypeJoinRouter() {
     return notificationType == TYPE_JOIN_ROUTER;
   }
+
+  bool isRouterDeleted() {
+    return notificationType == TYPE_DELETE_ROUTER;
+  }
 }

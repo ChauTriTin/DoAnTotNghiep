@@ -5,18 +5,24 @@ import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_fcm_wrapper/flutter_fcm_wrapper.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/const/constants.dart';
 import '../../../../db/firebase_helper.dart';
+import '../../../../model/notification_data.dart';
+import '../../../../model/push_notification.dart';
 import '../../../../model/user.dart';
+import '../../../../util/add_noti_helper.dart';
 import '../../../../util/log_dog_utils.dart';
 import '../../../../util/shared_preferences_util.dart';
 
 class PageDetailChatController extends BaseController {
   final CollectionReference _chat = FirebaseHelper.collectionReferenceChat;
   final userCollection = FirebaseHelper.collectionReferenceUser;
+
 
   var tripData = Trip().obs;
   var userChat = const User(id: "").obs;
@@ -138,69 +144,70 @@ class PageDetailChatController extends BaseController {
           .collection(FirebaseHelper.messages)
           .doc(message.createdAt.toString())
           .set(message.toJson());
+
+      String msg = (message as TextMessage).text;
+      postFCM(msg);
     } catch (e) {
       Dog.e("_addMessageToFireStore fail: $e");
     }
   }
+  var currentUser = UserSingletonController.instance;
 
-  Future<void> postFCM(
-      String body,
-      ) async {
-    // FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
-    //   apiKey: Constants.apiKey,
-    //   enableLog: true,
-    //   enableServerRespondLog: true,
-    // );
-    // try {
-    //   var listFcmToken = <String>[];
-    //   var memberIdsSendNoti = <String>[];
-    //   for (var element in listMember) {
-    //     var fcmToken = element.fcmToken;
-    //     if (fcmToken == currentUserData.value.fcmToken) {
-    //       //ignore my token
-    //     } else {
-    //       if (fcmToken != null && fcmToken.isNotEmpty) {
-    //         listFcmToken.add(fcmToken);
-    //         if (element.uid != null && element.uid!.isNotEmpty) {
-    //           memberIdsSendNoti.add(element.uid!);
-    //         }
-    //       }
-    //     }
-    //   }
-    //   debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
-    //
-    //   NotificationData notificationData = NotificationData(
-    //       trip.value.id,
-    //       currentUserData.value.uid,
-    //       "1",
-    //       DateTime.now().millisecondsSinceEpoch.toString());
-    //
-    //   var title = "Thông báo khẩn cấp từ ${getCurrentUserName()}";
-    //   PushNotification notification = PushNotification(
-    //     title: title,
-    //     body: body,
-    //     dataTitle: null,
-    //     dataBody: body,
-    //     data: notificationData.toJson(),
-    //   );
-    //
-    //   for (var element in memberIdsSendNoti) {
-    //     AddNotificationHelper.addNotification(notification, element);
-    //   }
-    //
-    //   Map<String, dynamic> result =
-    //   await flutterFCMWrapper.sendMessageByTokenID(
-    //     userRegistrationTokens: listFcmToken,
-    //     title: title,
-    //     body: body,
-    //     data: notificationData.toJson(),
-    //     androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
-    //     clickAction: "FLUTTER_NOTIFICATION_CLICK",
-    //   );
-    //   debugPrint("FCM sendTopicMessage fcmToken result $result");
-    // } catch (e) {
-    //   debugPrint("FCM sendTopicMessage fcmToken $e");
-    // }
+  Future<void> postFCM(String body) async {
+
+    FlutterFCMWrapper flutterFCMWrapper =  const FlutterFCMWrapper(
+      apiKey: Constants.apiKey,
+      enableLog: true,
+      enableServerRespondLog: true,
+    );
+    try {
+      var listFcmToken = <String>[];
+      var memberIdsSendNoti = <String>[];
+      for (var element in listMember) {
+        var fcmToken = element.fcmToken;
+        if (fcmToken != currentUser.getFCMToken()) {
+          if (fcmToken != null && fcmToken.isNotEmpty) {
+            listFcmToken.add(fcmToken);
+            if (element.uid != null && element.uid!.isNotEmpty) {
+              memberIdsSendNoti.add(element.uid!);
+            }
+          }
+        }
+      }
+      debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
+
+      NotificationData notificationData = NotificationData(
+          tripData.value.id,
+          currentUser.getUid(),
+          NotificationData.TYPE_MESSAGE,
+          DateTime.now().millisecondsSinceEpoch.toString());
+
+      var title = "${currentUser.getName()}  đã gửi tới nhóm ${tripData.value.title}";
+      PushNotification notification = PushNotification(
+        title: title,
+        body: body,
+        dataTitle: null,
+        dataBody: body,
+        data: notificationData.toJson(),
+      );
+
+      for (var element in memberIdsSendNoti) {
+        AddNotificationHelper.addNotification(notification, element);
+      }
+
+      Map<String, dynamic> result =
+      await flutterFCMWrapper.sendMessageByTokenID(
+        userRegistrationTokens: listFcmToken,
+        title: title,
+        body: body,
+        data: notificationData.toJson(),
+        androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      );
+      debugPrint("FCM sendTopicMessage fcmToken result $result");
+    } catch (e) {
+      debugPrint("FCM sendTopicMessage fcmToken $e");
+    }
   }
 
   void clearOnDispose() {

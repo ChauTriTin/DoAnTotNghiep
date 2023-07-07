@@ -82,21 +82,22 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
         return ListView.builder(
           padding: const EdgeInsets.only(top: 10),
           physics: const BouncingScrollPhysics(),
-          itemCount: list.length,
+          itemCount: _controller.listNotification.value.length,
           itemBuilder: (context, i) {
-            return getItemNotification(list[i], i);
+            var data = _controller.listNotification.value[i];
+            return getItemNotification(data);
           },
         );
       }
     });
   }
 
-  Widget getItemNotification(PushNotification data, int i) {
+  Widget getItemNotification(PushNotification data) {
     var notificationData = data.getNotificationData();
     String time = "";
     if (notificationData?.time != null &&
         notificationData?.time?.isEmpty == false) {
-      time = TimeUtils.formatDateTimeFromMilliseconds(
+      time = TimeUtils.formatDateTimeFromMilliseconds1(
           int.parse(notificationData?.time ?? ""));
     }
 
@@ -118,61 +119,59 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  data.title ?? "",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: ColorConstants.colorTitleTrip,
+                  ),
+                ),
+                const SizedBox(height: 14),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 25, // Kích thước rộng mong muốn
-                      height: 25,
+                      width: 20,
+                      height: 20,
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(data.userData?.avatar ??
                             StringConstants.avatarImgDefault),
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 4,),
                     Expanded(
                       flex: 1,
                       child: Text(
-                        data.title ?? "",
+                        "${data.userData?.name}",
                         style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: ColorConstants.colorTitleTrip,
+                          fontSize: 13,
+                          color: Colors.black,
                         ),
                       ),
                     )
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  "👤 ${data.userData?.name}",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 RichText(
                     text: TextSpan(
                         text: "📍 Chuyến đi: ",
                         style: const TextStyle(
                             color: ColorConstants.colorTitleTrip,
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.w500),
                         children: [
                       TextSpan(
                         text: titleTrip,
                         style: const TextStyle(
                             color: ColorConstants.textColor,
-                            fontSize: DimenConstants.txtMedium,
+                            fontSize: 13,
                             fontWeight: FontWeight.w400),
                       ),
                     ])),
                 const SizedBox(height: 8),
                 Text(
-                  data.body ?? "",
+                  "💬 ${data.body}",
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -196,27 +195,32 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
       PushNotification data, NotificationData? notificationData) {
     Dog.d("_onItemNotiClick: ${data.tripDetail.toString()}");
 
+    if (notificationData?.isRouterDeleted() == true) return;
+
     if (data.tripDetail == null) {
       showNoTripFoundPopup();
       return;
     }
 
-    if (notificationData?.isTypeMap() == true) {
-      Get.to(() => MapScreen(id: data.tripDetail?.id ?? ""));
-    } else if (notificationData?.isTypeMessage() == true) {
-      Get.to(() => const PageDetailChatScreen(), arguments: [
-        {Constants.detailChat: jsonEncode(data.tripDetail)},
-      ]);
-    } else if (notificationData?.isTypeMap() == true) {
-      Get.to(() => MapScreen(id: data.tripDetail?.id ?? ""));
-    } else if (notificationData?.isTypeComment() == true) {
-      Get.to(() => const DetailRouterScreen(), arguments: [
-        {Constants.detailTrip: jsonEncode(data.tripDetail)},
-      ]);
-    } else if (notificationData?.isTypeExitRouter() == true ||
-        notificationData?.isTypeJoinRouter() == true ||
-        notificationData?.isTypeRemove() == true) {
-      Get.to(() => JoinedManagerScreen(tripdata: data.tripDetail!));
+    switch (notificationData?.notificationType) {
+      case NotificationData.TYPE_MAP:
+        Get.to(() => MapScreen(id: data.tripDetail?.id ?? ""));
+        break;
+
+      case NotificationData.TYPE_MESSAGE:
+        Get.to(() => const PageDetailChatScreen(), arguments: [
+          {Constants.detailChat: jsonEncode(data.tripDetail)},
+        ]);
+        break;
+
+      case NotificationData.TYPE_COMMENT:
+      case NotificationData.TYPE_REMOVE:
+      case NotificationData.TYPE_EXIT_ROUTER:
+      case NotificationData.TYPE_JOIN_ROUTER:
+        Get.to(() => const DetailRouterScreen(), arguments: [
+          {Constants.detailTrip: jsonEncode(data.tripDetail)},
+        ]);
+        break;
     }
   }
 

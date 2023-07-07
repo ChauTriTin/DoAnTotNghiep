@@ -38,7 +38,7 @@ class PageNotiController extends BaseController {
       var notificationSnapshot =
           notificationStream.map((querySnapshot) => querySnapshot.docs);
 
-      notificationSnapshot.listen((chatSnapshots) {
+      notificationSnapshot.listen((chatSnapshots) async {
         log("getNotification: Update message");
         var tempNotifications = <PushNotification>[];
 
@@ -47,21 +47,24 @@ class PageNotiController extends BaseController {
 
           if (notification.data() == null) return;
 
-          var trip = PushNotification.fromJson((notification).data()!);
-          tempNotifications.insert(0, trip);
+          var notiData = PushNotification.fromJson((notification).data()!);
+
+          notiData.userData =
+              await getUserData(notiData.getNotificationData()?.userID);
+
+          notiData.tripDetail =
+              await getTripDetail(notiData.getNotificationData()?.tripID);
+
+          Dog.d("userdataNoti: ${notiData.userData}");
+          Dog.d("tripdataNoti: ${notiData.tripDetail}");
+
+          tempNotifications.insert(0, notiData);
         }
 
-        tempNotifications.forEach((element) async {
-          element.userData =
-              await getUserData(element.getNotificationData()?.userID);
-
-          element.tripDetail =
-              await getTripDetail(element.getNotificationData()?.tripID);
-
-          Dog.d("userdataNoti: ${element.userData }");
-          Dog.d("tripdataNoti: ${element.tripDetail }");
-        });
-
+        tempNotifications.sort((a, b) => b
+            .getNotificationData()!
+            .time!
+            .compareTo(b.getNotificationData()!.time!));
         listNotification.value = tempNotifications;
       });
     } catch (e) {

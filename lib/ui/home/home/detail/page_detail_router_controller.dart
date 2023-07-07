@@ -283,7 +283,7 @@ class DetailRouterController extends BaseController {
           break;
           case NotificationData.TYPE_DELETE_ROUTER:
           title =
-              "${detailTrip.value.title} đã bị ${userData.value.name} xóa''";
+              "${detailTrip.value.title} đã bị ${userData.value.name} xóa";
           break;
       }
 

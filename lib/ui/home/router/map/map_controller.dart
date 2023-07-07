@@ -337,7 +337,7 @@ class MapController extends BaseController {
       NotificationData notificationData = NotificationData(
           trip.value.id,
           currentUserData.value.uid,
-          "1",
+          NotificationData.TYPE_MAP,
           DateTime.now().millisecondsSinceEpoch.toString());
 
       var title = "Thông báo khẩn cấp từ ${getCurrentUserName()}";

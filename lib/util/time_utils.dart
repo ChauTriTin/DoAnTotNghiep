@@ -42,4 +42,11 @@ class TimeUtils {
     DateFormat dateFormat = DateFormat('HH:mm dd/MM/yyyy');
     return dateFormat.format(dateTime);
   }
+
+
+  static String formatDateTimeFromMilliseconds1(int milliseconds) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+    DateFormat dateFormat = DateFormat('HH:mm:ss dd/MM/yyyy');
+    return dateFormat.format(dateTime);
+  }
 }
