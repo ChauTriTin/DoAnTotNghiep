@@ -190,6 +190,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               _divider(12),
               _leader(),
               _divider(0),
+              _seeMore(),
               if (_controller.detailTrip.value.isComplete == false)
                 ...widgetsShowBeforeCompleted(),
               if (_controller.detailTrip.value.isComplete == true)
@@ -679,11 +680,49 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     const SizedBox(height: DimenConstants.marginPaddingMedium),
                     _headerDialog(StringConstants.titleDetailDialog),
                     const SizedBox(height: DimenConstants.marginPaddingMedium),
+                    _showTimeStart(),
                     ...convertListLocation()
                   ],
                 ),
               ),
             )));
+  }
+
+  Widget _showTimeStart() {
+    return Row(
+      children: [
+        Container(
+            width: 40,
+            height: 40,
+            margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            child: const Icon(Icons.timer, color: Colors.blue,)),
+        Expanded(
+          child:
+          RichText(
+            text: TextSpan(
+              children: <TextSpan>[
+                const TextSpan(
+                  text: 'Thời gian bắt đầu',
+                  style: TextStyle(
+                      color: ColorConstants.colorTitleTrip,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      decoration:
+                      TextDecoration.none), // Màu chữ đỏ
+                ),
+                TextSpan(
+                    text: ': ${_controller.detailTrip.value.timeStart}',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: Colors.black,
+                        decoration: TextDecoration.none)),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _locationTrip(Place place,
@@ -721,18 +760,6 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   ),
                 ],
               ),
-              if (!isSubLocation)
-                Container(
-                  padding: const EdgeInsets.only(
-                      right: DimenConstants.marginPaddingMedium,
-                      top: DimenConstants.marginPaddingMedium),
-                  child: Text(
-                    isStart
-                        ? "Thời gian: ${_controller.detailTrip.value.timeStart}"
-                        : "Thời gian: ${_controller.detailTrip.value.timeEnd}",
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                )
             ],
           ),
         )
@@ -1061,7 +1088,6 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
 
   List<Widget> widgetsShowBeforeCompleted() {
     var list = <Widget>[];
-    list.add(_seeMore());
     list.add(const SizedBox(height: DimenConstants.marginPaddingLarge));
     list.add(Container(
         margin: const EdgeInsets.only(right: 24, left: 24),
