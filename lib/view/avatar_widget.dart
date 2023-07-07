@@ -85,7 +85,7 @@ class AvatarWidget extends StatelessWidget {
                         width: DimenConstants.marginPaddingTiny,
                       ),
                       Text(
-                        rate.toString(),
+                        rate.toStringAsFixed(1),
                         style: const TextStyle(
                             color: ColorConstants.colorGreen,
                             fontSize: 14,
