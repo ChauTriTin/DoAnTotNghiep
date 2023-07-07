@@ -102,22 +102,20 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: SizedBox.fromSize(
-                        size: const Size.fromRadius(24),
-                        child: CachedMemoryImage(
-                          fit: BoxFit.cover,
-                          uniqueKey: trip.getFirstImageUrl(),
-                          base64: trip.getFirstImageUrl(),
-                        ),
-                      ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: SizedBox.fromSize(
+                    size: const Size.fromRadius(24),
+                    child: CachedMemoryImage(
+                      fit: BoxFit.cover,
+                      uniqueKey: trip.getFirstImageUrl(),
+                      base64: trip.getFirstImageUrl(),
                     ),
-                  )),
+                  ),
+                ),
+              ),
               Expanded(
                 flex: 7,
                 child: Text(
@@ -147,11 +145,11 @@ class _PageChatScreenState extends BaseStatefulState<PageChatScreen> {
                         ),
                         Text(
                           "${trip.listIdMember?.length.toString()}",
-                        //   style: GoogleFonts.roboto(
-                        //   fontSize: 18.0,
-                        //   fontWeight: FontWeight.bold,
-                        //   // other properties...
-                        // ),
+                          //   style: GoogleFonts.roboto(
+                          //   fontSize: 18.0,
+                          //   fontWeight: FontWeight.bold,
+                          //   // other properties...
+                          // ),
                           // style: const TextStyle(
                           //     color: Colors.black,
                           //     fontFamily: 'cafe',
