@@ -4,7 +4,6 @@ import 'package:appdiphuot/common/const/string_constants.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_screen.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
-import 'package:appdiphuot/util/add_noti_helper.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/theme_util.dart';
 import 'package:flutter/material.dart';
