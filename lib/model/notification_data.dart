@@ -30,6 +30,7 @@ class NotificationData {
   static const String TYPE_EXIT_ROUTER = "5";
   static const String TYPE_JOIN_ROUTER = "6";
   static const String TYPE_DELETE_ROUTER = "7";
+  static const String TYPE_RATE_TRIP = "7";
 
   bool isTypeMap() {
     return notificationType == TYPE_MAP;
@@ -57,5 +58,9 @@ class NotificationData {
 
   bool isRouterDeleted() {
     return notificationType == TYPE_DELETE_ROUTER;
+  }
+
+  bool isTypeRateTrip() {
+    return notificationType == TYPE_RATE_TRIP;
   }
 }

@@ -59,6 +59,10 @@ class MapController extends BaseController {
       // Update the specific field
       documentRef.update({FirebaseHelper.isComplete: true}).then((value) {
         Dog.d("completeTrip success");
+
+        //send notify rate for all user
+        postFCM("Chuyến đi đã kết thúc, mời bạn đánh giá!",
+            NotificationData.TYPE_RATE_TRIP);
       }).catchError((error) {
         Dog.e("completeTrip error: $error");
       });
@@ -303,6 +307,7 @@ class MapController extends BaseController {
 
   Future<void> postFCM(
     String body,
+    String type,
   ) async {
     FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
       apiKey: Constants.apiKey,
@@ -337,7 +342,7 @@ class MapController extends BaseController {
       NotificationData notificationData = NotificationData(
           trip.value.id,
           currentUserData.value.uid,
-          NotificationData.TYPE_MAP,
+          type,
           DateTime.now().millisecondsSinceEpoch.toString());
 
       var title = "Thông báo khẩn cấp từ ${getCurrentUserName()}";

@@ -2,7 +2,6 @@ import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/loc_search.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
-import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -56,7 +55,7 @@ class PageHomeController extends BaseController {
 
   Future<void> getAllRouter() async {
     setAppLoading(true, "Loading", TypeApp.loadingData);
-    var routerSnapshot = FirebaseHelper.collectionReferenceRouter.snapshots();
+    var routerSnapshot = FirebaseHelper.collectionReferenceRouter.orderBy("id", descending: true).snapshots();
     var routerSnapshotsMap =
         routerSnapshot.map((querySnapshot) => querySnapshot.docs);
 

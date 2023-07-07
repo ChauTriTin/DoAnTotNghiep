@@ -16,7 +16,6 @@ import '../../../../model/push_notification.dart';
 import '../../../../model/trip.dart';
 import '../../../../model/user.dart';
 import '../../../../util/add_noti_helper.dart';
-import '../../../../util/time_utils.dart';
 import '../../../user_singleton_controller.dart';
 
 class DetailRouterController extends BaseController {
@@ -60,7 +59,7 @@ class DetailRouterController extends BaseController {
   }
 
   Future<void> getAllRouter() async {
-    var routerSnapshot = db.collection("router").snapshots();
+    var routerSnapshot = db.collection("router").orderBy("id", descending: true).snapshots();
     routerSnapshot.listen((event) {
       try {
         for (var docSnapshot in event.docs) {
@@ -197,7 +196,7 @@ class DetailRouterController extends BaseController {
   Future<void> addCommentRoute(String? id, String text) async {
     try {
       Dog.d("addCommentRoute id: $id");
-      if (id == null) return;
+      if (id == null || text.isEmpty) return;
       var listComment = commentData;
       listComment.add(Comment(
           DateTime.now().millisecondsSinceEpoch.toString(),
