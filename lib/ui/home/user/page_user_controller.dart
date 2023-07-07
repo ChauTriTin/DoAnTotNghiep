@@ -2,23 +2,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:appdiphuot/base/base_controller.dart';
-import 'package:appdiphuot/common/const/string_constants.dart';
-import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/util/distance_util.dart';
-import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_directions/google_maps_directions.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../db/firebase_helper.dart';
 import '../../../model/trip.dart';
-import '../../../model/user.dart';
 import '../../../util/shared_preferences_util.dart';
-import '../../../util/ui_utils.dart';
 import '../../user_singleton_controller.dart';
 
 class PageUserController extends BaseController {
@@ -53,6 +43,7 @@ class PageUserController extends BaseController {
       var routerStream = FirebaseHelper.collectionReferenceRouter
           .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
           .where(FirebaseHelper.isComplete, isEqualTo: true)
+          .orderBy("id", descending: true)
           .snapshots();
 
       var routerSnapshots =
@@ -88,6 +79,7 @@ class PageUserController extends BaseController {
       log("getTripHost: userid $uid");
       var routerStream = FirebaseHelper.collectionReferenceRouter
           .where(FirebaseHelper.userIdHost, isEqualTo: uid)
+          .orderBy("id", descending: true)
           .snapshots();
 
       var routerSnapshots =
@@ -122,6 +114,7 @@ class PageUserController extends BaseController {
       var routerStream = FirebaseHelper.collectionReferenceRouter
           .where(FirebaseHelper.listIdMember, arrayContainsAny: [uid])
           .where(FirebaseHelper.isComplete, isEqualTo: false)
+          .orderBy("id", descending: true)
           .snapshots();
 
       var routerSnapshots =
