@@ -196,7 +196,7 @@ class DetailRouterController extends BaseController {
   Future<void> addCommentRoute(String? id, String text) async {
     try {
       Dog.d("addCommentRoute id: $id");
-      if (id == null) return;
+      if (id == null || text.isEmpty) return;
       var listComment = commentData;
       listComment.add(Comment(
           DateTime.now().millisecondsSinceEpoch.toString(),
