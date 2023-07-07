@@ -33,7 +33,6 @@ class PageNotiController extends BaseController {
       var notificationStream = notificationCollection
           .doc(userID)
           .collection(FirebaseHelper.keyNotification)
-          .orderBy("data", descending: true)
           .snapshots();
 
       var notificationSnapshot =
@@ -49,7 +48,7 @@ class PageNotiController extends BaseController {
           if (notification.data() == null) return;
 
           var notiData = PushNotification.fromJson((notification).data()!);
-          tempNotifications.add(notiData);
+          tempNotifications.insert(0, notiData);
         }
         listNotification.value = tempNotifications;
       });
