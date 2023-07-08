@@ -67,6 +67,9 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
   }
 
   void onPick(PickResult result) {
+    // final places = GoogleMapsPlaces (apiKey: Constants.¡LoveYou);
+    // final response = await places.getDetailsByPlaceId (pickResult.placeId!, language: "vi");
+
     Place p = Place();
     p.lat = result.geometry?.location.lat ?? defaultLat;
     p.long = result.geometry?.location.lng ?? defaultLong;
@@ -78,7 +81,13 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
     // debugPrint("onPlacePicked adrAddress ${result.adrAddress}");
     // debugPrint("onPlacePicked addressComponents length ${result.addressComponents?.length}");
     // debugPrint("onPlacePicked addressComponents ${result.addressComponents?.firstOrNull?.longName}");
+    debugPrint("onPlacePicked result.name ${result.name}");
     var address = "";
+    if (result.name == null) {
+      //do nothing
+    } else {
+      address = "${result.name}, ";
+    }
     result.addressComponents?.forEach((element) {
       var name = element.longName;
       debugPrint("onPlacePicked name $name");
@@ -99,6 +108,11 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
     try {
       var arr = address.split(",");
       var district = "${arr[arr.length - 3]}, ${arr[arr.length - 2]}";
+      if (result.name == null) {
+        //do nothing
+      } else {
+        district = "${result.name}, $district";
+      }
 
       var locSearch = LocSearch(district: district, count: 1);
       debugPrint("postFirebaseSearchLoc locSearch ${locSearch.toJson()}");
