@@ -6,6 +6,7 @@ import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_screen.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
 import 'package:appdiphuot/util/shared_preferences_util.dart';
 import 'package:appdiphuot/util/theme_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fcm/flutter_fcm.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,6 +17,7 @@ import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+import 'db/firebase_helper.dart';
 import 'model/push_notification.dart';
 import 'ui/splash/page_splash_screen.dart';
 
@@ -144,6 +146,9 @@ class Messaging {
                 SharedPreferencesUtil.KEY_FCM_TOKEN, token);
             debugPrint('FCM main token  $token');
             Messaging.token = token;
+
+            //update fcm token to cloud
+            updateFCMTokenToCloud(token);
           }
         },
         icon: 'ic_launcher',
@@ -151,6 +156,22 @@ class Messaging {
     } catch (e) {
       debugPrint('FCM main e $e');
     }
+  }
+}
+
+Future<void> updateFCMTokenToCloud(String token) async {
+  try {
+    String userId = await SharedPreferencesUtil.getUIDLogin() ?? "";
+    debugPrint("updateFCMTokenToCloud userId $userId");
+    DocumentReference documentRef =
+        FirebaseHelper.collectionReferenceUser.doc(userId);
+    documentRef.update({"fcmToken": token}).then((value) {
+      debugPrint("updateFCMTokenToCloud success");
+    }).catchError((error) {
+      debugPrint("updateFCMTokenToCloud error: $error");
+    });
+  } catch (e) {
+    debugPrint("updateFCMTokenToCloud e: $e");
   }
 }
 

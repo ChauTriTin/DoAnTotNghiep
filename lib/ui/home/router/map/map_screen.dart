@@ -678,7 +678,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color: Color(0xFFE7EFFF),
+                      color: const Color(0xFFE7EFFF),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -698,7 +698,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                             SizedBox(
                                 width: 46,
                                 height: 46,
-                                child: Image.asset("assets/images/policeman.png")),
+                                child:
+                                    Image.asset("assets/images/policeman.png")),
                           ],
                         ),
                       )),
@@ -711,7 +712,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color:  Color(0xFFEAF8E2),
+                      color: const Color(0xFFEAF8E2),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -745,7 +746,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color:  Color(0xFFEFEFEF),
+                      color: const Color(0xFFEFEFEF),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -779,7 +780,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color:  Color(0xFFFFE7D9),
+                      color: const Color(0xFFFFE7D9),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -799,7 +800,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                             SizedBox(
                                 width: 46,
                                 height: 46,
-                                child: Image.asset("assets/images/distance.png")),
+                                child:
+                                    Image.asset("assets/images/distance.png")),
                           ],
                         ),
                       )),
@@ -813,7 +815,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color:  Color(0xFFFFD9DA),
+                      color: const Color(0xFFFFD9DA),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
