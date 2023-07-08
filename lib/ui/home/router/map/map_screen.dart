@@ -506,13 +506,14 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         return Material(
           child: Container(
             width: Get.width,
-            height: 420,
+            height: Get.height * 0.8,
             padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: ListView(
               children: [
+                const SizedBox(height: DimenConstants.marginPaddingMedium),
                 const Text(
-                  "SOS",
+                  "Cần giúp đỡ",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: DimenConstants.txtHeader1,
                     color: ColorConstants.appColor,
@@ -520,124 +521,174 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   ),
                 ),
                 const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
                     _controller.postFCM("Xe tôi hư", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorConstants.appColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Xe tôi hư',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color: Color(0xFFFDD5BA),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Xe tôi hư',
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFF341502),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/broken_motorbike.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM(
-                        "Tôi lạc đường", NotificationData.TYPE_MAP);
+                    _controller.postFCM("Tôi lạc đường", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Tôi lạc đường',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color: Color(0xFFFCE8CE),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Tôi lạc đường',
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFF772101),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/lost_road.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM(
-                        "Tôi muốn dừng chân", NotificationData.TYPE_MAP);
+                    _controller.postFCM("Tôi muốn dừng chân", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Tôi muốn dừng chân',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color: Color(0xFFE1FCCF),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Tôi muốn dừng chân',
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFF1B3D01),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/wana_stop.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM(
-                        "Tôi gặp trục trặc", NotificationData.TYPE_MAP);
+                    _controller.postFCM("Tôi gặp trục trặc", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.cyan,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Tôi gặp trục trặc',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color: Color(0xFFD6E2FF),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Tôi gặp trục trặc',
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFF003CAD),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/problem.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+              const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM(
-                        "Cần người giúp khẩn cấp", NotificationData.TYPE_MAP);
+                    _controller.postFCM("Cần người giúp khẩn cấp", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Cần người giúp khẩn cấp',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color: Color(0xFFFFD7D7),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Cần người giúp khẩn cấp',
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFFCD0D0F),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/sos.png")),
+                          ],
+                        ),
+                      )),
                 ),
+                const SizedBox(height: 16),
+
               ],
             ),
           ),
