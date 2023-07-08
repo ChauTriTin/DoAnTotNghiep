@@ -561,7 +561,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color: Color(0xFFFCE8CE),
+                      color: Color(0xFFFAF1CB),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
