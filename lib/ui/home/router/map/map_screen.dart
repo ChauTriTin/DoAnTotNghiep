@@ -510,17 +510,17 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             child: ListView(
               children: [
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                const SizedBox(height: 12),
                 const Text(
                   "Cần giúp đỡ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: DimenConstants.txtHeader1,
                     color: ColorConstants.appColor,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
+                const SizedBox(height: 18),
                 InkWell(
                   onTap: () {
                     Get.back(); //close this sheet
