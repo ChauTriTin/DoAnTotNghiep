@@ -320,8 +320,11 @@ class CreateRouterController extends BaseController {
 
           var file = File(element.path!);
           var base64 = imageToBase64(file);
-          debugPrint("element ${element.name} ${element.path} base64 $base64");
-          trip.listImg?.add(base64);
+          if (base64 != null) {
+            debugPrint(
+                "element ${element.name} ${element.path} base64 $base64");
+            trip.listImg?.add(base64);
+          }
         },
       ),
     );
@@ -415,7 +418,7 @@ class CreateRouterController extends BaseController {
           .snapshots();
 
       var routerSnapshots =
-      routerStream.map((querySnapshot) => querySnapshot.docs);
+          routerStream.map((querySnapshot) => querySnapshot.docs);
 
       routerSnapshots.listen((routerSnapshots) {
         var tempTrips = <Trip>[];
@@ -424,12 +427,12 @@ class CreateRouterController extends BaseController {
           Dog.d("getTripInProgress: $routerSnapshot");
 
           DocumentSnapshot<Map<String, dynamic>>? tripMap =
-          routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
+              routerSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
 
           if (tripMap == null || tripMap.data() == null) return;
 
           var trip = Trip.fromJson((tripMap).data()!);
-          if(trip.isComplete == false){
+          if (trip.isComplete == false) {
             tempTrips.add(trip);
           }
         }
