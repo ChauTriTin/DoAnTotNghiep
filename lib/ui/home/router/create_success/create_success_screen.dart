@@ -404,8 +404,8 @@ class _CreateSuccessScreenState extends BaseStatefulState<CreateSuccessScreen> {
     }
 
     if (kDebugMode == true) {
-      showSnackBarFull(
-          StringConstants.warning, "Debug mode: forced go to map screen");
+      // showSnackBarFull(
+      //     StringConstants.warning, "Debug mode: forced go to map screen");
       go();
     }
     if (!_controller.isDoneCountdown.value) {
