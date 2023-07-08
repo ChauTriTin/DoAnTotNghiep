@@ -245,7 +245,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
             children: [
               Text(
                 text1,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: ColorConstants.textColorDisable,
                   fontSize: DimenConstants.txtMedium,
@@ -260,7 +260,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                 ),
               ),
               Rate(
-                iconSize: 50,
+                iconSize: 40,
                 color: Colors.orange,
                 allowHalf: false,
                 allowClear: true,
