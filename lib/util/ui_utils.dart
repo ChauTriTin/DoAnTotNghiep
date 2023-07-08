@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../common/const/color_constants.dart';
 import '../common/const/dimen_constants.dart';
@@ -55,6 +56,10 @@ class UIUtils {
       //   statusBarColor: ColorConstants.appColor,
       // ),
     );
+  }
+
+  static Widget getLottieNetwork(String url){
+    return Lottie.network(url);
   }
 
   static Widget getButton(

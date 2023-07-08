@@ -12,6 +12,7 @@ import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
 import 'package:appdiphuot/ui/home/router/map/map_controller.dart';
 import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_screen.dart';
+import 'package:appdiphuot/util/ui_utils.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -276,7 +277,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
         // var request = await http.get(Uri.parse(avt));
         // var bytes = request.bodyBytes;
         // LatLng lastMapPositionPoints = LatLng(defaultLat, defaultLong);
-        // var b = await getBytesFromCanvas(90, 90, bytes.buffer.asUint8List());
+        // var b = await getBytesFromCanvas(46, 46, bytes.buffer.asUint8List());
         // if (b == null) {
         //   return Marker(
         //     // markerId: MarkerId(lastMapPositionPoints.toString()),
@@ -356,7 +357,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
             elevation: DimenConstants.elevationMedium,
             backgroundColor: ColorConstants.appColor,
             onPressed: () {
-              Get.to(() => PageDetailChatScreen(tripID: _controller.trip.value.id ?? ""));
+              Get.to(() => PageDetailChatScreen(
+                  tripID: _controller.trip.value.id ?? ""));
             },
             child: const Icon(Icons.sms),
           ),
@@ -651,139 +653,192 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
       builder: (context) {
         return Material(
           child: Container(
+            alignment: Alignment.center,
             width: Get.width,
-            height: 420,
+            height: Get.height * 0.8,
             padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: ListView(
               children: [
-                Text(
-                  "Cảnh báo".toUpperCase(),
-                  style: const TextStyle(
+                const SizedBox(height: 15),
+                const Text(
+                  "Cảnh báo",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
                     fontSize: DimenConstants.txtHeader1,
                     color: ColorConstants.appColor,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 15),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
                     _controller.postFCM(
                         "Có cảnh sát", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorConstants.appColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Có cảnh sát',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color: Color(0xFFE7EFFF),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Có cảnh sát',
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFF001FB7),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/policeman.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
                     _controller.postFCM("Đường xấu", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Đường xấu',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color:  Color(0xFFEAF8E2),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Đường xấu',
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFF154D08),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/road.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
                     _controller.postFCM(
                         "Sắp có mưa", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Sắp có mưa',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color:  Color(0xFFEFEFEF),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Sắp có mưa",
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFF2A2A2A),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/rain.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
                     _controller.postFCM(
                         "Giữ khoảng cách", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.cyan,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Giữ khoảng cách',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color:  Color(0xFFFFE7D9),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Giữ khoảng cách",
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFFB67D10),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/distance.png")),
+                          ],
+                        ),
+                      )),
                 ),
-                const SizedBox(height: DimenConstants.marginPaddingMedium),
-                ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 4),
+                InkWell(
+                  onTap: () {
                     Get.back(); //close this sheet
                     _controller.postFCM(
                         "Dừng khẩn cấp", NotificationData.TYPE_MAP);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DimenConstants.radiusRound),
-                    ),
-                    minimumSize: Size(Get.width, 50),
-                  ),
-                  child: const Text(
-                    'Dừng khẩn cấp',
-                    style: TextStyle(
-                      fontSize: DimenConstants.txtMedium,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Card(
+                      shape: UIUtils.getCardCorner(),
+                      color:  Color(0xFFFFD9DA),
+                      shadowColor: Colors.grey,
+                      elevation: DimenConstants.cardElevation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Dừng khẩn cấp",
+                              style: TextStyle(
+                                fontSize: DimenConstants.txtMedium,
+                                color: Color(0xFFA80000),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                                width: 46,
+                                height: 46,
+                                child: Image.asset("assets/images/stop.png")),
+                          ],
+                        ),
+                      )),
                 ),
+                const SizedBox(height: 8),
               ],
             ),
           ),
