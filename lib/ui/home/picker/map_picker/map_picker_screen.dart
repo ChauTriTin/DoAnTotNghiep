@@ -98,7 +98,7 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
 
     try {
       var arr = address.split(",");
-      var district = arr[arr.length - 2];
+      var district = "${arr[arr.length - 3]}, ${arr[arr.length - 2]}";
 
       var locSearch = LocSearch(district: district, count: 1);
       debugPrint("postFirebaseSearchLoc locSearch ${locSearch.toJson()}");
