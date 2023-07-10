@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/notification_data.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/router/rate/done_trip/rate_screen.dart';
 import 'package:appdiphuot/ui/user_singleton_controller.dart';
@@ -106,7 +107,8 @@ class Messaging {
   static Future<void> onNotificationReceived(RemoteMessage message) async {
     await Firebase.initializeApp();
     debugPrint('FCM main Handling a message messageId ${message.messageId}');
-    debugPrint('FCM main messageData ${message.data}');
+    var data = convertMap(message.data);
+    debugPrint('FCM main data ${data.toString()}');
 
     PushNotification notification = PushNotification(
       title: message.notification?.title,
@@ -114,6 +116,7 @@ class Messaging {
       dataTitle: message.data['title'],
       dataBody: message.data['body'],
     );
+    debugPrint('FCM main notification ${notification.toJson()}');
 
     Get.dialog(
       AlertDialog(
@@ -124,6 +127,17 @@ class Messaging {
             child: const Text(StringConstants.confirm),
             onPressed: () {
               Get.back();
+
+              if (data["notificationType"] == NotificationData.TYPE_RATE_TRIP) {
+                var tripId = data["tripID"];
+                debugPrint(
+                    "FCM main onNotificationReceived isTypeRateTrip tripID: $tripId");
+                if (tripId == null || tripId.isEmpty) {
+                  //do nothing
+                } else {
+                  Get.to(RateScreen(id: tripId, onRateSuccess: null));
+                }
+              }
             },
           ),
         ],

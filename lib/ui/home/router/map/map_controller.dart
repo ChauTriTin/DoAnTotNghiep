@@ -338,6 +338,11 @@ class MapController extends BaseController {
         }
       }
       debugPrint("fcmToken listFcmToken ${listFcmToken.toString()}");
+      NotificationData notificationData = NotificationData(
+          trip.value.id,
+          currentUserData.value.uid,
+          type,
+          DateTime.now().millisecondsSinceEpoch.toString());
 
       var title = "Thông báo khẩn cấp từ ${getCurrentUserName()}";
       PushNotification notification = PushNotification(
@@ -362,6 +367,7 @@ class MapController extends BaseController {
         userRegistrationTokens: listFcmToken,
         title: title,
         body: body,
+        data: notificationData.toJson(),
         androidChannelID: DateTime.now().microsecondsSinceEpoch.toString(),
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       );
