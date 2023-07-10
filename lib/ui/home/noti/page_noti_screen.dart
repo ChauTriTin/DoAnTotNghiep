@@ -17,6 +17,7 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/push_notification.dart';
+import '../../../model/trip.dart';
 import '../../../util/time_utils.dart';
 import '../chat/detail/page_detail_chat_screen.dart';
 import '../home/detail/page_detail_router_screen.dart';
@@ -194,8 +195,8 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
     );
   }
 
-  void _onItemNotiClick(
-      PushNotification data) {
+  Future<void> _onItemNotiClick(
+      PushNotification data) async {
     Dog.d("_onItemNotiClick: ${data}");
     var tripId = data.tripID;
 
@@ -208,6 +209,17 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
 
     switch (data.notificationType) {
       case NotificationData.TYPE_MAP:
+        Trip? detailTrip = await _controller.getTripDetail(tripId);
+        Dog.d(" _onItemNotiClick trip: $detailTrip");
+        if (detailTrip == null) {
+          showNoTripFoundPopup();
+          break;
+        }
+
+        if (detailTrip.isComplete == true) {
+          showTripCompletedPopup();
+          break;
+        }
         Get.to(() => MapScreen(id: tripId));
         break;
 
@@ -219,7 +231,9 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
       case NotificationData.TYPE_REMOVE:
       case NotificationData.TYPE_EXIT_ROUTER:
       case NotificationData.TYPE_JOIN_ROUTER:
-        Get.to(() => DetailRouterScreen(tripId: tripId,));
+        Get.to(() => DetailRouterScreen(
+              tripId: tripId,
+            ));
         break;
     }
   }
@@ -229,6 +243,18 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
       context,
       StringConstants.warning,
       StringConstants.tripNotFound,
+      StringConstants.ok,
+      null,
+      null,
+      null,
+    );
+  }
+
+  void showTripCompletedPopup() {
+    UIUtils.showAlertDialog(
+      context,
+      StringConstants.warning,
+      StringConstants.tripCompleted,
       StringConstants.ok,
       null,
       null,
