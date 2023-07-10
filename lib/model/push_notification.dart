@@ -13,9 +13,15 @@ class PushNotification {
   String? notificationType;
   String? time;
 
-
-  PushNotification({this.title, this.body, this.dataTitle, this.dataBody,
-      this.tripName, this.tripID, this.userName, this.userAvatar,
+  PushNotification(
+      {this.title,
+      this.body,
+      this.dataTitle,
+      this.dataBody,
+      this.tripName,
+      this.tripID,
+      this.userName,
+      this.userAvatar,
       this.notificationType,
       this.time});
 
@@ -52,45 +58,48 @@ class PushNotification {
     return data;
   }
 
-
   @override
   String toString() {
     return 'PushNotification{title: $title, body: $body, dataTitle: $dataTitle, dataBody: $dataBody, tripName: $tripName, tripID: $tripID, userName: $userName, userAvatar: $userAvatar, notificationType: $notificationType, time: $time}';
   }
 
-  static const String TYPE_MAP = "1";
-  static const String TYPE_MESSAGE = "2";
-  static const String TYPE_COMMENT = "3";
-  static const String TYPE_REMOVE = "4";
-  static const String TYPE_EXIT_ROUTER = "5";
-  static const String TYPE_JOIN_ROUTER = "6";
-  static const String TYPE_DELETE_ROUTER = "7";
+  // static const String TYPE_MAP = "1";
+  // static const String TYPE_MESSAGE = "2";
+  // static const String TYPE_COMMENT = "3";
+  // static const String TYPE_REMOVE = "4";
+  // static const String TYPE_EXIT_ROUTER = "5";
+  // static const String TYPE_JOIN_ROUTER = "6";
+  // static const String TYPE_DELETE_ROUTER = "7";
 
   bool isTypeMap() {
-    return notificationType == TYPE_MAP;
+    return notificationType == NotificationData.TYPE_MAP;
   }
 
   bool isTypeMessage() {
-    return notificationType == TYPE_MESSAGE;
+    return notificationType == NotificationData.TYPE_MESSAGE;
   }
 
   bool isTypeComment() {
-    return notificationType == TYPE_COMMENT;
+    return notificationType == NotificationData.TYPE_COMMENT;
   }
 
   bool isTypeRemove() {
-    return notificationType == TYPE_REMOVE;
+    return notificationType == NotificationData.TYPE_REMOVE;
   }
 
   bool isTypeExitRouter() {
-    return notificationType == TYPE_EXIT_ROUTER;
+    return notificationType == NotificationData.TYPE_EXIT_ROUTER;
   }
 
   bool isTypeJoinRouter() {
-    return notificationType == TYPE_JOIN_ROUTER;
+    return notificationType == NotificationData.TYPE_JOIN_ROUTER;
   }
 
   bool isRouterDeleted() {
-    return notificationType == TYPE_DELETE_ROUTER;
+    return notificationType == NotificationData.TYPE_DELETE_ROUTER;
+  }
+
+  bool isTypeRateTrip() {
+    return notificationType == NotificationData.TYPE_RATE_TRIP;
   }
 }
