@@ -17,10 +17,12 @@ import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../common/const/constants.dart';
 import '../../../model/push_notification.dart';
+import '../../../model/rate.dart';
 import '../../../model/trip.dart';
 import '../../../util/time_utils.dart';
 import '../chat/detail/page_detail_chat_screen.dart';
 import '../home/detail/page_detail_router_screen.dart';
+import '../router/rate/done_trip/rate_screen.dart';
 
 class PageNotiScreen extends StatefulWidget {
   const PageNotiScreen({
@@ -102,10 +104,9 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
 
   Widget getItemNotification(PushNotification data) {
     String time = "";
-    if (data.time != null &&
-        data.time?.isEmpty == false) {
-      time = TimeUtils.formatDateTimeFromMilliseconds1(
-          int.parse(data.time ?? ""));
+    if (data.time != null && data.time?.isEmpty == false) {
+      time =
+          TimeUtils.formatDateTimeFromMilliseconds1(int.parse(data.time ?? ""));
     }
 
     return InkWell(
@@ -195,15 +196,14 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
     );
   }
 
-  Future<void> _onItemNotiClick(
-      PushNotification data) async {
+  Future<void> _onItemNotiClick(PushNotification data) async {
     Dog.d("_onItemNotiClick: ${data}");
     var tripId = data.tripID;
 
     if (data.isRouterDeleted() == true) return;
 
-    if ( tripId== null|| tripId.isEmpty == true) {
-      showNoTripFoundPopup();
+    if (tripId == null || tripId.isEmpty == true) {
+      showPopupMessage(StringConstants.tripNotFound);
       return;
     }
 
@@ -212,12 +212,12 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
         Trip? detailTrip = await _controller.getTripDetail(tripId);
         Dog.d(" _onItemNotiClick trip: $detailTrip");
         if (detailTrip == null) {
-          showNoTripFoundPopup();
+          showPopupMessage(StringConstants.tripNotFound);
           break;
         }
 
         if (detailTrip.isComplete == true) {
-          showTripCompletedPopup();
+          showPopupMessage(StringConstants.tripCompleted);
           break;
         }
         Get.to(() => MapScreen(id: tripId));
@@ -235,26 +235,40 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
               tripId: tripId,
             ));
         break;
+      case NotificationData.TYPE_RATE_TRIP:
+        Trip? detailTrip = await _controller.getTripDetail(tripId);
+        Dog.d(" _onItemNotiClick trip: $detailTrip");
+        if (detailTrip == null) {
+          showPopupMessage(StringConstants.tripNotFound);
+          break;
+        }
+
+        var ratesMap = convertMapToRateList(detailTrip.rates);
+        Rate? itemRated = ratesMap?.firstWhereOrNull(
+            (element) => element.idUser == _controller.currentUser.value.uid);
+
+        // Chưa đánh giá
+        if (itemRated == null) {
+          Get.to(RateScreen(id: tripId, onRateSuccess: null));
+        } else {
+          // đã đánh giá rồi
+          showPopupMessage(StringConstants.tripRated);
+        }
+        break;
     }
   }
 
-  void showNoTripFoundPopup() {
-    UIUtils.showAlertDialog(
-      context,
-      StringConstants.warning,
-      StringConstants.tripNotFound,
-      StringConstants.ok,
-      null,
-      null,
-      null,
-    );
+  List<Rate>? convertMapToRateList(Map<String, dynamic>? map) {
+    if (map == null) return <Rate>[];
+    final parsed = map.values.cast<Map<String, dynamic>>();
+    return parsed.map<Rate>((json) => Rate.fromJson(json)).toList();
   }
 
-  void showTripCompletedPopup() {
+  void showPopupMessage(String body) {
     UIUtils.showAlertDialog(
       context,
       StringConstants.warning,
-      StringConstants.tripCompleted,
+      body,
       StringConstants.ok,
       null,
       null,

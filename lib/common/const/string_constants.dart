@@ -76,6 +76,7 @@ class StringConstants {
   static const String outTrip = "Rời khỏi";
   static const String deleteWarning = "Bạn có chắc muốn xóa chuyến đi này không?";
   static const String tripNotFound = "Không tìm thấy thông tin chuyến đi";
+  static const String tripRated = "Bạn đã đánh giá chuyến đi này rồi";
   static const String tripCompleted= "Chuyến đi đã hoàn thành, bạn không thể xem map của chuyến đi này";
   static const String outWarning = "Bạn có chắc chắn muốn rời khỏi chuyến đi này không?";
   static const String informOutRouter = " đã rời khỏi chuyến đi ";
