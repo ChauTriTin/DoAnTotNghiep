@@ -19,6 +19,7 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 import 'package:overlay_support/overlay_support.dart';
 
 import 'db/firebase_helper.dart';
+import 'model/bus/event_bus.dart';
 import 'model/push_notification.dart';
 import 'ui/splash/page_splash_screen.dart';
 
@@ -135,7 +136,16 @@ class Messaging {
                 if (tripId == null || tripId.isEmpty) {
                   //do nothing
                 } else {
-                  Get.to(RateScreen(id: tripId, onRateSuccess: null));
+                  Get.to(
+                    RateScreen(
+                      id: tripId,
+                      onRateSuccess: () {
+                        debugPrint("FCM main rate success tripID: $tripId");
+                        final event = OnRateSuccess(mainScreen);
+                        eventBus.fire(event);
+                      },
+                    ),
+                  );
                 }
               }
             },

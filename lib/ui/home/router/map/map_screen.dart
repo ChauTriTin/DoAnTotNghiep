@@ -7,6 +7,7 @@ import 'package:appdiphuot/common/const/color_constants.dart';
 import 'package:appdiphuot/common/const/constants.dart';
 import 'package:appdiphuot/common/const/dimen_constants.dart';
 import 'package:appdiphuot/common/const/string_constants.dart';
+import 'package:appdiphuot/model/bus/event_bus.dart';
 import 'package:appdiphuot/model/notification_data.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/model/user.dart';
@@ -41,12 +42,14 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
   final _controller = Get.put(MapController());
   GoogleMapController? mapController;
   final double zoomLevel = 16.0;
+  StreamSubscription? eventBusOnRateSuccess;
 
   @override
   void initState() {
     super.initState();
     GoogleMapsDirections.init(googleAPIKey: Constants.iLoveYou());
     _setupListen();
+    _listenBus();
     _controller.getRouter(widget.id);
   }
 
@@ -59,9 +62,20 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
     });
   }
 
+  void _listenBus() {
+    eventBusOnRateSuccess = eventBus.on<OnRateSuccess>().listen((event) {
+      if (event.className == mainScreen) {
+        debugPrint("FCM main _listenBus mainScreen");
+        Navigator.pop(context);
+        debugPrint("FCM main _listenBus mainScreen pop");
+      }
+    });
+  }
+
   @override
   void dispose() {
     _controller.clearOnDispose();
+    eventBusOnRateSuccess?.cancel();
     super.dispose();
   }
 
@@ -548,7 +562,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                             SizedBox(
                                 width: 46,
                                 height: 46,
-                                child: Image.asset("assets/images/broken_motorbike.png")),
+                                child: Image.asset(
+                                    "assets/images/broken_motorbike.png")),
                           ],
                         ),
                       )),
@@ -557,7 +572,8 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                 InkWell(
                   onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Tôi lạc đường", NotificationData.TYPE_MAP);
+                    _controller.postFCM(
+                        "Tôi lạc đường", NotificationData.TYPE_MAP);
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
@@ -581,17 +597,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                             SizedBox(
                                 width: 46,
                                 height: 46,
-                                child: Image.asset("assets/images/lost_road.png")),
+                                child:
+                                    Image.asset("assets/images/lost_road.png")),
                           ],
                         ),
                       )),
                 ),
-
                 const SizedBox(height: 4),
                 InkWell(
                   onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Tôi muốn dừng chân", NotificationData.TYPE_MAP);
+                    _controller.postFCM(
+                        "Tôi muốn dừng chân", NotificationData.TYPE_MAP);
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
@@ -615,17 +632,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                             SizedBox(
                                 width: 46,
                                 height: 46,
-                                child: Image.asset("assets/images/wana_stop.png")),
+                                child:
+                                    Image.asset("assets/images/wana_stop.png")),
                           ],
                         ),
                       )),
                 ),
-
                 const SizedBox(height: 4),
                 InkWell(
                   onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Tôi gặp trục trặc", NotificationData.TYPE_MAP);
+                    _controller.postFCM(
+                        "Tôi gặp trục trặc", NotificationData.TYPE_MAP);
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
@@ -649,16 +667,18 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                             SizedBox(
                                 width: 46,
                                 height: 46,
-                                child: Image.asset("assets/images/problem.png")),
+                                child:
+                                    Image.asset("assets/images/problem.png")),
                           ],
                         ),
                       )),
                 ),
-              const SizedBox(height: 4),
+                const SizedBox(height: 4),
                 InkWell(
                   onTap: () {
                     Get.back(); //close this sheet
-                    _controller.postFCM("Cần người giúp khẩn cấp", NotificationData.TYPE_MAP);
+                    _controller.postFCM(
+                        "Cần người giúp khẩn cấp", NotificationData.TYPE_MAP);
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
@@ -688,7 +708,6 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                       )),
                 ),
                 const SizedBox(height: 16),
-
               ],
             ),
           ),

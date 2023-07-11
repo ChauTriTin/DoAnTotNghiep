@@ -113,10 +113,10 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
         ),
         const SizedBox(height: DimenConstants.marginPaddingMedium),
         _buildItem(
-          _controller.currentUserData.value.getAvatar(),
+          _controller.getLeaderInfor()?.getAvatar(),
           null,
           "Trưởng đoàn",
-          _controller.currentUserData.value.name ?? "",
+          _controller.getLeaderInfor()?.name ?? "",
           (rate) {
             _controller.setRateLeader(rate);
           },

@@ -8,4 +8,11 @@ class OnBackPress {
   OnBackPress(this.className);
 }
 
+class OnRateSuccess {
+  String className;
+
+  OnRateSuccess(this.className);
+}
+
 const String mapScreen = "mapScreen";
+const String mainScreen = "mainScreen";
