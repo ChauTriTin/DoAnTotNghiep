@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/rate.dart';
@@ -29,7 +27,7 @@ class FormController extends BaseController {
 
   Future<void> getRouter(String id) async {
     try {
-      debugPrint(">>>rate getRouter id $id");
+      debugPrint(">>>rate getRouter FCM main id $id");
       FirebaseHelper.collectionReferenceRouter
           .doc(id)
           .snapshots()
@@ -171,7 +169,7 @@ class FormController extends BaseController {
 
   Future<void> addRateToUserCollection(UserRate rate, Trip trip) async {
     try {
-      List<UserRate> rates = userHost.rates ??[];
+      List<UserRate> rates = userHost.rates ?? [];
       rates.insert(0, rate);
 
       // Map<String, dynamic> map = {};
@@ -179,8 +177,8 @@ class FormController extends BaseController {
       //   map.addEntries(element.idUser: element.to());
       // }
 
-    List<Map<String, dynamic>> rateMaps =
-    rates.map((rate) => rate.toJson()).toList();
+      List<Map<String, dynamic>> rateMaps =
+          rates.map((rate) => rate.toJson()).toList();
 
       Dog.d("addRateToUserCollection: ${rate.toString()}");
       await FirebaseHelper.collectionReferenceUser
@@ -209,5 +207,17 @@ class FormController extends BaseController {
 
   void setPlaceStopWithIndex(double value, int index) {
     rateListPlaceStop[index] = value;
+  }
+
+  UserData? getLeaderInfor() {
+    var idHost = trip.value.userIdHost;
+    UserData? leaderInfo;
+    for (var element in listMember) {
+      if (element.uid == idHost) {
+        leaderInfo = element;
+        break;
+      }
+    }
+    return leaderInfo;
   }
 }
