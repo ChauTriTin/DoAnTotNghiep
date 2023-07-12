@@ -41,15 +41,21 @@ class MemberController extends BaseController {
       if (tripData.value.listIdMember == null ||
           tripData.value.listIdMember?.isEmpty == true) return;
       var tempUserList = <UserData>[];
+      Dog.d(
+          "_getUserParticipated tripData.value.listIdMember: ${tripData.value.listIdMember}");
       for (var uid in tripData.value.listIdMember!) {
         DocumentSnapshot userSnapshot = await _users.doc(uid).get();
         if (!userSnapshot.exists) {
+          log("_getUserParticipated: user ís not exist");
           continue;
         }
 
         DocumentSnapshot<Map<String, dynamic>>? userMap =
             userSnapshot as DocumentSnapshot<Map<String, dynamic>>?;
-        if (userMap == null || userMap.data() == null) return;
+        if (userMap == null || userMap.data() == null) {
+          log("_getUserParticipated: user map is null");
+          continue;
+        }
 
         var user = UserData.fromJson((userMap).data()!);
         tempUserList.add(user);
@@ -69,6 +75,8 @@ class MemberController extends BaseController {
       var listIdMember = tripData.value.listIdMember;
       var listIdMemberBlocked = tripData.value.listIdMemberBlocked ?? [];
 
+      List<UserData> currentListMember = List.from(members);
+
       Dog.d("outTrip currentIdMember: ${listIdMember.toString()}");
       Dog.d("outTrip listIdMemberBlocked: ${listIdMemberBlocked.toString()}");
 
@@ -82,7 +90,7 @@ class MemberController extends BaseController {
         },
       ).then((value) {
         Dog.d("removeMember success");
-        postFCMBlockUser(user, isBlock);
+        postFCMBlockUser(user, isBlock, currentListMember);
         setAppLoading(false, "Loading", TypeApp.loadingData);
       }).catchError((error) {
         setAppLoading(false, "Loading", TypeApp.loadingData);
@@ -124,7 +132,7 @@ class MemberController extends BaseController {
     }
   }
 
-  Future<void> postFCMBlockUser(UserData userBlock, bool isBlock) async {
+  Future<void> postFCMBlockUser(UserData userBlock, bool isBlock, List<UserData> members) async {
     FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
       apiKey: Constants.apiKey,
       enableLog: true,
