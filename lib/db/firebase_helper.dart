@@ -7,6 +7,10 @@ class FirebaseHelper {
   static String keyUser = "users";
   static String keyChat = "chat";
   static String messages = "messages";
+  static String uid = "uid";
+  static String email = "email";
+  static String phone = "phone";
+  static String name = "name";
   static String rates = "rates";
   static String listIdMember = "listIdMember";
   static String listIdMemberBlocked = "listIdMemberBlocked";

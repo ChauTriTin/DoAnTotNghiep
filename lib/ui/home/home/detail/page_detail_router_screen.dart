@@ -29,6 +29,7 @@ import '../../../../model/comment.dart';
 import '../../../../model/place.dart';
 import '../../../../model/rate.dart';
 import '../../../user_singleton_controller.dart';
+import '../../router/add_member/add_member_screen.dart';
 import '../../router/create/create_router_screen.dart';
 import '../../router/create_success/create_success_screen.dart';
 import '../../router/create_success/enum_router.dart';
@@ -116,6 +117,20 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             ),
             backgroundColor: ColorConstants.appColor,
             actions: [
+              Visibility(
+                visible: !_controller.isTripCompleted() && _controller.isUserHost(),
+                child: IconButton(
+                  icon: SizedBox(
+                    width: 24,
+                    child: Image.asset("assets/images/add_member.png"),
+                  ),
+                  onPressed: () {
+                    Get.to(AddMemberScreen(
+                      tripID: _controller.detailTrip.value.id ?? "",
+                    ));
+                  },
+                ),
+              ),
               Visibility(
                   visible: !_controller.isTripCompleted() &&
                       _controller.isJoinedCurrentTrip(),
@@ -452,11 +467,12 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                                           color: ColorConstants.colorTitleTrip,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16,
-                                          decoration:
-                                          TextDecoration.none), // Màu chữ đỏ
+                                          decoration: TextDecoration
+                                              .none), // Màu chữ đỏ
                                     ),
                                     TextSpan(
-                                        text: ': ${_controller.userLeaderData.value.name}',
+                                        text:
+                                            ': ${_controller.userLeaderData.value.name}',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16,
@@ -623,7 +639,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
       return SizedBox(
         height: MediaQuery.of(context).size.height * 1 / 5.5,
         child: ListView.separated(
-          padding: const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
+          padding:
+              const EdgeInsets.only(left: DimenConstants.marginPaddingMedium),
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           itemCount: trips.length,
@@ -689,10 +706,12 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             width: 40,
             height: 40,
             margin: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            child: const Icon(Icons.timer, color: Colors.blue,)),
+            child: const Icon(
+              Icons.timer,
+              color: Colors.blue,
+            )),
         Expanded(
-          child:
-          RichText(
+          child: RichText(
             text: TextSpan(
               children: <TextSpan>[
                 const TextSpan(
@@ -701,8 +720,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       color: ColorConstants.colorTitleTrip,
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
-                      decoration:
-                      TextDecoration.none), // Màu chữ đỏ
+                      decoration: TextDecoration.none), // Màu chữ đỏ
                 ),
                 TextSpan(
                     text: ': ${_controller.detailTrip.value.timeStart}',
@@ -885,7 +903,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                     const SizedBox(
                       width: 8,
                     ),
-                    Text(TimeUtils.formatDateTimeFromMilliseconds(data.id as int)),
+                    Text(TimeUtils.formatDateTimeFromMilliseconds(
+                        data.id as int)),
                   ],
                 ),
               ),
@@ -908,8 +927,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   Text(
                     data.name ?? "No name",
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontSize: 14,
-                        fontWeight: FontWeight.w600, color: Colors.black),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
                   ),
                   const SizedBox(
                     height: 4,
@@ -917,8 +937,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   Text(
                     data.content ?? "",
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontSize: 13,
-                        fontWeight: FontWeight.w400, color: Colors.black),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -926,9 +947,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             Container(
               margin: const EdgeInsets.only(bottom: 12),
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  fontSize: 11,
-                    color: Colors.grey[500]),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(fontSize: 11, color: Colors.grey[500]),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Row(
@@ -936,7 +958,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       const SizedBox(
                         width: 8,
                       ),
-                      Text(TimeUtils.formatDateTimeFromMilliseconds(int.parse(data.id ?? "0"))),
+                      Text(TimeUtils.formatDateTimeFromMilliseconds(
+                          int.parse(data.id ?? "0"))),
                     ],
                   ),
                 ),
@@ -1090,7 +1113,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         )));
     list.add(const SizedBox(height: DimenConstants.marginPaddingMedium));
-    var listNotCompleted = _controller.listTrips.where((p0) => p0.isComplete == false).toList();
+    var listNotCompleted =
+        _controller.listTrips.where((p0) => p0.isComplete == false).toList();
     list.add(getOtherList(listNotCompleted));
     return list;
   }
@@ -1282,10 +1306,11 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16,
                                   decoration:
-                                  TextDecoration.none), // Màu chữ đỏ
+                                      TextDecoration.none), // Màu chữ đỏ
                             ),
                             TextSpan(
-                                text: ': ${_controller.detailTrip.value.placeStart?.name}}',
+                                text:
+                                    ': ${_controller.detailTrip.value.placeStart?.name}}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
@@ -1349,10 +1374,11 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16,
                                   decoration:
-                                  TextDecoration.none), // Màu chữ đỏ
+                                      TextDecoration.none), // Màu chữ đỏ
                             ),
                             TextSpan(
-                                text: ': ${_controller.detailTrip.value.placeEnd?.name}}',
+                                text:
+                                    ': ${_controller.detailTrip.value.placeEnd?.name}}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
@@ -1410,7 +1436,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                       margin: const EdgeInsets.only(right: 8),
                       child: const Text("Đánh giá của chuyến đi",
                           style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16, color: ColorConstants.colorTitleTrip)),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: ColorConstants.colorTitleTrip)),
                     ),
                   ),
                   Expanded(
@@ -1513,7 +1541,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               flex: 2,
               child: Container(
                 margin: const EdgeInsets.only(right: 8),
-                child:RichText(
+                child: RichText(
                   text: TextSpan(
                     children: <TextSpan>[
                       const TextSpan(
@@ -1522,8 +1550,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             color: ColorConstants.colorTitleTrip,
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
-                            decoration:
-                            TextDecoration.none), // Màu chữ đỏ
+                            decoration: TextDecoration.none), // Màu chữ đỏ
                       ),
                       TextSpan(
                           text: ': ${element.name}}',

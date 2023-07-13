@@ -102,6 +102,7 @@ class StringConstants {
   static const String noTripHome = "Chưa có chuyến đi nào được tạo";
   static const String noComment = "Chưa có bình luận nào";
   static const String noMessage = "Bạn chưa tham gia group chat nào";
+  static const String noUser = "Tìm bạn bè";
   static const String gotoDetailRouter = "Xem chi tiết chuyến đi";
 
   static const String avatarImgDefault =
@@ -145,6 +146,7 @@ class StringConstants {
       "📱 Version: 1.0.0\n\n"
       "Rất mong được đông đảo các bạn sử dụng";
   static const String termCondition = "Chính sách và điều khoản";
+  static const String inviteUser = "Mời bạn bè tham gia chuyến đi";
   static const String policyDetail = "Điều khoản riêng tư này "
       "mô tả về các chính sách và phương pháp thu nhập, sử dụng và trình bày thông "
       "tin của bạn khi sử dụng app AppDiPhuot. Chúng tôi sẽ không sử dụng hoặc tết lộ"
