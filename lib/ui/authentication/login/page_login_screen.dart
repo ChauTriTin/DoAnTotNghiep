@@ -166,15 +166,15 @@ class _LoginState extends BaseStatefulState<LoginScreen> {
                           const SizedBox(
                               width: DimenConstants.marginPaddingLarge),
 
-                          // Facebook
-                          GestureDetector(
-                            onTap: onTabFacebookLogin,
-                            child: SizedBox(
-                                width: DimenConstants.loginIconSize,
-                                child: Image.asset(
-                                  "assets/images/ic_facebook.png",
-                                )),
-                          )
+                          // // Facebook
+                          // GestureDetector(
+                          //   onTap: onTabFacebookLogin,
+                          //   child: SizedBox(
+                          //       width: DimenConstants.loginIconSize,
+                          //       child: Image.asset(
+                          //         "assets/images/ic_facebook.png",
+                          //       )),
+                          // )
                         ],
                       ),
 
