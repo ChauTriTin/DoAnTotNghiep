@@ -231,6 +231,7 @@ class _PageNotiScreenState extends BaseStatefulState<PageNotiScreen> {
       case NotificationData.TYPE_REMOVE:
       case NotificationData.TYPE_EXIT_ROUTER:
       case NotificationData.TYPE_JOIN_ROUTER:
+      case NotificationData.TYPE_INVITE_TRIP:
         Get.to(() => DetailRouterScreen(
               tripId: tripId,
             ));

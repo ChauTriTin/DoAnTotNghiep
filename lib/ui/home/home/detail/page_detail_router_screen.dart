@@ -126,7 +126,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   ),
                   onPressed: () {
                     Get.to(AddMemberScreen(
-                      tripID: _controller.detailTrip.value.id ?? "",
+                      trip: _controller.detailTrip.value,
                     ));
                   },
                 ),

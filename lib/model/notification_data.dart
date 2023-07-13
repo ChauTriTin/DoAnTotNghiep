@@ -31,6 +31,7 @@ class NotificationData {
   static const String TYPE_JOIN_ROUTER = "6";
   static const String TYPE_DELETE_ROUTER = "7";
   static const String TYPE_RATE_TRIP = "8";
+  static const String TYPE_INVITE_TRIP = "9";
 
   bool isTypeMap() {
     return notificationType == TYPE_MAP;

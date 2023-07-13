@@ -11,6 +11,7 @@ import 'package:lottie/lottie.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../../common/const/constants.dart';
+import '../../../../model/trip.dart';
 import '../../../../util/log_dog_utils.dart';
 import '../../../../util/ui_utils.dart';
 import 'add_member_controller.dart';
@@ -18,10 +19,10 @@ import 'add_member_controller.dart';
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({
     super.key,
-    required this.tripID,
+    required this.trip,
   });
 
-  final String tripID;
+  final Trip trip;
 
   @override
   State<AddMemberScreen> createState() => _AddMemberScreen();
@@ -35,7 +36,7 @@ class _AddMemberScreen extends BaseStatefulState<AddMemberScreen> {
   void initState() {
     super.initState();
     _setupListen();
-    _controller.getData(widget.tripID);
+    _controller.getData(widget.trip);
   }
 
   void _setupListen() {
@@ -149,6 +150,9 @@ class _AddMemberScreen extends BaseStatefulState<AddMemberScreen> {
   }
 
   Widget getUserItem(int index, UserData user) {
+    String avatar = user.avatar.isNullOrBlank == true
+        ? StringConstants.avatarImgDefault
+        : user.avatar ?? "";
     return InkWell(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -165,7 +169,7 @@ class _AddMemberScreen extends BaseStatefulState<AddMemberScreen> {
                   child: SizedBox.fromSize(
                     size: const Size.fromRadius(24),
                     child: Image.network(
-                      user.avatar ?? StringConstants.avatarImgDefault,
+                      avatar,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -180,19 +184,19 @@ class _AddMemberScreen extends BaseStatefulState<AddMemberScreen> {
                       fontWeight: FontWeight.w400),
                 ),
               ),
-              if (_controller.memberIds.value.contains(user.uid))
-               IconButton(
-                 onPressed: (){},
-                  icon: SizedBox(
-                    width: 24,
-                    child: Image.asset("assets/images/user_added.png"),
+                Visibility(
+                  visible: _controller.memberIds.value.contains(user.uid),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: SizedBox(
+                      width: 24,
+                      child: Image.asset("assets/images/user_added.png"),
+                    ),
                   ),
-                )
-              else
-                InkWell(
-                  onTap: () {
-                    _controller.addMember(user);
-                  },
+                ),
+
+                Visibility(
+                  visible: !_controller.memberIds.value.contains(user.uid),
                   child: IconButton(
                     icon: SizedBox(
                       width: 24,
