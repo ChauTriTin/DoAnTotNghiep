@@ -42,7 +42,7 @@ class CreateRouterController extends BaseController {
   var isCreateRouteSuccess = false.obs;
 
   var isEditRouterMode = false.obs;
-  var trip = Trip().obs;
+  var tripData = Trip().obs;
 
   var tripsInProgress = <Trip>[].obs;
 
@@ -293,9 +293,13 @@ class CreateRouterController extends BaseController {
     trip.id = id.value;
     trip.userIdHost = userData.value.uid;
     trip.userHostName = userData.value.name;
-    trip.listIdMember = <String>[];
-    if (userData.value.uid?.isNotEmpty == true) {
-      trip.listIdMember?.add(userData.value.uid ?? "");
+    if (tripData.value.listIdMember?.isNullOrBlank == true) {
+      trip.listIdMember = <String>[];
+      if (userData.value.uid?.isNotEmpty == true) {
+        trip.listIdMember?.add(userData.value.uid ?? "");
+      }
+    } else {
+      trip.listIdMember = tripData.value.listIdMember;
     }
     trip.title = sTitle;
     trip.des = sDescription;
@@ -382,24 +386,25 @@ class CreateRouterController extends BaseController {
         if (map == null || map.data() == null) return;
 
         var trip = Trip.fromJson((map).data()!);
-        this.trip.value = trip;
+        this.tripData.value = trip;
         debugPrint("editRouter getRouter success: ${trip.toString()}");
-        debugPrint("editRouter s timeStart ${this.trip.value.timeStart}");
-        debugPrint("editRouter s timeEnd ${this.trip.value.timeEnd}");
-        var timeStart = TimeUtils.stringToDateTime(this.trip.value.timeStart);
-        var timeEnd = TimeUtils.stringToDateTime(this.trip.value.timeEnd);
+        debugPrint("editRouter s timeStart ${this.tripData.value.timeStart}");
+        debugPrint("editRouter s timeEnd ${this.tripData.value.timeEnd}");
+        var timeStart =
+            TimeUtils.stringToDateTime(this.tripData.value.timeStart);
+        var timeEnd = TimeUtils.stringToDateTime(this.tripData.value.timeEnd);
         debugPrint("editRouter timeStart $timeStart");
         debugPrint("editRouter timeEnd $timeEnd");
         initDefault(
-          this.trip.value.title ?? "",
-          this.trip.value.des ?? "",
-          this.trip.value.placeStart,
-          this.trip.value.placeEnd,
-          this.trip.value.listPlace ?? List.empty(),
+          this.tripData.value.title ?? "",
+          this.tripData.value.des ?? "",
+          this.tripData.value.placeStart,
+          this.tripData.value.placeEnd,
+          this.tripData.value.listPlace ?? List.empty(),
           timeStart,
           timeEnd,
-          this.trip.value.require ?? "",
-          this.trip.value.isPublic ?? true,
+          this.tripData.value.require ?? "",
+          this.tripData.value.isPublic ?? true,
         );
       });
     } catch (e) {
