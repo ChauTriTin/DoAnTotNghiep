@@ -6,7 +6,6 @@ import 'package:appdiphuot/model/place.dart';
 import 'package:appdiphuot/ui/home/picker/map_picker/map_picker_screen.dart';
 import 'package:appdiphuot/ui/home/router/create_success/create_success_screen.dart';
 import 'package:appdiphuot/util/time_utils.dart';
-import 'package:appdiphuot/view/profile_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:forked_slider_button/forked_slider_button.dart';
@@ -17,7 +16,6 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:overlay_loading_progress/overlay_loading_progress.dart';
 
 import '../../../../util/log_dog_utils.dart';
-import '../../../user_singleton_controller.dart';
 import '../../setting/setting_screen.dart';
 import '../create_success/enum_router.dart';
 import 'create_router_controller.dart';
@@ -112,11 +110,11 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
 
         Get.to(
           CreateSuccessScreen(id: _controller.id.value, state: state
-              // dateTimeEnd: _controller.dateTimeEnd.value,
-              // placeStart: _controller.placeStart.value,
-              // placeEnd: _controller.placeEnd.value,
-              // listPlaceStop: _controller.listPlaceStop,
-              ),
+            // dateTimeEnd: _controller.dateTimeEnd.value,
+            // placeStart: _controller.placeStart.value,
+            // placeEnd: _controller.placeEnd.value,
+            // listPlaceStop: _controller.listPlaceStop,
+          ),
         );
       }
     });
@@ -237,7 +235,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -274,7 +272,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -558,7 +556,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -598,10 +596,10 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             dismissible: false,
             backgroundColor: Colors.red.withOpacity(0.25),
             action: () {
-              if(isCanJoin()) {
+              if (checkCanJoinTrip()) {
                 FocusScope.of(context).unfocus();
                 _controller.createRouter();
-              }else{
+              } else {
                 showErrorDialog("Không thể tham gia",
                     "Bạn có chuyến đi bắt đầu vào ngày này", "OK", () {});
               }
@@ -770,22 +768,35 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     _controller.setDateTimeEnd(dateTime);
   }
 
-  bool isCanJoin() {
+  bool checkCanJoinTrip() {
     var listJoined = _controller.tripsInProgress.value;
     Dog.d("tripsInProgress: ${listJoined.length}");
     if (listJoined.isNotEmpty) {
-      var currentTrip = listJoined[0];
-      List<String> timeCurrent = currentTrip.timeStart!.split(" ");
-      List<String> timeDetail =
-          TimeUtils.convert(_controller.dateTimeStart.value).split(" ");
-      Dog.d("timeCurrent: ${timeCurrent[0]} -- timeDetail: ${timeDetail[0]}");
-      if (timeCurrent[0] == timeDetail[0]) {
-        return false;
-      } else {
-        return true;
+      var listStartTimeOfTripsParticipated = <String>[];
+      try {
+        listJoined.forEach((element) {
+          // NẾU đang edit chuyến đi, sẽ loại trừ chuyến đi hiện tại và k cần check time của chuyến đi này
+          if (element.id != _controller.tripData.value.id) {
+            String timeStart = element.timeStart!.split(" ").first;
+            listStartTimeOfTripsParticipated.add(timeStart);
+          }
+        });
+
+        var timeOfCurrentTrip = TimeUtils
+            .convert(_controller.dateTimeStart.value)
+            .split(" ")
+            .first;
+
+        // Thời gian của chuyến đi hiện tại đã đụng với chuyến đi khác
+        if (listStartTimeOfTripsParticipated.contains(timeOfCurrentTrip)) {
+          return false;
+        } else {
+          return true;
+        }
+      } catch (e, s) {
+        print("checkCanJoinTrip eror: $s");
       }
-    } else {
-      return true;
     }
+    return false;
   }
 }

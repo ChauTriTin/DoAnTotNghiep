@@ -1085,7 +1085,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                   margin: const EdgeInsets.symmetric(
                       horizontal: DimenConstants.marginPaddingExtraLarge),
                   child: UIUtils.getOutlineButton1(StringConstants.confirm, () {
-                    if (isCanJoin()) {
+                    if (checkCanJoinTrip()) {
                       _controller.joinedRouter(_codeController.text);
                       Get.back();
                     } else {
@@ -1660,7 +1660,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     if (_controller.isUserBlocked()) {
       showUserBlockedDialog();
     } else {
-      if (isCanJoin()) {
+      if (checkCanJoinTrip()) {
         _controller.joinedRouter(_controller.detailTrip.value.id);
       } else {
         showErrorDialog("Không thể tham gia",
@@ -1669,22 +1669,27 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     }
   }
 
-  bool isCanJoin() {
+  bool checkCanJoinTrip() {
     var listJoined = _controller.tripsInProgress.value;
+    Dog.d("tripsInProgress: ${listJoined.length}");
     if (listJoined.isNotEmpty) {
-      var currentTrip = listJoined[0];
-      var detailTrip = _controller.detailTrip.value;
-      List<String> timeCurrent = currentTrip.timeStart!.split(" ");
-      List<String> timeDetail = detailTrip.timeStart!.split(" ");
+      try {
+        var listStartTimeOfTripsParticipated =
+            listJoined.map((e) => e.timeStart!.split(" ").first);
+        var timeStartOfCurrentTrip =
+            _controller.detailTrip.value.timeStart?.split(" ").first;
 
-      if (timeCurrent[0] == timeDetail[0]) {
-        return false;
-      } else {
-        return true;
+        // Thời gian của chuyến đi hiện tại đã đụng với chuyến đi khác
+        if (listStartTimeOfTripsParticipated.contains(timeStartOfCurrentTrip)) {
+          return false;
+        } else {
+          return true;
+        }
+      } catch (e, s) {
+        print("checkCanJoinTrip eror: $s");
       }
-    } else {
-      return true;
     }
+    return false;
   }
 
   void showUserBlockedDialog() {
