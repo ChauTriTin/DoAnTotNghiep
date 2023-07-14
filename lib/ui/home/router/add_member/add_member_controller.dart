@@ -126,7 +126,9 @@ class AddMemberController extends BaseController {
 
       List<String> tempMemberIds = List.from(memberIds);
       tempMemberIds.add(user.uid ?? "");
-      tempMemberIds.remove(currentUser.value.uid);
+
+      List<String> tempMemberIdsNotify = List.from(tempMemberIds);
+      tempMemberIdsNotify.remove(currentUser.value.uid);
 
       FirebaseHelper.collectionReferenceRouter.doc(tripData.value.id).update(
         {
@@ -134,7 +136,7 @@ class AddMemberController extends BaseController {
         },
       ).then((value) {
         Dog.d("addMember success");
-        postFCMBlockUser(tempMemberIds, user);
+        postFCMBlockUser(tempMemberIdsNotify, user);
 
         _showToastAddSuccess(user);
         getDetailTrip(tripData.value.id ?? "");

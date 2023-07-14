@@ -16,6 +16,7 @@ import '../../../../model/user.dart';
 import '../../../../util/ui_utils.dart';
 import '../../../../view/profile_bar_widget.dart';
 import '../../../user_singleton_controller.dart';
+import '../add_member/add_member_screen.dart';
 import 'member_controller.dart';
 
 class JoinedManagerScreen extends StatefulWidget {
@@ -47,8 +48,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
         OverlayLoadingProgress.stop();
       }
     });
-    _controller.appError.listen((err) {
-    });
+    _controller.appError.listen((err) {});
 
     _controller.isTripDeleted.listen((isDeleted) {
       if (isDeleted) {
@@ -60,46 +60,80 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
   void _showWarningDialog() {
     UIUtils.showAlertDialog(context, StringConstants.warning,
         StringConstants.deleteTripError, StringConstants.ok, () {
-          Get.back();
-        }, null, null);
+      Get.back();
+    }, null, null);
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        toolbarHeight: 0,
-        backgroundColor: ColorConstants.appColor,
-      ),
-      backgroundColor: ColorConstants.colorWhite,
-      body: Stack(
-        children: [
-          Obx(() => _getBody()),
-          Padding(
-            padding: const EdgeInsets.all(
-              DimenConstants.marginPaddingMedium,
-            ),
-            child: FloatingActionButton(
-              mini: true,
-              elevation: DimenConstants.elevationMedium,
-              backgroundColor: ColorConstants.appColor,
-              onPressed: () {
-                Get.back();
-              },
-              child: const Icon(Icons.clear),
-            ),
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          toolbarHeight: 0,
+          backgroundColor: ColorConstants.appColor,
+        ),
+        backgroundColor: ColorConstants.colorWhite,
+        body: Obx(
+          () => Stack(
+            children: [
+              _getBody(),
+              Padding(
+                padding: const EdgeInsets.all(
+                  DimenConstants.marginPaddingMedium,
+                ),
+                child: FloatingActionButton(
+                  mini: true,
+                  elevation: DimenConstants.elevationMedium,
+                  backgroundColor: ColorConstants.appColor,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Icon(Icons.clear),
+                ),
+              ),
+              Visibility(
+                visible: _controller.showInviteIcon(),
+                child: Positioned(
+                  top: 16,
+                  right: 16,
+                  child: TextButton(
+                    child: Row(
+                      children: [
+                        const Text(
+                          "Thêm thành viên",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        SizedBox(
+                          width: 20,
+                          child: Image.asset(
+                            "assets/images/add_member.png",
+                            color: ColorConstants.appColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      Get.to(AddMemberScreen(
+                        trip: _controller.tripData.value,
+                      ));
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget _getBody() {
     return Column(children: [
       const SizedBox(
-        height: DimenConstants.marginPaddingXXL,
+        height: 70,
       ),
       Padding(
         padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
@@ -217,7 +251,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
     return Padding(
       padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           _openMemberProfile(user);
         },
         child: Row(
@@ -244,7 +278,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
 
   void _openMemberProfile(UserData user) {
     Get.to(() => const PageUserPreviewScreen(), arguments: [
-      { Constants.user: user.uid}
+      {Constants.user: user.uid}
     ]);
   }
 
@@ -266,7 +300,8 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
         ),
       );
     } else {
-      if (currentUid == _controller.tripData.value.userIdHost && !_controller.isTripCompleted.value) {
+      if (currentUid == _controller.tripData.value.userIdHost &&
+          !_controller.isTripCompleted.value) {
         return InkWell(
           onTap: () {
             _showDeleteDialog(user);
@@ -287,23 +322,22 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
           ),
         );
       } else {
-        if (user.uid == _controller.currentUserID){
-          return
-             TextButton(
+        if (user.uid == _controller.currentUserID) {
+          return TextButton(
               onPressed: _showOutTripDialog,
               child: const Row(
                 children: [
-                  Text("Rời chuyến"
+                  Text("Rời chuyến"),
+                  SizedBox(
+                    width: 6,
                   ),
-                  SizedBox(width: 6,),
                   Icon(
                     Icons.output_rounded,
                     color: ColorConstants.appColor,
                     size: 18,
                   ),
                 ],
-              )
-          );
+              ));
         }
         return Container();
       }
@@ -318,7 +352,7 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
       StringConstants.cancel,
       null,
       StringConstants.delete,
-      (){
+      () {
         _controller.removeMember(user, true);
       },
     );
@@ -332,8 +366,8 @@ class _JoinedManagerScreenState extends State<JoinedManagerScreen> {
       StringConstants.cancel,
       null,
       StringConstants.outTrip,
-      (){
-        _controller.removeMember(_controller.currentUserUser.value, false);
+      () {
+        _controller.removeMember(_controller.currentUserData.value, false);
       },
     );
   }

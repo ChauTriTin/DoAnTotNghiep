@@ -184,8 +184,11 @@ class _AddMemberScreen extends BaseStatefulState<AddMemberScreen> {
                       fontWeight: FontWeight.w400),
                 ),
               ),
-                Visibility(
-                  visible: _controller.memberIds.value.contains(user.uid),
+              Obx(
+                () => Visibility(
+                  visible: _controller.tripData.value.listIdMember
+                          ?.contains(user.uid) ==
+                      true,
                   child: IconButton(
                     onPressed: () {},
                     icon: SizedBox(
@@ -194,19 +197,21 @@ class _AddMemberScreen extends BaseStatefulState<AddMemberScreen> {
                     ),
                   ),
                 ),
-
-                Visibility(
-                  visible: !_controller.memberIds.value.contains(user.uid),
-                  child: IconButton(
-                    icon: SizedBox(
-                      width: 24,
-                      child: Image.asset("assets/images/add_new_user.png"),
+              ),
+              Obx(() => Visibility(
+                    visible: _controller.tripData.value.listIdMember
+                            ?.contains(user.uid) ==
+                        false,
+                    child: IconButton(
+                      icon: SizedBox(
+                        width: 24,
+                        child: Image.asset("assets/images/add_new_user.png"),
+                      ),
+                      onPressed: () {
+                        _controller.addMember(user);
+                      },
                     ),
-                    onPressed: () {
-                      _controller.addMember(user);
-                    },
-                  ),
-                )
+                  ))
             ],
           ),
         ),

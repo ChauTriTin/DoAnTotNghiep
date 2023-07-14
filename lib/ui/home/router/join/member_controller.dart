@@ -25,7 +25,12 @@ class MemberController extends BaseController {
   var isTripCompleted = false.obs;
   var isTripDeleted = false.obs;
   var currentUserID = UserSingletonController.instance.getUid();
-  var currentUserUser = UserSingletonController.instance.userData;
+  var currentUserData = UserSingletonController.instance.userData;
+
+  bool showInviteIcon() {
+    return tripData.value.userIdHost == currentUserID &&
+        !(tripData.value.isComplete ?? false);
+  }
 
   void clearOnDispose() {
     Get.delete<MemberController>();
@@ -132,7 +137,8 @@ class MemberController extends BaseController {
     }
   }
 
-  Future<void> postFCMBlockUser(UserData userBlock, bool isBlock, List<UserData> members) async {
+  Future<void> postFCMBlockUser(
+      UserData userBlock, bool isBlock, List<UserData> members) async {
     FlutterFCMWrapper flutterFCMWrapper = const FlutterFCMWrapper(
       apiKey: Constants.apiKey,
       enableLog: true,
@@ -145,7 +151,7 @@ class MemberController extends BaseController {
         var fcmToken = element.fcmToken;
         if (fcmToken != null &&
             fcmToken.isNotEmpty &&
-            fcmToken != currentUserUser.value.fcmToken) {
+            fcmToken != currentUserData.value.fcmToken) {
           if (fcmToken == userBlock.fcmToken) {
             listFcmToken.add(fcmToken);
             if (element.uid != null && element.uid!.isNotEmpty) {
@@ -159,13 +165,13 @@ class MemberController extends BaseController {
       var title = "";
       String body = "";
       if (isBlock) {
-        body = "${currentUserUser.value.name} đã bị kick khỏi chuyến đi";
+        body = "${currentUserData.value.name} đã bị kick khỏi chuyến đi";
         title =
-            "${currentUserUser.value.name} vừa kick ${userBlock.name} ra khỏi chuyến đi ${tripData.value.title}";
+            "${currentUserData.value.name} vừa kick ${userBlock.name} ra khỏi chuyến đi ${tripData.value.title}";
       } else {
-        body = "${currentUserUser.value.name} đã rời khỏi chuyến đi";
+        body = "${currentUserData.value.name} đã rời khỏi chuyến đi";
         title =
-            "${currentUserUser.value.name} đã rời khỏi chuyến đi '${tripData.value.title}'";
+            "${currentUserData.value.name} đã rời khỏi chuyến đi '${tripData.value.title}'";
       }
 
       PushNotification notification = PushNotification(
@@ -175,8 +181,8 @@ class MemberController extends BaseController {
         dataBody: body,
         tripName: tripData.value.title,
         tripID: tripData.value.id,
-        userName: currentUserUser.value.name,
-        userAvatar: currentUserUser.value.avatar,
+        userName: currentUserData.value.name,
+        userAvatar: currentUserData.value.avatar,
         notificationType: NotificationData.TYPE_REMOVE,
         time: DateTime.now().millisecondsSinceEpoch.toString(),
       );
