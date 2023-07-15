@@ -110,11 +110,11 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
 
         Get.to(
           CreateSuccessScreen(id: _controller.id.value, state: state
-            // dateTimeEnd: _controller.dateTimeEnd.value,
-            // placeStart: _controller.placeStart.value,
-            // placeEnd: _controller.placeEnd.value,
-            // listPlaceStop: _controller.listPlaceStop,
-          ),
+              // dateTimeEnd: _controller.dateTimeEnd.value,
+              // placeStart: _controller.placeStart.value,
+              // placeEnd: _controller.placeEnd.value,
+              // listPlaceStop: _controller.listPlaceStop,
+              ),
         );
       }
     });
@@ -235,7 +235,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -272,7 +272,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -437,7 +437,6 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 style: const TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.w500,
-
                   fontSize: DimenConstants.txtMedium,
                 ),
               ),
@@ -556,7 +555,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -769,7 +768,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   }
 
   bool checkCanJoinTrip() {
-    var listJoined = _controller.tripsInProgress.value;
+    var listJoined = _controller.tripsInProgress;
     Dog.d("tripsInProgress: ${listJoined.length}");
     if (listJoined.isNotEmpty) {
       var listStartTimeOfTripsParticipated = <String>[];
@@ -782,10 +781,8 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           }
         });
 
-        var timeOfCurrentTrip = TimeUtils
-            .convert(_controller.dateTimeStart.value)
-            .split(" ")
-            .first;
+        var timeOfCurrentTrip =
+            TimeUtils.convert(_controller.dateTimeStart.value).split(" ").first;
 
         // Thời gian của chuyến đi hiện tại đã đụng với chuyến đi khác
         if (listStartTimeOfTripsParticipated.contains(timeOfCurrentTrip)) {
