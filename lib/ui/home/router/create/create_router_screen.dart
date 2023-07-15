@@ -705,9 +705,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
       initialDate: _controller.dateTimeStart.value,
-      firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
-        const Duration(days: 3652),
+        const Duration(days: 365),
       ),
       is24HourMode: false,
       isShowSeconds: false,
@@ -748,9 +748,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
       initialDate: _controller.dateTimeEnd.value,
-      firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
-        const Duration(days: 3652),
+        const Duration(days: 365),
       ),
       is24HourMode: false,
       isShowSeconds: false,
