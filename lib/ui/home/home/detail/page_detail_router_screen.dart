@@ -1687,9 +1687,10 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
         }
       } catch (e, s) {
         print("checkCanJoinTrip eror: $s");
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   void showUserBlockedDialog() {

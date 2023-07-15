@@ -293,12 +293,13 @@ class CreateRouterController extends BaseController {
     trip.id = id.value;
     trip.userIdHost = userData.value.uid;
     trip.userHostName = userData.value.name;
-    if (tripData.value.listIdMember?.isNullOrBlank == true) {
+    if (tripData.value.listIdMember == null || tripData.value.listIdMember?.isEmpty == true) {
       trip.listIdMember = <String>[];
       if (userData.value.uid?.isNotEmpty == true) {
         trip.listIdMember?.add(userData.value.uid ?? "");
       }
     } else {
+      Dog.d("EditTripData: ${tripData.value}");
       trip.listIdMember = tripData.value.listIdMember;
     }
     trip.title = sTitle;

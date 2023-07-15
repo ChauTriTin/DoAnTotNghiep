@@ -782,6 +782,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           }
         });
 
+        Dog.d("tripsInProgress listStartTimeOfTripsParticipated: $listStartTimeOfTripsParticipated");
+
+
         var timeOfCurrentTrip = TimeUtils
             .convert(_controller.dateTimeStart.value)
             .split(" ")
@@ -795,8 +798,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
         }
       } catch (e, s) {
         print("checkCanJoinTrip eror: $s");
+        return true;
       }
     }
-    return false;
+    return true;
   }
 }
