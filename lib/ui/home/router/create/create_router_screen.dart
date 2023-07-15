@@ -788,7 +788,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
   }
 
   bool checkCanJoinTrip() {
-    var listJoined = _controller.tripsInProgress;
+    var listJoined = _controller.tripsInProgress.value;
     Dog.d("tripsInProgress: ${listJoined.length}");
     if (listJoined.isNotEmpty) {
       var listStartTimeOfTripsParticipated = <String>[];

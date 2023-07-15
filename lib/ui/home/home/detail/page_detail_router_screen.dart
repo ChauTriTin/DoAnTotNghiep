@@ -1661,7 +1661,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     if (_controller.isUserBlocked()) {
       showUserBlockedDialog();
     } else {
-      if (!checkCanJoinTrip()) {
+      if (checkCanJoinTrip()) {
         _controller.joinedRouter(_controller.detailTrip.value.id);
       } else {
         showErrorDialog("Không thể tham gia",
