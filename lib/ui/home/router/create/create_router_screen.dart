@@ -630,38 +630,52 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       itemCount: list.length,
       itemBuilder: (context, i) {
         var place = list[i];
-        return InkWell(
-          child: Container(
-            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            decoration: BoxDecoration(
-                border: Border.all(
-                  width: 0.5,
-                  color: Colors.black,
+        return Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                child: Container(
+                  padding:
+                      const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 0.5,
+                        color: Colors.black,
+                      ),
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(DimenConstants.radiusMedium))),
+                  child: Text(
+                    place.name ?? "",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: DimenConstants.txtMedium,
+                    ),
+                  ),
                 ),
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(DimenConstants.radiusMedium))),
-            child: Text(
-              place.name ?? "",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: DimenConstants.txtMedium,
+                onTap: () {
+                  Get.to(MapPickerScreen(
+                    defaultPlace: place,
+                    callback: (newPlace) {
+                      _controller.editPlaceStop(newPlace, i);
+                    },
+                  ));
+                },
               ),
             ),
-          ),
-          onTap: () {
-            Get.to(MapPickerScreen(
-              defaultPlace: place,
-              callback: (newPlace) {
-                _controller.editPlaceStop(newPlace, i);
+            const SizedBox(width: DimenConstants.marginPaddingMedium),
+            FloatingActionButton(
+              mini: true,
+              elevation: DimenConstants.elevationMedium,
+              backgroundColor: ColorConstants.appColor,
+              onPressed: () {
+                _controller.deletePlaceStop(i);
+                showSnackBarFull(
+                    StringConstants.warning, "Xoá điểm dừng chân thành công");
               },
-            ));
-          },
-          onLongPress: () {
-            _controller.deletePlaceStop(i);
-            showSnackBarFull(
-                StringConstants.warning, "Xoá điểm dừng chân thành công");
-          },
+              child: const Icon(Icons.remove),
+            ),
+          ],
         );
       },
     );
