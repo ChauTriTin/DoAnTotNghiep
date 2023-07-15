@@ -459,24 +459,29 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                     const EdgeInsets.all(DimenConstants.marginPaddingMedium),
                 child: Text(
                   userData.name ?? "",
-                  style: TextStyle(
-                    fontSize: DimenConstants.txtSmall,
-                    color: Colors.white,
-                    shadows: <Shadow>[
-                      Shadow(
-                        offset: const Offset(3.0, 3.0),
-                        blurRadius: 3.0,
-                        color: ColorConstants.errorBorderTextInputColor
-                            .withOpacity(0.5),
-                      ),
-                      Shadow(
-                        offset: const Offset(3.0, 3.0),
-                        blurRadius: 8.0,
-                        color: ColorConstants.errorBorderTextInputColor
-                            .withOpacity(0.5),
-                      ),
-                    ],
-                  ),
+                  style: const TextStyle(
+                      inherit: true,
+                      fontWeight: FontWeight.bold,
+                      fontSize: DimenConstants.txtSmall,
+                      color: Colors.black,
+                      shadows: [
+                        Shadow(
+                            // bottomLeft
+                            offset: Offset(-1.5, -1.5),
+                            color: Colors.white),
+                        Shadow(
+                            // bottomRight
+                            offset: Offset(1.5, -1.5),
+                            color: Colors.white),
+                        Shadow(
+                            // topRight
+                            offset: Offset(1.5, 1.5),
+                            color: Colors.white),
+                        Shadow(
+                            // topLeft
+                            offset: Offset(-1.5, 1.5),
+                            color: Colors.white),
+                      ]),
                   textAlign: TextAlign.center,
                 ),
               ),
