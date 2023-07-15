@@ -118,7 +118,8 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
             backgroundColor: ColorConstants.appColor,
             actions: [
               Visibility(
-                visible: !_controller.isTripCompleted() && _controller.isUserHost(),
+                visible:
+                    !_controller.isTripCompleted() && _controller.isUserHost(),
                 child: IconButton(
                   icon: SizedBox(
                     width: 24,

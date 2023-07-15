@@ -9,7 +9,6 @@ import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/util/log_dog_utils.dart';
 import 'package:appdiphuot/util/time_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -52,7 +51,7 @@ class CreateRouterController extends BaseController {
   }
 
   Future<void> copyRouterId() async {
-    await Clipboard.setData(ClipboardData(text: id.value ?? ""));
+    await Clipboard.setData(ClipboardData(text: id.value));
     Fluttertoast.showToast(
         msg: "Copied",
         toastLength: Toast.LENGTH_SHORT,
@@ -124,7 +123,7 @@ class CreateRouterController extends BaseController {
   }
 
   bool isValidToAddNewPlaceStop() {
-    if (listPlaceStop.length < 5) {
+    if (listPlaceStop.length < 20) {
       return true;
     }
     return false;
@@ -386,25 +385,24 @@ class CreateRouterController extends BaseController {
         if (map == null || map.data() == null) return;
 
         var trip = Trip.fromJson((map).data()!);
-        this.tripData.value = trip;
+        tripData.value = trip;
         debugPrint("editRouter getRouter success: ${trip.toString()}");
-        debugPrint("editRouter s timeStart ${this.tripData.value.timeStart}");
-        debugPrint("editRouter s timeEnd ${this.tripData.value.timeEnd}");
-        var timeStart =
-            TimeUtils.stringToDateTime(this.tripData.value.timeStart);
-        var timeEnd = TimeUtils.stringToDateTime(this.tripData.value.timeEnd);
+        debugPrint("editRouter s timeStart ${tripData.value.timeStart}");
+        debugPrint("editRouter s timeEnd ${tripData.value.timeEnd}");
+        var timeStart = TimeUtils.stringToDateTime(tripData.value.timeStart);
+        var timeEnd = TimeUtils.stringToDateTime(tripData.value.timeEnd);
         debugPrint("editRouter timeStart $timeStart");
         debugPrint("editRouter timeEnd $timeEnd");
         initDefault(
-          this.tripData.value.title ?? "",
-          this.tripData.value.des ?? "",
-          this.tripData.value.placeStart,
-          this.tripData.value.placeEnd,
-          this.tripData.value.listPlace ?? List.empty(),
+          tripData.value.title ?? "",
+          tripData.value.des ?? "",
+          tripData.value.placeStart,
+          tripData.value.placeEnd,
+          tripData.value.listPlace ?? List.empty(),
           timeStart,
           timeEnd,
-          this.tripData.value.require ?? "",
-          this.tripData.value.isPublic ?? true,
+          tripData.value.require ?? "",
+          tripData.value.isPublic ?? true,
         );
       });
     } catch (e) {
