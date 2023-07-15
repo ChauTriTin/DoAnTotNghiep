@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
 import '../../../common/const/string_constants.dart';
+import '../../../model/rate.dart';
 import '../../../model/trip.dart';
 
 class PageHomeController extends BaseController {
@@ -122,7 +123,26 @@ class PageHomeController extends BaseController {
           var aLength = a.listIdMember?.length ?? 1;
           var bLength = b.listIdMember?.length ?? 1;
 
-          return bLength.compareTo(aLength);
+          double aRate = 0;
+          var listRateA = convertMapToRateList(a.rates);
+          if (listRateA.isNotEmpty) {
+            for (var element in listRateA) {
+              if (element.rateTrip != null) aRate = aRate + element.rateTrip!;
+            }
+          }
+
+          double bRate = 0;
+          var listRateB = convertMapToRateList(b.rates);
+          if (listRateB.isNotEmpty) {
+            for (var element in listRateB) {
+              if (element.rateTrip != null) bRate = bRate + element.rateTrip!;
+            }
+          }
+
+          if (bLength != aLength) {
+            return bLength.compareTo(aLength);
+          }
+          return aRate.compareTo(bRate);
         });
         filteredListTripType = listTrips;
         break;
@@ -147,5 +167,11 @@ class PageHomeController extends BaseController {
 
     listTripWithState.value = filteredTrip;
     listTripWithSearch.value = filteredTrip;
+  }
+
+  List<Rate> convertMapToRateList(Map<String, dynamic>? map) {
+    if (map == null) return <Rate>[];
+    final parsed = map.values.cast<Map<String, dynamic>>();
+    return parsed.map<Rate>((json) => Rate.fromJson(json)).toList();
   }
 }
