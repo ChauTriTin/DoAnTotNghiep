@@ -635,6 +635,12 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             Expanded(
               child: InkWell(
                 child: Container(
+                  margin: const EdgeInsets.fromLTRB(
+                    0,
+                    DimenConstants.marginPaddingSmall,
+                    0,
+                    DimenConstants.marginPaddingSmall,
+                  ),
                   padding:
                       const EdgeInsets.all(DimenConstants.marginPaddingMedium),
                   decoration: BoxDecoration(
