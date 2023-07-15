@@ -793,13 +793,13 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     if (listJoined.isNotEmpty) {
       var listStartTimeOfTripsParticipated = <String>[];
       try {
-        listJoined.forEach((element) {
+        for (var element in listJoined) {
           // NẾU đang edit chuyến đi, sẽ loại trừ chuyến đi hiện tại và k cần check time của chuyến đi này
           if (element.id != _controller.tripData.value.id) {
             String timeStart = element.timeStart!.split(" ").first;
             listStartTimeOfTripsParticipated.add(timeStart);
           }
-        });
+        }
 
         var timeOfCurrentTrip =
             TimeUtils.convert(_controller.dateTimeStart.value).split(" ").first;
@@ -811,7 +811,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           return true;
         }
       } catch (e, s) {
-        print("checkCanJoinTrip eror: $s");
+        debugPrint("checkCanJoinTrip eror: $s");
       }
     }
     return false;

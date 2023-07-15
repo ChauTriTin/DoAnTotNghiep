@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:appdiphuot/base/base_stateful_state.dart';
@@ -460,9 +459,23 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                     const EdgeInsets.all(DimenConstants.marginPaddingMedium),
                 child: Text(
                   userData.name ?? "",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: DimenConstants.txtSmall,
                     color: Colors.white,
+                    shadows: <Shadow>[
+                      Shadow(
+                        offset: const Offset(3.0, 3.0),
+                        blurRadius: 3.0,
+                        color: ColorConstants.errorBorderTextInputColor
+                            .withOpacity(0.5),
+                      ),
+                      Shadow(
+                        offset: const Offset(3.0, 3.0),
+                        blurRadius: 8.0,
+                        color: ColorConstants.errorBorderTextInputColor
+                            .withOpacity(0.5),
+                      ),
+                    ],
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -542,7 +555,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color: Color(0xFFFDD5BA),
+                      color: const Color(0xFFFDD5BA),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -577,7 +590,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color: Color(0xFFFAF1CB),
+                      color: const Color(0xFFFAF1CB),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -612,7 +625,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color: Color(0xFFE1FCCF),
+                      color: const Color(0xFFE1FCCF),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -647,7 +660,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color: Color(0xFFD6E2FF),
+                      color: const Color(0xFFD6E2FF),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
@@ -682,7 +695,7 @@ class _MapScreenState extends BaseStatefulState<MapScreen> {
                   },
                   child: Card(
                       shape: UIUtils.getCardCorner(),
-                      color: Color(0xFFFFD7D7),
+                      color: const Color(0xFFFFD7D7),
                       shadowColor: Colors.grey,
                       elevation: DimenConstants.cardElevation,
                       child: Padding(
