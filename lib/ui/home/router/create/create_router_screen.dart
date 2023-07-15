@@ -110,11 +110,11 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
 
         Get.to(
           CreateSuccessScreen(id: _controller.id.value, state: state
-            // dateTimeEnd: _controller.dateTimeEnd.value,
-            // placeStart: _controller.placeStart.value,
-            // placeEnd: _controller.placeEnd.value,
-            // listPlaceStop: _controller.listPlaceStop,
-          ),
+              // dateTimeEnd: _controller.dateTimeEnd.value,
+              // placeStart: _controller.placeStart.value,
+              // placeEnd: _controller.placeEnd.value,
+              // listPlaceStop: _controller.listPlaceStop,
+              ),
         );
       }
     });
@@ -235,7 +235,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -272,7 +272,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -437,7 +437,6 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 style: const TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.w500,
-
                   fontSize: DimenConstants.txtMedium,
                 ),
               ),
@@ -556,7 +555,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
             ),
             filled: true,
             contentPadding:
-            const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                const EdgeInsets.all(DimenConstants.marginPaddingMedium),
             fillColor: Colors.black12,
           ),
         ),
@@ -631,38 +630,58 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       itemCount: list.length,
       itemBuilder: (context, i) {
         var place = list[i];
-        return InkWell(
-          child: Container(
-            padding: const EdgeInsets.all(DimenConstants.marginPaddingMedium),
-            decoration: BoxDecoration(
-                border: Border.all(
-                  width: 0.5,
-                  color: Colors.black,
+        return Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(
+                    0,
+                    DimenConstants.marginPaddingSmall,
+                    0,
+                    DimenConstants.marginPaddingSmall,
+                  ),
+                  padding:
+                      const EdgeInsets.all(DimenConstants.marginPaddingMedium),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 0.5,
+                        color: Colors.black,
+                      ),
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(DimenConstants.radiusMedium))),
+                  child: Text(
+                    place.name ?? "",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: DimenConstants.txtMedium,
+                    ),
+                  ),
                 ),
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(DimenConstants.radiusMedium))),
-            child: Text(
-              place.name ?? "",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: DimenConstants.txtMedium,
+                onTap: () {
+                  Get.to(MapPickerScreen(
+                    defaultPlace: place,
+                    callback: (newPlace) {
+                      _controller.editPlaceStop(newPlace, i);
+                    },
+                  ));
+                },
               ),
             ),
-          ),
-          onTap: () {
-            Get.to(MapPickerScreen(
-              defaultPlace: place,
-              callback: (newPlace) {
-                _controller.editPlaceStop(newPlace, i);
+            const SizedBox(width: DimenConstants.marginPaddingMedium),
+            FloatingActionButton(
+              mini: true,
+              elevation: DimenConstants.elevationMedium,
+              backgroundColor: ColorConstants.appColor,
+              onPressed: () {
+                _controller.deletePlaceStop(i);
+                showSnackBarFull(
+                    StringConstants.warning, "Xoá điểm dừng chân thành công");
               },
-            ));
-          },
-          onLongPress: () {
-            _controller.deletePlaceStop(i);
-            showSnackBarFull(
-                StringConstants.warning, "Xoá điểm dừng chân thành công");
-          },
+              child: const Icon(Icons.remove),
+            ),
+          ],
         );
       },
     );
@@ -686,9 +705,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
       initialDate: _controller.dateTimeStart.value,
-      firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
-        const Duration(days: 3652),
+        const Duration(days: 365),
       ),
       is24HourMode: false,
       isShowSeconds: false,
@@ -729,9 +748,9 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
       initialDate: _controller.dateTimeEnd.value,
-      firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
-        const Duration(days: 3652),
+        const Duration(days: 365),
       ),
       is24HourMode: false,
       isShowSeconds: false,
@@ -774,13 +793,13 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
     if (listJoined.isNotEmpty) {
       var listStartTimeOfTripsParticipated = <String>[];
       try {
-        listJoined.forEach((element) {
+        for (var element in listJoined) {
           // NẾU đang edit chuyến đi, sẽ loại trừ chuyến đi hiện tại và k cần check time của chuyến đi này
           if (element.id != _controller.tripData.value.id) {
             String timeStart = element.timeStart!.split(" ").first;
             listStartTimeOfTripsParticipated.add(timeStart);
           }
-        });
+        }
 
         Dog.d("tripsInProgress listStartTimeOfTripsParticipated: $listStartTimeOfTripsParticipated");
 
@@ -799,6 +818,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
       } catch (e, s) {
         print("checkCanJoinTrip eror: $s");
         return true;
+        debugPrint("checkCanJoinTrip eror: $s");
       }
     }
     return true;
