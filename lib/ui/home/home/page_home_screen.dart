@@ -441,12 +441,19 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   }
 
   Widget _getRowListPlaceTop(LocSearch location, int index) {
+    int countRate = 0;
+
+    location.listRate?.forEach((element) {
+      countRate++;
+    });
+
     Widget widgetTopPlace;
     List<Color> colors = [
       Colors.red.withOpacity(0.8),
       Colors.yellow.withOpacity(0.7),
       Colors.green.withOpacity(0.7),
     ];
+
 
     Color backgroundColor;
 
@@ -518,12 +525,25 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                   width: DimenConstants.marginPaddingMedium,
                 ),
                 Expanded(
-                    child: Text(
-                  location.district ?? "",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      location.district ?? "",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 20),
+                    ),
+                    Text(
+                      "$countRate đánh giá",
+                      style: const TextStyle(
+                        color: Colors.blue,
+                          fontWeight: FontWeight.w300,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 14),
+                    ),
+                  ],
                 ))
               ],
             ),
