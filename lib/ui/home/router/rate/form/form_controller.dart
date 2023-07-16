@@ -182,11 +182,21 @@ class FormController extends BaseController {
       postFirebaseSearchLoc(districtPlaceEnd, rate.ratePlaceEnd?.toInt());
     }
 
+    try {
+      for (int i = 0; i < (rate.rateListPlaceStop?.length ?? 0); i++) {
+        var keyIndex = trip.value.listPlace?[i].district;
+        var rateIndex = rate.rateListPlaceStop?[i].toInt();
+        postFirebaseSearchLoc(keyIndex, rateIndex);
+      }
+    } catch (e) {
+      debugPrint(">>>rateListPlaceStop err $e");
+    }
+
     voidCallback.call();
   }
 
-  void postFirebaseSearchLoc(String key, int? rate) {
-    if (rate == null) {
+  void postFirebaseSearchLoc(String? key, int? rate) {
+    if (key == null || key.isEmpty || rate == null) {
       return;
     }
     try {
