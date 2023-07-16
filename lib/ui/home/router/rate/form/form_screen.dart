@@ -353,8 +353,9 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
                           height: DimenConstants.marginPaddingMedium),
                       ElevatedButton(
                         onPressed: () {
-                          Get.back(); //close this popup
-                          Get.back(); //close this screen
+                          //TODO loitp revert
+                          // Get.back(); //close this popup
+                          // Get.back(); //close this screen
                           widget.onRateSuccess.call();
                           showSnackBarFull(
                               StringConstants.warning, "Đánh giá thành công");

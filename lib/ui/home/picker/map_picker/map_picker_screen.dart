@@ -111,8 +111,11 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
         district = "${result.name}, $district";
       }
       p.district = district;
-      var locSearch =
-          LocSearch(district: district, count: 1, fullAddress: p.fullAddress);
+      var locSearch = LocSearch(
+          district: district,
+          count: 1,
+          fullAddress: p.fullAddress,
+          listRate: []);
       debugPrint("postFirebaseSearchLoc locSearch ${locSearch.toJson()}");
 
       //save to firebase

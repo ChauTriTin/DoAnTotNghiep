@@ -1,5 +1,6 @@
 import 'package:appdiphuot/base/base_controller.dart';
 import 'package:appdiphuot/db/firebase_helper.dart';
+import 'package:appdiphuot/model/loc_search.dart';
 import 'package:appdiphuot/model/rate.dart';
 import 'package:appdiphuot/model/trip.dart';
 import 'package:appdiphuot/model/user.dart';
@@ -164,7 +165,55 @@ class FormController extends BaseController {
     } catch (e) {
       debugPrint(">>>rate err $e");
     }
+
+    var districtPlaceStart = trip.value.placeStart?.district;
+    debugPrint(
+        ">>>districtPlaceStart $districtPlaceStart, ratePlaceStart ${rate.ratePlaceStart}");
+    if (districtPlaceStart == null || districtPlaceStart.isEmpty) {
+      //do nothing
+    } else {
+      postFirebaseSearchLoc(districtPlaceStart, rate.ratePlaceStart?.toInt());
+    }
+
     voidCallback.call();
+  }
+
+  void postFirebaseSearchLoc(String key, int? rate) {
+    if (rate == null) {
+      return;
+    }
+    try {
+      //get old value
+      FirebaseHelper.collectionReferenceLoc
+          .doc(key)
+          .snapshots()
+          .listen((value) {
+        DocumentSnapshot<Map<String, dynamic>>? map =
+            value as DocumentSnapshot<Map<String, dynamic>>?;
+        if (map == null || map.data() == null) {
+          debugPrint("postFirebaseSearchLoc return -> does not exit");
+        } else {
+          var oldLocSearch = LocSearch.fromJson((map).data()!);
+          debugPrint(
+              "postFirebaseSearchLoc oldLocSearch before ${oldLocSearch.toJson()}");
+          var newListRate = oldLocSearch.listRate;
+          newListRate?.add(rate);
+          oldLocSearch.listRate = newListRate;
+          debugPrint(
+              "postFirebaseSearchLoc oldLocSearch after ${oldLocSearch.toJson()}");
+          FirebaseHelper.collectionReferenceLoc
+              .doc(key)
+              .set(oldLocSearch.toJson())
+              .then((value) {
+            debugPrint("postFirebaseSearchLoc value success");
+          }).catchError((e) {
+            debugPrint("postFirebaseSearchLoc catchError $e");
+          });
+        }
+      });
+    } catch (e) {
+      debugPrint("postFirebaseSearchLoc catch $e");
+    }
   }
 
   Future<void> addRateToUserCollection(UserRate rate, Trip trip) async {
