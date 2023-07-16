@@ -228,6 +228,7 @@ class MapController extends BaseController {
         .map((point) => LatLng(point.latitude, point.longitude))
         .toList();
     log(">>>decodePolyline ${points.length}");
+
     return points;
   }
 
