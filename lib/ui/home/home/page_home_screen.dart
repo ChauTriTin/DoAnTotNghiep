@@ -540,13 +540,18 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                           fontStyle: FontStyle.italic,
                           fontSize: 20),
                     ),
-                    Text(
-                      "${avegaraRate}/$countRate đánh giá",
-                      style: const TextStyle(
-                        color: Colors.blue,
-                          fontWeight: FontWeight.w300,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "${avegaraRate}/$countRate đánh giá",
+                          style: const TextStyle(
+                            color: Colors.blue,
+                              fontWeight: FontWeight.w300,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 17),
+                        ),
+                      ],
                     ),
                   ],
                 ))
