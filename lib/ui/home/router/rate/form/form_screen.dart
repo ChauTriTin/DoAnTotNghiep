@@ -140,7 +140,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           null,
           "assets/images/ic_marker_start.png",
           "Điểm xuất phát",
-          _controller.trip.value.placeStart?.name ?? "",
+          _controller.trip.value.placeStart?.fullAddress ?? "",
           (rate) {
             _controller.setPlaceStart(rate);
           },
@@ -153,7 +153,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
           null,
           "assets/images/ic_marker_end.png",
           "Địa điểm đến",
-          _controller.trip.value.placeEnd?.name ?? "",
+          _controller.trip.value.placeEnd?.fullAddress ?? "",
           (rate) {
             _controller.setPlaceEnd(rate);
           },
@@ -183,7 +183,7 @@ class _FormScreenState extends BaseStatefulState<FormScreen> {
               null,
               "assets/images/ic_marker_end.png",
               "Địa điểm dừng chân ${i + 1}",
-              list[i].name ?? "",
+              list[i].fullAddress ?? "",
               (rate) {
                 _controller.setPlaceStopWithIndex(rate, i);
               },

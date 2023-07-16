@@ -20,7 +20,8 @@ class DistanceUtil {
       for (int i = 0; i < listPlace.length - 1; i++) {
         double km = await _genDistance(listPlace[i], listPlace[i + 1]);
         kmTemp += km;
-        Dog.d("getTotalKm ${trip.title} Km of ${listPlace[i].name} -> ${listPlace[i + 1].name}: $km");
+        Dog.d(
+            "getTotalKm ${trip.title} Km of ${listPlace[i].fullAddress} -> ${listPlace[i + 1].fullAddress}: $km");
       }
       totalKm += kmTemp;
       Dog.d("getTotalKm: totalKm: $totalKm -- km of ${trip.title}: $kmTemp");

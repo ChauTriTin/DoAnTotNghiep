@@ -370,7 +370,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.placeStart.value.name ?? "Chọn địa điểm",
+              _controller.placeStart.value.fullAddress ?? "Chọn địa điểm",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -410,7 +410,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                 borderRadius: const BorderRadius.all(
                     Radius.circular(DimenConstants.radiusMedium))),
             child: Text(
-              _controller.placeEnd.value.name ?? "Chọn địa điểm",
+              _controller.placeEnd.value.fullAddress ?? "Chọn địa điểm",
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: DimenConstants.txtMedium,
@@ -652,7 +652,7 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
                       borderRadius: const BorderRadius.all(
                           Radius.circular(DimenConstants.radiusMedium))),
                   child: Text(
-                    place.name ?? "",
+                    place.fullAddress ?? "",
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: DimenConstants.txtMedium,
@@ -801,13 +801,11 @@ class _CreateRouterScreenState extends BaseStatefulState<CreateRouterScreen> {
           }
         }
 
-        Dog.d("tripsInProgress listStartTimeOfTripsParticipated: $listStartTimeOfTripsParticipated");
+        Dog.d(
+            "tripsInProgress listStartTimeOfTripsParticipated: $listStartTimeOfTripsParticipated");
 
-
-        var timeOfCurrentTrip = TimeUtils
-            .convert(_controller.dateTimeStart.value)
-            .split(" ")
-            .first;
+        var timeOfCurrentTrip =
+            TimeUtils.convert(_controller.dateTimeStart.value).split(" ").first;
 
         // Thời gian của chuyến đi hiện tại đã đụng với chuyến đi khác
         if (listStartTimeOfTripsParticipated.contains(timeOfCurrentTrip)) {

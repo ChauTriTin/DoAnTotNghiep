@@ -250,7 +250,9 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
   }
 
   void _onPressTripItem(Trip trip) {
-    Get.to(() => DetailRouterScreen(tripId: trip.id ?? "",));
+    Get.to(() => DetailRouterScreen(
+          tripId: trip.id ?? "",
+        ));
   }
 
   Widget _buildTripInfo() {
@@ -377,7 +379,7 @@ class _PageUserScreenState extends BaseStatefulState<PageUserScreen> {
                     height: DimenConstants.marginMMedium,
                   ),
                   Text(
-                    "📍 ${StringConstants.startLocation}${trip.placeStart?.name ?? ""}",
+                    "📍 ${StringConstants.startLocation}${trip.placeStart?.fullAddress ?? ""}",
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                         color: ColorConstants.textColor,

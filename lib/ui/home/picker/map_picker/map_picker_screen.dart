@@ -5,13 +5,10 @@ import 'package:appdiphuot/db/firebase_helper.dart';
 import 'package:appdiphuot/model/loc_search.dart';
 import 'package:appdiphuot/model/place.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-
-import '../../../../common/const/dimen_constants.dart';
 
 class MapPickerScreen extends StatefulWidget {
   const MapPickerScreen({
@@ -33,18 +30,18 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
     return Scaffold(
       backgroundColor: ColorConstants.appColorBkg,
       body: _buildBodyView(),
-      floatingActionButton: Visibility(
-        visible: kDebugMode,
-        child: FloatingActionButton(
-          elevation: DimenConstants.elevationMedium,
-          backgroundColor: ColorConstants.appColor,
-          onPressed: () {
-            widget.callback.call(Place.getRandomPlace());
-            Get.back();
-          },
-          child: const Icon(Icons.place),
-        ),
-      ),
+      // floatingActionButton: Visibility(
+      //   visible: kDebugMode,
+      //   child: FloatingActionButton(
+      //     elevation: DimenConstants.elevationMedium,
+      //     backgroundColor: ColorConstants.appColor,
+      //     onPressed: () {
+      //       widget.callback.call(Place.getRandomPlace());
+      //       Get.back();
+      //     },
+      //     child: const Icon(Icons.place),
+      //   ),
+      // ),
     );
   }
 
@@ -102,7 +99,7 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
       address = address.substring(0, address.length - 1);
     }
     debugPrint("onPlacePicked address $address");
-    p.name = address;
+    p.fullAddress = address;
     // debugPrint("onPlacePicked vicinity ${result.vicinity}");
 
     try {
@@ -113,8 +110,9 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
       } else {
         district = "${result.name}, $district";
       }
-
-      var locSearch = LocSearch(district: district, count: 1);
+      p.district = district;
+      var locSearch =
+          LocSearch(district: district, count: 1, fullAddress: p.fullAddress);
       debugPrint("postFirebaseSearchLoc locSearch ${locSearch.toJson()}");
 
       //save to firebase
@@ -123,6 +121,7 @@ class _MapPickerScreenState extends BaseStatefulState<MapPickerScreen> {
       debugPrint("onPick err $e");
     }
 
+    debugPrint("onPick ${p.toJson()}");
     widget.callback.call(p);
     Get.back();
   }

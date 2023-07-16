@@ -392,9 +392,11 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
   }
 
   Widget _buildListRouter() {
-    Dog.d("buttonChipTypeSelected: ${_controller.buttonChipTypeSelected.value}");
+    Dog.d(
+        "buttonChipTypeSelected: ${_controller.buttonChipTypeSelected.value}");
     if (_controller.buttonChipTypeSelected.value == StringConstants.placeTop) {
-      Dog.d("buttonChipTypeSelected listLocation: ${_controller.listLocation.value}");
+      Dog.d(
+          "buttonChipTypeSelected listLocation: ${_controller.listLocation.value}");
       return Expanded(
         child: ListView.separated(
           physics: const BouncingScrollPhysics(),
@@ -484,7 +486,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
         height: 70,
         child: Center(
           child: Text(
-            (index+1).toString(),
+            (index + 1).toString(),
             style: const TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
@@ -538,7 +540,9 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
       ),
       child: InkWell(
         onTap: () {
-          Get.to(() => DetailRouterScreen(tripId: trip.id ?? "",));
+          Get.to(() => DetailRouterScreen(
+                tripId: trip.id ?? "",
+              ));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -628,7 +632,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       Expanded(
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          trip.placeStart?.name ?? "",
+                          trip.placeStart?.fullAddress ?? "",
                           style: const TextStyle(
                             fontSize: 14.0,
                             color: Colors.black,
@@ -646,7 +650,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                       Expanded(
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          trip.placeEnd?.name ?? "",
+                          trip.placeEnd?.fullAddress ?? "",
                           style: const TextStyle(
                             fontSize: 14.0,
                             color: Colors.black,
