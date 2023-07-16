@@ -248,13 +248,15 @@ class CreateRouterController extends BaseController {
     // }
     debugPrint("sPlaceStart $sPlaceStart");
     debugPrint("sPlaceEnd $sPlaceEnd");
-    if (sPlaceStart.name == null || sPlaceStart.name?.isEmpty == true) {
+    if (sPlaceStart.fullAddress == null ||
+        sPlaceStart.fullAddress?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm bắt đầu");
       setAppLoading(false, "", TypeApp.createRouter);
       return;
     }
-    if (sPlaceEnd.name == null || sPlaceEnd.name?.isEmpty == true) {
+    if (sPlaceEnd.fullAddress == null ||
+        sPlaceEnd.fullAddress?.isEmpty == true) {
       showSnackBarFullError(
           StringConstants.warning, "Vui lòng chọn địa điểm kết thúc");
       setAppLoading(false, "", TypeApp.createRouter);
@@ -292,7 +294,8 @@ class CreateRouterController extends BaseController {
     trip.id = id.value;
     trip.userIdHost = userData.value.uid;
     trip.userHostName = userData.value.name;
-    if (tripData.value.listIdMember == null || tripData.value.listIdMember?.isEmpty == true) {
+    if (tripData.value.listIdMember == null ||
+        tripData.value.listIdMember?.isEmpty == true) {
       trip.listIdMember = <String>[];
       if (userData.value.uid?.isNotEmpty == true) {
         trip.listIdMember?.add(userData.value.uid ?? "");

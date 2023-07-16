@@ -766,7 +766,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               Wrap(
                 children: [
                   Text(
-                    place.name ?? "",
+                    place.fullAddress ?? "",
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
                     maxLines: 1,
@@ -790,9 +790,9 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
     Dog.d(
         "convertListLocation : ${_controller.detailTrip.value.listPlace?.length}");
     Dog.d(
-        "convertListLocation : ${_controller.detailTrip.value.placeStart?.name}");
+        "convertListLocation : ${_controller.detailTrip.value.placeStart?.fullAddress}");
     Dog.d(
-        "convertListLocation : ${_controller.detailTrip.value.placeEnd?.name}");
+        "convertListLocation : ${_controller.detailTrip.value.placeEnd?.fullAddress}");
     _controller.detailTrip.value.listPlace?.forEach((element) {
       list.add(_locationTrip(element, isSubLocation: true));
     });
@@ -1138,12 +1138,14 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
               dfPlaceStart: Place(
                 lat: trip.placeStart?.lat ?? defaultLat,
                 long: trip.placeStart?.long ?? defaultLong,
-                name: trip.placeStart?.name ?? "",
+                fullAddress: trip.placeStart?.fullAddress ?? "",
+                district: trip.placeStart?.district ?? "",
               ),
               dfPlaceEnd: Place(
                 lat: trip.placeEnd?.lat ?? defaultLat,
                 long: trip.placeEnd?.long ?? defaultLong,
-                name: trip.placeEnd?.name ?? "",
+                fullAddress: trip.placeEnd?.fullAddress ?? "",
+                district: trip.placeStart?.district ?? "",
               ),
               dfListPlaceStop: [...trip.listPlace ?? <Place>[]],
               dfDateTimeStart: DateTime.now().add(const Duration(days: 7)),
@@ -1311,7 +1313,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             ),
                             TextSpan(
                                 text:
-                                    ': ${_controller.detailTrip.value.placeStart?.name}}',
+                                    ': ${_controller.detailTrip.value.placeStart?.fullAddress}}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
@@ -1379,7 +1381,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             ),
                             TextSpan(
                                 text:
-                                    ': ${_controller.detailTrip.value.placeEnd?.name}}',
+                                    ': ${_controller.detailTrip.value.placeEnd?.fullAddress}}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
@@ -1554,7 +1556,7 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
                             decoration: TextDecoration.none), // Màu chữ đỏ
                       ),
                       TextSpan(
-                          text: ': ${element.name}}',
+                          text: ': ${element.fullAddress}}',
                           style: const TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 16,
