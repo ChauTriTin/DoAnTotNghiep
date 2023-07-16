@@ -175,6 +175,13 @@ class FormController extends BaseController {
       postFirebaseSearchLoc(districtPlaceStart, rate.ratePlaceStart?.toInt());
     }
 
+    var districtPlaceEnd = trip.value.placeEnd?.district;
+    if (districtPlaceEnd == null || districtPlaceEnd.isEmpty) {
+      //do nothing
+    } else {
+      postFirebaseSearchLoc(districtPlaceEnd, rate.ratePlaceEnd?.toInt());
+    }
+
     voidCallback.call();
   }
 
