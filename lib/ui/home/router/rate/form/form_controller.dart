@@ -184,12 +184,18 @@ class FormController extends BaseController {
     }
     try {
       //get old value
-      FirebaseHelper.collectionReferenceLoc
-          .doc(key)
-          .snapshots()
-          .listen((value) {
+      var stopListen = false;
+      CollectionReference collectionRef = FirebaseHelper.collectionReferenceLoc;
+
+      collectionRef.doc(key).snapshots().listen((value) {
+        if (stopListen) {
+          return;
+        } else {
+          stopListen = true;
+        }
         DocumentSnapshot<Map<String, dynamic>>? map =
             value as DocumentSnapshot<Map<String, dynamic>>?;
+
         if (map == null || map.data() == null) {
           debugPrint("postFirebaseSearchLoc return -> does not exit");
         } else {
@@ -201,6 +207,10 @@ class FormController extends BaseController {
           oldLocSearch.listRate = newListRate;
           debugPrint(
               "postFirebaseSearchLoc oldLocSearch after ${oldLocSearch.toJson()}");
+
+          //listen once
+          // collectionRef.doc(key).snapshots().listen((_) {}).cancel();
+
           FirebaseHelper.collectionReferenceLoc
               .doc(key)
               .set(oldLocSearch.toJson())
