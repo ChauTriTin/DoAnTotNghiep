@@ -442,10 +442,15 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
 
   Widget _getRowListPlaceTop(LocSearch location, int index) {
     int countRate = 0;
+    double rate = 0;
+    int totalRate = location.listRate?.length ?? 1;
 
     location.listRate?.forEach((element) {
       countRate++;
+      rate += element;
     });
+    double avegaraRate = 0;
+    if (rate > 0) avegaraRate = (rate / totalRate);
 
     Widget widgetTopPlace;
     List<Color> colors = [
@@ -536,7 +541,7 @@ class _PageHomeScreenState extends BaseStatefulState<PageHomeScreen> {
                           fontSize: 20),
                     ),
                     Text(
-                      "$countRate đánh giá",
+                      "${avegaraRate}/$countRate đánh giá",
                       style: const TextStyle(
                         color: Colors.blue,
                           fontWeight: FontWeight.w300,
