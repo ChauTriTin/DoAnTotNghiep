@@ -217,12 +217,9 @@ class MapController extends BaseController {
     double long2,
   ) async {
     log("<<<_getRoute $lat1 $long1, $lat2 $long2");
-    Directions directions = await getDirections(
-      lat1,
-      long1,
-      lat2,
-      long2,
-    );
+    Directions directions =
+        await getDirections(lat1, long1, lat2, long2, mode: "walking");
+    //driving, walking, bicycling, transit
 
     DirectionRoute route = directions.shortestRoute;
     log(">>>route done");
