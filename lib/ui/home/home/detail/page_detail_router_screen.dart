@@ -1487,125 +1487,130 @@ class _DetailRouterScreenState extends BaseStatefulState<DetailRouterScreen> {
 
   List<Widget> listPlaceRate() {
     var list = <Widget>[];
-    var ratesMap = convertMapToRateList(_controller.detailTrip.value.rates);
-    var listPlaceRate = <double>[];
-    var listPlaceRateCount = <int>[];
+    try {
+      var ratesMap = convertMapToRateList(_controller.detailTrip.value.rates);
+      var listPlaceRate = <double>[];
+      var listPlaceRateCount = <int>[];
 
-    var totalRate = _controller.detailTrip.value.rates?.length ?? 0;
+      var totalRate = _controller.detailTrip.value.rates?.length ?? 0;
 
-    _controller.detailTrip.value.listPlace?.forEach((element) {
-      listPlaceRate.add(0);
-      listPlaceRateCount.add(0);
-    });
-
-    for (var element in ratesMap) {
-      element.rateListPlaceStop?.forEach((item) {
-        int index = element.rateListPlaceStop?.indexOf(item) ?? -1;
-        Dog.d("index: $index , listPlaceRate: ${listPlaceRate.length}");
-        if (index != -1) {
-          var currentCount = listPlaceRateCount[index];
-          listPlaceRateCount[index] = currentCount + 1;
-          if (listPlaceRate.isEmpty) {
-            listPlaceRate[index] = item;
-          } else {
-            var currentRate = listPlaceRate[index];
-            listPlaceRate[index] = currentRate + item;
-          }
-        }
-      });
-    }
-
-    if (listPlaceRate.isEmpty) {
       _controller.detailTrip.value.listPlace?.forEach((element) {
         listPlaceRate.add(0);
+        listPlaceRateCount.add(0);
       });
-    }
 
-    for (var element in _controller.detailTrip.value.listPlace ?? <Place>[]) {
-      var listPlace = _controller.detailTrip.value.listPlace;
-      int index = -1;
-
-      if (listPlace != null && listPlace.isNotEmpty) {
-        index = listPlace.indexOf(element);
+      for (var element in ratesMap) {
+        element.rateListPlaceStop?.forEach((item) {
+          int index = element.rateListPlaceStop?.indexOf(item) ?? -1;
+          Dog.d("index: $index , listPlaceRate: ${listPlaceRate.length}");
+          if (index != -1) {
+            var currentCount = listPlaceRateCount[index];
+            listPlaceRateCount[index] = currentCount + 1;
+            if (listPlaceRate.isEmpty) {
+              listPlaceRate[index] = item;
+            } else {
+              var currentRate = listPlaceRate[index];
+              listPlaceRate[index] = currentRate + item;
+            }
+          }
+        });
       }
-      double rate = 0;
-      int countRate = 0;
-      if (totalRate != 0 && index != -1) {
-        rate = listPlaceRate[index] / totalRate;
-        countRate = listPlaceRateCount[index];
+
+      if (listPlaceRate.isEmpty) {
+        _controller.detailTrip.value.listPlace?.forEach((element) {
+          listPlaceRate.add(0);
+        });
       }
 
-      if (index != -1) {
-        list.add(const SizedBox(height: 12));
-        list.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                margin: const EdgeInsets.only(right: 8),
-                child: RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      const TextSpan(
-                        text: "Điểm dừng chân",
-                        style: TextStyle(
-                            color: ColorConstants.colorTitleTrip,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            decoration: TextDecoration.none), // Màu chữ đỏ
-                      ),
-                      TextSpan(
-                          text: ': ${element.fullAddress}}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400,
+      for (var element in _controller.detailTrip.value.listPlace ?? <Place>[]) {
+        var listPlace = _controller.detailTrip.value.listPlace;
+        int index = -1;
+
+        if (listPlace != null && listPlace.isNotEmpty) {
+          index = listPlace.indexOf(element);
+        }
+        double rate = 0;
+        int countRate = 0;
+        if (totalRate != 0 && index != -1) {
+          rate = listPlaceRate[index] / totalRate;
+          countRate = listPlaceRateCount[index];
+        }
+
+        if (index != -1) {
+          list.add(const SizedBox(height: 12));
+          list.add(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  child: RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        const TextSpan(
+                          text: "Điểm dừng chân",
+                          style: TextStyle(
+                              color: ColorConstants.colorTitleTrip,
+                              fontWeight: FontWeight.w500,
                               fontSize: 16,
-                              color: Colors.black,
-                              decoration: TextDecoration.none)),
-                    ],
+                              decoration: TextDecoration.none), // Màu chữ đỏ
+                        ),
+                        TextSpan(
+                            text: ': ${element.fullAddress}}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                                decoration: TextDecoration.none)),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Row(
-                children: [
-                  RatingBar.builder(
-                    initialRating: rate,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 20.0,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.orange,
+              Expanded(
+                flex: 3,
+                child: Row(
+                  children: [
+                    RatingBar.builder(
+                      initialRating: rate,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 20.0,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) =>
+                      const Icon(
+                        Icons.star,
+                        color: Colors.orange,
+                      ),
+                      ignoreGestures: true,
+                      onRatingUpdate: (double value) {},
                     ),
-                    ignoreGestures: true,
-                    onRatingUpdate: (double value) {},
-                  ),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  Expanded(
-                    child: Text(
-                      "$countRate đánh giá",
-                      style: const TextStyle(
-                          color: ColorConstants.colorGreen,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
+                    const SizedBox(
+                      width: 6,
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
-        list.add(_divider(8));
+                    Expanded(
+                      child: Text(
+                        "$countRate đánh giá",
+                        style: const TextStyle(
+                            color: ColorConstants.colorGreen,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ));
+          list.add(_divider(8));
+        }
       }
+      return list;
+    }catch(ex){
+      return <Widget>[];
     }
-    return list;
   }
 
   Widget _copyIdRouter() {
